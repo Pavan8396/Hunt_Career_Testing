@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testng-results ignored="0" total="3" passed="3" failed="0" skipped="0">
+  <reporter-output>
+  </reporter-output>
+  <suite started-at="2025-05-26T23:13:27 IST" name="Suite" finished-at="2025-05-26T23:13:50 IST" duration-ms="23200">
+    <groups>
+    </groups>
+    <test started-at="2025-05-26T23:13:27 IST" name="Test" finished-at="2025-05-26T23:13:50 IST" duration-ms="23200">
+      <class name="com.huntcareer.qa.testcases.Login">
+        <test-method is-config="true" signature="setup()[pri:0, instance:com.huntcareer.qa.testcases.Login@4d1c00d0]" started-at="2025-05-26T23:13:27 IST" name="setup" finished-at="2025-05-26T23:13:30 IST" duration-ms="3066" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setup -->
+        <test-method signature="verifyWithInvalidData()[pri:0, instance:com.huntcareer.qa.testcases.Login@4d1c00d0]" started-at="2025-05-26T23:13:30 IST" name="verifyWithInvalidData" finished-at="2025-05-26T23:13:35 IST" duration-ms="4670" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- verifyWithInvalidData -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:com.huntcareer.qa.testcases.Login@4d1c00d0]" started-at="2025-05-26T23:13:35 IST" name="tearDown" finished-at="2025-05-26T23:13:35 IST" duration-ms="234" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+        <test-method is-config="true" signature="setup()[pri:0, instance:com.huntcareer.qa.testcases.Login@4d1c00d0]" started-at="2025-05-26T23:13:35 IST" name="setup" finished-at="2025-05-26T23:13:37 IST" duration-ms="2306" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setup -->
+        <test-method signature="verifyWithValidData()[pri:0, instance:com.huntcareer.qa.testcases.Login@4d1c00d0]" started-at="2025-05-26T23:13:37 IST" name="verifyWithValidData" finished-at="2025-05-26T23:13:42 IST" duration-ms="4694" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- verifyWithValidData -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:com.huntcareer.qa.testcases.Login@4d1c00d0]" started-at="2025-05-26T23:13:42 IST" name="tearDown" finished-at="2025-05-26T23:13:42 IST" duration-ms="212" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+      </class> <!-- com.huntcareer.qa.testcases.Login -->
+      <class name="com.huntcareer.qa.testcases.Register">
+        <test-method is-config="true" signature="setup()[pri:0, instance:com.huntcareer.qa.testcases.Register@22fcf7ab]" started-at="2025-05-26T23:13:42 IST" name="setup" finished-at="2025-05-26T23:13:45 IST" duration-ms="2293" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setup -->
+        <test-method signature="verifyRegisterWithValidData()[pri:0, instance:com.huntcareer.qa.testcases.Register@22fcf7ab]" started-at="2025-05-26T23:13:45 IST" name="verifyRegisterWithValidData" finished-at="2025-05-26T23:13:50 IST" duration-ms="5455" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- verifyRegisterWithValidData -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:com.huntcareer.qa.testcases.Register@22fcf7ab]" started-at="2025-05-26T23:13:50 IST" name="tearDown" finished-at="2025-05-26T23:13:50 IST" duration-ms="200" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+      </class> <!-- com.huntcareer.qa.testcases.Register -->
+    </test> <!-- Test -->
+  </suite> <!-- Suite -->
+</testng-results>
