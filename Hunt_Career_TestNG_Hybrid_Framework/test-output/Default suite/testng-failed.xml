@@ -5,8 +5,9 @@
     <classes>
       <class name="com.huntcareer.qa.testcases.Login">
         <methods>
-          <include name="verifyWithValidData"/>
+          <include name="setup"/>
           <include name="tearDown"/>
+          <include name="verifyWithInvalidData"/>
         </methods>
       </class> <!-- com.huntcareer.qa.testcases.Login -->
     </classes>

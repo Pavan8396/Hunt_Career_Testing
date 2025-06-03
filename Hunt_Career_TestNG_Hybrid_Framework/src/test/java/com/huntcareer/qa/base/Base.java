@@ -15,19 +15,31 @@ import com.huntcareer.qa.utils.Utilities;
 public class Base {
 	WebDriver driver;
 	public Properties prop;
-	
-	//public Properties loadPropertiesFile(){
+	public Properties dataProp;
+
+	// public Properties loadPropertiesFile(){
 	public Base() {
-		try {
+
 		prop = new Properties();
 		File propFile = new File(
 				System.getProperty("user.dir") + "\\src\\main\\java\\com\\huntcareer\\qa\\config\\Config.properties");
+
+		dataProp = new Properties();
+		File dataFile = new File(System.getProperty("user.dir")
+				+ "\\src\\main\\java\\com\\huntcareer\\qa\\testdata\\testdata.properties");
+		try {
+		FileInputStream fis1 = new FileInputStream(dataFile);
+		dataProp.load(fis1);
+		}catch(Throwable e) {
+			e.printStackTrace();
+		}
+		try {
 			FileInputStream fis = new FileInputStream(propFile);
 			prop.load(fis);
 		} catch (Throwable e) {
 			e.printStackTrace();
 		}
-		//return prop;
+		// return prop;
 	}
 
 	public WebDriver inicializeBrowserAndOpenApplication(String browserName) {
