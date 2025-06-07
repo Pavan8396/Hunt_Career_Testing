@@ -93,4 +93,110 @@ public class Login extends Base {
 		lp.verifyPasswordMustHaveAtLeast8CharactersLong();
 		lp.verifyPasswordMustHaveAtLeast8CharactersLongIsGone();
 	}
+	
+	@Test (priority = 5)
+	public void verifyinvalidEmailAndValidPassword() {
+		lp = new LoginPage(driver);
+		lp.enterEmail(dataProp.getProperty("invalidEmail"));
+		lp.enterPassword(dataProp.getProperty("validPassword"));
+		lp.clickLoginButton();
+		lp.verifyInvalidEmailAndPassword();
+		lp.verifyInvalidEmailAndPasswordIsGone();
+	}
+	
+	@Test (priority = 6)
+	public void verifyValidEmailAndInvalidPassword() {
+		lp = new LoginPage(driver);
+		lp.enterEmail(dataProp.getProperty("validEmail"));
+		lp.enterPassword(dataProp.getProperty("invalidPassword"));
+		lp.clickLoginButton();
+		lp.verifyInvalidEmailAndPassword();
+		lp.verifyInvalidEmailAndPasswordIsGone();
+	}
+	
+	@Test (priority = 7)
+	public void verifyNoEmailAndNoPassword() {
+		lp = new LoginPage(driver);
+		lp.clickLoginButton();
+		lp.verifyEmailIsRequired();
+		lp.verifyEmailIsRequiredIsGone();
+	}
+	
+	@Test (priority = 8)
+	public void verifyNoEmail() {
+		lp = new LoginPage(driver);
+		lp.enterPassword(dataProp.getProperty("validPassword"));
+		lp.clickLoginButton();
+		lp.verifyEmailIsRequired();
+		lp.verifyEmailIsRequiredIsGone();
+	}
+	
+	@Test (priority = 9)
+	public void verifyNoPassword() {
+		lp = new LoginPage(driver);
+		lp.enterEmail(dataProp.getProperty("validEmail"));
+		lp.clickLoginButton();
+		lp.verifyPasswordIsRequired();
+		lp.verifyPasswordIsRequiredIsGone();
+	}
+	
+	@Test (priority = 10)
+	public void verifyEmailWithoutTopDomain() {
+		lp = new LoginPage(driver);
+		lp.enterEmail(dataProp.getProperty("emailWithoutTopDomain"));
+		lp.enterPassword(dataProp.getProperty("validPassword"));
+		lp.clickLoginButton();
+		lp.verifyPleaseEnterValidEmailAddress();
+		lp.verifyPleaseEnterValidEmailAddressIsGone();
+	}
+	
+	@Test (priority = 11)
+	public void verifyEmailWithoutDomain() {
+		lp = new LoginPage(driver);
+		lp.enterEmail(dataProp.getProperty("emailWithoutDomain"));
+		lp.enterPassword(dataProp.getProperty("validPassword"));
+		lp.clickLoginButton();
+		lp.verifyPleaseEnterValidEmailAddress();
+		lp.verifyPleaseEnterValidEmailAddressIsGone();
+	}
+	
+	@Test (priority = 12)
+	public void verifyEmailWithoutUserName() {
+		lp = new LoginPage(driver);
+		lp.enterEmail(dataProp.getProperty("emailWithoutUserName"));
+		lp.enterPassword(dataProp.getProperty("validPassword"));
+		lp.clickLoginButton();
+		lp.verifyPleaseEnterValidEmailAddress();
+		lp.verifyPleaseEnterValidEmailAddressIsGone();
+	}
+	
+	@Test (priority = 13)
+	public void verifyEmailWithDoubleAtTheRate() {
+		lp = new LoginPage(driver);
+		lp.enterEmail(dataProp.getProperty("emailWithDoubleAtTheRate"));
+		lp.enterPassword(dataProp.getProperty("validPassword"));
+		lp.clickLoginButton();
+		lp.verifyPleaseEnterValidEmailAddress();
+		lp.verifyPleaseEnterValidEmailAddressIsGone();
+	}
+	
+	@Test (priority = 14)
+	public void verifyEmailWithDotAfterUserName() {
+		lp = new LoginPage(driver);
+		lp.enterEmail(dataProp.getProperty("emailWithDotAfterUserName"));
+		lp.enterPassword(dataProp.getProperty("validPassword"));
+		hp = lp.clickLoginButton();
+		hp.verifySuccessMessage();
+		hp.verifySuccessMessageIsGone();
+	}
+	
+	@Test (priority = 15)
+	public void verifyEmailWithDotInbetweenUserName() {
+		lp = new LoginPage(driver);
+		lp.enterEmail(dataProp.getProperty("emailWithDotInbetweenUserName"));
+		lp.enterPassword(dataProp.getProperty("validPassword"));
+		hp = lp.clickLoginButton();
+		hp.verifySuccessMessage();
+		hp.verifySuccessMessageIsGone();
+	}
 }

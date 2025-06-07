@@ -28,6 +28,15 @@ public class LoginPage {
 
 	@FindBy(xpath = "//div[contains(text(), 'Password must be at least 8 characters long.')]")
 	private WebElement passwordMustHaveATLeast8CharactersLongMessage;
+	
+	@FindBy(xpath = "//div[contains(text(), 'Please enter a valid email address.')]")
+	private WebElement pleaseEnterValidEmailAddressMessage;
+	
+	@FindBy(xpath = "//div[contains(text(), 'Email is required.')]")
+	private WebElement EmailIsRequiredMessage;
+	
+	@FindBy(xpath = "//div[contains(text(), 'Password is required.')]")
+	private WebElement passwordIsRequiredMessage;
 
 	public LoginPage(WebDriver driver) {
 		this.driver = driver;
@@ -58,6 +67,36 @@ public class LoginPage {
 				"Invalid email or password message should not be visible anymore");
 	}
 
+	public void verifyEmailIsRequired() {
+		Assert.assertEquals(wait.until(ExpectedConditions.visibilityOf(EmailIsRequiredMessage)).getText(),
+				"Email is required.", "Message Text Mismatch");
+	}
+
+	public void verifyEmailIsRequiredIsGone() {
+		Assert.assertTrue(wait.until(ExpectedConditions.invisibilityOf(EmailIsRequiredMessage)),
+				"Email is required message should not be visible anymore");
+	}
+	
+	public void verifyPleaseEnterValidEmailAddress() {
+		Assert.assertEquals(wait.until(ExpectedConditions.visibilityOf(pleaseEnterValidEmailAddressMessage)).getText(),
+				"Please enter a valid email address.", "Message Text Mismatch");
+	}
+
+	public void verifyPleaseEnterValidEmailAddressIsGone() {
+		Assert.assertTrue(wait.until(ExpectedConditions.invisibilityOf(pleaseEnterValidEmailAddressMessage)),
+				"Please enter a valid email address message should not be visible anymore");
+	}
+	
+	public void verifyPasswordIsRequired() {
+		Assert.assertEquals(wait.until(ExpectedConditions.visibilityOf(passwordIsRequiredMessage)).getText(),
+				"Password is required.", "Message Text Mismatch");
+	}
+
+	public void verifyPasswordIsRequiredIsGone() {
+		Assert.assertTrue(wait.until(ExpectedConditions.invisibilityOf(passwordIsRequiredMessage)),
+				"Password is required message should not be visible anymore");
+	}
+	
 	public void verifyPasswordMustHaveAtLeast8CharactersLong() {
 		Assert.assertEquals(wait.until(ExpectedConditions.visibilityOf(passwordMustHaveATLeast8CharactersLongMessage)).getText(),
 				"Password must be at least 8 characters long.", "Message Text Mismatch");
