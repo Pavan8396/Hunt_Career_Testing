@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Date;
+import java.util.Locale;
+import java.util.Random;
 
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.xssf.usermodel.XSSFCell;
@@ -15,10 +17,45 @@ import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.io.FileHandler;
 
+import com.github.javafaker.Faker;
+
 public class Utilities {
-	public static final int IMPLICIT_WAIT_TIME = 15;
+	public static final int IMPLICIT_WAIT_TIME = 10;
 	public static final int PAGE_WAIT_TIME = 5;
 
+	private static final Faker faker = new Faker(new Locale("en-IND"));
+    private static final Random random = new Random();
+	
+    public static String getFirstName() {
+    	return faker.name().firstName();
+    }
+    
+    public static String getLastName() {
+    	return faker.name().lastName();
+    }
+    
+    public static String getEmail(String type) {
+    
+    	switch(type) {
+    	
+    	case "withoutAllDomain": return genarateEmailTimeStamp();
+    	case "withoutTopLevelDomain": return genarateEmailTimeStamp()+"@mailinator";
+    	case "doubleAt": return genarateEmailTimeStamp()+"@@mailinator.com";
+    	case "dotBeforeAt": return genarateEmailTimeStamp()+".@mailinator.com";
+    	case "withoutDomain": return genarateEmailTimeStamp()+"@.com";
+    	case "withoutUserName": return "@mailinator.com";
+    	default: return genarateEmailTimeStamp()+"@mailinator.com";
+    	}
+    }
+    
+    public static String generateRandomPassword() {
+    	return "Test@"+random.nextInt(1000);
+    }
+    
+    public static String generateRandomPhoneNumber() {
+    	return faker.phoneNumber().cellPhone().replaceAll("[^0-9]", "").substring(0, 10);
+    }
+    
 	public static String generateTimeStamp() {
 		Date date = new Date();
 		return date.toString().replace(" ", "_").replace(":", "_");
@@ -27,7 +64,7 @@ public class Utilities {
 	public static String genarateEmailTimeStamp() {
 		Date date = new Date();
 		String timeStamp = date.toString().replace(" ", "_").replace(":", "_");
-		return "testUser" + timeStamp + "@mailinator.com";
+		return "testUser" + timeStamp;
 	}
 
 	public static Object[][] getTestDataFromExcel(String sheetName) {

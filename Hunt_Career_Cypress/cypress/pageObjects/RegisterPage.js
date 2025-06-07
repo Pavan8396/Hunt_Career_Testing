@@ -59,7 +59,6 @@ class RegisterPage extends BasePage {
         return cy.xpath("//div[contains(text(), 'Please enter a valid 10-digit phone number.')]")
     }
 
-
     // Actions
     enterFirstNameField(firstName) {
         if (firstName) {

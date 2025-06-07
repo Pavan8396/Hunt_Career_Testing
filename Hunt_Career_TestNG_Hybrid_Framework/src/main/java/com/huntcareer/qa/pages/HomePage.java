@@ -26,9 +26,7 @@ public class HomePage {
 	public void verifySuccessMessage() {
 		Assert.assertEquals(wait.until(ExpectedConditions.visibilityOf(successLoginMessage)).getText(),
 				"Logged in successfully!", "Message Text Mismatch");
-	}
-	
-	public void verifySuccessMessageIsGone() {
-		Assert.assertTrue(wait.until(ExpectedConditions.invisibilityOf(successLoginMessage)), "Success message should not be visible anymore");
+		Assert.assertTrue(wait.until(ExpectedConditions.invisibilityOf(successLoginMessage)),
+				"Success message should not be visible anymore");
 	}
 }

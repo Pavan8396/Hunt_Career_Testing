@@ -37,6 +37,9 @@ public class LoginPage {
 	
 	@FindBy(xpath = "//div[contains(text(), 'Password is required.')]")
 	private WebElement passwordIsRequiredMessage;
+	
+	@FindBy(xpath = "//div[contains(text(), 'Registered successfully! Please login.')]")
+	private WebElement registerSuccessMessage;
 
 	public LoginPage(WebDriver driver) {
 		this.driver = driver;
@@ -60,9 +63,6 @@ public class LoginPage {
 	public void verifyInvalidEmailAndPassword() {
 		Assert.assertEquals(wait.until(ExpectedConditions.visibilityOf(invalidEmailAndPassword)).getText(),
 				"Invalid email or password", "Message Text Mismatch");
-	}
-
-	public void verifyInvalidEmailAndPasswordIsGone() {
 		Assert.assertTrue(wait.until(ExpectedConditions.invisibilityOf(invalidEmailAndPassword)),
 				"Invalid email or password message should not be visible anymore");
 	}
@@ -70,9 +70,6 @@ public class LoginPage {
 	public void verifyEmailIsRequired() {
 		Assert.assertEquals(wait.until(ExpectedConditions.visibilityOf(EmailIsRequiredMessage)).getText(),
 				"Email is required.", "Message Text Mismatch");
-	}
-
-	public void verifyEmailIsRequiredIsGone() {
 		Assert.assertTrue(wait.until(ExpectedConditions.invisibilityOf(EmailIsRequiredMessage)),
 				"Email is required message should not be visible anymore");
 	}
@@ -80,19 +77,13 @@ public class LoginPage {
 	public void verifyPleaseEnterValidEmailAddress() {
 		Assert.assertEquals(wait.until(ExpectedConditions.visibilityOf(pleaseEnterValidEmailAddressMessage)).getText(),
 				"Please enter a valid email address.", "Message Text Mismatch");
-	}
-
-	public void verifyPleaseEnterValidEmailAddressIsGone() {
 		Assert.assertTrue(wait.until(ExpectedConditions.invisibilityOf(pleaseEnterValidEmailAddressMessage)),
 				"Please enter a valid email address message should not be visible anymore");
 	}
-	
+
 	public void verifyPasswordIsRequired() {
 		Assert.assertEquals(wait.until(ExpectedConditions.visibilityOf(passwordIsRequiredMessage)).getText(),
 				"Password is required.", "Message Text Mismatch");
-	}
-
-	public void verifyPasswordIsRequiredIsGone() {
 		Assert.assertTrue(wait.until(ExpectedConditions.invisibilityOf(passwordIsRequiredMessage)),
 				"Password is required message should not be visible anymore");
 	}
@@ -100,10 +91,14 @@ public class LoginPage {
 	public void verifyPasswordMustHaveAtLeast8CharactersLong() {
 		Assert.assertEquals(wait.until(ExpectedConditions.visibilityOf(passwordMustHaveATLeast8CharactersLongMessage)).getText(),
 				"Password must be at least 8 characters long.", "Message Text Mismatch");
-	}
-
-	public void verifyPasswordMustHaveAtLeast8CharactersLongIsGone() {
 		Assert.assertTrue(wait.until(ExpectedConditions.invisibilityOf(passwordMustHaveATLeast8CharactersLongMessage)),
 				"Password must be at least 8 characters long message should not be visible anymore");
+	}
+	
+	public void verifyRegisterSuccess() {
+		Assert.assertEquals(wait.until(ExpectedConditions.visibilityOf(registerSuccessMessage)).getText(),
+				"Registered successfully! Please login.", "Message Text Mismatch");
+		Assert.assertTrue(wait.until(ExpectedConditions.invisibilityOf(registerSuccessMessage)),
+				"Registered successfully! Please login message should not be visible anymore");
 	}
 }
