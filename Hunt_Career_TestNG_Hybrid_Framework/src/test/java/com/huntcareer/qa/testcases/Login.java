@@ -83,4 +83,14 @@ public class Login extends Base {
 		lp.verifyInvalidEmailAndPassword();
 		lp.verifyInvalidEmailAndPasswordIsGone();
 	}
+	
+	@Test (priority = 4)
+	public void verifyShortPassword() {
+		lp = new LoginPage(driver);
+		lp.enterEmail(dataProp.getProperty("validEmail"));
+		lp.enterPassword(dataProp.getProperty("shortPassword"));
+		lp.clickLoginButton();
+		lp.verifyPasswordMustHaveAtLeast8CharactersLong();
+		lp.verifyPasswordMustHaveAtLeast8CharactersLongIsGone();
+	}
 }

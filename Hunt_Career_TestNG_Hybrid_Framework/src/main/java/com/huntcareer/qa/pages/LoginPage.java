@@ -13,42 +13,58 @@ import org.testng.Assert;
 public class LoginPage {
 	WebDriver driver;
 	WebDriverWait wait;
-	
+
 	@FindBy(xpath = "//input[@id='email']")
 	private WebElement emailField;
-	
+
 	@FindBy(xpath = "//input[@id='password']")
 	private WebElement passwordField;
-	
+
 	@FindBy(xpath = "//button[@aria-label='Login']")
 	private WebElement loginButton;
-	
+
 	@FindBy(xpath = "//div[contains(text(), 'Invalid email or password')]")
 	private WebElement invalidEmailAndPassword;
-	
-	
+
+	@FindBy(xpath = "//div[contains(text(), 'Password must be at least 8 characters long.')]")
+	private WebElement passwordMustHaveATLeast8CharactersLongMessage;
+
 	public LoginPage(WebDriver driver) {
 		this.driver = driver;
 		this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 		PageFactory.initElements(driver, this);
 	}
-	
+
 	public void enterEmail(String emailText) {
 		emailField.sendKeys(emailText);
 	}
+
 	public void enterPassword(String passwordText) {
 		passwordField.sendKeys(passwordText);
 	}
+
 	public HomePage clickLoginButton() {
 		loginButton.click();
 		return new HomePage(driver);
 	}
+
 	public void verifyInvalidEmailAndPassword() {
 		Assert.assertEquals(wait.until(ExpectedConditions.visibilityOf(invalidEmailAndPassword)).getText(),
 				"Invalid email or password", "Message Text Mismatch");
 	}
-	
+
 	public void verifyInvalidEmailAndPasswordIsGone() {
-		Assert.assertTrue(wait.until(ExpectedConditions.invisibilityOf(invalidEmailAndPassword)), "Invalid email or password message should not be visible anymore");
+		Assert.assertTrue(wait.until(ExpectedConditions.invisibilityOf(invalidEmailAndPassword)),
+				"Invalid email or password message should not be visible anymore");
+	}
+
+	public void verifyPasswordMustHaveAtLeast8CharactersLong() {
+		Assert.assertEquals(wait.until(ExpectedConditions.visibilityOf(passwordMustHaveATLeast8CharactersLongMessage)).getText(),
+				"Password must be at least 8 characters long.", "Message Text Mismatch");
+	}
+
+	public void verifyPasswordMustHaveAtLeast8CharactersLongIsGone() {
+		Assert.assertTrue(wait.until(ExpectedConditions.invisibilityOf(passwordMustHaveATLeast8CharactersLongMessage)),
+				"Password must be at least 8 characters long message should not be visible anymore");
 	}
 }

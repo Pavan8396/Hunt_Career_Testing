@@ -28,9 +28,6 @@ class LoginPage extends BasePage{
     checkPasswordIsRequiredMessage(){
         return cy.xpath("//div[contains(text(), 'Password is required.')]")
     }
-    checkPhoneNumberMessage(){
-        return cy.xpath("//div[contains(text(), 'Please enter a valid 10-digit phone number.')]")
-    }
 
     //Actions
     enterEmailField(email){

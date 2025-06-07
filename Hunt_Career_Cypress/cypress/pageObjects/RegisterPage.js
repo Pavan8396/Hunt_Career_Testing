@@ -55,6 +55,9 @@ class RegisterPage extends BasePage {
     checkPhoneNumberRequiredMessage() {
         return cy.xpath("//div[contains(text(), 'Phone Number is required.')]");
     }
+    checkPhoneNumberInvalidMessage(){
+        return cy.xpath("//div[contains(text(), 'Please enter a valid 10-digit phone number.')]")
+    }
 
 
     // Actions

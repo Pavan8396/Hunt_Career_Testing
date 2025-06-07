@@ -103,6 +103,18 @@ export const registerData = {
         };
     })(),
 
+    invalidPhoneNumber: (() => {
+        const password = generateRandomPassword();
+        return {
+            firstName: getRandomFirstName(),
+            lastName: getRandomLastName(),
+            email: generateEmail('normal'),
+            password: password,
+            confirmPassword: password,
+            phoneNumber: "abcd1234567"  // intentionally invalid phone number
+        };
+    })(),
+
     emailWithoutAllDomain: (() => {
         const password = generateRandomPassword();
         return {

@@ -57,37 +57,44 @@ describe("Register Test", () =>{
         registerPage.validationMessageNotExist(registerPage.checkPhoneNumberRequiredMessage());
     })
 
-    it("TC-10-Enter email without All Domain", () =>{
+    it("TC-10-Enter invalid PhoneNumber", () =>{
+        cy.registerFull(registerData.invalidPhoneNumber.firstName, registerData.invalidPhoneNumber.lastName, registerData.invalidPhoneNumber.email, registerData.invalidPhoneNumber.password, registerData.invalidPhoneNumber.confirmPassword, registerData.invalidPhoneNumber.phoneNumber)
+        registerPage.validationMessage(registerPage.checkPhoneNumberInvalidMessage());
+        registerPage.validationMessageNotExist(registerPage.checkPhoneNumberInvalidMessage());
+    })
+
+
+    it("TC-11-Enter email without All Domain", () =>{
         cy.registerSecondPage(registerData.emailWithoutAllDomain.firstName, registerData.emailWithoutAllDomain.lastName, registerData.emailWithoutAllDomain.email, registerData.emailWithoutAllDomain.password, registerData.emailWithoutAllDomain.confirmPassword, registerData.emailWithoutAllDomain.phoneNumber)
         registerPage.validationMessage(registerPage.checkPleaseEnterValidEmailAddressMessage());
         registerPage.validationMessageNotExist(registerPage.checkPleaseEnterValidEmailAddressMessage());
     })
 
-    it("TC-11-Enter email without Top Level Domain", () =>{
+    it("TC-12-Enter email without Top Level Domain", () =>{
         cy.registerSecondPage(registerData.emailWithoutTopLevelDomain.firstName, registerData.emailWithoutTopLevelDomain.lastName, registerData.emailWithoutTopLevelDomain.email, registerData.emailWithoutTopLevelDomain.password, registerData.emailWithoutTopLevelDomain.confirmPassword, registerData.emailWithoutTopLevelDomain.phoneNumber)
         registerPage.validationMessage(registerPage.checkPleaseEnterValidEmailAddressMessage());
         registerPage.validationMessageNotExist(registerPage.checkPleaseEnterValidEmailAddressMessage());
     })
 
-    it("TC-12-Enter email with double at", () =>{
+    it("TC-13-Enter email with double at", () =>{
         cy.registerSecondPage(registerData.emailDoubleAt.firstName, registerData.emailDoubleAt.lastName, registerData.emailDoubleAt.email, registerData.emailDoubleAt.password, registerData.emailDoubleAt.confirmPassword, registerData.emailDoubleAt.phoneNumber)
         registerPage.validationMessage(registerPage.checkPleaseEnterValidEmailAddressMessage());
         registerPage.validationMessageNotExist(registerPage.checkPleaseEnterValidEmailAddressMessage());
     })
 
-    it("TC-13-Enter email with dot before at", () =>{
+    it("TC-14-Enter email with dot before at", () =>{
         cy.registerFull(registerData.emailDotBeforeAt.firstName, registerData.emailDotBeforeAt.lastName, registerData.emailDotBeforeAt.email, registerData.emailDotBeforeAt.password, registerData.emailDotBeforeAt.confirmPassword, registerData.emailDotBeforeAt.phoneNumber)
         registerPage.validationMessage(registerPage.checkSuccessCreationMessage());
         registerPage.validationMessageNotExist(registerPage.checkSuccessCreationMessage());
     })
 
-    it("TC-14-Enter email without Domain", () =>{
+    it("TC-15-Enter email without Domain", () =>{
         cy.registerSecondPage(registerData.emailWithoutDomain.firstName, registerData.emailWithoutDomain.lastName, registerData.emailWithoutDomain.email, registerData.emailWithoutDomain.password, registerData.emailWithoutDomain.confirmPassword, registerData.emailWithoutDomain.phoneNumber)
         registerPage.validationMessage(registerPage.checkPleaseEnterValidEmailAddressMessage());
         registerPage.validationMessageNotExist(registerPage.checkPleaseEnterValidEmailAddressMessage());
     })
 
-    it("TC-15-Enter email without username", () =>{
+    it("TC-16-Enter email without username", () =>{
         cy.registerSecondPage(registerData.emailMissingUsername.firstName, registerData.emailMissingUsername.lastName, registerData.emailMissingUsername.email, registerData.emailMissingUsername.password, registerData.emailMissingUsername.confirmPassword, registerData.emailMissingUsername.phoneNumber)
         registerPage.validationMessage(registerPage.checkPleaseEnterValidEmailAddressMessage());
         registerPage.validationMessageNotExist(registerPage.checkPleaseEnterValidEmailAddressMessage());
