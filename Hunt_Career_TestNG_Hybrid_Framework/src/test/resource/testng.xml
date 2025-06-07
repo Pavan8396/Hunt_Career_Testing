@@ -8,6 +8,7 @@
 		<classes>
 			<class name="com.huntcareer.qa.testcases.Login" />
 			<class name="com.huntcareer.qa.testcases.Register" />
+			<class name="com.huntcareer.qa.testcases.Search" />
 		</classes>
 	</test> <!--
 	Test -->
