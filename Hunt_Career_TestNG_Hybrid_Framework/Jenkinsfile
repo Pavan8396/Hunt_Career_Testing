@@ -1,11 +1,6 @@
 pipeline {
     agent any // You might want to specify a particular agent with Java and Maven installed
 
-    environment {
-        // Define any environment variables needed for your tests
-        // EXAMPLE_VAR = "example_value"
-    }
-
     tools {
         maven 'MAVEN'
         jdk 'JAVA'
