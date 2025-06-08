@@ -1,52 +1,61 @@
 pipeline {
-    agent any // You might want to specify a particular agent with Java and Maven installed
+    agent any 
+
+    environment {
+        // EXAMPLE_VAR = "example_value"
+    }
 
     tools {
         maven 'MAVEN'
         jdk 'JAVA'
-        // If you have JDK and Maven configured globally in Jenkins, you can specify them here
-        // jdk 'AdoptOpenJDK-17' // Example: Replace with your JDK configuration name
-        // maven 'Maven-3.9.6' // Example: Replace with your Maven configuration name
+        // jdk 'AdoptOpenJDK-17' 
+        // maven 'Maven-3.9.6'
     }
 
     stages {
         stage('Checkout') {
             steps {
                 echo 'Checking out code...'
-                // Assuming your Jenkins job is configured to checkout from SCM (e.g., Git)
                 checkout scm
             }
         }
 
-        stage('Build') {
+        // Wrap subsequent stages in dir block
+        stage('TestNG Framework Operations') {
             steps {
-                echo 'Building the project...'
-                // For Windows agents, use bat
-                // bat 'mvn clean install -DskipTests'
-                // For Linux/macOS agents, use sh
-                bat 'mvn clean install -DskipTests' 
-            }
-        }
+                dir('Hunt_Career_TestNG_Hybrid_Framework') {
+                    stage('Build') {
+                        steps {
+                            echo 'Building the project...'
+                            // For Windows agents, use bat
+                            // bat 'mvn clean install -DskipTests'
+                            // For Linux/macOS agents, use sh
+                            bat 'mvn clean install -DskipTests'
+                        }
+                    }
 
-        stage('Test') {
-            steps {
-                echo 'Running tests...'
-                // For Windows agents, use bat
-                // bat 'mvn test'
-                // For Linux/macOS agents, use sh
-                bat 'mvn test'
-            }
-        }
+                    stage('Test') {
+                        steps {
+                            echo 'Running tests...'
+                            // For Windows agents, use bat
+                            // bat 'mvn test'
+                            // For Linux/macOS agents, use sh
+                            bat 'mvn test'
+                        }
+                    }
 
-        stage('Archive Reports') {
-            steps {
-                echo 'Archiving reports...'
-                archiveArtifacts artifacts: '**/test-output/ExtentReports/extentReport.html', allowEmptyArchive: true
-                archiveArtifacts artifacts: '**/test-output/emailable-report.html', allowEmptyArchive: true
-                archiveArtifacts artifacts: '**/test-output/testng-results.xml', allowEmptyArchive: true
-                
-                // Optional: Publish TestNG reports if you have the TestNG plugin installed in Jenkins
-                // publishTestNGResults testResultsPattern: '**/test-output/testng-results.xml'
+                    stage('Archive Reports') {
+                        steps {
+                            echo 'Archiving reports...'
+                            archiveArtifacts artifacts: 'test-output/ExtentReports/extentReport.html', allowEmptyArchive: true // Adjusted path
+                            archiveArtifacts artifacts: 'test-output/emailable-report.html', allowEmptyArchive: true // Adjusted path
+                            archiveArtifacts artifacts: 'test-output/testng-results.xml', allowEmptyArchive: true // Adjusted path
+                            
+                            // Optional: Publish TestNG reports
+                            // publishTestNGResults testResultsPattern: 'test-output/testng-results.xml' // Adjusted path
+                        }
+                    }
+                }
             }
         }
     }
@@ -54,19 +63,15 @@ pipeline {
     post {
         always {
             echo 'Pipeline finished.'
-            // Clean up workspace or send notifications
         }
         success {
             echo 'Pipeline executed successfully!'
-            // Add success specific notifications (e.g., email, Slack)
         }
         failure {
             echo 'Pipeline failed.'
-            // Add failure specific notifications
         }
         unstable {
             echo 'Pipeline is unstable.'
-            // Add unstable specific notifications
         }
     }
 }

@@ -1,16 +1,9 @@
 pipeline {
-    agent any // You might want to specify a particular agent with Node.js installed
-
-    environment {
-        // Define any environment variables needed for your tests
-        // BASE_URL = "http://localhost:3000" // Example for Playwright
-        // CI = 'true' // Often used by test runners
-    }
+    agent any 
 
     tools {
         nodejs 'NodeJS'
-        // If you have Node.js configured globally in Jenkins, you can specify it here
-        // nodejs 'NodeJS-18' // Example: Replace with your NodeJS configuration name
+        // nodejs 'NodeJS-18' 
     }
 
     stages {
@@ -21,43 +14,49 @@ pipeline {
             }
         }
 
-        stage('Install Dependencies') {
+        // Wrap subsequent stages in dir block
+        stage('Playwright Framework Operations') {
             steps {
-                echo 'Installing npm dependencies...'
-                // For Windows agents, use bat
-                // bat 'npm install'
-                // For Linux/macOS agents, use sh
-                bat 'npm install'
-            }
-        }
+                dir('Hunt_Career_Playwright') {
+                    stage('Install Dependencies') {
+                        steps {
+                            echo 'Installing npm dependencies...'
+                            // For Windows agents, use bat
+                            // bat 'npm install'
+                            // For Linux/macOS agents, use sh
+                            bat 'npm install'
+                        }
+                    }
 
-        stage('Install Playwright Browsers') {
-            steps {
-                echo 'Installing Playwright browsers...'
-                // For Windows agents, use bat
-                // bat 'npx playwright install --with-deps'
-                // For Linux/macOS agents, use sh
-                bat 'npx playwright install --with-deps' // --with-deps installs necessary OS dependencies
-            }
-        }
+                    stage('Install Playwright Browsers') {
+                        steps {
+                            echo 'Installing Playwright browsers...'
+                            // For Windows agents, use bat
+                            // bat 'npx playwright install --with-deps'
+                            // For Linux/macOS agents, use sh
+                            bat 'npx playwright install --with-deps'
+                        }
+                    }
 
-        stage('Run Playwright Tests') {
-            steps {
-                echo 'Running Playwright tests...'
-                // For Windows agents, use bat
-                // bat 'npx playwright test'
-                // For Linux/macOS agents, use sh
-                sh 'npx playwright test'
-            }
-        }
+                    stage('Run Playwright Tests') {
+                        steps {
+                            echo 'Running Playwright tests...'
+                            // For Windows agents, use bat
+                            // bat 'npx playwright test'
+                            // For Linux/macOS agents, use sh
+                            sh 'npx playwright test'
+                        }
+                    }
 
-        stage('Archive Reports') {
-            steps {
-                echo 'Archiving Playwright reports...'
-                // Archive Playwright HTML report (default output location)
-                archiveArtifacts artifacts: 'playwright-report/**/*', allowEmptyArchive: true
-                // Archive test results data (if needed for other processing)
-                // archiveArtifacts artifacts: 'test-results/**/*', allowEmptyArchive: true
+                    stage('Archive Reports') {
+                        steps {
+                            echo 'Archiving Playwright reports...'
+                            // Path is already relative, ensure it's correct for playwright-report
+                            archiveArtifacts artifacts: 'playwright-report/**/*', allowEmptyArchive: true
+                            // archiveArtifacts artifacts: 'test-results/**/*', allowEmptyArchive: true
+                        }
+                    }
+                }
             }
         }
     }
