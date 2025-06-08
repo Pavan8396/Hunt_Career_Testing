@@ -1,13 +1,15 @@
 pipeline {
-    agent any 
+    agent any // You might want to specify a particular agent with Node.js installed
 
     environment {
-        // CYPRESS_BASE_URL = "http://localhost:3000" 
+        // Define any environment variables needed for your tests
+        // CYPRESS_BASE_URL = "http://localhost:3000" // Example
     }
 
     tools {
         nodejs 'NodeJS'
-        //nodejs 'NodeJS-18' 
+        // If you have Node.js configured globally in Jenkins, you can specify it here
+        //nodejs 'NodeJS-18' // Example: Replace with your NodeJS configuration name
     }
 
     stages {
@@ -18,40 +20,36 @@ pipeline {
             }
         }
 
-        // Wrap subsequent stages in dir block
-        stage('Cypress Framework Operations') {
+        stage('Install Dependencies') {
             steps {
-                dir('Hunt_Career_Cypress') {
-                    stage('Install Dependencies') {
-                        steps {
-                            echo 'Installing npm dependencies...'
-                            // For Windows agents, use bat
-                            // bat 'npm install'
-                            // For Linux/macOS agents, use sh
-                            bat 'npm install'
-                        }
-                    }
+                echo 'Installing npm dependencies...'
+                // For Windows agents, use bat
+                // bat 'npm install'
+                // For Linux/macOS agents, use sh
+                bat 'npm install'
+            }
+        }
 
-                    stage('Run Cypress Tests') {
-                        steps {
-                            echo 'Running Cypress tests and generating report...'
-                            // For Windows agents, use bat
-                            // bat 'npm run test:run:report'
-                            // For Linux/macOS agents, use sh
-                            bat 'npm run test:run:report'
-                        }
-                    }
+        stage('Run Cypress Tests') {
+            steps {
+                echo 'Running Cypress tests and generating report...'
+                // Using the script from package.json
+                // For Windows agents, use bat
+                // bat 'npm run test:run:report'
+                // For Linux/macOS agents, use sh
+                bat 'npm run test:run:report'
+            }
+        }
 
-                    stage('Archive Reports and Artifacts') {
-                        steps {
-                            echo 'Archiving reports and artifacts...'
-                            // Adjusted paths to be relative to Hunt_Career_Cypress
-                            archiveArtifacts artifacts: 'mochawesome-report/mochawesome*.html', allowEmptyArchive: true
-                            archiveArtifacts artifacts: 'cypress/screenshots/**/*.png', allowEmptyArchive: true
-                            archiveArtifacts artifacts: 'cypress/videos/**/*.mp4', allowEmptyArchive: true
-                        }
-                    }
-                }
+        stage('Archive Reports and Artifacts') {
+            steps {
+                echo 'Archiving reports and artifacts...'
+                // Archive Mochawesome HTML reports (assuming default output location)
+                archiveArtifacts artifacts: '**/mochawesome-report/mochawesome*.html', allowEmptyArchive: true
+                // Archive Cypress screenshots (if any, on failure by default)
+                archiveArtifacts artifacts: '**/cypress/screenshots/**/*.png', allowEmptyArchive: true
+                // Archive Cypress videos (if any, by default for `cypress run`)
+                archiveArtifacts artifacts: '**/cypress/videos/**/*.mp4', allowEmptyArchive: true
             }
         }
     }
