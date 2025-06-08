@@ -1,6 +1,6 @@
 {
   "devDependencies": {
-    "cypress": "^14.3.2",
+    "cypress": "^14.4.1",
     "cypress-mochawesome-reporter": "^3.8.2",
     "cypress-repeat": "^2.3.8",
     "cypress-wait-until": "^3.0.2",
@@ -16,6 +16,7 @@
   "scripts": {
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
+    "move:json": "move mochawesome-report\\.jsons\\*.json mochawesome-report\\",
     "report:merge": "mochawesome-merge mochawesome-report/*.json -o mochawesome-report/mochawesome.json",
     "report:generate": "marge mochawesome-report/mochawesome.json -f report -o mochawesome-report",
     "report:full": "npm run report:merge && npm run report:generate",

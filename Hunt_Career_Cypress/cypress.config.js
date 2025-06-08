@@ -33,6 +33,7 @@ module.exports = defineConfig({
     overwrite: false,
     html: false,
     json: true,
+    saveJson: true,
     embeddedScreenshots: true,
     inlineAssets: true,
     charts: true,
