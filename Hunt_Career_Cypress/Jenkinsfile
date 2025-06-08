@@ -26,7 +26,7 @@ pipeline {
             steps {
                 dir('Hunt_Career_Cypress') {
                     echo 'Running Cypress tests and generating report...'
-                    bat 'npm run test:run'
+                    bat 'npm run test:run:report'
                 }
             }
         }
