@@ -1,13 +1,8 @@
 pipeline {
     agent any 
 
-    environment {
-        // CYPRESS_BASE_URL = "http://localhost:3000" 
-    }
-
     tools {
-        nodejs 'NodeJS'
-        //nodejs 'NodeJS-18' 
+        nodejs 'NodeJS'  // Ensure 'NodeJS' is configured in Jenkins global tools
     }
 
     stages {
@@ -18,39 +13,31 @@ pipeline {
             }
         }
 
-        // Wrap subsequent stages in dir block
-        stage('Cypress Framework Operations') {
+        stage('Install Dependencies') {
             steps {
                 dir('Hunt_Career_Cypress') {
-                    stage('Install Dependencies') {
-                        steps {
-                            echo 'Installing npm dependencies...'
-                            // For Windows agents, use bat
-                            // bat 'npm install'
-                            // For Linux/macOS agents, use sh
-                            bat 'npm install'
-                        }
-                    }
+                    echo 'Installing npm dependencies...'
+                    bat 'npm install'
+                }
+            }
+        }
 
-                    stage('Run Cypress Tests') {
-                        steps {
-                            echo 'Running Cypress tests and generating report...'
-                            // For Windows agents, use bat
-                            // bat 'npm run test:run:report'
-                            // For Linux/macOS agents, use sh
-                            bat 'npm run test:run:report'
-                        }
-                    }
+        stage('Run Cypress Tests') {
+            steps {
+                dir('Hunt_Career_Cypress') {
+                    echo 'Running Cypress tests and generating report...'
+                    bat 'npm run test:run:report'
+                }
+            }
+        }
 
-                    stage('Archive Reports and Artifacts') {
-                        steps {
-                            echo 'Archiving reports and artifacts...'
-                            // Adjusted paths to be relative to Hunt_Career_Cypress
-                            archiveArtifacts artifacts: 'mochawesome-report/mochawesome*.html', allowEmptyArchive: true
-                            archiveArtifacts artifacts: 'cypress/screenshots/**/*.png', allowEmptyArchive: true
-                            archiveArtifacts artifacts: 'cypress/videos/**/*.mp4', allowEmptyArchive: true
-                        }
-                    }
+        stage('Archive Reports and Artifacts') {
+            steps {
+                dir('Hunt_Career_Cypress') {
+                    echo 'Archiving reports and artifacts...'
+                    archiveArtifacts artifacts: 'mochawesome-report/mochawesome*.html', allowEmptyArchive: true
+                    archiveArtifacts artifacts: 'cypress/screenshots/**/*.png', allowEmptyArchive: true
+                    archiveArtifacts artifacts: 'cypress/videos/**/*.mp4', allowEmptyArchive: true
                 }
             }
         }

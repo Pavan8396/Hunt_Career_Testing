@@ -2,8 +2,7 @@ pipeline {
     agent any 
 
     tools {
-        nodejs 'NodeJS'
-        // nodejs 'NodeJS-18' 
+        nodejs 'NodeJS'  // Ensure this is installed via Jenkins Global Tool Configuration
     }
 
     stages {
@@ -14,48 +13,38 @@ pipeline {
             }
         }
 
-        // Wrap subsequent stages in dir block
-        stage('Playwright Framework Operations') {
+        stage('Install Dependencies') {
             steps {
                 dir('Hunt_Career_Playwright') {
-                    stage('Install Dependencies') {
-                        steps {
-                            echo 'Installing npm dependencies...'
-                            // For Windows agents, use bat
-                            // bat 'npm install'
-                            // For Linux/macOS agents, use sh
-                            bat 'npm install'
-                        }
-                    }
+                    echo 'Installing npm dependencies...'
+                    bat 'npm install'
+                }
+            }
+        }
 
-                    stage('Install Playwright Browsers') {
-                        steps {
-                            echo 'Installing Playwright browsers...'
-                            // For Windows agents, use bat
-                            // bat 'npx playwright install --with-deps'
-                            // For Linux/macOS agents, use sh
-                            bat 'npx playwright install --with-deps'
-                        }
-                    }
+        stage('Install Playwright Browsers') {
+            steps {
+                dir('Hunt_Career_Playwright') {
+                    echo 'Installing Playwright browsers...'
+                    bat 'npx playwright install --with-deps'
+                }
+            }
+        }
 
-                    stage('Run Playwright Tests') {
-                        steps {
-                            echo 'Running Playwright tests...'
-                            // For Windows agents, use bat
-                            // bat 'npx playwright test'
-                            // For Linux/macOS agents, use sh
-                            sh 'npx playwright test'
-                        }
-                    }
+        stage('Run Playwright Tests') {
+            steps {
+                dir('Hunt_Career_Playwright') {
+                    echo 'Running Playwright tests...'
+                    bat 'npx playwright test'
+                }
+            }
+        }
 
-                    stage('Archive Reports') {
-                        steps {
-                            echo 'Archiving Playwright reports...'
-                            // Path is already relative, ensure it's correct for playwright-report
-                            archiveArtifacts artifacts: 'playwright-report/**/*', allowEmptyArchive: true
-                            // archiveArtifacts artifacts: 'test-results/**/*', allowEmptyArchive: true
-                        }
-                    }
+        stage('Archive Reports') {
+            steps {
+                dir('Hunt_Career_Playwright') {
+                    echo 'Archiving Playwright reports...'
+                    archiveArtifacts artifacts: 'playwright-report/**/*', allowEmptyArchive: true
                 }
             }
         }
