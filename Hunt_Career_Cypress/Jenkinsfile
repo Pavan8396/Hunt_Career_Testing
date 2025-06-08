@@ -22,6 +22,15 @@ pipeline {
             }
         }
 
+        stage('Debug Report Folder') {
+            steps {
+                dir('Hunt_Career_Cypress') {
+                    echo 'Listing contents of mochawesome-report before merge...'
+                    bat 'dir mochawesome-report'
+                }
+            }
+        }
+
         stage('Clean Previous Reports') {
             steps {
                 dir('Hunt_Career_Cypress') {
