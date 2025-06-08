@@ -1,29 +1,3 @@
-// const { defineConfig } = require("cypress");
-
-// module.exports = defineConfig({
-//   e2e: {
-//     baseUrl: 'http://localhost:3000',
-//     setupNodeEvents(on, config) {
-//       require('cypress-mochawesome-reporter/plugin')(on);
-//     },
-//     reporter: 'cypress-mochawesome-reporter',
-//     reporterOptions: {
-//       charts: true,
-//       reportPageTitle: 'Test Report',
-//       embeddedScreenshots: true,
-//       inlineAssets: true,
-//       saveAllAttempts: true,
-//       overwrite: false,
-//       html: false,
-//       json: true
-//     },
-//     // retries: {
-//     //   runMode: 2,
-//     //   openMode: 0,
-//     // },
-//   },
-// });
-
 const { defineConfig } = require("cypress");
 
 module.exports = defineConfig({
@@ -46,5 +20,9 @@ module.exports = defineConfig({
       require('cypress-mochawesome-reporter/plugin')(on);
       return config;
     }
-  }
+  },
+  // retries: {
+  //     runMode: 2,
+  //     openMode: 0,
+  //   },
 });
