@@ -27,20 +27,18 @@
 const { defineConfig } = require("cypress");
 
 module.exports = defineConfig({
-
   reporter: 'cypress-mochawesome-reporter',
   reporterOptions: {
     reportDir: 'mochawesome-report',
-    charts: true,
-    reportPageTitle: 'Test Report',
+    overwrite: false,
+    html: false,
+    json: true,
     embeddedScreenshots: true,
     inlineAssets: true,
-    saveAllAttempts: true,
-    overwrite: false,
-    html: false, // Generate only JSON for merging
-    json: true
+    charts: true,
+    reportPageTitle: 'Test Report',
+    saveAllAttempts: true
   },
-
   e2e: {
     baseUrl: 'http://localhost:3000',
     setupNodeEvents(on, config) {

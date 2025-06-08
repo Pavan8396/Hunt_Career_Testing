@@ -14,10 +14,9 @@
     "@faker-js/faker": "^9.7.0"
   },
   "scripts": {
-  "cypress:open": "cypress open",
-  "cypress:run": "cypress run --headed",
+  "cypress:run": "cypress run --reporter cypress-mochawesome-reporter",
   "report:merge": "mochawesome-merge mochawesome-report/*.json > mochawesome.json",
-  "report:generate": "marge mochawesome.json --reportDir mochawesome-report --inline",
+  "report:generate": "marge mochawesome.json --reportDir mochawesome-report --reportTitle 'Cypress Test Report'",
   "report:full": "npm run report:merge && npm run report:generate",
   "test:run:report": "npm run cypress:run && npm run report:full"
   }

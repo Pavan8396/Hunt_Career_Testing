@@ -2,7 +2,7 @@ pipeline {
     agent any 
 
     tools {
-        nodejs 'NodeJS'  // Ensure 'NodeJS' is configured in Jenkins global tools
+        nodejs 'NodeJS'
     }
 
     stages {
@@ -18,6 +18,16 @@ pipeline {
                 dir('Hunt_Career_Cypress') {
                     echo 'Installing npm dependencies...'
                     bat 'npm install'
+                }
+            }
+        }
+
+        stage('Clean Previous Reports') {
+            steps {
+                dir('Hunt_Career_Cypress') {
+                    echo 'Cleaning old report files...'
+                    bat 'if exist mochawesome-report rmdir /s /q mochawesome-report'
+                    bat 'if exist mochawesome.json del mochawesome.json'
                 }
             }
         }
