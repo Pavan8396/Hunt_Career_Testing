@@ -14,10 +14,11 @@
     "@faker-js/faker": "^9.7.0"
   },
   "scripts": {
-  "cypress:run": "cypress run --reporter cypress-mochawesome-reporter",
-  "report:merge": "mochawesome-merge mochawesome-report/*.json > mochawesome.json",
-  "report:generate": "marge mochawesome.json --reportDir mochawesome-report --reportTitle 'Cypress Test Report'",
-  "report:full": "npm run report:merge && npm run report:generate",
-  "test:run:report": "npm run cypress:run && npm run report:full"
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run",
+    "report:merge": "mochawesome-merge mochawesome-report/*.json -o mochawesome-report/mochawesome.json",
+    "report:generate": "marge mochawesome-report/mochawesome.json -f report -o mochawesome-report",
+    "report:full": "npm run report:merge && npm run report:generate",
+    "test:run:report": "npm run cypress:run && npm run report:full"
   }
 }
