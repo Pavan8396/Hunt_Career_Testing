@@ -1,0 +1,77 @@
+pipeline {
+    agent any 
+
+    environment {
+        // EXAMPLE_VAR = "example_value"
+    }
+
+    tools {
+        maven 'MAVEN'
+        jdk 'JAVA'
+        // jdk 'AdoptOpenJDK-17' 
+        // maven 'Maven-3.9.6'
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                echo 'Checking out code...'
+                checkout scm
+            }
+        }
+
+        // Wrap subsequent stages in dir block
+        stage('TestNG Framework Operations') {
+            steps {
+                dir('Hunt_Career_TestNG_Hybrid_Framework') {
+                    stage('Build') {
+                        steps {
+                            echo 'Building the project...'
+                            // For Windows agents, use bat
+                            // bat 'mvn clean install -DskipTests'
+                            // For Linux/macOS agents, use sh
+                            bat 'mvn clean install -DskipTests'
+                        }
+                    }
+
+                    stage('Test') {
+                        steps {
+                            echo 'Running tests...'
+                            // For Windows agents, use bat
+                            // bat 'mvn test'
+                            // For Linux/macOS agents, use sh
+                            bat 'mvn test'
+                        }
+                    }
+
+                    stage('Archive Reports') {
+                        steps {
+                            echo 'Archiving reports...'
+                            archiveArtifacts artifacts: 'test-output/ExtentReports/extentReport.html', allowEmptyArchive: true // Adjusted path
+                            archiveArtifacts artifacts: 'test-output/emailable-report.html', allowEmptyArchive: true // Adjusted path
+                            archiveArtifacts artifacts: 'test-output/testng-results.xml', allowEmptyArchive: true // Adjusted path
+                            
+                            // Optional: Publish TestNG reports
+                            // publishTestNGResults testResultsPattern: 'test-output/testng-results.xml' // Adjusted path
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'Pipeline finished.'
+        }
+        success {
+            echo 'Pipeline executed successfully!'
+        }
+        failure {
+            echo 'Pipeline failed.'
+        }
+        unstable {
+            echo 'Pipeline is unstable.'
+        }
+    }
+}

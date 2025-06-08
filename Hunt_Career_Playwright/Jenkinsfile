@@ -1,0 +1,83 @@
+pipeline {
+    agent any 
+
+    environment {
+        // BASE_URL = "http://localhost:3000" 
+        // CI = 'true' 
+    }
+
+    tools {
+        nodejs 'NodeJS'
+        // nodejs 'NodeJS-18' 
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                echo 'Checking out code...'
+                checkout scm
+            }
+        }
+
+        // Wrap subsequent stages in dir block
+        stage('Playwright Framework Operations') {
+            steps {
+                dir('Hunt_Career_Playwright') {
+                    stage('Install Dependencies') {
+                        steps {
+                            echo 'Installing npm dependencies...'
+                            // For Windows agents, use bat
+                            // bat 'npm install'
+                            // For Linux/macOS agents, use sh
+                            sh 'npm install'
+                        }
+                    }
+
+                    stage('Install Playwright Browsers') {
+                        steps {
+                            echo 'Installing Playwright browsers...'
+                            // For Windows agents, use bat
+                            // bat 'npx playwright install --with-deps'
+                            // For Linux/macOS agents, use sh
+                            sh 'npx playwright install --with-deps'
+                        }
+                    }
+
+                    stage('Run Playwright Tests') {
+                        steps {
+                            echo 'Running Playwright tests...'
+                            // For Windows agents, use bat
+                            // bat 'npx playwright test'
+                            // For Linux/macOS agents, use sh
+                            sh 'npx playwright test'
+                        }
+                    }
+
+                    stage('Archive Reports') {
+                        steps {
+                            echo 'Archiving Playwright reports...'
+                            // Path is already relative, ensure it's correct for playwright-report
+                            archiveArtifacts artifacts: 'playwright-report/**/*', allowEmptyArchive: true
+                            // archiveArtifacts artifacts: 'test-results/**/*', allowEmptyArchive: true
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'Pipeline finished.'
+        }
+        success {
+            echo 'Pipeline executed successfully!'
+        }
+        failure {
+            echo 'Pipeline failed.'
+        }
+        unstable {
+            echo 'Pipeline is unstable.'
+        }
+    }
+}
