@@ -22,11 +22,28 @@ pipeline {
             }
         }
 
+        stage('Debug Workspace') {
+            steps {
+                dir('Hunt_Career_Cypress') {
+                    echo 'Debugging workspace structure...'
+                    bat 'dir'
+                }
+            }
+        }
+
         stage('Debug Report Folder') {
             steps {
                 dir('Hunt_Career_Cypress') {
-                    echo 'Listing contents of mochawesome-report before merge...'
-                    bat 'dir mochawesome-report'
+                    script {
+                        echo 'Checking if mochawesome-report folder exists...'
+                        def reportExists = fileExists('mochawesome-report')
+                        if (reportExists) {
+                            echo 'mochawesome-report exists. Listing contents...'
+                            bat 'dir mochawesome-report'
+                        } else {
+                            echo 'mochawesome-report directory does NOT exist.'
+                        }
+                    }
                 }
             }
         }
@@ -34,7 +51,7 @@ pipeline {
         stage('Clean Previous Reports') {
             steps {
                 dir('Hunt_Career_Cypress') {
-                    echo 'Cleaning old report files...'
+                    echo 'Cleaning old report files if they exist...'
                     bat 'if exist mochawesome-report rmdir /s /q mochawesome-report'
                     bat 'if exist mochawesome.json del mochawesome.json'
                 }
