@@ -31,7 +31,9 @@ public class Register extends Base {
 
 	@AfterMethod
 	public void tearDown() {
-		driver.quit();
+		if (driver != null) {
+			driver.quit();	
+		}
 	}
 
 	@Test(priority = 1)
