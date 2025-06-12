@@ -63,7 +63,7 @@ pipeline {
             archiveArtifacts artifacts: 'Hunt_Career_TestNG_Hybrid_Framework/test-output/emailable-report.html', allowEmptyArchive: true
             archiveArtifacts artifacts: 'Hunt_Career_TestNG_Hybrid_Framework/test-output/testng-results.xml', allowEmptyArchive: true
             
-            publishTestNGResults testResultsPattern: 'Hunt_Career_TestNG_Hybrid_Framework/test-output/testng-results.xml', allowMissingResults: true, escapeTestDescriptons: true, escapeExceptionMsg: true
+            junit testResults: 'Hunt_Career_TestNG_Hybrid_Framework/test-output/testng-results.xml', allowEmptyResults: true
 
             publishHTML(target: [
                 allowMissing: true,
