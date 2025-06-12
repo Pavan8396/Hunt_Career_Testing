@@ -29,7 +29,7 @@ public class Search extends Base {
 		driver.quit();
 	}
 	
-	@Test(priority = 1)
+	@Test(priority = 1, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TC_1_verifyValidSearch() {
 
 		sp = new SearchPage(driver);
@@ -38,7 +38,7 @@ public class Search extends Base {
 		sp.getSearchTag("validSearchTerm");
 	}
 	
-	@Test(priority = 2)
+	@Test(priority = 2, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TC_2_verifyInvalidSearch() {
 		sp = new SearchPage(driver);
 		sp.enterKeywordIntoSearchInputField(dataProp.getProperty("invalidSearchTerm"));
@@ -46,7 +46,7 @@ public class Search extends Base {
 		sp.getSearchTag("invalidSearchTerm");
 	}
 	
-	@Test(priority = 3)
+	@Test(priority = 3, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TC_3_verifySearchWithSpecialCharcters() {
 		sp = new SearchPage(driver);
 		sp.enterKeywordIntoSearchInputField(dataProp.getProperty("specialCharctersSearchTerm"));
@@ -54,7 +54,7 @@ public class Search extends Base {
 		sp.getSearchTag("specialCharctersSearchTerm");
 	}
 	
-	@Test(priority = 4)
+	@Test(priority = 4, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TC_4_verifySearchWithFilters() {
 		sp = new SearchPage(driver);
 		sp.enterKeywordIntoSearchInputField(dataProp.getProperty("validSearchTerm"));

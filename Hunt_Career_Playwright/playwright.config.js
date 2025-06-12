@@ -26,7 +26,7 @@ export default defineConfig({
   reporter: [['html', { open: 'never' }]], //never | on | always 
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
-    headless: false,
+    headless: !!process.env.CI,
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
     baseURL: 'http://localhost:3000',

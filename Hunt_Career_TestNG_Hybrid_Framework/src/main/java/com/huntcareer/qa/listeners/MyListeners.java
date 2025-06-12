@@ -3,6 +3,7 @@ package com.huntcareer.qa.listeners;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
 
 import org.openqa.selenium.WebDriver;
 import org.testng.ITestContext;
@@ -39,8 +40,9 @@ public class MyListeners implements ITestListener {
 	public void onTestFailure(ITestResult result) {
 		WebDriver driver = null;
 		try {
-			driver = (WebDriver) result.getTestClass().getRealClass().getDeclaredField("driver")
-					.get(result.getInstance());
+			Field field = result.getTestClass().getRealClass().getDeclaredField("driver");
+			field.setAccessible(true);		
+			driver = (WebDriver) field.get(result.getInstance());
 		} catch (Throwable e) {
 			e.printStackTrace();
 		}

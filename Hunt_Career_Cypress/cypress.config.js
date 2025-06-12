@@ -21,8 +21,8 @@ module.exports = defineConfig({
       return config;
     }
   },
-  // retries: {
-  //     runMode: 2,
-  //     openMode: 0,
-  //   },
+  retries: {
+      runMode: 2,
+      openMode: 0,
+    },
 });

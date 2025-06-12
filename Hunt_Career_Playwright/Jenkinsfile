@@ -34,17 +34,16 @@ pipeline {
         stage('Run Playwright Tests') {
             steps {
                 dir('Hunt_Career_Playwright') {
-                    echo 'Running Playwright tests...'
-                    bat 'npx playwright test'
-                }
-            }
-        }
-
-        stage('Archive Reports') {
-            steps {
-                dir('Hunt_Career_Playwright') {
-                    echo 'Archiving Playwright reports...'
-                    archiveArtifacts artifacts: 'playwright-report/**/*', allowEmptyArchive: true
+                    script {
+                        try {
+                            echo 'Running Playwright tests...'
+                            bat 'npx playwright test'
+                        } catch (any) {
+                            currentBuild.result = 'UNSTABLE'
+                            echo "Playwright tests execution failed or reported errors. Build set to UNSTABLE."
+                            throw any // Re-throw the error
+                        }
+                    }
                 }
             }
         }
@@ -52,16 +51,35 @@ pipeline {
 
     post {
         always {
-            echo 'Pipeline finished.'
+            echo 'Pipeline finished. Archiving and publishing reports...'
+            // Existing archiveArtifacts for Playwright reports
+            dir('Hunt_Career_Playwright') { // Ensure dir context for archive if paths are relative
+                archiveArtifacts artifacts: 'playwright-report/**/*', allowEmptyArchive: true
+            }
+
+            // Add HTML Publisher step for Playwright report
+            publishHTML(target: [
+                allowMissing: true,
+                alwaysLinkToLastBuild: true,
+                keepAll: true,
+                reportDir: 'Hunt_Career_Playwright/playwright-report', // Path from workspace root
+                reportFiles: 'index.html', // Main html file
+                reportName: 'Playwright Test Report'
+            ])
         }
         success {
             echo 'Pipeline executed successfully!'
+            // echo 'TODO: Send success notification'
         }
         failure {
-            echo 'Pipeline failed.'
+            echo 'Pipeline failed. Sending failure notification (placeholder)...'
+            // Example placeholder for mail:
+            // mail to: 'your-team@example.com', subject: "FAILED: Pipeline ${env.JOB_NAME} [${env.BUILD_NUMBER}]", body: "Check console output: ${env.BUILD_URL}"
         }
         unstable {
-            echo 'Pipeline is unstable.'
+            echo 'Pipeline is unstable (tests likely failed). Sending unstable notification (placeholder)...'
+            // Example placeholder for mail:
+            // mail to: 'your-team@example.com', subject: "UNSTABLE: Pipeline ${env.JOB_NAME} [${env.BUILD_NUMBER}]", body: "Tests reported issues. Check results: ${env.BUILD_URL}"
         }
     }
 }

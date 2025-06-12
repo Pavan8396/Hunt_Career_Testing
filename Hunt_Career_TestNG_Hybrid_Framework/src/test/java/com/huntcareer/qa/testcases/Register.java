@@ -36,7 +36,7 @@ public class Register extends Base {
 		}
 	}
 
-	@Test(priority = 1)
+	@Test(priority = 1,  retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TC_1_verifyRegisterWithValidData() {
 
 		rp = new RegisterPage(driver);
@@ -53,7 +53,7 @@ public class Register extends Base {
 		lp.verifyRegisterSuccess();
 	}
 
-	@Test(priority = 2)
+	@Test(priority = 2, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TC_2_verifyDuplicateData() {
 
 		rp = new RegisterPage(driver);
@@ -70,7 +70,7 @@ public class Register extends Base {
 		rp.verifyUserAlreadyExistsMessage();
 	}
 
-	@Test(priority = 3)
+	@Test(priority = 3, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TC_3_verifyNoFirstNameData() {
 
 		rp = new RegisterPage(driver);
@@ -80,7 +80,7 @@ public class Register extends Base {
 		rp.verifyBlankFirstNameMessage();
 	}
 
-	@Test(priority = 4)
+	@Test(priority = 4, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TC_4_verifyNoLastNameData() {
 
 		rp = new RegisterPage(driver);
@@ -90,7 +90,7 @@ public class Register extends Base {
 		rp.verifyBlankLastNameMessage();
 	}
 
-	@Test(priority = 5)
+	@Test(priority = 5, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TC_5_verifyNoEmailData() {
 
 		rp = new RegisterPage(driver);
@@ -104,7 +104,7 @@ public class Register extends Base {
 		rp.verifyBlankEmailMessage();
 	}
 
-	@Test(priority = 6)
+	@Test(priority = 6, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TC_6_verifyNoPasswordData() {
 
 		rp = new RegisterPage(driver);
@@ -118,7 +118,7 @@ public class Register extends Base {
 		rp.verifyPasswordMustBeAtLeast8CharctersLongMessage();
 	}
 
-	@Test(priority = 7)
+	@Test(priority = 7, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TC_7_verifyPasswordWithLessCharacters() {
 
 		rp = new RegisterPage(driver);
@@ -133,7 +133,7 @@ public class Register extends Base {
 		rp.verifyPasswordMustBeAtLeast8CharctersLongMessage();
 	}
 
-	@Test(priority = 8)
+	@Test(priority = 8, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TC_8_verifyRegisterWithoutConfirmPasswordData() {
 
 		rp = new RegisterPage(driver);
@@ -147,7 +147,7 @@ public class Register extends Base {
 		rp.verifyPasswordDoNotMatchMessage();
 	}
 
-	@Test(priority = 9)
+	@Test(priority = 9, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TC_9_verifyNoPhoneNumberData() {
 
 		rp = new RegisterPage(driver);
@@ -163,7 +163,7 @@ public class Register extends Base {
 		rp.verifyPhoneNumberIsRequiredMessage();
 	}
 
-	@Test(priority = 10)
+	@Test(priority = 10, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TC_10_verifyInvalidPhoneNumberData() {
 
 		rp = new RegisterPage(driver);
@@ -180,7 +180,7 @@ public class Register extends Base {
 		rp.verifyInvalidPhoneNumberMessage();
 	}
 
-	@Test(priority = 11)
+	@Test(priority = 11, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TC_11_verifyEmailWithoutAllDomainData() {
 
 		rp = new RegisterPage(driver);
@@ -195,7 +195,7 @@ public class Register extends Base {
 		rp.verifyInvalidEmailAndPassword();
 	}
 
-	@Test(priority = 12)
+	@Test(priority = 12, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TC_12_verifyWithoutTopLevelDomainData() {
 
 		rp = new RegisterPage(driver);
@@ -210,7 +210,7 @@ public class Register extends Base {
 		rp.verifyInvalidEmailAndPassword();
 	}
 
-	@Test(priority = 13)
+	@Test(priority = 13, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TC_13_verifyEmailWithDoubleAtData() {
 
 		rp = new RegisterPage(driver);
@@ -225,7 +225,7 @@ public class Register extends Base {
 		rp.verifyInvalidEmailAndPassword();
 	}
 
-	@Test(priority = 14)
+	@Test(priority = 14, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TC_14_verifyDotBeforeAtTheRateData() {
 
 		rp = new RegisterPage(driver);
@@ -242,7 +242,7 @@ public class Register extends Base {
 		lp.verifyRegisterSuccess();
 	}
 
-	@Test(priority = 15)
+	@Test(priority = 15, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TC_15_verifyEmailWithoutDomainData() {
 
 		rp = new RegisterPage(driver);
@@ -257,7 +257,7 @@ public class Register extends Base {
 		rp.verifyInvalidEmailAndPassword();
 	}
 	
-	@Test(priority = 16)
+	@Test(priority = 16, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TC_16_verifyWithoutUserNameData() {
 
 		rp = new RegisterPage(driver);

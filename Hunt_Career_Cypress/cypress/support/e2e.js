@@ -18,6 +18,32 @@ import './commands'
 import 'cypress-mochawesome-reporter/register';
 
 Cypress.on('uncaught:exception', (err, runnable) => {
-    return false;
+    // Log the error to the Cypress command log for visibility
+    Cypress.log({
+        name: 'Uncaught Exception',
+        message: err.message,
+        consoleProps: () => {
+            return {
+                Error: err,
+                Runnable: runnable
+            };
+        }
+    });
+    
+    // Example: Only ignore a very specific, known benign error.
+    // Replace this condition with actual known benign errors if any.
+    // If there are none, the best practice is often to REMOVE this handler entirely
+    // or `return true;` to let tests fail on any uncaught app exception.
+    if (err.message.includes('ignore_this_specific_error_if_it_exists')) {
+        return false; // Don't fail the test for this specific error
+    }
+    // For most other uncaught exceptions, it's better to let Cypress fail the test.
+    // However, to maintain previous behavior of ignoring all for now (while recommending removal),
+    // this example will still return false, but with a strong recommendation to make it more strict.
+    // For a stricter approach, this should be `return true;`
+    console.warn('Warning: An uncaught application exception was ignored. Review if this is expected. Error: ' + err.message);
+    return false; // TEMPORARY: Keeps old behavior of ignoring all, but logs it.
+                  // STRONGLY RECOMMENDED: Change to 'return true;' or remove handler 
+                  // unless specific benign errors are being filtered.
   });
   

@@ -18,7 +18,7 @@ pipeline {
             steps {
                 dir('Hunt_Career_TestNG_Hybrid_Framework') {
                     echo 'Building the project...'
-                    bat 'mvn clean install -DskipTests'
+                    bat 'mvn -B clean install -DskipTests'
                 }
             }
         }
@@ -26,8 +26,16 @@ pipeline {
         stage('Test') {
             steps {
                 dir('Hunt_Career_TestNG_Hybrid_Framework') {
-                    echo 'Running tests...'
-                    bat 'mvn test'
+                    script {
+                        try {
+                            echo 'Running tests...'
+                            bat 'mvn -B test'
+                        } catch (any) {
+                            currentBuild.result = 'UNSTABLE'
+                            echo "TestNG tests execution failed or reported errors. Build set to UNSTABLE."
+                            throw any // Re-throw the error
+                        }
+                    }
                 }
             }
         }
@@ -39,9 +47,6 @@ pipeline {
                     archiveArtifacts artifacts: 'test-output/ExtentReports/extentReport.html', allowEmptyArchive: true
                     archiveArtifacts artifacts: 'test-output/emailable-report.html', allowEmptyArchive: true
                     archiveArtifacts artifacts: 'test-output/testng-results.xml', allowEmptyArchive: true
-
-                    // Optional: publish TestNG results plugin
-                    // publishTestNGResults testResultsPattern: 'test-output/testng-results.xml'
                 }
             }
         }
@@ -49,16 +54,48 @@ pipeline {
 
     post {
         always {
-            echo 'Pipeline finished.'
+            echo 'Pipeline finished. Publishing reports and archiving...'
+            // Archiving is already relative to Hunt_Career_TestNG_Hybrid_Framework due to Jenkinsfile location, 
+            // but explicit dir is safer if Jenkinsfile moves.
+            // For publishTestNGResults, it's often workspace relative.
+            
+            archiveArtifacts artifacts: 'Hunt_Career_TestNG_Hybrid_Framework/test-output/ExtentReports/extentReport.html', allowEmptyArchive: true
+            archiveArtifacts artifacts: 'Hunt_Career_TestNG_Hybrid_Framework/test-output/emailable-report.html', allowEmptyArchive: true
+            archiveArtifacts artifacts: 'Hunt_Career_TestNG_Hybrid_Framework/test-output/testng-results.xml', allowEmptyArchive: true
+            
+            publishTestNGResults testResultsPattern: 'Hunt_Career_TestNG_Hybrid_Framework/test-output/testng-results.xml', allowMissingResults: true, escapeTestDescriptons: true, escapeExceptionMsg: true
+
+            publishHTML(target: [
+                allowMissing: true,
+                alwaysLinkToLastBuild: true,
+                keepAll: true,
+                reportDir: 'Hunt_Career_TestNG_Hybrid_Framework/test-output/ExtentReports', 
+                reportFiles: 'extentReport.html', 
+                reportName: 'Extent Test Report'
+            ])
+
+            publishHTML(target: [
+                allowMissing: true,
+                alwaysLinkToLastBuild: true,
+                keepAll: true,
+                reportDir: 'Hunt_Career_TestNG_Hybrid_Framework/test-output', 
+                reportFiles: 'emailable-report.html', 
+                reportName: 'TestNG Emailable Report'
+            ])
         }
         success {
             echo 'Pipeline executed successfully!'
+            // echo 'TODO: Send success notification' 
         }
         failure {
-            echo 'Pipeline failed.'
+            echo 'Pipeline failed. Sending failure notification (placeholder)...'
+            // Example placeholder for mail:
+            // mail to: 'your-team@example.com', subject: "FAILED: Pipeline ${env.JOB_NAME} [${env.BUILD_NUMBER}]", body: "Check console output: ${env.BUILD_URL}"
         }
         unstable {
-            echo 'Pipeline is unstable.'
+            echo 'Pipeline is unstable (tests likely failed). Sending unstable notification (placeholder)...'
+            // Example placeholder for mail:
+            // mail to: 'your-team@example.com', subject: "UNSTABLE: Pipeline ${env.JOB_NAME} [${env.BUILD_NUMBER}]", body: "Tests reported issues. Check results: ${env.BUILD_URL}"
         }
     }
 }
