@@ -131,7 +131,6 @@ class SearchPage extends BasePage {
         }
     }
 
-    // Validation methods (same pattern as LoginPage)
     validationMessage(element) {
         this.waitUntilVisible(element);
     }
