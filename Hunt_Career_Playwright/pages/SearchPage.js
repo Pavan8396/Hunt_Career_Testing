@@ -22,11 +22,11 @@ class SearchPage extends BasePage {
   }
 
   locationTag(location) {
-    return this.page.locator(`//div[contains(text(), "📍 ${location}")]`);
+    return this.page.locator(`//span[contains(., "📍 ${location}")]`);
   }
 
   jobTypeTag(jobType) {
-    return this.page.locator(`//div[contains(text(), "🧾 ${jobType}")]`);
+    return this.page.locator(`//span[contains(., "🧾 ${jobType}")]`);
   }
 
   locationOption(location) {
