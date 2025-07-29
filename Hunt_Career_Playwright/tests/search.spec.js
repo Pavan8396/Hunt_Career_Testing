@@ -9,7 +9,7 @@ const test = baseTest.extend({
 });
 
 test.describe('Search Tests', () => {
-  test("TC-1: Search with a valid keyword", async ({ page, searchPage }) => {
+  test("TC-1: Search with a valid keyword", async ({ searchPage }) => {
     const searchTerm = searchData.validSearch.searchTerm
     await searchPage.navigate();
     await searchPage.search(searchTerm);
@@ -17,7 +17,7 @@ test.describe('Search Tests', () => {
     await expect(searchPage.searchTag(searchTerm)).toBeVisible();
   });
 
-  test("TC-2-Search with a invalid keyword", async ({ page, searchPage}) =>{
+  test("TC-2-Search with a invalid keyword", async ({ searchPage}) =>{
     const searchTerm = searchData.invalidSearch.searchTerm
     await searchPage.navigate();
     await searchPage.search(searchTerm);
@@ -26,7 +26,7 @@ test.describe('Search Tests', () => {
     await expect(searchPage.noJobsFoundMessage).toBeVisible();
   })
 
-  test("TC-3: Search with a special character", async ({page, searchPage}) =>{
+  test("TC-3: Search with a special character", async ({ searchPage}) =>{
     const searchTerm = searchData.specialCharSearch.searchTerm
     await searchPage.navigate();
     await searchPage.search(searchTerm);
@@ -34,7 +34,7 @@ test.describe('Search Tests', () => {
     await expect(searchPage.searchTag(searchTerm)).toBeVisible();
   })
 
-  test("TC-4: Search with filter", async ({page, searchPage}) =>{
+  test("TC-4: Search with filter", async ({ searchPage}) =>{
     const searchTerm = searchData.searchWithFilters.searchTerm
     await searchPage.navigate();
     await searchPage.search(searchTerm);
