@@ -16,6 +16,12 @@ public class HomePage {
 
 	@FindBy(xpath = "//div[contains(text(), 'Logged in successfully!')]")
 	private WebElement successLoginMessage;
+	
+	@FindBy(xpath = "//a[contains(text(), 'Login')]")
+	private WebElement loginHomeLink;
+	
+	@FindBy(xpath = "//a[contains(text(), 'Signup')]")
+	private WebElement registerHomeLink;
 
 	public HomePage(WebDriver driver) {
 		this.driver = driver;
@@ -28,5 +34,13 @@ public class HomePage {
 				"Logged in successfully!", "Message Text Mismatch");
 		Assert.assertTrue(wait.until(ExpectedConditions.invisibilityOf(successLoginMessage)),
 				"Success message should not be visible anymore");
+	}
+	
+	public void clickOnLoginHomeLink() {
+		loginHomeLink.click();
+	}
+	
+	public void clickOnRegisterHomeLink() {
+		registerHomeLink.click();
 	}
 }

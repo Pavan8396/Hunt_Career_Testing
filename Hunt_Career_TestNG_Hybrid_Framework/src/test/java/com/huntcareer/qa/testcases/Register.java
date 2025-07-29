@@ -8,6 +8,8 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import com.huntcareer.qa.base.Base;
+import com.huntcareer.qa.pages.HomePage;
+import com.huntcareer.qa.pages.LandingPage;
 import com.huntcareer.qa.pages.LoginPage;
 import com.huntcareer.qa.pages.RegisterPage;
 import com.huntcareer.qa.testdata.RegisterData;
@@ -16,7 +18,9 @@ public class Register extends Base {
 	WebDriver driver;
 	RegisterPage rp;
 	LoginPage lp;
-
+	LandingPage ldp;
+	HomePage hp;
+	
 	public Register() {
 		super();
 	}
@@ -26,7 +30,10 @@ public class Register extends Base {
 		// loadPropertiesFile();
 		driver = inicializeBrowserAndOpenApplication(prop.getProperty("browser"));
 		// driver.get(loadPropertiesFile().getProperty("url")+"/signup");
-		driver.get(prop.getProperty("url") + "/signup");
+		driver.get(prop.getProperty("url"));
+		ldp = new LandingPage(driver);
+		hp = ldp.clickOnJobSeekerRole();
+		hp.clickOnRegisterHomeLink();
 	}
 
 	@AfterMethod

@@ -8,6 +8,7 @@ import org.testng.annotations.Test;
 
 import com.huntcareer.qa.base.Base;
 import com.huntcareer.qa.pages.HomePage;
+import com.huntcareer.qa.pages.LandingPage;
 import com.huntcareer.qa.pages.LoginPage;
 import com.huntcareer.qa.utils.Utilities;
 
@@ -15,6 +16,7 @@ public class Login extends Base {
 	public WebDriver driver;
 	LoginPage lp;
 	HomePage hp;
+	LandingPage ldp;
 
 	public Login() {
 		super();
@@ -24,7 +26,10 @@ public class Login extends Base {
 	public void setup() {
 		// loadPropertiesFile();
 		driver = inicializeBrowserAndOpenApplication(prop.getProperty("browser"));
-		driver.get(prop.getProperty("url") + "/login");
+		driver.get(prop.getProperty("url"));
+		ldp = new LandingPage(driver);
+		hp = ldp.clickOnJobSeekerRole();
+		hp.clickOnLoginHomeLink();
 		// driver.get(loadPropertiesFile().getProperty("url")+"/login");
 	}
 

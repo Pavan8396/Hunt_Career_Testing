@@ -6,12 +6,16 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import com.huntcareer.qa.base.Base;
+import com.huntcareer.qa.pages.HomePage;
+import com.huntcareer.qa.pages.LandingPage;
 import com.huntcareer.qa.pages.SearchPage;
 
 public class Search extends Base {
 	WebDriver driver;
 	SearchPage sp;
-
+	LandingPage ldp;
+	HomePage hp;
+	
 	public Search() {
 		super();
 	}
@@ -22,6 +26,8 @@ public class Search extends Base {
 		driver = inicializeBrowserAndOpenApplication(prop.getProperty("browser"));
 		// driver.get(loadPropertiesFile().getProperty("url")+"/signup");
 		driver.get(prop.getProperty("url"));
+		ldp = new LandingPage(driver);
+		hp = ldp.clickOnJobSeekerRole();
 	}
 
 	@AfterMethod

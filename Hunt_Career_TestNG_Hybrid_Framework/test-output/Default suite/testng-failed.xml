@@ -5,9 +5,12 @@
     <classes>
       <class name="com.huntcareer.qa.testcases.Search">
         <methods>
+          <include name="TC_3_verifySearchWithSpecialCharcters"/>
+          <include name="TC_1_verifyValidSearch"/>
           <include name="setup"/>
           <include name="tearDown"/>
           <include name="TC_4_verifySearchWithFilters"/>
+          <include name="TC_2_verifyInvalidSearch"/>
         </methods>
       </class> <!-- com.huntcareer.qa.testcases.Search -->
     </classes>

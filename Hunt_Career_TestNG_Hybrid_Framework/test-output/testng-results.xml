@@ -2,24 +2,24 @@
 <testng-results ignored="0" total="1" passed="1" failed="0" skipped="0">
   <reporter-output>
   </reporter-output>
-  <suite started-at="2025-06-07T22:55:21 IST" name="Default suite" finished-at="2025-06-07T22:55:25 IST" duration-ms="4217">
+  <suite started-at="2025-07-29T23:02:49 IST" name="Default suite" finished-at="2025-07-29T23:02:57 IST" duration-ms="8593">
     <groups>
     </groups>
-    <test started-at="2025-06-07T22:55:21 IST" name="Default test" finished-at="2025-06-07T22:55:25 IST" duration-ms="4217">
-      <class name="com.huntcareer.qa.testcases.Search">
-        <test-method is-config="true" signature="setup()[pri:0, instance:com.huntcareer.qa.testcases.Search@26794848]" started-at="2025-06-07T22:55:21 IST" name="setup" finished-at="2025-06-07T22:55:24 IST" duration-ms="2997" status="PASS">
+    <test started-at="2025-07-29T23:02:49 IST" name="Default test" finished-at="2025-07-29T23:02:57 IST" duration-ms="8593">
+      <class name="com.huntcareer.qa.testcases.Register">
+        <test-method is-config="true" signature="setup()[pri:0, instance:com.huntcareer.qa.testcases.Register@40f70521]" started-at="2025-07-29T23:02:49 IST" name="setup" finished-at="2025-07-29T23:02:52 IST" duration-ms="3055" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- setup -->
-        <test-method signature="TC_4_verifySearchWithFilters()[pri:4, instance:com.huntcareer.qa.testcases.Search@26794848]" started-at="2025-06-07T22:55:24 IST" name="TC_4_verifySearchWithFilters" finished-at="2025-06-07T22:55:25 IST" duration-ms="1011" status="PASS">
+        <test-method signature="TC_6_verifyNoPasswordData()[pri:6, instance:com.huntcareer.qa.testcases.Register@40f70521]" started-at="2025-07-29T23:02:52 IST" name="TC_6_verifyNoPasswordData" finished-at="2025-07-29T23:02:57 IST" duration-ms="5173" status="PASS">
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- TC_4_verifySearchWithFilters -->
-        <test-method is-config="true" signature="tearDown()[pri:0, instance:com.huntcareer.qa.testcases.Search@26794848]" started-at="2025-06-07T22:55:25 IST" name="tearDown" finished-at="2025-06-07T22:55:25 IST" duration-ms="158" status="PASS">
+        </test-method> <!-- TC_6_verifyNoPasswordData -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:com.huntcareer.qa.testcases.Register@40f70521]" started-at="2025-07-29T23:02:57 IST" name="tearDown" finished-at="2025-07-29T23:02:57 IST" duration-ms="302" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- tearDown -->
-      </class> <!-- com.huntcareer.qa.testcases.Search -->
+      </class> <!-- com.huntcareer.qa.testcases.Register -->
     </test> <!-- Default test -->
   </suite> <!-- Default suite -->
 </testng-results>
