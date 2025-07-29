@@ -28,6 +28,9 @@ export default class LoginPage extends BasePage{
     checkPasswordIsRequiredMessage(){
         return cy.xpath("//div[contains(text(), 'Password is required.')]")
     }
+    loginHomeLink(){
+        return cy.xpath("//a[contains(text(), 'Login')]")
+    }
 
     //Actions
     enterEmailField(email){
@@ -38,6 +41,12 @@ export default class LoginPage extends BasePage{
     }
     clickLoginButton(){
         this.clickElement(this.LoginButton());
+    }
+
+    navigate(){
+        cy.visit("/");
+        this.navigateToJobSeeker();
+        this.clickElement(this.loginHomeLink());
     }
 
     login(email, password){

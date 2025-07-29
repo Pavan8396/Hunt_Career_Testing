@@ -18,7 +18,11 @@
   "blankPassword":{
     "email":"upavan@mailinator.com",
     "password": " "
-  }, 
+  },
+  "NoEmail":{
+    "email":" ",
+    "password": "Test@1234"
+  },
   "EmailwithoutDomain":{
     "email":"pavanu@.com",
     "password":"Test@1234"

@@ -11,4 +11,10 @@ export class BasePage {
     typeInElement(element, text){
         element.should('be.visible').type(text)
     }
+    navigateToJobSeeker(){
+        return cy.xpath("//h2[contains(text(), 'I am a Job Seeker')]").click();
+    }
+    navigateToEmployer(){
+        return cy.xpath("//h2[contains(text(), 'I am a Employer')]").click();
+    }
 }

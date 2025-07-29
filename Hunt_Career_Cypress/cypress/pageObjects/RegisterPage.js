@@ -58,6 +58,9 @@ export default class RegisterPage extends BasePage {
     checkPhoneNumberInvalidMessage(){
         return cy.xpath("//div[contains(text(), 'Please enter a valid 10-digit phone number.')]")
     }
+    registerLinkHomePage(){
+        return cy.xpath("//a[contains(text(), 'Signup')]")
+    }
 
     // Actions
     enterFirstNameField(firstName) {
@@ -98,6 +101,12 @@ export default class RegisterPage extends BasePage {
     }
     clickSignupButton() {
         this.clickElement(this.SignupButton());
+    }
+    navigate(){
+        cy.visit('/');
+        this.navigateToJobSeeker();
+        this.clickElement(this.registerLinkHomePage());
+
     }
 
     register(firstName, lastName, email, password, confirmPassword, phoneNumber) {

@@ -106,6 +106,10 @@ export default class SearchPage extends BasePage {
     clickClearAllFilters() {
         this.clickElement(this.ClearAllFiltersButton());
     }
+    navigation(){
+        cy.visit("/");
+        this.navigateToJobSeeker();
+    }
 
     // Main search action
     search(searchTerm, location = null, jobType = null) {
