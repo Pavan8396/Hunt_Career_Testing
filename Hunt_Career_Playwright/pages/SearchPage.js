@@ -1,6 +1,6 @@
 import { BasePage } from "./BasePage"
 
-class SearchPage extends BasePage {
+export class SearchPage extends BasePage {
   constructor(page) {
     super(page);
     this.page = page;
@@ -90,6 +90,11 @@ class SearchPage extends BasePage {
     await this.clearAllFiltersButton.click();
   }
 
+  // Actions
+  async navigate() {
+    await this.page.goto('/');
+  }
+
   // Composite action
   async search(searchTerm, location = null, jobType = null) {
     await this.enterSearchTerm(searchTerm);
@@ -109,4 +114,3 @@ class SearchPage extends BasePage {
     }
   }
 }
-module.exports = { SearchPage };

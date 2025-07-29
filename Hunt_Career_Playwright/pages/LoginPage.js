@@ -14,6 +14,10 @@ export class LoginPage extends BasePage {
         this.passwordRequiredMsg = page.locator("//div[contains(text(), 'Password is required.')]");
     }
 
+    async navigate() {
+        await this.page.goto('/login');
+    }
+
     async login(email, password) {
         await this.typeInElement(this.emailField, email);
         await this.typeInElement(this.passwordField, password);
