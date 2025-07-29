@@ -1,6 +1,6 @@
 import { BasePage } from "./basePage";
 
-class LoginPage extends BasePage{
+export default class LoginPage extends BasePage{
     EmailField(){
         return cy.xpath("//input[@id='email']");
     }
@@ -45,13 +45,4 @@ class LoginPage extends BasePage{
         this.enterPasswordField(password);
         this.clickLoginButton();
     }
-
-    validationMessage(element){
-        this.waitUntilVisible(element)
-    }
-    validationMessageNotExist(element){
-        this.waitUntilNotVisible(element)
-    }
 }
-
-export const loginPage = new LoginPage();

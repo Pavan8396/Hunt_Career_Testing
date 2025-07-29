@@ -1,6 +1,6 @@
 import { BasePage } from "./basePage";
 
-class RegisterPage extends BasePage {
+export default class RegisterPage extends BasePage {
     FirstNameField() {
         return cy.xpath("//input[@id='firstName']");
     }
@@ -127,13 +127,4 @@ class RegisterPage extends BasePage {
         this.enterConfirmPasswordField(confirmPassword);
         this.clickSecondNextButton();
     }
-
-    validationMessage(element) {
-        this.waitUntilVisible(element);
-    }
-    validationMessageNotExist(element) {
-        this.waitUntilNotVisible(element);
-    }
 }
-
-export const registerPage = new RegisterPage();

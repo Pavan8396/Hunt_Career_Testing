@@ -11,8 +11,9 @@ The project follows a standard Cypress directory structure with some additions t
 *   **`cypress/e2e`**: This directory contains all the test script files (also known as spec files). Each `.cy.js` file typically represents a test suite for a specific feature or functionality of the application.
     *   Example: `login.cy.js`, `register.cy.js`, `search.cy.js`
 
-*   **`cypress/fixtures`**: Fixtures are used to store static test data that can be loaded into tests. This helps in separating test data from test logic, making tests cleaner and easier to manage. Data is typically stored in JSON or JS files.
-    *   Example: `loginData.json`, `registerData.js`, `searchData.json`
+*   **`cypress/fixtures`**: This directory holds test data. This framework uses a combination of static JSON files and dynamic JavaScript modules.
+    *   `loginData.json`, `searchData.json`: These are static data files, best for test cases that don't change. They can be loaded using `cy.fixture()`.
+    *   `registerData.js`: This is a JavaScript module that programmatically generates dynamic and random test data for user registration, using the `@faker-js/faker` library. It is imported directly into the test file, not loaded with `cy.fixture()`. This approach is powerful for creating a wide variety of realistic test inputs.
 
 *   **`cypress/pageObjects`**: This directory implements the Page Object Model (POM) design pattern. Each `.js` file represents a page in the application and encapsulates the page's elements and the actions that can be performed on them. This promotes reusability and maintainability of test code.
     *   Example: `BasePage.js`, `LoginPage.js`, `RegisterPage.js`, `SearchPage.js`
@@ -120,27 +121,9 @@ Users might need to modify `baseUrl` or other environment-specific settings in `
 
 ## Custom Commands
 
-Custom commands provide a way to abstract common sequences of actions or complex logic into reusable functions. They help in making test scripts more readable, maintainable, and DRY (Don't Repeat Yourself).
+The `cypress/support/commands.js` file is a great place to put reusable, low-level functions. For example, if you frequently need to interact with a specific type of complex UI element, you could create a custom command for it.
 
-*   **Definition**: Custom commands are defined in the `cypress/support/commands.js` file.
-    ```javascript
-    // Example of a custom login command in commands.js
-    Cypress.Commands.add('login', (email, password) => {
-      cy.visit('/login');
-      cy.get('input[name="email"]').type(email);
-      cy.get('input[name="password"]').type(password);
-      cy.get('button[type="submit"]').click();
-    });
-    ```
-*   **Usage**: Once defined, these commands can be used in any test script like standard Cypress commands:
-    ```javascript
-    // Example usage in a test file
-    it('should login successfully', () => {
-      cy.login('user@example.com', 'password123');
-      cy.url().should('include', '/dashboard');
-    });
-    ```
-    Ensure that `cypress/support/e2e.js` imports `commands.js` (which it does by default: `import './commands'`).
+However, in this framework, high-level business logic (like "login" or "register") is intentionally kept within the Page Object methods to ensure that the tests are explicit and easy to follow. Therefore, you will not find commands like `cy.login()` here. Instead, tests will call methods directly from the page object instances.
 
 ## Page Object Model (POM)
 
@@ -160,13 +143,18 @@ This framework utilizes the Page Object Model (POM) design pattern to create a s
     // Example of using a LoginPage object in a test
     import LoginPage from '../pageObjects/LoginPage';
 
-    it('should login successfully using POM', () => {
-      const loginPage = new LoginPage();
-      loginPage.visit();
-      loginPage.fillEmail('user@example.com');
-      loginPage.fillPassword('password123');
-      loginPage.submit();
-      cy.url().should('include', '/dashboard');
+    describe('Login Test', () => {
+      let loginPage;
+
+      beforeEach(() => {
+        loginPage = new LoginPage();
+        cy.visit('/login');
+      });
+
+      it('should login successfully using POM', () => {
+        loginPage.login('user@example.com', 'password123');
+        cy.url().should('include', '/dashboard');
+      });
     });
     ```
 

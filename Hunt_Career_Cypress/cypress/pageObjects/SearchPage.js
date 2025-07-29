@@ -1,6 +1,6 @@
 import { BasePage } from "./basePage";
 
-class SearchPage extends BasePage {
+export default class SearchPage extends BasePage {
 
     SearchInputField() {
         return cy.xpath("//input[@placeholder='Search jobs by title, company, or keyword...']");
@@ -64,11 +64,6 @@ class SearchPage extends BasePage {
 
     JobTypeTag(jobType) {
         return cy.xpath(`//span[contains(., "🧾 ${jobType}")]`);
-    }
-
-    // Messages
-    checkNoJobsFoundMessage() {
-        return this.NoJobsFoundMessage();
     }
 
     // Actions
@@ -139,5 +134,3 @@ class SearchPage extends BasePage {
         this.waitUntilNotVisible(element);
     }
 }
-
-export const searchPage = new SearchPage();
