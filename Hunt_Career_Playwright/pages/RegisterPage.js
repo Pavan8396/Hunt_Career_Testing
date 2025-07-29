@@ -24,6 +24,7 @@ export class RegisterPage extends BasePage {
     }
 
     async navigate() {
+        await this.navigateToJobSeeker();
         await this.page.goto('/signup');
     }
 
