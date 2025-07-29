@@ -92,7 +92,7 @@ export class SearchPage extends BasePage {
 
   // Actions
   async navigate() {
-    await this.page.goto('/');
+    await this.navigateToJobSeeker();
   }
 
   // Composite action
