@@ -23,6 +23,10 @@ export class RegisterPage extends BasePage {
         this.checkPhoneNumberRequiredMessage = page.locator("//div[contains(text(), 'Phone Number is required.')]");
     }
 
+    async navigate() {
+        await this.page.goto('/signup');
+    }
+
     async register(firstName, lastName, email, password, confirmPassword, phoneNumber){
         await this.typeInElement(this.firstNameField, firstName);
         await this.typeInElement(this.lastNameField, lastName);

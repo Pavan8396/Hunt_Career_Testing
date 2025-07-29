@@ -11,8 +11,9 @@ The project follows a standard Playwright directory structure with specific conv
 *   **`.github/workflows`**: This directory contains CI/CD pipeline configurations.
     *   `playwright.yml`: Defines a GitHub Actions workflow for automatically running Playwright tests, often triggered on pushes or pull requests.
 
-*   **`data`**: Stores test data used by the test scripts. Separating data from test logic makes tests cleaner and easier to manage, especially when dealing with multiple data sets.
-    *   Example: `loginData.json`, `registerData.js`, `searchData.json`
+*   **`data`**: Stores test data used by the test scripts. This framework uses a combination of static (`.json`) and dynamic (`.js`) data sources.
+    *   `loginData.json`, `searchData.json`: Static JSON files for simple, unchanging test cases.
+    *   `registerData.js`: A JavaScript file that generates dynamic, random, and realistic test data for user registration scenarios using functions from `utils/utils.js`. This approach allows for a wider range of test inputs without hardcoding data.
 
 *   **`pages`**: Implements the Page Object Model (POM). Each `.js` file in this directory represents a page (or a significant component) of the application. It encapsulates the page's elements and the interaction methods associated with them.
     *   Example: `BasePage.js`, `LoginPage.js`, `RegisterPage.js`, `SearchPage.js`
@@ -127,6 +128,26 @@ Playwright comes with a built-in HTML reporter that provides a detailed overview
     *   Details for each test, including steps.
     *   Screenshots, videos, and traces if configured.
 
+## Test Suites
+
+This framework contains the following test suites:
+
+*   **Login (`login.spec.js`)**: Covers the user login functionality with various scenarios, including:
+    *   Successful login with valid credentials.
+    *   Failed login with invalid credentials (unregistered user, incorrect password).
+    *   Validation messages for invalid email formats and empty fields.
+
+*   **Registration (`register.spec.js`)**: Covers the user registration flow, testing:
+    *   Successful new user registration with dynamically generated valid data.
+    *   Attempted registration with an existing email address.
+    *   Validation for required fields (first name, last name, etc.).
+    *   Password and email format validation.
+
+*   **Search (`search.spec.js`)**: Covers the job search functionality, including:
+    *   Searching for jobs using valid and invalid keywords.
+    *   Searching with special characters.
+    *   Applying filters for location and job type and verifying the results.
+
 ## Configuration
 
 The `playwright.config.js` file is central to configuring Playwright for your project. Key settings include:
@@ -153,32 +174,14 @@ The `playwright.config.js` file is central to configuring Playwright for your pr
     reporter: [['html', { open: 'never', outputFolder: 'playwright-report' }]],
     ```
 
-## Utility Functions/Commands
+## Utility Functions
 
 The `utils/` directory provides helper functions and shared logic:
 
-*   **`utils/utils.js`**: This file typically contains general utility functions that can be used anywhere in the framework. Examples include:
-    *   Generating random strings or numbers for test data.
-    *   Date/time manipulation.
-    *   Custom data formatters.
-
-*   **`utils/commands.js`**: While Playwright doesn't have a direct equivalent to Cypress's `cy.commands.add()`, this file can be used to structure reusable sequences of actions or complex interactions. These functions can then be imported and used within page objects or test files to keep test logic DRY.
-    ```javascript
-    // Example in utils/commands.js
-    export async function performLogin(page, username, password) {
-      await page.fill('#username', username);
-      await page.fill('#password', password);
-      await page.click('#loginButton');
-    }
-
-    // Usage in a test
-    import { performLogin } from '../utils/commands';
-    test('should login', async ({ page }) => {
-      await page.goto('/login');
-      await performLogin(page, 'user@example.com', 'pass123');
-      // ... assertions
-    });
-    ```
+*   **`utils/utils.js`**: This file contains general utility functions that are used to generate dynamic test data. Examples include:
+    *   Generating random names, emails, and phone numbers using `@faker-js/faker`.
+    *   Creating unique email addresses based on the current timestamp.
+    *   Generating random, valid passwords that meet specific criteria.
 
 ## Page Object Model (POM)
 
