@@ -15,34 +15,28 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                dir('Hunt_Career_Cypress') {
-                    echo 'Installing npm dependencies...'
-                    bat 'npm install'
-                }
+                echo 'Installing npm dependencies...'
+                bat 'npm install'
             }
         }
 
         stage('Debug Workspace') {
             steps {
-                dir('Hunt_Career_Cypress') {
-                    echo 'Debugging workspace structure...'
-                    bat 'dir'
-                }
+                echo 'Debugging workspace structure...'
+                bat 'dir'
             }
         }
 
         stage('Debug Report Folder') {
             steps {
-                dir('Hunt_Career_Cypress') {
-                    script {
-                        echo 'Checking if mochawesome-report folder exists...'
-                        def reportExists = fileExists('mochawesome-report')
-                        if (reportExists) {
-                            echo 'mochawesome-report exists. Listing contents...'
-                            bat 'dir mochawesome-report'
-                        } else {
-                            echo 'mochawesome-report directory does NOT exist.'
-                        }
+                script {
+                    echo 'Checking if mochawesome-report folder exists...'
+                    def reportExists = fileExists('mochawesome-report')
+                    if (reportExists) {
+                        echo 'mochawesome-report exists. Listing contents...'
+                        bat 'dir mochawesome-report'
+                    } else {
+                        echo 'mochawesome-report directory does NOT exist.'
                     }
                 }
             }
@@ -50,26 +44,22 @@ pipeline {
 
         stage('Clean Previous Reports') {
             steps {
-                dir('Hunt_Career_Cypress') {
-                    echo 'Cleaning old report files if they exist...'
-                    bat 'if exist mochawesome-report rmdir /s /q mochawesome-report'
-                    bat 'if exist mochawesome.json del mochawesome.json'
-                }
+                echo 'Cleaning old report files if they exist...'
+                bat 'if exist mochawesome-report rmdir /s /q mochawesome-report'
+                bat 'if exist mochawesome.json del mochawesome.json'
             }
         }
 
         stage('Run Cypress Tests') {
             steps {
-                dir('Hunt_Career_Cypress') {
-                    script {
-                        try {
-                            echo 'Running Cypress tests and generating report...'
-                            bat 'npm run test:run:report'
-                        } catch (any) {
-                            currentBuild.result = 'UNSTABLE'
-                            echo "Cypress tests execution failed or reported errors. Build set to UNSTABLE."
-                            throw any // Re-throw the error
-                        }
+                script {
+                    try {
+                        echo 'Running Cypress tests and generating report...'
+                        bat 'npm run test:run:report'
+                    } catch (any) {
+                        currentBuild.result = 'UNSTABLE'
+                        echo "Cypress tests execution failed or reported errors. Build set to UNSTABLE."
+                        throw any // Re-throw the error
                     }
                 }
             }
@@ -80,16 +70,16 @@ pipeline {
         always {
             echo 'Pipeline finished. Archiving artifacts and publishing reports...'
             // Existing archiveArtifacts for reports, screenshots, videos
-            archiveArtifacts artifacts: 'Hunt_Career_Cypress/mochawesome-report/mochawesome*.html', allowEmptyArchive: true
-            archiveArtifacts artifacts: 'Hunt_Career_Cypress/cypress/screenshots/**/*.png', allowEmptyArchive: true
-            archiveArtifacts artifacts: 'Hunt_Career_Cypress/cypress/videos/**/*.mp4', allowEmptyArchive: true
+            archiveArtifacts artifacts: 'mochawesome-report/mochawesome*.html', allowEmptyArchive: true
+            archiveArtifacts artifacts: 'cypress/screenshots/**/*.png', allowEmptyArchive: true
+            archiveArtifacts artifacts: 'cypress/videos/**/*.mp4', allowEmptyArchive: true
 
             // Add HTML Publisher step
             publishHTML(target: [
                 allowMissing: true,
                 alwaysLinkToLastBuild: true,
                 keepAll: true,
-                reportDir: 'Hunt_Career_Cypress/mochawesome-report', // Path from workspace root
+                reportDir: 'mochawesome-report', // Path from workspace root
                 reportFiles: 'mochawesome.html', // Main html file, adjust if different
                 reportName: 'Cypress Test Report'
             ])
