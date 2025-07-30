@@ -26,7 +26,7 @@ export default defineConfig({
   reporter: [['html', { open: 'never' }]], //never | on | always 
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
-    headless: true,
+    headless: false,
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
     baseURL: 'http://localhost:3000',
@@ -40,7 +40,7 @@ export default defineConfig({
       name: 'chromium',
       use: {
         ...devices['Desktop Chrome'],
-        headless: true
+        headless: false
       },
     },
 

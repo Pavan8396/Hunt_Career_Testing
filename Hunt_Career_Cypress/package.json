@@ -15,10 +15,10 @@
   },
   "scripts": {
     "cypress:open": "cypress open",
-    "cypress:run": "cypress run",
+    "cypress:run": "cypress run --headed",
     "report:merge": "mochawesome-merge mochawesome-report/*.json -o mochawesome-report/mochawesome.json",
     "report:generate": "marge mochawesome-report/mochawesome.json -f report -o mochawesome-report",
     "report:full": "npm run report:merge && npm run report:generate",
-    "test:run:report": "npm run cypress:run"
+    "test:run:report": "npm run cypress:run && npm run report:full"
   }
 }
