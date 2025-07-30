@@ -15,22 +15,26 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                echo 'Installing npm dependencies...'
-                bat 'npm install'
+                dir('Hunt_Career_Cypress') {
+                    echo 'Installing npm dependencies...'
+                    bat 'npm install'
+                }
             }
         }
 
         stage('Run Cypress Tests') {
             steps {
-                echo 'Running Cypress tests...'
-                // The `test:run:report` script from package.json runs the tests and generates the report.
-                // Using a try-catch block to ensure the pipeline continues to the post-build steps even on test failure.
-                script {
-                    try {
-                        bat 'npm run test:run:report'
-                    } catch (any) {
-                        currentBuild.result = 'UNSTABLE'
-                        echo "Cypress tests failed."
+                dir('Hunt_Career_Cypress') {
+                    echo 'Running Cypress tests...'
+                    // The `test:run:report` script from package.json runs the tests and generates the report.
+                    // Using a try-catch block to ensure the pipeline continues to the post-build steps even on test failure.
+                    script {
+                        try {
+                            bat 'npm run test:run:report'
+                        } catch (any) {
+                            currentBuild.result = 'UNSTABLE'
+                            echo "Cypress tests failed."
+                        }
                     }
                 }
             }
@@ -42,18 +46,18 @@ pipeline {
             echo 'Archiving reports and artifacts...'
 
             // Archive the Mochawesome HTML report
-            archiveArtifacts artifacts: 'mochawesome-report/mochawesome.html', allowEmptyArchive: true
+            archiveArtifacts artifacts: 'Hunt_Career_Cypress/mochawesome-report/mochawesome.html', allowEmptyArchive: true
 
             // Archive screenshots and videos, which are useful for debugging failed tests
-            archiveArtifacts artifacts: 'cypress/screenshots/**/*.png', allowEmptyArchive: true
-            archiveArtifacts artifacts: 'cypress/videos/**/*.mp4', allowEmptyArchive: true
+            archiveArtifacts artifacts: 'Hunt_Career_Cypress/cypress/screenshots/**/*.png', allowEmptyArchive: true
+            archiveArtifacts artifacts: 'Hunt_Career_Cypress/cypress/videos/**/*.mp4', allowEmptyArchive: true
 
             // Publish the HTML report for easy viewing in Jenkins
             publishHTML(target: [
                 allowMissing: true,
                 alwaysLinkToLastBuild: true,
                 keepAll: true,
-                reportDir: 'mochawesome-report',
+                reportDir: 'Hunt_Career_Cypress/mochawesome-report',
                 reportFiles: 'mochawesome.html',
                 reportName: 'Cypress Test Report'
             ])
