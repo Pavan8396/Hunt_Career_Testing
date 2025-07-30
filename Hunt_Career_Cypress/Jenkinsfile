@@ -1,8 +1,8 @@
 pipeline {
-    agent any 
+    agent any
 
     tools {
-        nodejs 'NodeJS'
+        nodejs 'NodeJS' // Make sure NodeJS is configured in Jenkins Global Tool Configuration
     }
 
     stages {
@@ -16,50 +16,21 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 echo 'Installing npm dependencies...'
-                bat 'npm install'
-            }
-        }
-
-        stage('Debug Workspace') {
-            steps {
-                echo 'Debugging workspace structure...'
-                bat 'dir'
-            }
-        }
-
-        stage('Debug Report Folder') {
-            steps {
-                script {
-                    echo 'Checking if mochawesome-report folder exists...'
-                    def reportExists = fileExists('mochawesome-report')
-                    if (reportExists) {
-                        echo 'mochawesome-report exists. Listing contents...'
-                        bat 'dir mochawesome-report'
-                    } else {
-                        echo 'mochawesome-report directory does NOT exist.'
-                    }
-                }
-            }
-        }
-
-        stage('Clean Previous Reports') {
-            steps {
-                echo 'Cleaning old report files if they exist...'
-                bat 'if exist mochawesome-report rmdir /s /q mochawesome-report'
-                bat 'if exist mochawesome.json del mochawesome.json'
+                sh 'npm install'
             }
         }
 
         stage('Run Cypress Tests') {
             steps {
+                echo 'Running Cypress tests...'
+                // The `test:run:report` script from package.json runs the tests and generates the report.
+                // Using a try-catch block to ensure the pipeline continues to the post-build steps even on test failure.
                 script {
                     try {
-                        echo 'Running Cypress tests and generating report...'
-                        bat 'npm run test:run:report'
+                        sh 'npm run test:run:report'
                     } catch (any) {
                         currentBuild.result = 'UNSTABLE'
-                        echo "Cypress tests execution failed or reported errors. Build set to UNSTABLE."
-                        throw any // Re-throw the error
+                        echo "Cypress tests failed."
                     }
                 }
             }
@@ -68,35 +39,24 @@ pipeline {
 
     post {
         always {
-            echo 'Pipeline finished. Archiving artifacts and publishing reports...'
-            // Existing archiveArtifacts for reports, screenshots, videos
-            archiveArtifacts artifacts: 'mochawesome-report/mochawesome*.html', allowEmptyArchive: true
+            echo 'Archiving reports and artifacts...'
+
+            // Archive the Mochawesome HTML report
+            archiveArtifacts artifacts: 'mochawesome-report/mochawesome.html', allowEmptyArchive: true
+
+            // Archive screenshots and videos, which are useful for debugging failed tests
             archiveArtifacts artifacts: 'cypress/screenshots/**/*.png', allowEmptyArchive: true
             archiveArtifacts artifacts: 'cypress/videos/**/*.mp4', allowEmptyArchive: true
 
-            // Add HTML Publisher step
+            // Publish the HTML report for easy viewing in Jenkins
             publishHTML(target: [
                 allowMissing: true,
                 alwaysLinkToLastBuild: true,
                 keepAll: true,
-                reportDir: 'mochawesome-report', // Path from workspace root
-                reportFiles: 'mochawesome.html', // Main html file, adjust if different
+                reportDir: 'mochawesome-report',
+                reportFiles: 'mochawesome.html',
                 reportName: 'Cypress Test Report'
             ])
-        }
-        success {
-            echo 'Pipeline executed successfully!'
-            // echo 'TODO: Send success notification'
-        }
-        failure {
-            echo 'Pipeline failed. Sending failure notification (placeholder)...'
-            // Example placeholder for mail:
-            // mail to: 'your-team@example.com', subject: "FAILED: Pipeline ${env.JOB_NAME} [${env.BUILD_NUMBER}]", body: "Check console output: ${env.BUILD_URL}"
-        }
-        unstable {
-            echo 'Pipeline is unstable (tests likely failed). Sending unstable notification (placeholder)...'
-            // Example placeholder for mail:
-            // mail to: 'your-team@example.com', subject: "UNSTABLE: Pipeline ${env.JOB_NAME} [${env.BUILD_NUMBER}]", body: "Tests reported issues. Check results: ${env.BUILD_URL}"
         }
     }
 }
