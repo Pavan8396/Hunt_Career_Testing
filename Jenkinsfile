@@ -5,21 +5,21 @@ pipeline {
         stage('Run Cypress Tests') {
             steps {
                 echo 'Triggering the Cypress pipeline...'
-                build job: 'Hunt_Career_Cypress', wait: true
+                build job: 'huntcareer-ui-tests-cypress', wait: true
             }
         }
 
         stage('Run Playwright Tests') {
             steps {
                 echo 'Triggering the Playwright pipeline...'
-                build job: 'Hunt_Career_Playwright', wait: true
+                build job: 'huntcareer-ui-tests-playwright', wait: true
             }
         }
 
         stage('Run TestNG Tests') {
             steps {
                 echo 'Triggering the TestNG pipeline...'
-                build job: 'Hunt_Career_TestNG_Hybrid_Framework', wait: true
+                build job: 'huntcareer-ui-tests-selenium', wait: true
             }
         }
     }
