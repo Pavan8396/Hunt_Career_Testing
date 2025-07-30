@@ -14,9 +14,8 @@
     "@faker-js/faker": "^9.7.0"
   },
   "scripts": {
-    "cypress:open": "./node_modules/.bin/cypress open",
-    "cypress:run": "./node_modules/.bin/cypress run",
-    "move:json": "move mochawesome-report\\.jsons\\*.json mochawesome-report\\",
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run",
     "report:merge": "mochawesome-merge mochawesome-report/*.json -o mochawesome-report/mochawesome.json",
     "report:generate": "marge mochawesome-report/mochawesome.json -f report -o mochawesome-report",
     "report:full": "npm run report:merge && npm run report:generate",
