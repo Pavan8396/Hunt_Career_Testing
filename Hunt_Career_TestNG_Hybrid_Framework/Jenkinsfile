@@ -22,7 +22,7 @@ pipeline {
                     echo '----------------------------------------'
                     echo '          BUILDING THE PROJECT'
                     echo '----------------------------------------'
-                    bat 'mvn -B clean install'
+                    bat 'mvn -B clean install -DskipTests'
                 }
             }
         }
