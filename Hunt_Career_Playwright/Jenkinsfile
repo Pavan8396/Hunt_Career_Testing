@@ -2,13 +2,15 @@ pipeline {
     agent any
 
     tools {
-        nodejs 'NodeJS' // Make sure NodeJS is configured in Jenkins Global Tool Configuration
+        nodejs 'NodeJS'
     }
 
     stages {
         stage('Checkout') {
             steps {
-                echo 'Checking out code...'
+                echo '----------------------------------------'
+                echo '        CHECKING OUT SOURCE CODE'
+                echo '----------------------------------------'
                 checkout scm
             }
         }
@@ -16,7 +18,9 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 dir('Hunt_Career_Playwright') {
-                    echo 'Installing npm dependencies...'
+                    echo '----------------------------------------'
+                    echo '      INSTALLING NPM DEPENDENCIES'
+                    echo '----------------------------------------'
                     bat 'npm install'
                 }
             }
@@ -25,8 +29,9 @@ pipeline {
         stage('Install Playwright Browsers') {
             steps {
                 dir('Hunt_Career_Playwright') {
-                    echo 'Installing Playwright browsers...'
-                    // This command installs the browsers needed by Playwright
+                    echo '----------------------------------------'
+                    echo '     INSTALLING PLAYWRIGHT BROWSERS'
+                    echo '----------------------------------------'
                     bat 'npx playwright install --with-deps'
                 }
             }
@@ -35,9 +40,9 @@ pipeline {
         stage('Run Playwright Tests') {
             steps {
                 dir('Hunt_Career_Playwright') {
-                    echo 'Running Playwright tests...'
-                    // Using a script block to wrap the test command in a try-catch block.
-                    // This prevents the pipeline from stopping abruptly on test failures.
+                    echo '----------------------------------------'
+                    echo '         RUNNING PLAYWRIGHT TESTS'
+                    echo '----------------------------------------'
                     script {
                         try {
                             bat 'npx playwright test'
@@ -53,12 +58,10 @@ pipeline {
 
     post {
         always {
-            echo 'Archiving and publishing reports...'
-
-            // Archive the Playwright report
+            echo '----------------------------------------'
+            echo '        ARCHIVING & PUBLISHING REPORTS'
+            echo '----------------------------------------'
             archiveArtifacts artifacts: 'Hunt_Career_Playwright/playwright-report/**/*', allowEmptyArchive: true
-
-            // Publish the HTML report for easy viewing in Jenkins
             publishHTML(target: [
                 allowMissing: true,
                 alwaysLinkToLastBuild: true,
