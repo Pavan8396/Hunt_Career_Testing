@@ -16,7 +16,7 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 echo 'Installing npm dependencies...'
-                sh 'npm install'
+                bat 'npm install'
             }
         }
 
@@ -27,7 +27,7 @@ pipeline {
                 // Using a try-catch block to ensure the pipeline continues to the post-build steps even on test failure.
                 script {
                     try {
-                        sh 'npm run test:run:report'
+                        bat 'npm run test:run:report'
                     } catch (any) {
                         currentBuild.result = 'UNSTABLE'
                         echo "Cypress tests failed."

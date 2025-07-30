@@ -16,7 +16,7 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 echo 'Installing npm dependencies...'
-                sh 'npm install'
+                bat 'npm install'
             }
         }
 
@@ -24,7 +24,7 @@ pipeline {
             steps {
                 echo 'Installing Playwright browsers...'
                 // This command installs the browsers needed by Playwright
-                sh 'npx playwright install --with-deps'
+                bat 'npx playwright install --with-deps'
             }
         }
 
@@ -35,7 +35,7 @@ pipeline {
                 // This prevents the pipeline from stopping abruptly on test failures.
                 script {
                     try {
-                        sh 'npx playwright test'
+                        bat 'npx playwright test'
                     } catch (any) {
                         currentBuild.result = 'UNSTABLE'
                         echo "Playwright tests failed."
