@@ -17,22 +17,26 @@ pipeline {
 
         stage('Build') {
             steps {
-                echo 'Cleaning and building the project...'
-                // Using -B for batch mode to prevent interactive prompts
-                bat 'mvn -B clean install'
+                dir('Hunt_Career_TestNG_Hybrid_Framework') {
+                    echo 'Cleaning and building the project...'
+                    // Using -B for batch mode to prevent interactive prompts
+                    bat 'mvn -B clean install'
+                }
             }
         }
 
         stage('Test') {
             steps {
-                echo 'Running TestNG tests...'
-                // Using a script block to wrap the test command in a try-catch block.
-                script {
-                    try {
-                        bat 'mvn -B test'
-                    } catch (any) {
-                        currentBuild.result = 'UNSTABLE'
-                        echo "TestNG tests failed."
+                dir('Hunt_Career_TestNG_Hybrid_Framework') {
+                    echo 'Running TestNG tests...'
+                    // Using a script block to wrap the test command in a try-catch block.
+                    script {
+                        try {
+                            bat 'mvn -B test'
+                        } catch (any) {
+                            currentBuild.result = 'UNSTABLE'
+                            echo "TestNG tests failed."
+                        }
                     }
                 }
             }
@@ -44,17 +48,17 @@ pipeline {
             echo 'Archiving and publishing reports...'
 
             // Archive the JUnit XML results, which Jenkins can use to track test trends
-            junit testResults: 'target/surefire-reports/testng-results.xml', allowEmptyResults: true
+            junit testResults: 'Hunt_Career_TestNG_Hybrid_Framework/target/surefire-reports/testng-results.xml', allowEmptyResults: true
 
             // Archive the Extent HTML report
-            archiveArtifacts artifacts: 'test-output/ExtentReports/extentReport.html', allowEmptyArchive: true
-            
+            archiveArtifacts artifacts: 'Hunt_Career_TestNG_Hybrid_Framework/test-output/ExtentReports/extentReport.html', allowEmptyArchive: true
+
             // Publish the Extent HTML report for easy viewing
             publishHTML(target: [
                 allowMissing: true,
                 alwaysLinkToLastBuild: true,
                 keepAll: true,
-                reportDir: 'test-output/ExtentReports',
+                reportDir: 'Hunt_Career_TestNG_Hybrid_Framework/test-output/ExtentReports',
                 reportFiles: 'extentReport.html',
                 reportName: 'Extent Test Report'
             ])
@@ -64,7 +68,7 @@ pipeline {
                 allowMissing: true,
                 alwaysLinkToLastBuild: true,
                 keepAll: true,
-                reportDir: 'test-output',
+                reportDir: 'Hunt_Career_TestNG_Hybrid_Framework/test-output',
                 reportFiles: 'emailable-report.html',
                 reportName: 'TestNG Emailable Report'
             ])
