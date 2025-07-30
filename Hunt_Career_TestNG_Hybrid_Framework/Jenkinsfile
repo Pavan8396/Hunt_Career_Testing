@@ -16,25 +16,21 @@ pipeline {
 
         stage('Build') {
             steps {
-                dir('Hunt_Career_TestNG_Hybrid_Framework') {
-                    echo 'Building the project...'
-                    bat 'mvn -B clean install -DskipTests'
-                }
+                echo 'Building the project...'
+                bat 'mvn -B clean install -DskipTests'
             }
         }
 
         stage('Test') {
             steps {
-                dir('Hunt_Career_TestNG_Hybrid_Framework') {
-                    script {
-                        try {
-                            echo 'Running tests...'
-                            bat 'mvn -B test'
-                        } catch (any) {
-                            currentBuild.result = 'UNSTABLE'
-                            echo "TestNG tests execution failed or reported errors. Build set to UNSTABLE."
-                            throw any // Re-throw the error
-                        }
+                script {
+                    try {
+                        echo 'Running tests...'
+                        bat 'mvn -B test'
+                    } catch (any) {
+                        currentBuild.result = 'UNSTABLE'
+                        echo "TestNG tests execution failed or reported errors. Build set to UNSTABLE."
+                        throw any // Re-throw the error
                     }
                 }
             }
@@ -42,12 +38,10 @@ pipeline {
 
         stage('Archive Reports') {
             steps {
-                dir('Hunt_Career_TestNG_Hybrid_Framework') {
-                    echo 'Archiving reports...'
-                    archiveArtifacts artifacts: 'test-output/ExtentReports/extentReport.html', allowEmptyArchive: true
-                    archiveArtifacts artifacts: 'test-output/emailable-report.html', allowEmptyArchive: true
-                    archiveArtifacts artifacts: 'test-output/testng-results.xml', allowEmptyArchive: true
-                }
+                echo 'Archiving reports...'
+                archiveArtifacts artifacts: 'test-output/ExtentReports/extentReport.html', allowEmptyArchive: true
+                archiveArtifacts artifacts: 'test-output/emailable-report.html', allowEmptyArchive: true
+                archiveArtifacts artifacts: 'test-output/testng-results.xml', allowEmptyArchive: true
             }
         }
     }
@@ -55,21 +49,18 @@ pipeline {
     post {
         always {
             echo 'Pipeline finished. Publishing reports and archiving...'
-            // Archiving is already relative to Hunt_Career_TestNG_Hybrid_Framework due to Jenkinsfile location, 
-            // but explicit dir is safer if Jenkinsfile moves.
-            // For publishTestNGResults, it's often workspace relative.
             
-            archiveArtifacts artifacts: 'Hunt_Career_TestNG_Hybrid_Framework/test-output/ExtentReports/extentReport.html', allowEmptyArchive: true
-            archiveArtifacts artifacts: 'Hunt_Career_TestNG_Hybrid_Framework/test-output/emailable-report.html', allowEmptyArchive: true
-            archiveArtifacts artifacts: 'Hunt_Career_TestNG_Hybrid_Framework/test-output/testng-results.xml', allowEmptyArchive: true
+            archiveArtifacts artifacts: 'test-output/ExtentReports/extentReport.html', allowEmptyArchive: true
+            archiveArtifacts artifacts: 'test-output/emailable-report.html', allowEmptyArchive: true
+            archiveArtifacts artifacts: 'test-output/testng-results.xml', allowEmptyArchive: true
             
-            junit testResults: 'Hunt_Career_TestNG_Hybrid_Framework/test-output/testng-results.xml', allowEmptyResults: true
+            junit testResults: 'test-output/testng-results.xml', allowEmptyResults: true
 
             publishHTML(target: [
                 allowMissing: true,
                 alwaysLinkToLastBuild: true,
                 keepAll: true,
-                reportDir: 'Hunt_Career_TestNG_Hybrid_Framework/test-output/ExtentReports', 
+                reportDir: 'test-output/ExtentReports',
                 reportFiles: 'extentReport.html', 
                 reportName: 'Extent Test Report'
             ])
@@ -78,7 +69,7 @@ pipeline {
                 allowMissing: true,
                 alwaysLinkToLastBuild: true,
                 keepAll: true,
-                reportDir: 'Hunt_Career_TestNG_Hybrid_Framework/test-output', 
+                reportDir: 'test-output',
                 reportFiles: 'emailable-report.html', 
                 reportName: 'TestNG Emailable Report'
             ])

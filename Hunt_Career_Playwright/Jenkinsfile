@@ -15,34 +15,28 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                dir('Hunt_Career_Playwright') {
-                    echo 'Installing npm dependencies...'
-                    bat 'npm install'
-                }
+                echo 'Installing npm dependencies...'
+                bat 'npm install'
             }
         }
 
         stage('Install Playwright Browsers') {
             steps {
-                dir('Hunt_Career_Playwright') {
-                    echo 'Installing Playwright browsers...'
-                    bat 'npx playwright install --with-deps'
-                }
+                echo 'Installing Playwright browsers...'
+                bat 'npx playwright install --with-deps'
             }
         }
 
         stage('Run Playwright Tests') {
             steps {
-                dir('Hunt_Career_Playwright') {
-                    script {
-                        try {
-                            echo 'Running Playwright tests...'
-                            bat 'npx playwright test'
-                        } catch (any) {
-                            currentBuild.result = 'UNSTABLE'
-                            echo "Playwright tests execution failed or reported errors. Build set to UNSTABLE."
-                            throw any // Re-throw the error
-                        }
+                script {
+                    try {
+                        echo 'Running Playwright tests...'
+                        bat 'npx playwright test'
+                    } catch (any) {
+                        currentBuild.result = 'UNSTABLE'
+                        echo "Playwright tests execution failed or reported errors. Build set to UNSTABLE."
+                        throw any // Re-throw the error
                     }
                 }
             }
@@ -53,16 +47,14 @@ pipeline {
         always {
             echo 'Pipeline finished. Archiving and publishing reports...'
             // Existing archiveArtifacts for Playwright reports
-            dir('Hunt_Career_Playwright') { // Ensure dir context for archive if paths are relative
-                archiveArtifacts artifacts: 'playwright-report/**/*', allowEmptyArchive: true
-            }
+            archiveArtifacts artifacts: 'playwright-report/**/*', allowEmptyArchive: true
 
             // Add HTML Publisher step for Playwright report
             publishHTML(target: [
                 allowMissing: true,
                 alwaysLinkToLastBuild: true,
                 keepAll: true,
-                reportDir: 'Hunt_Career_Playwright/playwright-report', // Path from workspace root
+                reportDir: 'playwright-report', // Path from workspace root
                 reportFiles: 'index.html', // Main html file
                 reportName: 'Playwright Test Report'
             ])
