@@ -13,8 +13,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import com.huntcareer.qa.utils.Utilities;
 
 public class Base {
-	//WebDriver driver;
-	private static ThreadLocal<WebDriver>tlDriver = new ThreadLocal<>();
+	WebDriver driver;
 	public Properties prop;
 	public Properties dataProp;
 
@@ -45,29 +44,16 @@ public class Base {
 
 	public WebDriver inicializeBrowserAndOpenApplication(String browserName) {
 
-		WebDriver driver;
 		if (browserName.equalsIgnoreCase("chrome")) {
 			driver = new ChromeDriver();
 		} else if (browserName.equalsIgnoreCase("firefox")) {
 			driver = new FirefoxDriver();
 		} else if (browserName.equalsIgnoreCase("edge")) {
 			driver = new EdgeDriver();
-		}else{
-			throw new IllegalArgumentException("Browser Name " + browserName + " not supported");
 		}
 		driver.manage().window().maximize();
 		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(Utilities.IMPLICIT_WAIT_TIME));
 		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(Utilities.PAGE_WAIT_TIME));
-		//return driver;
-		tlDriver.set(driver);
-		return getDriver();
-	}
-
-	public static synchronized WebDriver getDriver() {
-		return tlDriver.get();
-	}
-
-	public static void unload() {
-		tlDriver.remove();
+		return driver;
 	}
 }

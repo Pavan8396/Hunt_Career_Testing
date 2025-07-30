@@ -31,28 +31,22 @@ public class Register extends Base {
 		driver = inicializeBrowserAndOpenApplication(prop.getProperty("browser"));
 		// driver.get(loadPropertiesFile().getProperty("url")+"/signup");
 		driver.get(prop.getProperty("url"));
-		//ldp = new LandingPage(driver);
-		ldp = new LandingPage(getDriver());
+		ldp = new LandingPage(driver);
 		hp = ldp.clickOnJobSeekerRole();
 		hp.clickOnRegisterHomeLink();
 	}
 
 	@AfterMethod
 	public void tearDown() {
-		// if (driver != null) {
-		// 	driver.quit();	
-		// }
-		if (getDriver() != null) {
-			getDriver().quit();
-			unload();
+		if (driver != null) {
+			driver.quit();	
 		}
 	}
 
 	@Test(priority = 1,  retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TC_1_verifyRegisterWithValidData() {
 
-		//rp = new RegisterPage(driver);
-		rp = new RegisterPage(getDriver());
+		rp = new RegisterPage(driver);
 		Map<String, String> user = RegisterData.validUser();
 		rp.enterFirstName(user.get("firstName"));
 		rp.enterLastName(user.get("lastName"));
@@ -69,8 +63,7 @@ public class Register extends Base {
 	@Test(priority = 2, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TC_2_verifyDuplicateData() {
 
-		//rp = new RegisterPage(driver);
-		rp = new RegisterPage(getDriver());
+		rp = new RegisterPage(driver);
 		Map<String, String> user = RegisterData.duplicateUser();
 		rp.enterFirstName(user.get("firstName"));
 		rp.enterLastName(user.get("lastName"));
@@ -87,8 +80,7 @@ public class Register extends Base {
 	@Test(priority = 3, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TC_3_verifyNoFirstNameData() {
 
-		//rp = new RegisterPage(driver);
-		rp = new RegisterPage(getDriver());
+		rp = new RegisterPage(driver);
 		Map<String, String> user = RegisterData.noFirstName();
 		rp.enterLastName(user.get("lastName"));
 		rp.clickFirstNextButton();
@@ -98,8 +90,7 @@ public class Register extends Base {
 	@Test(priority = 4, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TC_4_verifyNoLastNameData() {
 
-		//rp = new RegisterPage(driver);
-		rp = new RegisterPage(getDriver());
+		rp = new RegisterPage(driver);
 		Map<String, String> user = RegisterData.noLastName();
 		rp.enterFirstName(user.get("firstName"));
 		rp.clickFirstNextButton();
@@ -109,8 +100,7 @@ public class Register extends Base {
 	@Test(priority = 5, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TC_5_verifyNoEmailData() {
 
-		//rp = new RegisterPage(driver);
-		rp = new RegisterPage(getDriver());
+		rp = new RegisterPage(driver);
 		Map<String, String> user = RegisterData.noEmail();
 		rp.enterFirstName(user.get("firstName"));
 		rp.enterLastName(user.get("lastName"));
@@ -124,8 +114,7 @@ public class Register extends Base {
 	@Test(priority = 6, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TC_6_verifyNoPasswordData() {
 
-		//rp = new RegisterPage(driver);
-		rp = new RegisterPage(getDriver());
+		rp = new RegisterPage(driver);
 		Map<String, String> user = RegisterData.noPassword();
 		rp.enterFirstName(user.get("firstName"));
 		rp.enterLastName(user.get("lastName"));
@@ -139,8 +128,7 @@ public class Register extends Base {
 	@Test(priority = 7, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TC_7_verifyPasswordWithLessCharacters() {
 
-		//rp = new RegisterPage(driver);
-		rp = new RegisterPage(getDriver());
+		rp = new RegisterPage(driver);
 		Map<String, String> user = RegisterData.passwordWithLessCharacters();
 		rp.enterFirstName(user.get("firstName"));
 		rp.enterLastName(user.get("lastName"));
@@ -155,8 +143,7 @@ public class Register extends Base {
 	@Test(priority = 8, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TC_8_verifyRegisterWithoutConfirmPasswordData() {
 
-		//rp = new RegisterPage(driver);
-		rp = new RegisterPage(getDriver());
+		rp = new RegisterPage(driver);
 		Map<String, String> user = RegisterData.noConfirmPassword();
 		rp.enterFirstName(user.get("firstName"));
 		rp.enterLastName(user.get("lastName"));
@@ -170,8 +157,7 @@ public class Register extends Base {
 	@Test(priority = 9, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TC_9_verifyNoPhoneNumberData() {
 
-		//rp = new RegisterPage(driver);
-		rp = new RegisterPage(getDriver());
+		rp = new RegisterPage(driver);
 		Map<String, String> user = RegisterData.noPhoneNumber();
 		rp.enterFirstName(user.get("firstName"));
 		rp.enterLastName(user.get("lastName"));
@@ -187,8 +173,7 @@ public class Register extends Base {
 	@Test(priority = 10, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TC_10_verifyInvalidPhoneNumberData() {
 
-		//rp = new RegisterPage(driver);
-		rp = new RegisterPage(getDriver());
+		rp = new RegisterPage(driver);
 		Map<String, String> user = RegisterData.invalidPhoneNumber();
 		rp.enterFirstName(user.get("firstName"));
 		rp.enterLastName(user.get("lastName"));
@@ -205,8 +190,7 @@ public class Register extends Base {
 	@Test(priority = 11, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TC_11_verifyEmailWithoutAllDomainData() {
 
-		//rp = new RegisterPage(driver);
-		rp = new RegisterPage(getDriver());
+		rp = new RegisterPage(driver);
 		Map<String, String> user = RegisterData.emailWithoutAllDomain();
 		rp.enterFirstName(user.get("firstName"));
 		rp.enterLastName(user.get("lastName"));
@@ -221,8 +205,7 @@ public class Register extends Base {
 	@Test(priority = 12, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TC_12_verifyWithoutTopLevelDomainData() {
 
-		//rp = new RegisterPage(driver);
-		rp = new RegisterPage(getDriver());
+		rp = new RegisterPage(driver);
 		Map<String, String> user = RegisterData.emailwithoutTopLevelDomain();
 		rp.enterFirstName(user.get("firstName"));
 		rp.enterLastName(user.get("lastName"));
@@ -237,8 +220,7 @@ public class Register extends Base {
 	@Test(priority = 13, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TC_13_verifyEmailWithDoubleAtData() {
 
-		//rp = new RegisterPage(driver);
-		rp = new RegisterPage(getDriver());
+		rp = new RegisterPage(driver);
 		Map<String, String> user = RegisterData.emailwithdoubleAt();
 		rp.enterFirstName(user.get("firstName"));
 		rp.enterLastName(user.get("lastName"));
@@ -253,8 +235,7 @@ public class Register extends Base {
 	@Test(priority = 14, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TC_14_verifyDotBeforeAtTheRateData() {
 
-		//rp = new RegisterPage(driver);
-		rp = new RegisterPage(getDriver());
+		rp = new RegisterPage(driver);
 		Map<String, String> user = RegisterData.emailWithdotBeforeAt();
 		rp.enterFirstName(user.get("firstName"));
 		rp.enterLastName(user.get("lastName"));
@@ -271,8 +252,7 @@ public class Register extends Base {
 	@Test(priority = 15, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TC_15_verifyEmailWithoutDomainData() {
 
-		//rp = new RegisterPage(driver);
-		rp = new RegisterPage(getDriver());
+		rp = new RegisterPage(driver);
 		Map<String, String> user = RegisterData.emailwithoutDomain();
 		rp.enterFirstName(user.get("firstName"));
 		rp.enterLastName(user.get("lastName"));
@@ -287,8 +267,7 @@ public class Register extends Base {
 	@Test(priority = 16, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TC_16_verifyWithoutUserNameData() {
 
-		//rp = new RegisterPage(driver);
-		rp = new RegisterPage(getDriver());
+		rp = new RegisterPage(driver);
 		Map<String, String> user = RegisterData.emailwithoutUserName();
 		rp.enterFirstName(user.get("firstName"));
 		rp.enterLastName(user.get("lastName"));
