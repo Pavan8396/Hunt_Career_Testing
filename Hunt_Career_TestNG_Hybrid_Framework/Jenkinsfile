@@ -19,7 +19,7 @@ pipeline {
             steps {
                 echo 'Cleaning and building the project...'
                 // Using -B for batch mode to prevent interactive prompts
-                sh 'mvn -B clean install'
+                bat 'mvn -B clean install'
             }
         }
 
@@ -29,7 +29,7 @@ pipeline {
                 // Using a script block to wrap the test command in a try-catch block.
                 script {
                     try {
-                        sh 'mvn -B test'
+                        bat 'mvn -B test'
                     } catch (any) {
                         currentBuild.result = 'UNSTABLE'
                         echo "TestNG tests failed."
