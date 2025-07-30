@@ -2,13 +2,15 @@ pipeline {
     agent any
 
     tools {
-        nodejs 'NodeJS' // Make sure NodeJS is configured in Jenkins Global Tool Configuration
+        nodejs 'NodeJS'
     }
 
     stages {
         stage('Checkout') {
             steps {
-                echo 'Checking out code...'
+                echo '----------------------------------------'
+                echo '        CHECKING OUT SOURCE CODE'
+                echo '----------------------------------------'
                 checkout scm
             }
         }
@@ -16,7 +18,9 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 dir('Hunt_Career_Cypress') {
-                    echo 'Installing npm dependencies...'
+                    echo '----------------------------------------'
+                    echo '      INSTALLING NPM DEPENDENCIES'
+                    echo '----------------------------------------'
                     bat 'npm install'
                 }
             }
@@ -25,9 +29,9 @@ pipeline {
         stage('Run Cypress Tests') {
             steps {
                 dir('Hunt_Career_Cypress') {
-                    echo 'Running Cypress tests...'
-                    // The `test:run:report` script from package.json runs the tests and generates the report.
-                    // Using a try-catch block to ensure the pipeline continues to the post-build steps even on test failure.
+                    echo '----------------------------------------'
+                    echo '          RUNNING CYPRESS TESTS'
+                    echo '----------------------------------------'
                     script {
                         try {
                             bat 'npm run test:run:report'
@@ -43,16 +47,12 @@ pipeline {
 
     post {
         always {
-            echo 'Archiving reports and artifacts...'
-
-            // Archive the Mochawesome HTML report
+            echo '----------------------------------------'
+            echo '        ARCHIVING & PUBLISHING REPORTS'
+            echo '----------------------------------------'
             archiveArtifacts artifacts: 'Hunt_Career_Cypress/mochawesome-report/mochawesome.html', allowEmptyArchive: true
-
-            // Archive screenshots and videos, which are useful for debugging failed tests
             archiveArtifacts artifacts: 'Hunt_Career_Cypress/cypress/screenshots/**/*.png', allowEmptyArchive: true
             archiveArtifacts artifacts: 'Hunt_Career_Cypress/cypress/videos/**/*.mp4', allowEmptyArchive: true
-
-            // Publish the HTML report for easy viewing in Jenkins
             publishHTML(target: [
                 allowMissing: true,
                 alwaysLinkToLastBuild: true,

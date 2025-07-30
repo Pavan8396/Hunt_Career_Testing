@@ -4,21 +4,27 @@ pipeline {
     stages {
         stage('Run Cypress Tests') {
             steps {
-                echo 'Triggering the Cypress pipeline...'
+                echo '----------------------------------------'
+                echo '        TRIGGERING CYPRESS PIPELINE'
+                echo '----------------------------------------'
                 build job: 'huntcareer-ui-tests-cypress', wait: true
             }
         }
 
         stage('Run Playwright Tests') {
             steps {
-                echo 'Triggering the Playwright pipeline...'
+                echo '----------------------------------------'
+                echo '      TRIGGERING PLAYWRIGHT PIPELINE'
+                echo '----------------------------------------'
                 build job: 'huntcareer-ui-tests-playwright', wait: true
             }
         }
 
         stage('Run TestNG Tests') {
             steps {
-                echo 'Triggering the TestNG pipeline...'
+                echo '----------------------------------------'
+                echo '         TRIGGERING TESTNG PIPELINE'
+                echo '----------------------------------------'
                 build job: 'huntcareer-ui-tests-selenium', wait: true
             }
         }
@@ -26,10 +32,12 @@ pipeline {
 
     post {
         always {
-            echo 'Master pipeline finished.'
+            echo '----------------------------------------'
+            echo '          MASTER PIPELINE FINISHED'
+            echo '----------------------------------------'
         }
         success {
-            echo 'All pipelines executed successfully.'
+            echo 'All downstream pipelines executed successfully.'
         }
         failure {
             echo 'One of the downstream pipelines failed.'

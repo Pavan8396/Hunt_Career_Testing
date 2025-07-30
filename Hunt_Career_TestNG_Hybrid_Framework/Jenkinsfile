@@ -2,7 +2,6 @@ pipeline {
     agent any
 
     tools {
-        // Ensure these tools are configured in Jenkins Global Tool Configuration
         jdk 'JAVA'
         maven 'MAVEN'
     }
@@ -10,7 +9,9 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                echo 'Checking out code...'
+                echo '----------------------------------------'
+                echo '        CHECKING OUT SOURCE CODE'
+                echo '----------------------------------------'
                 checkout scm
             }
         }
@@ -18,8 +19,9 @@ pipeline {
         stage('Build') {
             steps {
                 dir('Hunt_Career_TestNG_Hybrid_Framework') {
-                    echo 'Cleaning and building the project...'
-                    // Using -B for batch mode to prevent interactive prompts
+                    echo '----------------------------------------'
+                    echo '          BUILDING THE PROJECT'
+                    echo '----------------------------------------'
                     bat 'mvn -B clean install'
                 }
             }
@@ -28,8 +30,9 @@ pipeline {
         stage('Test') {
             steps {
                 dir('Hunt_Career_TestNG_Hybrid_Framework') {
-                    echo 'Running TestNG tests...'
-                    // Using a script block to wrap the test command in a try-catch block.
+                    echo '----------------------------------------'
+                    echo '           RUNNING TESTNG TESTS'
+                    echo '----------------------------------------'
                     script {
                         try {
                             bat 'mvn -B test'
@@ -45,15 +48,10 @@ pipeline {
 
     post {
         always {
-            echo 'Archiving and publishing reports...'
-
-            // Archive the JUnit XML results, which Jenkins can use to track test trends
+            echo '----------------------------------------'
+            echo '        ARCHIVING & PUBLISHING REPORTS'
+            echo '----------------------------------------'
             junit testResults: 'Hunt_Career_TestNG_Hybrid_Framework/target/surefire-reports/testng-results.xml', allowEmptyResults: true
-
-            // Archive the Extent HTML report
-            archiveArtifacts artifacts: 'Hunt_Career_TestNG_Hybrid_Framework/test-output/ExtentReports/extentReport.html', allowEmptyArchive: true
-
-            // Publish the Extent HTML report for easy viewing
             publishHTML(target: [
                 allowMissing: true,
                 alwaysLinkToLastBuild: true,
@@ -61,16 +59,6 @@ pipeline {
                 reportDir: 'Hunt_Career_TestNG_Hybrid_Framework/test-output/ExtentReports',
                 reportFiles: 'extentReport.html',
                 reportName: 'Extent Test Report'
-            ])
-
-            // Also publish the standard TestNG emailable report
-            publishHTML(target: [
-                allowMissing: true,
-                alwaysLinkToLastBuild: true,
-                keepAll: true,
-                reportDir: 'Hunt_Career_TestNG_Hybrid_Framework/test-output',
-                reportFiles: 'emailable-report.html',
-                reportName: 'TestNG Emailable Report'
             ])
         }
     }
