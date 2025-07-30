@@ -26,19 +26,23 @@ public class Search extends Base {
 		driver = inicializeBrowserAndOpenApplication(prop.getProperty("browser"));
 		// driver.get(loadPropertiesFile().getProperty("url")+"/signup");
 		driver.get(prop.getProperty("url"));
-		ldp = new LandingPage(driver);
+		//ldp = new LandingPage(driver);
+		ldp = new LandingPage(getDriver());
 		hp = ldp.clickOnJobSeekerRole();
 	}
 
 	@AfterMethod
 	public void tearDown() {
-		driver.quit();
+		//driver.quit();
+		getDriver().quit();
+		unload();
 	}
 	
 	@Test(priority = 1, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TC_1_verifyValidSearch() {
 
-		sp = new SearchPage(driver);
+		//sp = new SearchPage(driver);
+		sp = new SearchPage(getDriver());
 		sp.enterKeywordIntoSearchInputField(dataProp.getProperty("validSearchTerm"));
 		sp.clickOnSearch();
 		sp.getSearchTag("validSearchTerm");
@@ -46,7 +50,8 @@ public class Search extends Base {
 	
 	@Test(priority = 2, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TC_2_verifyInvalidSearch() {
-		sp = new SearchPage(driver);
+		//sp = new SearchPage(driver);
+		sp = new SearchPage(getDriver());
 		sp.enterKeywordIntoSearchInputField(dataProp.getProperty("invalidSearchTerm"));
 		sp.clickOnSearch();
 		sp.getSearchTag("invalidSearchTerm");
@@ -54,7 +59,8 @@ public class Search extends Base {
 	
 	@Test(priority = 3, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TC_3_verifySearchWithSpecialCharcters() {
-		sp = new SearchPage(driver);
+		//sp = new SearchPage(driver);
+		sp = new SearchPage(getDriver());
 		sp.enterKeywordIntoSearchInputField(dataProp.getProperty("specialCharctersSearchTerm"));
 		sp.clickOnSearch();
 		sp.getSearchTag("specialCharctersSearchTerm");
@@ -62,7 +68,8 @@ public class Search extends Base {
 	
 	@Test(priority = 4, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TC_4_verifySearchWithFilters() {
-		sp = new SearchPage(driver);
+		//sp = new SearchPage(driver);
+		sp = new SearchPage(getDriver());
 		sp.enterKeywordIntoSearchInputField(dataProp.getProperty("validSearchTerm"));
 		sp.clickLocationButton();
 		sp.selectLocationOption(dataProp.getProperty("filterLocation"));

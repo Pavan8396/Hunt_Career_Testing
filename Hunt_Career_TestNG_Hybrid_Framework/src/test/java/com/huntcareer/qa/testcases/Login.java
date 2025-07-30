@@ -35,7 +35,9 @@ public class Login extends Base {
 
 	@AfterMethod
 	public void tearDown() {
-		driver.quit();
+		//driver.quit();
+		getDriver().quit();
+		unload();
 	}
 
 	@DataProvider(name = "testdata")
@@ -47,7 +49,8 @@ public class Login extends Base {
 	@Test(priority = 1, dataProvider = "testdata", retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	
 	public void TC_1_verifyWithValidDataUsingExcel(String email, String password) {
-		lp = new LoginPage(driver);
+		//lp = new LoginPage(driver);
+		lp = new LoginPage(getDriver());
 		lp.enterEmail(email);
 		lp.enterPassword(password);
 		hp = lp.clickLoginButton();
@@ -61,7 +64,8 @@ public class Login extends Base {
 
 	@Test(priority = 3, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TC_3_verifyWithValidData() {
-		lp = new LoginPage(driver);
+		//lp = new LoginPage(driver);
+		lp = new LoginPage(getDriver());
 		lp.enterEmail(dataProp.getProperty("validEmail"));
 		lp.enterPassword(dataProp.getProperty("validPassword"));
 		hp = lp.clickLoginButton();
@@ -81,7 +85,8 @@ public class Login extends Base {
 
 	@Test(priority = 2, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TC_2_verifyWithInvalidData() {
-		lp = new LoginPage(driver);
+		//lp = new LoginPage(driver);
+		lp = new LoginPage(getDriver());
 		lp.enterEmail(dataProp.getProperty("invalidEmail"));
 		lp.enterPassword(dataProp.getProperty("invalidPassword"));
 		lp.clickLoginButton();
@@ -90,7 +95,8 @@ public class Login extends Base {
 	
 	@Test (priority = 4, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TC_4_verifyShortPassword() {
-		lp = new LoginPage(driver);
+		//lp = new LoginPage(driver);
+		lp = new LoginPage(getDriver());
 		lp.enterEmail(dataProp.getProperty("validEmail"));
 		lp.enterPassword(dataProp.getProperty("shortPassword"));
 		lp.clickLoginButton();
@@ -99,7 +105,8 @@ public class Login extends Base {
 	
 	@Test (priority = 5, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TC_5_verifyinvalidEmailAndValidPassword() {
-		lp = new LoginPage(driver);
+		//lp = new LoginPage(driver);
+		lp = new LoginPage(getDriver());
 		lp.enterEmail(dataProp.getProperty("invalidEmail"));
 		lp.enterPassword(dataProp.getProperty("validPassword"));
 		lp.clickLoginButton();
@@ -108,7 +115,8 @@ public class Login extends Base {
 	
 	@Test (priority = 6, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TC_6_verifyValidEmailAndInvalidPassword() {
-		lp = new LoginPage(driver);
+		//lp = new LoginPage(driver);
+		lp = new LoginPage(getDriver());
 		lp.enterEmail(dataProp.getProperty("validEmail"));
 		lp.enterPassword(dataProp.getProperty("invalidPassword"));
 		lp.clickLoginButton();
@@ -117,14 +125,16 @@ public class Login extends Base {
 	
 	@Test (priority = 7, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TC_7_verifyNoEmailAndNoPassword() {
-		lp = new LoginPage(driver);
+		//lp = new LoginPage(driver);
+		lp = new LoginPage(getDriver());
 		lp.clickLoginButton();
 		lp.verifyEmailIsRequired();
 	}
 	
 	@Test (priority = 8, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TC_8_verifyNoEmail() {
-		lp = new LoginPage(driver);
+		//lp = new LoginPage(driver);
+		lp = new LoginPage(getDriver());
 		lp.enterPassword(dataProp.getProperty("validPassword"));
 		lp.clickLoginButton();
 		lp.verifyEmailIsRequired();
@@ -132,7 +142,8 @@ public class Login extends Base {
 	
 	@Test (priority = 9, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TC_9_verifyNoPassword() {
-		lp = new LoginPage(driver);
+		//lp = new LoginPage(driver);
+		lp = new LoginPage(getDriver());
 		lp.enterEmail(dataProp.getProperty("validEmail"));
 		lp.clickLoginButton();
 		lp.verifyPasswordIsRequired();
@@ -140,7 +151,8 @@ public class Login extends Base {
 	
 	@Test (priority = 10, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TC_10_verifyEmailWithoutTopDomain() {
-		lp = new LoginPage(driver);
+		//lp = new LoginPage(driver);
+		lp = new LoginPage(getDriver());
 		lp.enterEmail(dataProp.getProperty("emailWithoutTopDomain"));
 		lp.enterPassword(dataProp.getProperty("validPassword"));
 		lp.clickLoginButton();
@@ -149,7 +161,8 @@ public class Login extends Base {
 	
 	@Test (priority = 11, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TC_11_verifyEmailWithoutDomain() {
-		lp = new LoginPage(driver);
+		//lp = new LoginPage(driver);
+		lp = new LoginPage(getDriver());
 		lp.enterEmail(dataProp.getProperty("emailWithoutDomain"));
 		lp.enterPassword(dataProp.getProperty("validPassword"));
 		lp.clickLoginButton();
@@ -158,7 +171,8 @@ public class Login extends Base {
 	
 	@Test (priority = 12, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TC_12_verifyEmailWithoutUserName() {
-		lp = new LoginPage(driver);
+		//lp = new LoginPage(driver);
+		lp = new LoginPage(getDriver());
 		lp.enterEmail(dataProp.getProperty("emailWithoutUserName"));
 		lp.enterPassword(dataProp.getProperty("validPassword"));
 		lp.clickLoginButton();
@@ -167,7 +181,8 @@ public class Login extends Base {
 	
 	@Test (priority = 13, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TC_13_verifyEmailWithDoubleAtTheRate() {
-		lp = new LoginPage(driver);
+		//lp = new LoginPage(driver);
+		lp = new LoginPage(getDriver());
 		lp.enterEmail(dataProp.getProperty("emailWithDoubleAtTheRate"));
 		lp.enterPassword(dataProp.getProperty("validPassword"));
 		lp.clickLoginButton();
@@ -176,7 +191,8 @@ public class Login extends Base {
 	
 	@Test (priority = 14, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TC_14_verifyEmailWithDotAfterUserName() {
-		lp = new LoginPage(driver);
+		//lp = new LoginPage(driver);
+		lp = new LoginPage(getDriver());
 		lp.enterEmail(dataProp.getProperty("emailWithDotAfterUserName"));
 		lp.enterPassword(dataProp.getProperty("validPassword"));
 		hp = lp.clickLoginButton();
@@ -185,7 +201,8 @@ public class Login extends Base {
 	
 	@Test (priority = 15, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TC_15_verifyEmailWithDotInbetweenUserName() {
-		lp = new LoginPage(driver);
+		//lp = new LoginPage(driver);
+		lp = new LoginPage(getDriver());
 		lp.enterEmail(dataProp.getProperty("emailWithDotInbetweenUserName"));
 		lp.enterPassword(dataProp.getProperty("validPassword"));
 		hp = lp.clickLoginButton();
