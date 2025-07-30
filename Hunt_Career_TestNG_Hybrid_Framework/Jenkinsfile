@@ -1,9 +1,10 @@
 pipeline {
-    agent any 
+    agent any
 
     tools {
-        maven 'MAVEN'
+        // Ensure these tools are configured in Jenkins Global Tool Configuration
         jdk 'JAVA'
+        maven 'MAVEN'
     }
 
     stages {
@@ -16,77 +17,57 @@ pipeline {
 
         stage('Build') {
             steps {
-                echo 'Building the project...'
-                bat 'mvn -B clean install -DskipTests'
+                echo 'Cleaning and building the project...'
+                // Using -B for batch mode to prevent interactive prompts
+                sh 'mvn -B clean install'
             }
         }
 
         stage('Test') {
             steps {
+                echo 'Running TestNG tests...'
+                // Using a script block to wrap the test command in a try-catch block.
                 script {
                     try {
-                        echo 'Running tests...'
-                        bat 'mvn -B test'
+                        sh 'mvn -B test'
                     } catch (any) {
                         currentBuild.result = 'UNSTABLE'
-                        echo "TestNG tests execution failed or reported errors. Build set to UNSTABLE."
-                        throw any // Re-throw the error
+                        echo "TestNG tests failed."
                     }
                 }
-            }
-        }
-
-        stage('Archive Reports') {
-            steps {
-                echo 'Archiving reports...'
-                archiveArtifacts artifacts: 'test-output/ExtentReports/extentReport.html', allowEmptyArchive: true
-                archiveArtifacts artifacts: 'test-output/emailable-report.html', allowEmptyArchive: true
-                archiveArtifacts artifacts: 'test-output/testng-results.xml', allowEmptyArchive: true
             }
         }
     }
 
     post {
         always {
-            echo 'Pipeline finished. Publishing reports and archiving...'
-            
-            archiveArtifacts artifacts: 'test-output/ExtentReports/extentReport.html', allowEmptyArchive: true
-            archiveArtifacts artifacts: 'test-output/emailable-report.html', allowEmptyArchive: true
-            archiveArtifacts artifacts: 'test-output/testng-results.xml', allowEmptyArchive: true
-            
-            junit testResults: 'test-output/testng-results.xml', allowEmptyResults: true
+            echo 'Archiving and publishing reports...'
 
+            // Archive the JUnit XML results, which Jenkins can use to track test trends
+            junit testResults: 'target/surefire-reports/testng-results.xml', allowEmptyResults: true
+
+            // Archive the Extent HTML report
+            archiveArtifacts artifacts: 'test-output/ExtentReports/extentReport.html', allowEmptyArchive: true
+            
+            // Publish the Extent HTML report for easy viewing
             publishHTML(target: [
                 allowMissing: true,
                 alwaysLinkToLastBuild: true,
                 keepAll: true,
                 reportDir: 'test-output/ExtentReports',
-                reportFiles: 'extentReport.html', 
+                reportFiles: 'extentReport.html',
                 reportName: 'Extent Test Report'
             ])
 
+            // Also publish the standard TestNG emailable report
             publishHTML(target: [
                 allowMissing: true,
                 alwaysLinkToLastBuild: true,
                 keepAll: true,
                 reportDir: 'test-output',
-                reportFiles: 'emailable-report.html', 
+                reportFiles: 'emailable-report.html',
                 reportName: 'TestNG Emailable Report'
             ])
-        }
-        success {
-            echo 'Pipeline executed successfully!'
-            // echo 'TODO: Send success notification' 
-        }
-        failure {
-            echo 'Pipeline failed. Sending failure notification (placeholder)...'
-            // Example placeholder for mail:
-            // mail to: 'your-team@example.com', subject: "FAILED: Pipeline ${env.JOB_NAME} [${env.BUILD_NUMBER}]", body: "Check console output: ${env.BUILD_URL}"
-        }
-        unstable {
-            echo 'Pipeline is unstable (tests likely failed). Sending unstable notification (placeholder)...'
-            // Example placeholder for mail:
-            // mail to: 'your-team@example.com', subject: "UNSTABLE: Pipeline ${env.JOB_NAME} [${env.BUILD_NUMBER}]", body: "Tests reported issues. Check results: ${env.BUILD_URL}"
         }
     }
 }
