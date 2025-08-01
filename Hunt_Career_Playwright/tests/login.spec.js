@@ -14,67 +14,67 @@ test.describe('Login Tests', () => {
     await loginPage.navigate();
   })
 
-  test('TC-1: TC-1-Enter with valid credcredentials', async ({ loginPage }) => {
+  test('LTC-1: Enter with valid credcredentials', async ({ loginPage }) => {
     await loginPage.login(loginData.validUser.email, loginData.validUser.password);
     await loginPage.waitUntilVisible(loginPage.successMessage);
     await loginPage.waitUntilNotVisible(loginPage.successMessage);
   });
 
-  test('TC-2: Enter User who is Not registerd', async ({ loginPage }) => {
+  test('LTC-2: Enter User who is Not registerd', async ({ loginPage }) => {
     await loginPage.login(loginData.invalidUser.email, loginData.invalidUser.password);
     await loginPage.waitUntilVisible(loginPage.invalidCredentialsMessage);
     await loginPage.waitUntilNotVisible(loginPage.invalidCredentialsMessage);
   });
 
-  test('TC-3-Enter Invalid Email and Valid password', async ({loginPage})=>{
+  test('LTC-3-Enter Invalid Email and Valid password', async ({loginPage})=>{
     await loginPage.login(loginData.invalidEmail.email, loginData.invalidEmail.password);
     await loginPage.waitUntilVisible(loginPage.validEmailMsg);
     await loginPage.waitUntilNotVisible(loginPage.validEmailMsg);
   })
 
-  test('TC-4-Enter Valid Email and Invalid Password', async ({loginPage})=>{
+  test('LTC-4-Enter Valid Email and Invalid Password', async ({loginPage})=>{
     await loginPage.login(loginData.invalidPassowrd.email, loginData.invalidPassowrd.password);
     await loginPage.waitUntilVisible(loginPage.passwordLengthMsg);
     await loginPage.waitUntilNotVisible(loginPage.passwordLengthMsg);
   })
 
-  test('TC-5-Dont enter any data into Email field and click on Login Button', async ({loginPage})=>{
+  test('LTC-5-Dont enter any data into Email field and click on Login Button', async ({loginPage})=>{
     await loginPage.clickElement(loginPage.loginButton);
     await loginPage.waitUntilVisible(loginPage.emailRequiredMsg);
     await loginPage.waitUntilNotVisible(loginPage.emailRequiredMsg);
   })
 
-  test('TC-6-Dont enter any data into Password field and click on Login Button', async ({loginPage})=>{
+  test('LTC-6-Dont enter any data into Password field and click on Login Button', async ({loginPage})=>{
     await loginPage.login(loginData.blankPassword.email, loginData.blankPassword.password);
     await loginPage.waitUntilVisible(loginPage.passwordRequiredMsg);
     await loginPage.waitUntilNotVisible(loginPage.passwordRequiredMsg);
   })
 
-  test('TC-7-Enter Email without the domain name and click on login button', async ({loginPage})=>{
+  test('LTC-7-Enter Email without the domain name and click on login button', async ({loginPage})=>{
     await loginPage.login(loginData.EmailwithoutDomain.email, loginData.EmailwithoutDomain.password);
     await loginPage.waitUntilVisible(loginPage.validEmailMsg);
     await loginPage.waitUntilNotVisible(loginPage.validEmailMsg);
   })
 
-  test('TC-8-Enter email without username and click on login button', async ({loginPage})=>{
+  test('LTC-8-Enter email without username and click on login button', async ({loginPage})=>{
     await loginPage.login(loginData.emailWihoutName.email, loginData.emailWihoutName.password);
     await loginPage.waitUntilVisible(loginPage.validEmailMsg);
     await loginPage.waitUntilNotVisible(loginPage.validEmailMsg);
   })
 
-  test('TC-9-Enter the Email with two at the rate characters and click on login button', async ({loginPage})=>{
+  test('LTC-9-Enter the Email with two at the rate characters and click on login button', async ({loginPage})=>{
     await loginPage.login(loginData["emailhaving2@"].email, loginData["emailhaving2@"].password);
     await loginPage.waitUntilVisible(loginPage.validEmailMsg);
     await loginPage.waitUntilNotVisible(loginPage.validEmailMsg);
   })
 
-  test('TC-10-Enter email with dot at the end and click on login button', async ({loginPage})=>{
+  test('LTC-10-Enter email with dot at the end and click on login button', async ({loginPage})=>{
     await loginPage.login(loginData.emailWithDotAfterName.email, loginData.emailWithDotAfterName.password);
     await loginPage.waitUntilVisible(loginPage.successMessage);
     await loginPage.waitUntilNotVisible(loginPage.successMessage);
   })
 
-  test('TC-11-Enter Email with dot in the middle of name and click on Login button', async ({loginPage})=>{
+  test('LTC-11-Enter Email with dot in the middle of name and click on Login button', async ({loginPage})=>{
     await loginPage.login(loginData.emailWithDotInbetweenName.email, loginData.emailWithDotInbetweenName.password);
     await loginPage.waitUntilVisible(loginPage.successMessage);
     await loginPage.waitUntilNotVisible(loginPage.successMessage);

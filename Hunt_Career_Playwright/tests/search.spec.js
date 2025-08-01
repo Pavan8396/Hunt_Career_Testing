@@ -1,6 +1,9 @@
 import { expect, test as baseTest } from '@playwright/test';
 import searchData  from '../data/searchData.json';
 import { SearchPage } from '../pages/SearchPage.js';
+import { loginAsValidUser } from '../utils/loginHelper.js';
+import { HomePage } from '../pages/HomePage.js';
+import { loginPage } from '../pages/LoginPage.js';
 
 const test = baseTest.extend({
   searchPage : async({page}, use) => {
@@ -14,14 +17,14 @@ test.describe('Search Tests', () => {
     await searchPage.navigate();
   })  
 
-  test("TC-1: Search with a valid keyword", async ({ searchPage }) => {
+  test("STC-1: Search with a valid keyword", async ({ searchPage }) => {
     const searchTerm = searchData.validSearch.searchTerm
     await searchPage.search(searchTerm);
     await searchPage.searchTag(searchTerm);
     await expect(searchPage.searchTag(searchTerm)).toBeVisible();
   });
 
-  test("TC-2-Search with a invalid keyword", async ({ searchPage}) =>{
+  test("STC-2-Search with a invalid keyword", async ({ searchPage}) =>{
     const searchTerm = searchData.invalidSearch.searchTerm
     await searchPage.search(searchTerm);
     await searchPage.searchTag(searchTerm);
@@ -29,14 +32,14 @@ test.describe('Search Tests', () => {
     await expect(searchPage.noJobsFoundMessage).toBeVisible();
   })
 
-  test("TC-3: Search with a special character", async ({ searchPage}) =>{
+  test("STC-3: Search with a special character", async ({ searchPage}) =>{
     const searchTerm = searchData.specialCharSearch.searchTerm
     await searchPage.search(searchTerm);
     await searchPage.searchTag(searchTerm);
     await expect(searchPage.searchTag(searchTerm)).toBeVisible();
   })
 
-  test("TC-4: Search with filter", async ({ searchPage}) =>{
+  test("STC-4: Search with filter", async ({ searchPage}) =>{
     const searchTerm = searchData.searchWithFilters.searchTerm
     await searchPage.search(searchTerm);
     await expect(searchPage.searchTag(searchTerm)).toBeVisible();
@@ -48,5 +51,11 @@ test.describe('Search Tests', () => {
     await searchPage.jobTypeSearchInput.fill(searchData.searchWithFilters.jobType);
     await searchPage.jobTypeOption(searchData.searchWithFilters.jobType).click();
     await expect(searchPage.jobTypeTag(searchData.searchWithFilters.jobType)).toBeVisible();
+  })
+
+  test("STC-5-Login and Search and click on view discription page", async ({searchPage})=>{
+    await loginAsValidUser(loginPage, loginData);
+    await searchPage.search(searchData.validSearch.searchTerm);
+    await HomePage.viewDetailsLink.click();
   })
 });
