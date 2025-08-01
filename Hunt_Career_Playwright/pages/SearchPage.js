@@ -1,4 +1,4 @@
-import { BasePage } from "./BasePage"
+import { BasePage } from "./BasePage";
 
 export class SearchPage extends BasePage {
   constructor(page) {
@@ -6,14 +6,22 @@ export class SearchPage extends BasePage {
     this.page = page;
 
     // Elements
-    this.searchInputField = page.getByPlaceholder('Search jobs by title, company, or keyword...');
-    this.searchButton = page.getByRole('button', { name: 'Search' });
-    this.locationButton = page.getByRole('button', { name: 'Toggle location filter dropdown' });
-    this.locationSearchInput = page.getByPlaceholder('Search location...');
-    this.jobTypeButton = page.getByRole('button', { name: 'Toggle job type filter dropdown' });
-    this.jobTypeSearchInput = page.getByPlaceholder('Search job type...');
-    this.clearAllFiltersButton = page.getByRole('button', { name: 'Clear all filters' });
-    this.noJobsFoundMessage = page.getByText('No jobs found.');
+    this.searchInputField = page.getByPlaceholder(
+      "Search jobs by title, company, or keyword...",
+    );
+    this.searchButton = page.getByRole("button", { name: "Search" });
+    this.locationButton = page.getByRole("button", {
+      name: "Toggle location filter dropdown",
+    });
+    this.locationSearchInput = page.getByPlaceholder("Search location...");
+    this.jobTypeButton = page.getByRole("button", {
+      name: "Toggle job type filter dropdown",
+    });
+    this.jobTypeSearchInput = page.getByPlaceholder("Search job type...");
+    this.clearAllFiltersButton = page.getByRole("button", {
+      name: "Clear all filters",
+    });
+    this.noJobsFoundMessage = page.getByText("No jobs found.");
   }
 
   // Dynamic locators
@@ -38,15 +46,15 @@ export class SearchPage extends BasePage {
   }
 
   jobCardTitle(jobCard) {
-    return jobCard.locator('h3.text-lg.font-semibold');
+    return jobCard.locator("h3.text-lg.font-semibold");
   }
 
   jobCardCompanyLocation(jobCard) {
-    return jobCard.locator('p.text-gray-600');
+    return jobCard.locator("p.text-gray-600");
   }
 
   jobCardDescription(jobCard) {
-    return jobCard.locator('p.text-sm.text-gray-700.mt-3.line-clamp-3');
+    return jobCard.locator("p.text-sm.text-gray-700.mt-3.line-clamp-3");
   }
 
   // Actions

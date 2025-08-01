@@ -1,10 +1,9 @@
-import { expect, test as baseTest } from '@playwright/test';
-import searchData from '../data/searchData.json';
-import loginData from '../data/loginData.json';
-import { SearchPage } from '../pages/SearchPage.js';
-import { loginAsValidUser } from '../utils/loginHelper.js';
-import { HomePage } from '../pages/HomePage.js';
-import { LoginPage } from '../pages/LoginPage.js';
+import { expect, test as baseTest } from "@playwright/test";
+import testData from "../data/testData.json";
+import { SearchPage } from "../pages/SearchPage.js";
+import { loginAsValidUser } from "../utils/loginHelper.js";
+import { HomePage } from "../pages/HomePage.js";
+import { LoginPage } from "../pages/LoginPage.js";
 
 const test = baseTest.extend({
   searchPage: async ({ page }, use) => {
@@ -18,48 +17,71 @@ const test = baseTest.extend({
   },
 });
 
-test.describe('Search Tests', () => {
-
+test.describe("Search Tests", () => {
   test.beforeEach(async ({ searchPage }) => {
     await searchPage.navigate();
-  })
+  });
 
-  test("STC-1: Search with a valid keyword", async ({ searchPage }) => {
-    const searchTerm = searchData.validSearch.searchTerm
+  test("should display search results when searching with a valid keyword", async ({
+    searchPage,
+  }) => {
+    const searchTerm = testData.search.validSearch.searchTerm;
     await searchPage.search(searchTerm);
     await expect(searchPage.searchTag(searchTerm)).toBeVisible();
   });
 
-  test("STC-2-Search with a invalid keyword", async ({ searchPage }) => {
-    const searchTerm = searchData.invalidSearch.searchTerm
+  test("should display 'No jobs found' message when searching with an invalid keyword", async ({
+    searchPage,
+  }) => {
+    const searchTerm = testData.search.invalidSearch.searchTerm;
     await searchPage.search(searchTerm);
     await expect(searchPage.searchTag(searchTerm)).not.toBeVisible();
     await expect(searchPage.noJobsFoundMessage).toBeVisible();
-  })
+  });
 
-  test("STC-3: Search with a special character", async ({ searchPage }) => {
-    const searchTerm = searchData.specialCharSearch.searchTerm
+  test("should display search results when searching with a special character", async ({
+    searchPage,
+  }) => {
+    const searchTerm = testData.search.specialCharSearch.searchTerm;
     await searchPage.search(searchTerm);
     await expect(searchPage.searchTag(searchTerm)).toBeVisible();
-  })
+  });
 
-  test("STC-4: Search with filter", async ({ searchPage }) => {
-    const searchTerm = searchData.searchWithFilters.searchTerm
+  test("should display filtered search results when applying location and job type filters", async ({
+    searchPage,
+  }) => {
+    const searchTerm = testData.search.searchWithFilters.searchTerm;
     await searchPage.search(searchTerm);
     await expect(searchPage.searchTag(searchTerm)).toBeVisible();
     await searchPage.locationButton.click();
-    await searchPage.locationSearchInput.fill(searchData.searchWithFilters.location);
-    await searchPage.locationOption(searchData.searchWithFilters.location).click();
-    await expect(searchPage.locationTag(searchData.searchWithFilters.location)).toBeVisible();
+    await searchPage.locationSearchInput.fill(
+      testData.search.searchWithFilters.location,
+    );
+    await searchPage
+      .locationOption(testData.search.searchWithFilters.location)
+      .click();
+    await expect(
+      searchPage.locationTag(testData.search.searchWithFilters.location),
+    ).toBeVisible();
     await searchPage.jobTypeButton.click();
-    await searchPage.jobTypeSearchInput.fill(searchData.searchWithFilters.jobType);
-    await searchPage.jobTypeOption(searchData.searchWithFilters.jobType).click();
-    await expect(searchPage.jobTypeTag(searchData.searchWithFilters.jobType)).toBeVisible();
-  })
+    await searchPage.jobTypeSearchInput.fill(
+      testData.search.searchWithFilters.jobType,
+    );
+    await searchPage
+      .jobTypeOption(testData.search.searchWithFilters.jobType)
+      .click();
+    await expect(
+      searchPage.jobTypeTag(testData.search.searchWithFilters.jobType),
+    ).toBeVisible();
+  });
 
-  test("STC-5-Login and Search and click on view description page", async ({ loginPage, searchPage, homePage }) => {
-    await loginAsValidUser(loginPage, loginData);
-    await searchPage.search(searchData.validSearch.searchTerm);
+  test("should allow a logged-in user to search and view job details", async ({
+    loginPage,
+    searchPage,
+    homePage,
+  }) => {
+    await loginAsValidUser(loginPage, testData.login);
+    await searchPage.search(testData.search.validSearch.searchTerm);
     await homePage.viewDetailsLink.first().click();
-  })
+  });
 });

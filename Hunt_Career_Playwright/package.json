@@ -6,7 +6,8 @@
   "scripts": {
     "test": "npx playwright test",
     "test:headed": "npx playwright test --headed",
-    "report": "npx playwright show-report"
+    "report": "npx playwright show-report",
+    "format": "prettier --write ."
   },
   "keywords": [],
   "author": "",
@@ -14,7 +15,8 @@
   "type": "commonjs",
   "devDependencies": {
     "@playwright/test": "^1.52.0",
-    "@types/node": "^22.15.19"
+    "@types/node": "^22.15.19",
+    "prettier": "^3.6.2"
   },
   "dependencies": {
     "@faker-js/faker": "^9.8.0"

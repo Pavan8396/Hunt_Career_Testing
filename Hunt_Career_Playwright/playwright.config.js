@@ -1,19 +1,19 @@
 // @ts-check
-import { defineConfig, devices } from '@playwright/test';
+import { defineConfig, devices } from "@playwright/test";
 
 /**
  * Read environment variables from file.
  * https://github.com/motdotla/dotenv
  */
-// import dotenv from 'dotenv';
-// import path from 'path';
-// dotenv.config({ path: path.resolve(__dirname, '.env') });
+import dotenv from "dotenv";
+import path from "path";
+dotenv.config({ path: path.resolve(__dirname, ".env") });
 
 /**
  * @see https://playwright.dev/docs/test-configuration
  */
 export default defineConfig({
-  testDir: './tests',
+  testDir: "./tests",
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
@@ -23,24 +23,24 @@ export default defineConfig({
   /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 11 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: [['html', { open: 'never' }]], //never | on | always 
+  reporter: [["html", { open: "never" }]], //never | on | always
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     headless: true,
-    screenshot: 'only-on-failure',
-    video: 'retain-on-failure',
-    baseURL: 'http://localhost:3000',
-    trace: 'on-first-retry',
+    screenshot: "only-on-failure",
+    video: "retain-on-failure",
+    baseURL: process.env.BASE_URL,
+    trace: "on-first-retry",
   },
   //workers:1,
 
   /* Configure projects for major browsers */
   projects: [
     {
-      name: 'chromium',
+      name: "chromium",
       use: {
-        ...devices['Desktop Chrome'],
-        headless: true
+        ...devices["Desktop Chrome"],
+        headless: true,
       },
     },
 
@@ -82,4 +82,3 @@ export default defineConfig({
   //   reuseExistingServer: !process.env.CI,
   // },
 });
-

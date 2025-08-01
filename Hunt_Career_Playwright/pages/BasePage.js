@@ -4,11 +4,11 @@ export class BasePage {
   }
 
   async waitUntilVisible(locator) {
-    await locator.waitFor({ state: 'visible' });
+    await locator.waitFor({ state: "visible" });
   }
 
   async waitUntilNotVisible(locator) {
-    await locator.waitFor({ state: 'hidden' });
+    await locator.waitFor({ state: "hidden" });
   }
 
   async clickElement(locator) {
@@ -20,12 +20,16 @@ export class BasePage {
   }
 
   async navigateToJobSeeker() {
-    await this.page.goto('/');
-    await this.page.locator("//h2[contains(text(), 'I am a Job Seeker')]").click();
+    await this.page.goto("/");
+    await this.page
+      .locator("//h2[contains(text(), 'I am a Job Seeker')]")
+      .click();
   }
 
   async navigateToEmployer() {
-    await this.page.goto('/');
-    await this.page.getByRole("//h2[contains(text(), 'I am a Employer')]").click();
+    await this.page.goto("/");
+    await this.page
+      .getByRole("//h2[contains(text(), 'I am a Employer')]")
+      .click();
   }
 }
