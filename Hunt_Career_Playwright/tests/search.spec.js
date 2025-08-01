@@ -57,9 +57,9 @@ test.describe('Search Tests', () => {
     await expect(searchPage.jobTypeTag(searchData.searchWithFilters.jobType)).toBeVisible();
   })
 
-  test("STC-5-Login and Search and click on view discription page", async ({searchPage})=>{
+  test("STC-5-Login and Search and click on view discription page", async ({searchPage, loginPage, homePage})=>{
     await loginAsValidUser(loginPage, loginData);
     await searchPage.search(searchData.validSearch.searchTerm);
-    await HomePage.viewDetailsLink.first().click();
+    await homePage.viewDetailsLink.first().click();
   })
 });
