@@ -1,4 +1,4 @@
-import { BasePage } from "./BasePage"
+import { BasePage } from "./BasePage";
 
 export class SearchPage extends BasePage {
   constructor(page) {
@@ -6,13 +6,25 @@ export class SearchPage extends BasePage {
     this.page = page;
 
     // Elements
-    this.searchInputField = page.locator("//input[@placeholder='Search jobs by title, company, or keyword...']");
+    this.searchInputField = page.locator(
+      "//input[@placeholder='Search jobs by title, company, or keyword...']",
+    );
     this.searchButton = page.locator("//button[@aria-label='Search']");
-    this.locationButton = page.locator("//button[@aria-label='Toggle location filter dropdown']");
-    this.locationSearchInput = page.locator("//input[@placeholder='Search location...']");
-    this.jobTypeButton = page.locator("//button[@aria-label='Toggle job type filter dropdown']");
-    this.jobTypeSearchInput = page.locator("//input[@placeholder='Search job type...']");
-    this.clearAllFiltersButton = page.locator("//button[@aria-label='Clear all filters']");
+    this.locationButton = page.locator(
+      "//button[@aria-label='Toggle location filter dropdown']",
+    );
+    this.locationSearchInput = page.locator(
+      "//input[@placeholder='Search location...']",
+    );
+    this.jobTypeButton = page.locator(
+      "//button[@aria-label='Toggle job type filter dropdown']",
+    );
+    this.jobTypeSearchInput = page.locator(
+      "//input[@placeholder='Search job type...']",
+    );
+    this.clearAllFiltersButton = page.locator(
+      "//button[@aria-label='Clear all filters']",
+    );
     this.noJobsFoundMessage = page.locator('p:has-text("No jobs found.")');
   }
 
@@ -38,15 +50,15 @@ export class SearchPage extends BasePage {
   }
 
   jobCardTitle(jobCard) {
-    return jobCard.locator('h3.text-lg.font-semibold');
+    return jobCard.locator("h3.text-lg.font-semibold");
   }
 
   jobCardCompanyLocation(jobCard) {
-    return jobCard.locator('p.text-gray-600');
+    return jobCard.locator("p.text-gray-600");
   }
 
   jobCardDescription(jobCard) {
-    return jobCard.locator('p.text-sm.text-gray-700.mt-3.line-clamp-3');
+    return jobCard.locator("p.text-sm.text-gray-700.mt-3.line-clamp-3");
   }
 
   // Actions
