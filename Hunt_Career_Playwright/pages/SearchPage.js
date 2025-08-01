@@ -6,35 +6,35 @@ export class SearchPage extends BasePage {
     this.page = page;
 
     // Elements
-    this.searchInputField = page.locator("//input[@placeholder='Search jobs by title, company, or keyword...']");
-    this.searchButton = page.locator("//button[@aria-label='Search']");
-    this.locationButton = page.locator("//button[@aria-label='Toggle location filter dropdown']");
-    this.locationSearchInput = page.locator("//input[@placeholder='Search location...']");
-    this.jobTypeButton = page.locator("//button[@aria-label='Toggle job type filter dropdown']");
-    this.jobTypeSearchInput = page.locator("//input[@placeholder='Search job type...']");
-    this.clearAllFiltersButton = page.locator("//button[@aria-label='Clear all filters']");
-    this.noJobsFoundMessage = page.locator('p:has-text("No jobs found.")');
+    this.searchInputField = page.getByPlaceholder('Search jobs by title, company, or keyword...');
+    this.searchButton = page.getByRole('button', { name: 'Search' });
+    this.locationButton = page.getByRole('button', { name: 'Toggle location filter dropdown' });
+    this.locationSearchInput = page.getByPlaceholder('Search location...');
+    this.jobTypeButton = page.getByRole('button', { name: 'Toggle job type filter dropdown' });
+    this.jobTypeSearchInput = page.getByPlaceholder('Search job type...');
+    this.clearAllFiltersButton = page.getByRole('button', { name: 'Clear all filters' });
+    this.noJobsFoundMessage = page.getByText('No jobs found.');
   }
 
   // Dynamic locators
   searchTag(searchTerm) {
-    return this.page.locator(`//span[contains(., "🔍 ${searchTerm}")]`);
+    return this.page.getByText(`🔍 ${searchTerm}`);
   }
 
   locationTag(location) {
-    return this.page.locator(`//span[contains(., "📍 ${location}")]`);
+    return this.page.getByText(`📍 ${location}`);
   }
 
   jobTypeTag(jobType) {
-    return this.page.locator(`//span[contains(., "🧾 ${jobType}")]`);
+    return this.page.getByText(`🧾 ${jobType}`);
   }
 
   locationOption(location) {
-    return this.page.locator(`//label[contains(., "${location}")]//input`);
+    return this.page.getByLabel(location);
   }
 
   jobTypeOption(jobType) {
-    return this.page.locator(`//label[contains(., "${jobType}")]//input`);
+    return this.page.getByLabel(jobType);
   }
 
   jobCardTitle(jobCard) {
