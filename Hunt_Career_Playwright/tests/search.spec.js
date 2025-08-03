@@ -5,6 +5,7 @@ import { SearchPage } from "../pages/SearchPage.js";
 import { loginAsValidUser } from "../utils/loginHelper.js";
 import { HomePage } from "../pages/HomePage.js";
 import { LoginPage } from "../pages/LoginPage.js";
+import { ViewDetailsPage } from "../pages/ViewDetailsPage.js";
 
 const test = baseTest.extend({
   searchPage: async ({ page }, use) => {
@@ -16,6 +17,9 @@ const test = baseTest.extend({
   homePage: async ({ page }, use) => {
     await use(new HomePage(page));
   },
+  viewDetailsPage: async ({page}, use) => {
+    await use(new ViewDetailsPage(page));
+  }
 });
 
 test.describe("Search Tests", () => {
@@ -72,9 +76,11 @@ test.describe("Search Tests", () => {
     searchPage,
     loginPage,
     homePage,
+    viewDetailsPage
   }) => {
     await loginAsValidUser(loginPage, loginData);
     await searchPage.search(searchData.validSearch.searchTerm);
     await homePage.viewDetailsLink.first().click();
+    await expect(viewDetailsPage.ApplyButton).toBeVisible();
   });
 });
