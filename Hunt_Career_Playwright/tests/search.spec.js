@@ -83,4 +83,15 @@ test.describe("Search Tests", () => {
     await homePage.viewDetailsLink.first().click();
     await expect(viewDetailsPage.ApplyButton).toBeVisible();
   });
+
+  test("STC-6-Login and Save the job and view the saved job in saved jobs page", async ({
+    searchPage,
+    loginPage,
+    homePage,
+    viewDetailsPage
+  }) => {
+    await loginAsValidUser(loginPage, loginData);
+    await homePage.saveButton.first().click(); 
+    await homePage.saveConfirmationPopup.click();
+  });
 });

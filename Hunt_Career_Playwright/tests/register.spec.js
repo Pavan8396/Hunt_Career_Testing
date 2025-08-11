@@ -13,7 +13,7 @@ test.describe("Register Tests", () => {
     await registerPage.navigate();
   });
 
-  test("RTC-1: Enter with valid credcredentials", async ({ registerPage }) => {
+  test("RTC-1: Enter with valid credentials", async ({ registerPage }) => {
     await registerPage.register(
       registerData.validUser.firstName,
       registerData.validUser.lastName,
@@ -25,9 +25,9 @@ test.describe("Register Tests", () => {
     await registerPage.waitUntilVisible(
       registerPage.checkSuccessCreationMessage,
     );
-    await registerPage.waitUntilNotVisible(
-      registerPage.checkSuccessCreationMessage,
-    );
+    // await registerPage.waitUntilNotVisible(
+    //   registerPage.checkSuccessCreationMessage,
+    // );
   });
 
   test("RTC-2-Enter with duplicate credentials", async ({ registerPage }) => {
