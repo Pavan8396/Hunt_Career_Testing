@@ -28,22 +28,6 @@ export class SearchPage extends BasePage {
     this.noJobsFoundMessage = page.locator('p:has-text("No jobs found.")');
   }
 
-  getJobCardByIndex(index) {
-    const titleLocator = this.page
-      .locator(
-        "//h3[contains(@class, 'text-lg') and contains(@class, 'font-semibold')]",
-      )
-      .nth(index);
-
-    const cardLocator = titleLocator.locator("xpath=./ancestor::div[1]");
-    const saveButtonLocator = cardLocator.locator("button:has-text('Save')");
-
-    return {
-      getTitle: async () => await titleLocator.textContent(),
-      clickSave: async () => await saveButtonLocator.click(),
-    };
-  }
-
   // Dynamic locators
   searchTag(searchTerm) {
     return this.page.locator(`//span[contains(., "🔍 ${searchTerm}")]`);
@@ -63,6 +47,14 @@ export class SearchPage extends BasePage {
 
   jobTypeOption(jobType) {
     return this.page.locator(`//label[contains(., "${jobType}")]//input`);
+  }
+
+  jobCardTitle(index) {
+    return this.page
+      .locator(
+        "//h3[contains(@class, 'text-lg') and contains(@class, 'font-semibold')]",
+      )
+      .nth(index);
   }
 
   jobCardCompanyLocation(jobCard) {
