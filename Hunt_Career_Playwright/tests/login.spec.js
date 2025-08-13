@@ -1,10 +1,14 @@
 import { test as baseTest } from "@playwright/test";
 import loginData from "../data/loginData.json";
 import { LoginPage } from "../pages/LoginPage.js";
+import { HomePage } from "../pages/HomePage.js";
 
 const test = baseTest.extend({
   loginPage: async ({ page }, use) => {
     await use(new LoginPage(page));
+  },
+  homePage: async ({ page }, use) => {
+    await use(new HomePage(page));
   },
 });
 
@@ -13,13 +17,13 @@ test.describe("Login Tests", () => {
     await loginPage.navigate();
   });
 
-  test("LTC-1: Enter with valid credcredentials", async ({ loginPage }) => {
+  test("LTC-1: Enter with valid credcredentials", async ({ loginPage, homePage }) => {
     await loginPage.login(
       loginData.validUser.email,
       loginData.validUser.password,
     );
-    await loginPage.waitUntilVisible(loginPage.successMessage);
-    await loginPage.waitUntilNotVisible(loginPage.successMessage);
+    await homePage.waitUntilVisible(homePage.successMessage);
+    await homePage.waitUntilNotVisible(homePage.successMessage);
   });
 
   test("LTC-2: Enter User who is Not registerd", async ({ loginPage }) => {

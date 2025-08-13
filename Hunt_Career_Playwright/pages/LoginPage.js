@@ -6,9 +6,6 @@ export class LoginPage extends BasePage {
     this.emailField = page.locator('//input[@id="email"]');
     this.passwordField = page.locator('//input[@id="password"]');
     this.loginButton = page.locator('//button[@aria-label="Login"]');
-    this.successMessage = page.locator(
-      "//div[contains(text(), 'Logged in successfully!')]",
-    );
     this.invalidCredentialsMessage = page.locator(
       "//div[contains(text(), 'Invalid email or password')]",
     );

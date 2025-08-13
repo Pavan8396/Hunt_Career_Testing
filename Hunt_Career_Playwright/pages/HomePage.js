@@ -6,5 +6,8 @@ export class HomePage extends BasePage {
     this.viewDetailsLink = page.locator('//span[contains(text(), "View Details ")]');
     this.saveButton = page.locator('//button[contains(text(), "Save")]');
     this.saveConfirmationPopup = page.locator('//button[contains(text(), "Confirm")]');
+    this.openUserMenu = page.locator('//button[@aria-label = "Open user menu"]');
+    this.clickOnSavedJobs = page.locator('//a[contains(text(), "Saved Jobs")]');
+    this.successMessage = page.locator("//div[contains(text(), 'Logged in successfully!')]");
   }
 }
