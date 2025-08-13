@@ -8,4 +8,4 @@ export class SavePage extends BasePage {
     savedJobCard(jobTitle) {
       return this.page.locator(`//h3[contains(text(), '${jobTitle}')]`);
     }
-  }
+}
