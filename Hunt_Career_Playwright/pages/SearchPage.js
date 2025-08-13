@@ -50,7 +50,11 @@ export class SearchPage extends BasePage {
   }
 
   jobCardTitle(index) {
-    return this.page.locator("//h3[contains(@class, 'text-lg.font-semibold')]").nth(index);
+    return this.page
+      .locator(
+        "//h3[contains(@class, 'text-lg') and contains(@class, 'font-semibold')]",
+      )
+      .nth(index);
   }
 
   jobCardCompanyLocation(jobCard) {
