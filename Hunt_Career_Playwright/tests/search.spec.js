@@ -89,6 +89,7 @@ test.describe("Search Tests", () => {
   });
 
   test("STC-6-Login and Save the job and view the saved job in saved jobs page", async ({
+    page,
     loginPage,
     homePage,
     searchPage,
