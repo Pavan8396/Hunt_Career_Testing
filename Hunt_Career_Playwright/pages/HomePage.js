@@ -13,4 +13,4 @@ export class HomePage extends BasePage {
     savedMessage(jobTitle) {
       return this.page.locator(`//div[contains(text(), 'Job "${jobTitle}" saved')]`);
     }
-  }
+}

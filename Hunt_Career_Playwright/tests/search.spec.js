@@ -6,6 +6,7 @@ import { loginAsValidUser } from "../utils/loginHelper.js";
 import { HomePage } from "../pages/HomePage.js";
 import { LoginPage } from "../pages/LoginPage.js";
 import { ViewDetailsPage } from "../pages/ViewDetailsPage.js";
+import { SavePage } from "../pages/SavePage.js";
 
 const test = baseTest.extend({
   searchPage: async ({ page }, use) => {
@@ -17,9 +18,12 @@ const test = baseTest.extend({
   homePage: async ({ page }, use) => {
     await use(new HomePage(page));
   },
-  viewDetailsPage: async ({page}, use) => {
+  viewDetailsPage: async ({ page }, use) => {
     await use(new ViewDetailsPage(page));
-  }
+  },
+  savePage: async ({ page }, use) => {
+    await use(new SavePage(page));
+  },
 });
 
 test.describe("Search Tests", () => {
@@ -76,7 +80,7 @@ test.describe("Search Tests", () => {
     searchPage,
     loginPage,
     homePage,
-    viewDetailsPage
+    viewDetailsPage,
   }) => {
     await loginAsValidUser(loginPage, loginData);
     await searchPage.search(searchData.validSearch.searchTerm);
@@ -87,14 +91,16 @@ test.describe("Search Tests", () => {
   test("STC-6-Login and Save the job and view the saved job in saved jobs page", async ({
     loginPage,
     homePage,
-    searchPage
+    searchPage,
+    savePage,
   }) => {
-    await loginAsValidUser(loginPage, loginData);
-    const jobTitle = searchPage.jobCardTitle(1);
+    await loginAsValidUser(loginPage, loginData, page);
+    const jobTitle = await searchPage.jobCardTitle(1).textContent();
     await homePage.saveButton.nth(1).click();
     await homePage.saveConfirmationPopup.click();
+    await expect(homePage.savedMessage(jobTitle)).toBeVisible();
     await homePage.openUserMenu.click();
     await homePage.clickOnSavedJobs.click();
-    await expect(homePage.savedJobCard()).toBeVisible();
+    await expect(savePage.savedJobCard(jobTitle)).toBeVisible();
   });
 });
