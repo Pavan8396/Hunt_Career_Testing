@@ -33,7 +33,9 @@ export class SearchPage extends BasePage {
 
   getJobCardByIndex(index) {
     const cardLocator = this.jobCards.nth(index);
-    const titleLocator = cardLocator.locator("h3");
+    const titleLocator = cardLocator.locator(
+      "h3[class*='text-lg'][class*='font-semibold']",
+    );
     const saveButtonLocator = cardLocator.locator("button:has-text('Save')");
 
     return {
