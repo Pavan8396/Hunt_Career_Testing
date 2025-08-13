@@ -10,4 +10,7 @@ export class HomePage extends BasePage {
     this.clickOnSavedJobs = page.locator('//a[contains(text(), "Saved Jobs")]');
     this.successMessage = page.locator("//div[contains(text(), 'Logged in successfully!')]");
   }
-}
+    savedMessage(jobTitle) {
+      return this.page.locator(`//div[contains(text(), 'Job "${jobTitle}" saved')]`);
+    }
+  }

@@ -87,11 +87,16 @@ test.describe("Search Tests", () => {
   test("STC-6-Login and Save the job and view the saved job in saved jobs page", async ({
     loginPage,
     homePage,
+    searchPage
   }) => {
     await loginAsValidUser(loginPage, loginData);
-    await homePage.saveButton.first().click(); 
+    await homePage.saveButton.nth(3).click(); 
     await homePage.saveConfirmationPopup.click();
+    //const jobTitle = await searchPage.jobCardTitle(jobCard).innerText();
+    await homePage.waitUntilVisible(homePage.savedMessage);
+    await homePage.waitUntilNotVisible(homePage.savedMessage);
     await homePage.openUserMenu.click();
     await homePage.clickOnSavedJobs.click();
+    
   });
 });

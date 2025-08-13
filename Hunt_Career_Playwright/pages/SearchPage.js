@@ -61,6 +61,10 @@ export class SearchPage extends BasePage {
     return jobCard.locator("p.text-sm.text-gray-700.mt-3.line-clamp-3");
   }
 
+  jobCard() {
+    return this.page.locator("//div[contains(@class, 'job-card')]");
+  }
+
   // Actions
   async enterSearchTerm(searchTerm) {
     await this.searchInputField.fill(searchTerm);
