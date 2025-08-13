@@ -97,8 +97,9 @@ test.describe("Search Tests", () => {
   }) => {
     await loginAsValidUser(loginPage, loginData, page);
     await searchPage.search(searchData.validSearch.searchTerm);
-    const jobTitle = await searchPage.jobCardTitle(1).textContent();
-    await homePage.saveButton.nth(1).click();
+    const jobIndex = 1;
+    const jobTitle = await searchPage.jobCardTitle(jobIndex).textContent();
+    await homePage.saveButton.nth(jobIndex).click();
     await homePage.saveConfirmationPopup.click();
     await expect(homePage.savedMessage(jobTitle)).toBeVisible();
     await homePage.openUserMenu.click();
