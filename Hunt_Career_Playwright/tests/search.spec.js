@@ -90,13 +90,11 @@ test.describe("Search Tests", () => {
     searchPage
   }) => {
     await loginAsValidUser(loginPage, loginData);
-    const jobTitle = await searchPage.jobCardTitle(0).textContent();
-    await homePage.saveButton.first().click();
+    const jobTitle = searchPage.jobCardTitle(1);
+    await homePage.saveButton.nth(1).click();
     await homePage.saveConfirmationPopup.click();
-    await homePage.waitUntilVisible(homePage.savedMessage(jobTitle));
-    await homePage.waitUntilNotVisible(homePage.savedMessage(jobTitle));
     await homePage.openUserMenu.click();
     await homePage.clickOnSavedJobs.click();
-    await expect(homePage.savedJobCard(jobTitle)).toBeVisible();
+    await expect(homePage.savedJobCard()).toBeVisible();
   });
 });

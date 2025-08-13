@@ -63,5 +63,26 @@ export class RegisterPage extends BasePage {
     await this.typeInElement(this.phoneNumberField, phoneNumber);
     await this.clickElement(this.signupButton);
   }
+  async registerFirstPage(firstName, lastName) {
+    await this.typeInElement(this.firstNameField, firstName);
+    await this.typeInElement(this.lastNameField, lastName);
+    await this.clickElement(this.firstNextButton);
+  }
+
+  async registerSecondPage(
+    firstName,
+    lastName,
+    email,
+    password,
+    confirmPassword,
+  ) {
+    await this.typeInElement(this.firstNameField, firstName);
+    await this.typeInElement(this.lastNameField, lastName);
+    await this.clickElement(this.firstNextButton);
+    await this.typeInElement(this.emailField, email);
+    await this.typeInElement(this.passwordField, password);
+    await this.typeInElement(this.confirmPasswordField, confirmPassword);
+    await this.clickElement(this.secondNextButton);
+  }
 
 }
