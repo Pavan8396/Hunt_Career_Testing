@@ -26,6 +26,20 @@ export class SearchPage extends BasePage {
       "//button[@aria-label='Clear all filters']",
     );
     this.noJobsFoundMessage = page.locator('p:has-text("No jobs found.")');
+    this.jobCards = this.page.locator(
+      "div:has(h3[class*='text-lg'][class*='font-semibold'])",
+    );
+  }
+
+  getJobCardByIndex(index) {
+    const cardLocator = this.jobCards.nth(index);
+    const titleLocator = cardLocator.locator("h3");
+    const saveButtonLocator = cardLocator.locator("button:has-text('Save')");
+
+    return {
+      getTitle: async () => await titleLocator.textContent(),
+      clickSave: async () => await saveButtonLocator.click(),
+    };
   }
 
   // Dynamic locators
@@ -47,14 +61,6 @@ export class SearchPage extends BasePage {
 
   jobTypeOption(jobType) {
     return this.page.locator(`//label[contains(., "${jobType}")]//input`);
-  }
-
-  jobCardTitle(index) {
-    return this.page
-      .locator(
-        "//h3[contains(@class, 'text-lg') and contains(@class, 'font-semibold')]",
-      )
-      .nth(index);
   }
 
   jobCardCompanyLocation(jobCard) {
