@@ -22,8 +22,8 @@ test.describe("Login Tests", () => {
       loginData.validUser.email,
       loginData.validUser.password,
     );
-    await homePage.waitUntilVisible(homePage.successMessage);
-    await homePage.waitUntilNotVisible(homePage.successMessage);
+    await loginPage.waitUntilVisible(homePage.successMessage);
+    await loginPage.waitUntilNotVisible(homePage.successMessage);
   });
 
   test("LTC-2: Enter User who is Not registerd", async ({ loginPage }) => {
@@ -110,24 +110,24 @@ test.describe("Login Tests", () => {
   });
 
   test("LTC-10-Enter email with dot at the end and click on login button", async ({
-    loginPage,
+    loginPage, homePage
   }) => {
     await loginPage.login(
       loginData.emailWithDotAfterName.email,
       loginData.emailWithDotAfterName.password,
     );
-    await loginPage.waitUntilVisible(loginPage.successMessage);
-    await loginPage.waitUntilNotVisible(loginPage.successMessage);
+    await loginPage.waitUntilVisible(homePage.successMessage);
+    await loginPage.waitUntilNotVisible(homePage.successMessage);
   });
 
   test("LTC-11-Enter Email with dot in the middle of name and click on Login button", async ({
-    loginPage,
+    loginPage, homePage
   }) => {
     await loginPage.login(
       loginData.emailWithDotInbetweenName.email,
       loginData.emailWithDotInbetweenName.password,
     );
-    await loginPage.waitUntilVisible(loginPage.successMessage);
-    await loginPage.waitUntilNotVisible(loginPage.successMessage);
+    await loginPage.waitUntilVisible(homePage.successMessage);
+    await loginPage.waitUntilNotVisible(homePage.successMessage);
   });
 });

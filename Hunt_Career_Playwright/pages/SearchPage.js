@@ -49,8 +49,8 @@ export class SearchPage extends BasePage {
     return this.page.locator(`//label[contains(., "${jobType}")]//input`);
   }
 
-  jobCardTitle(jobCard) {
-    return jobCard.locator("h3.text-lg.font-semibold");
+  jobCardTitle(index) {
+    return this.page.locator("//h3[contains(@class, 'text-lg.font-semibold')]").nth(index);
   }
 
   jobCardCompanyLocation(jobCard) {
@@ -61,9 +61,9 @@ export class SearchPage extends BasePage {
     return jobCard.locator("p.text-sm.text-gray-700.mt-3.line-clamp-3");
   }
 
-  jobCard() {
-    return this.page.locator("//div[contains(@class, 'job-card')]");
-  }
+  // jobCard() {
+  //   return this.page.locator("//div[contains(@class,  'relative flex flex-col justify-between border rounded p-4 shadow hover:shadow-md transition bg-white dark:bg-gray-800 dark:border-gray-700 cursor-pointer h-full')][1]");
+  // }
 
   // Actions
   async enterSearchTerm(searchTerm) {
