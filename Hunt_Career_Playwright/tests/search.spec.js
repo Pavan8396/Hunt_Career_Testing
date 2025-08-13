@@ -96,6 +96,7 @@ test.describe("Search Tests", () => {
     savePage,
   }) => {
     await loginAsValidUser(loginPage, loginData, page);
+    await searchPage.search(searchData.validSearch.searchTerm);
     const jobTitle = await searchPage.jobCardTitle(1).textContent();
     await homePage.saveButton.nth(1).click();
     await homePage.saveConfirmationPopup.click();
