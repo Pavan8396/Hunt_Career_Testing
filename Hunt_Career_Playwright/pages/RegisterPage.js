@@ -3,12 +3,12 @@ import { BasePage } from "./BasePage";
 export class RegisterPage extends BasePage {
   constructor(page) {
     super(page);
-    this.firstNameField = page.locator("//input[@id='firstName']");
-    this.lastNameField = page.locator("//input[@id='lastName']");
-    this.emailField = page.locator("//input[@id='email']");
-    this.passwordField = page.locator("//input[@id='password']");
-    this.confirmPasswordField = page.locator("//input[@id='confirmPassword']");
-    this.phoneNumberField = page.locator("//input[@id='phoneNumber']");
+    this.firstNameField = page.locator("#firstName");
+    this.lastNameField = page.locator("#lastName");
+    this.emailField = page.locator("#email");
+    this.passwordField = page.locator("#password");
+    this.confirmPasswordField = page.locator("#confirmPassword");
+    this.phoneNumberField = page.locator("#phoneNumber");
     this.firstNextButton = page.locator("//button[@type='button']");
     this.secondNextButton = page.locator("//button[normalize-space()='Next']");
     this.signupButton = page.locator("//button[@aria-label='Sign up']");
@@ -64,25 +64,4 @@ export class RegisterPage extends BasePage {
     await this.clickElement(this.signupButton);
   }
 
-  async registerFirstPage(firstName, lastName) {
-    await this.typeInElement(this.firstNameField, firstName);
-    await this.typeInElement(this.lastNameField, lastName);
-    await this.clickElement(this.firstNextButton);
-  }
-
-  async registerSecondPage(
-    firstName,
-    lastName,
-    email,
-    password,
-    confirmPassword,
-  ) {
-    await this.typeInElement(this.firstNameField, firstName);
-    await this.typeInElement(this.lastNameField, lastName);
-    await this.clickElement(this.firstNextButton);
-    await this.typeInElement(this.emailField, email);
-    await this.typeInElement(this.passwordField, password);
-    await this.typeInElement(this.confirmPasswordField, confirmPassword);
-    await this.clickElement(this.secondNextButton);
-  }
 }
