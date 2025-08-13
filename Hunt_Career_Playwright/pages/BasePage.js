@@ -29,7 +29,7 @@ export class BasePage {
   async navigateToEmployer() {
     await this.page.goto("/");
     await this.page
-      .getByRole("//h2[contains(text(), 'I am a Employer')]")
+      .locator("//h2[contains(text(), 'I am a Employer')]")
       .click();
   }
 }
