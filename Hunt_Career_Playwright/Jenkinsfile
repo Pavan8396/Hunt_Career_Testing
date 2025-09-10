@@ -1,3 +1,80 @@
+// pipeline {
+//     agent any
+
+//     tools {
+//         nodejs 'NodeJS'
+//     }
+
+//     stages {
+//         stage('Checkout') {
+//             steps {
+//                 echo '----------------------------------------'
+//                 echo '        CHECKING OUT SOURCE CODE'
+//                 echo '----------------------------------------'
+//                 checkout scm
+//             }
+//         }
+
+//         stage('Install Dependencies') {
+//             steps {
+//                 dir('Hunt_Career_Playwright') {
+//                     echo '----------------------------------------'
+//                     echo '      INSTALLING NPM DEPENDENCIES'
+//                     echo '----------------------------------------'
+//                     bat 'npm install'
+//                 }
+//             }
+//         }
+
+//         stage('Install Playwright Browsers') {
+//             steps {
+//                 dir('Hunt_Career_Playwright') {
+//                     echo '----------------------------------------'
+//                     echo '     INSTALLING PLAYWRIGHT BROWSERS'
+//                     echo '----------------------------------------'
+//                     bat 'npx playwright install --with-deps'
+//                 }
+//             }
+//         }
+
+//         stage('Run Playwright Tests') {
+//             steps {
+//                 dir('Hunt_Career_Playwright') {
+//                     echo '----------------------------------------'
+//                     echo '         RUNNING PLAYWRIGHT TESTS'
+//                     echo '----------------------------------------'
+//                     script {
+//                         try {
+//                             bat 'npx playwright test'
+//                         } catch (any) {
+//                             currentBuild.result = 'UNSTABLE'
+//                             echo "Playwright tests failed."
+//                         }
+//                     }
+//                 }
+//             }
+//         }
+//     }
+
+//     post {
+//         always {
+//             echo '----------------------------------------'
+//             echo '        ARCHIVING & PUBLISHING REPORTS'
+//             echo '----------------------------------------'
+//             archiveArtifacts artifacts: 'Hunt_Career_Playwright/playwright-report/**/*', allowEmptyArchive: true
+//             publishHTML(target: [
+//                 allowMissing: true,
+//                 alwaysLinkToLastBuild: true,
+//                 keepAll: true,
+//                 reportDir: 'Hunt_Career_Playwright/playwright-report',
+//                 reportFiles: 'index.html',
+//                 reportName: 'Playwright Test Report'
+//             ])
+//         }
+//     }
+// }
+
+
 pipeline {
     agent any
 
@@ -21,7 +98,7 @@ pipeline {
                     echo '----------------------------------------'
                     echo '      INSTALLING NPM DEPENDENCIES'
                     echo '----------------------------------------'
-                    bat 'npm install'
+                    bat 'npm install --quiet --no-progress'
                 }
             }
         }
@@ -45,11 +122,60 @@ pipeline {
                     echo '----------------------------------------'
                     script {
                         try {
-                            bat 'npx playwright test'
+                            // Run with multiple reporters: JSON (for summary) + HTML (for publishing)
+                            bat 'npx playwright test --reporter=json,html'
                         } catch (any) {
                             currentBuild.result = 'UNSTABLE'
                             echo "Playwright tests failed."
                         }
+                    }
+                }
+            }
+        }
+
+        stage('Parse Test Results') {
+            steps {
+                dir('Hunt_Career_Playwright') {
+                    script {
+                        def report = readJSON file: 'test-results.json'
+                        def stats = [
+                            total   : 0,
+                            passed  : 0,
+                            failed  : 0,
+                            skipped : 0,
+                            duration: 0
+                        ]
+
+                        report.suites.each { suite ->
+                            suite.specs.each { spec ->
+                                stats.total += 1
+                                def ok = spec.ok
+                                if (ok) {
+                                    stats.passed += 1
+                                } else {
+                                    def skipped = spec.tests.any { t -> t.results.any { r -> r.status == 'skipped' } }
+                                    if (skipped) {
+                                        stats.skipped += 1
+                                    } else {
+                                        stats.failed += 1
+                                    }
+                                }
+                                spec.tests.each { t ->
+                                    t.results.each { r ->
+                                        stats.duration += (r.duration || 0)
+                                    }
+                                }
+                            }
+                        }
+
+                        echo '----------------------------------------'
+                        echo '        PLAYWRIGHT TEST SUMMARY'
+                        echo '----------------------------------------'
+                        echo " Total:   ${stats.total}"
+                        echo " Passed:  ${stats.passed}"
+                        echo " Failed:  ${stats.failed}"
+                        echo " Skipped: ${stats.skipped}"
+                        echo " Duration: ${stats.duration} ms"
                     }
                 }
             }

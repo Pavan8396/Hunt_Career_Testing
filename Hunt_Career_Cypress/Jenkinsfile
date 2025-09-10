@@ -27,22 +27,42 @@ pipeline {
         }
 
         stage('Run Cypress Tests') {
-            steps {
-                dir('Hunt_Career_Cypress') {
-                    echo '----------------------------------------'
-                    echo '          RUNNING CYPRESS TESTS'
-                    echo '----------------------------------------'
-                    script {
-                        try {
-                            bat 'npm run test:run:report'
-                        } catch (any) {
-                            currentBuild.result = 'UNSTABLE'
-                            echo "Cypress tests failed."
-                        }
-                    }
+    steps {
+        dir('Hunt_Career_Cypress') {
+            echo '----------------------------------------'
+            echo '          RUNNING CYPRESS TESTS'
+            echo '----------------------------------------'
+            script {
+                try {
+                    bat 'npx cypress run --reporter mochawesome --reporter-options quiet=true'
+                } catch (any) {
+                    currentBuild.result = 'UNSTABLE'
+                    echo "Cypress tests failed."
                 }
             }
         }
+    }
+}
+
+stage('Parse Test Results') {
+    steps {
+        dir('Hunt_Career_Cypress/mochawesome-report') {
+            script {
+                def report = readJSON file: 'mochawesome.json'
+                def stats = report.stats
+                echo "----------------------------------------"
+                echo "        CYPRESS TEST SUMMARY"
+                echo "----------------------------------------"
+                echo " Total:   ${stats.tests}"
+                echo " Passed:  ${stats.passes}"
+                echo " Failed:  ${stats.failures}"
+                echo " Skipped: ${stats.pending}"
+                echo " Duration: ${stats.duration} ms"
+            }
+        }
+    }
+}
+
     }
 
     post {
