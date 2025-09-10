@@ -101,7 +101,9 @@ test.describe("Search Tests", () => {
     const jobTitle = await searchPage.jobCardTitle(jobIndex).textContent();
     await homePage.saveButton.nth(jobIndex).click();
     await homePage.saveConfirmationPopup.click();
-    await expect(homePage.savedMessage(jobTitle)).toBeVisible();
+    await homePage.waitUntilVisible(homePage.savedMessage(jobTitle));
+    await homePage.waitUntilNotVisible(homePage.savedMessage(jobTitle));
+    //await expect(homePage.savedMessage(jobTitle)).toBeVisible();
     await homePage.openUserMenu.click();
     await homePage.clickOnSavedJobs.click();
     await expect(savePage.savedJobCard(jobTitle)).toBeVisible();

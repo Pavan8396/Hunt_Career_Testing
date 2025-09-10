@@ -73,4 +73,9 @@ public class Search extends Base {
 		sp.getLocationTag("filterLocation");
 		sp.getJobTypeTag("filterJobType");
 	}
+	
+	@Test(priority = 4, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
+	public void TC_5_Login_and_Save_the_job_and_view_the_saved_job_in_saved_jobs_page() {
+		
+	}
 }
