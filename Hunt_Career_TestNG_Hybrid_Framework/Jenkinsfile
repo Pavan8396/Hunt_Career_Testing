@@ -22,7 +22,7 @@ pipeline {
                     echo '----------------------------------------'
                     echo '          BUILDING THE PROJECT'
                     echo '----------------------------------------'
-                    bat 'mvn -B -q clean install -DskipTests'
+                    bat 'mvn -B clean install -DskipTests'
                 }
             }
         }
@@ -35,34 +35,11 @@ pipeline {
                     echo '----------------------------------------'
                     script {
                         try {
-                            bat 'mvn -B -q test'
+                            bat 'mvn -B test'
                         } catch (any) {
                             currentBuild.result = 'UNSTABLE'
                             echo "TestNG tests failed."
                         }
-                    }
-                }
-            }
-        }
-
-        stage('Parse Test Results') {
-            steps {
-                dir('Hunt_Career_TestNG_Hybrid_Framework/target/surefire-reports') {
-                    script {
-                        def testng = readXML file: 'testng-results.xml'
-                        def stats = testng.'testng-results'.@ // root attributes
-                        def total = stats.'total'.toInteger()
-                        def passed = stats.'passed'.toInteger()
-                        def failed = stats.'failed'.toInteger()
-                        def skipped = stats.'skipped'.toInteger()
-
-                        echo '----------------------------------------'
-                        echo '        TESTNG TEST SUMMARY'
-                        echo '----------------------------------------'
-                        echo " Total:   ${total}"
-                        echo " Passed:  ${passed}"
-                        echo " Failed:  ${failed}"
-                        echo " Skipped: ${skipped}"
                     }
                 }
             }
