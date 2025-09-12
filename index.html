@@ -36,6 +36,31 @@
   .fade { transition: opacity .22s ease, transform .22s ease; }
   .hidden { opacity: 0.0; transform: translateY(6px); pointer-events: none; }
   /* winning line animation uses stroke-dashoffset */
+
+  /* Grid animation */
+  #grid line {
+    stroke-dasharray: 276;
+    stroke-dashoffset: 276;
+  }
+  #grid.animate-grid line {
+    transition: stroke-dashoffset 0.5s ease-in-out;
+    stroke-dashoffset: 0;
+  }
+  #grid.animate-grid line:nth-child(1) { transition-delay: 0ms; }
+  #grid.animate-grid line:nth-child(2) { transition-delay: 100ms; }
+  #grid.animate-grid line:nth-child(3) { transition-delay: 200ms; }
+  #grid.animate-grid line:nth-child(4) { transition-delay: 300ms; }
+
+  /* Score pop animation */
+  @keyframes pop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+    100% { transform: scale(1); }
+  }
+  .popping {
+    animation: pop 0.3s ease-in-out;
+    display: inline-block; /* to make transform work */
+  }
 </style>
 </head>
 <body>
@@ -102,6 +127,9 @@
               <line x1="12" y1="200" x2="288" y2="200"></line>
             </g>
 
+            <!-- hover preview layer -->
+            <g id="hoverLayer" transform="translate(150,150)"></g>
+
             <!-- marks group -->
             <g id="marks" transform="translate(150,150)"></g>
 
@@ -166,6 +194,7 @@
 // --- DOM references
 const boardSvg = document.getElementById('boardSvg');
 const marksGroup = document.getElementById('marks');
+const hoverLayer = document.getElementById('hoverLayer');
 const winLayer = document.getElementById('winLayer');
 const messageEl = document.getElementById('message');
 const turnEl = document.getElementById('turn');
@@ -264,7 +293,7 @@ function drawXAt(index, animate=true){
   l2.setAttribute('stroke','#6ff3c5'); l2.setAttribute('stroke-linecap','round'); l2.setAttribute('stroke-width','8');
   if(animate){
     animateStroke(l1, 14);
-    animateStroke(l2, 18);
+    animateStroke(l2, 18, 100); // 100ms delay for second stroke
   }
   g.appendChild(l1); g.appendChild(l2);
   marksGroup.appendChild(g);
@@ -290,17 +319,18 @@ function drawOAt(index, animate=true){
 }
 
 // helper to animate line drawing using stroke-dasharray for lines
-function animateStroke(lineEl, len){
+function animateStroke(lineEl, len, delay=20){
   lineEl.style.strokeDasharray = len;
   lineEl.style.strokeDashoffset = len;
   lineEl.style.transition = 'stroke-dashoffset .28s cubic-bezier(.2,.9,.2,1)';
-  setTimeout(()=> lineEl.style.strokeDashoffset = '0', 20);
+  setTimeout(()=> lineEl.style.strokeDashoffset = '0', delay);
 }
 
 // play at a cell index (handles turns, AI, state)
 function playAt(index){
   if(state.over) return;
   if(state.board[index]) return;
+  hideHover();
   pushHistory();
   state.board[index] = state.turn;
   state.moves++;
@@ -341,6 +371,7 @@ function pushHistory(){
 // undo last
 function undo(){
   if(state.history.length===0) return;
+  hideHover();
   const last = state.history.pop();
   state.board = last.board.slice();
   state.turn = last.turn;
@@ -405,6 +436,14 @@ function endGame(winner){
     setMessage(winner + ' wins!');
     // stats
     state.scores[winner] = (state.scores[winner]||0) + 1;
+
+    // Animate score update
+    const scoreEl = winner === 'X' ? scoreXEl : scoreOEl;
+    scoreEl.classList.add('popping');
+    scoreEl.addEventListener('animationend', () => {
+      scoreEl.classList.remove('popping');
+    }, { once: true });
+
     if(winner==='X') state.curStreak++; else state.curStreak = 0;
     state.bestStreak = Math.max(state.bestStreak, state.curStreak);
     updateUI();
@@ -507,6 +546,7 @@ function shareResult(){
 
 // start a new game
 function startNewGame(){
+  hideHover();
   state.board = Array(9).fill(null);
   state.turn = 'X';
   state.moves = 0;
@@ -514,9 +554,50 @@ function startNewGame(){
   state.history = [];
   winLayer.innerHTML = '';
   marksGroup.innerHTML = '';
+
+  // Animate grid lines
+  const grid = document.getElementById('grid');
+  grid.classList.remove('animate-grid');
+  void grid.offsetWidth; // Force reflow to restart animation
+  grid.classList.add('animate-grid');
+
   setMessage('Game ready — ' + (state.mode==='ai' ? ('VS AI ('+state.aiLevel+')') : '2 Player'));
   updateUI();
 }
+
+// --- Hover preview functions
+function showHover(index) {
+  if (state.over || state.board[index]) return;
+  hideHover(); // Clear previous before showing new one
+
+  const [cx, cy] = cellCenters[index];
+  const mark = state.turn;
+  const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+  g.setAttribute('transform', `translate(${cx},${cy})`);
+  g.style.opacity = '0.2'; // Make it look like a preview
+
+  if (mark === 'X') {
+    const l1 = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    l1.setAttribute('x1',-28); l1.setAttribute('y1',-28); l1.setAttribute('x2',28); l1.setAttribute('y2',28);
+    l1.setAttribute('stroke','#7ad5ff'); l1.setAttribute('stroke-linecap','round'); l1.setAttribute('stroke-width','8');
+    const l2 = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    l2.setAttribute('x1',28); l2.setAttribute('y1',-28); l2.setAttribute('x2',-28); l2.setAttribute('y2',28);
+    l2.setAttribute('stroke','#6ff3c5'); l2.setAttribute('stroke-linecap','round'); l2.setAttribute('stroke-width','8');
+    g.appendChild(l1);
+    g.appendChild(l2);
+  } else { // 'O'
+    const c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    c.setAttribute('cx',0); c.setAttribute('cy',0); c.setAttribute('r',22);
+    c.setAttribute('fill','none'); c.setAttribute('stroke','#ffd486'); c.setAttribute('stroke-width','6');
+    g.appendChild(c);
+  }
+  hoverLayer.appendChild(g);
+}
+
+function hideHover() {
+  hoverLayer.innerHTML = '';
+}
+
 
 // initial setup: wire click mapping on the empty board (SVG uses marksGroup positions)
 function renderEmptyGridClickable(){
@@ -533,6 +614,8 @@ function renderEmptyGridClickable(){
     rect.setAttribute('x', cx-50); rect.setAttribute('y', cy-50); rect.setAttribute('width', 100); rect.setAttribute('height', 100);
     rect.setAttribute('fill','transparent'); rect.style.cursor='pointer';
     rect.addEventListener('click', ()=> { playAt(i); });
+    rect.addEventListener('mouseover', ()=> { showHover(i); });
+    rect.addEventListener('mouseout', ()=> { hideHover(); });
     clickLayer.appendChild(rect);
   }
   boardSvg.appendChild(clickLayer);
