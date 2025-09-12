@@ -1,0 +1,547 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>God-Level Tic Tac Toe — Visual Edition</title>
+<meta name="description" content="Tic Tac Toe with SVG graphics & animations. VS AI (easy/medium/hard) or 2-player. No sound." />
+<style>
+  :root{
+    --bg:#071428; --panel:#0b1220; --card:#0f1724;
+    --accent:#7ad5ff; --accent2:#6ff3c5; --muted:#9fb0c7;
+    --glass:rgba(255,255,255,0.02);
+  }
+  html,body{height:100%;margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Arial;background:linear-gradient(180deg,#021024,#071428);color:#eaf8ff}
+  .wrap{max-width:980px;margin:22px auto;padding:16px;border-radius:14px;background:linear-gradient(180deg,rgba(255,255,255,0.015),transparent);box-shadow:0 12px 40px rgba(0,0,0,0.6)}
+  .top{display:flex;justify-content:space-between;align-items:center;gap:12px}
+  .brand{font-weight:800;font-size:18px}
+  .controls{display:flex;gap:8px;align-items:center}
+  .select,button{padding:8px 10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:var(--muted);cursor:pointer}
+  button.primary{background:linear-gradient(90deg,var(--accent),var(--accent2));color:#042; border:none; font-weight:700}
+  .main{display:flex;gap:18px;margin-top:14px;align-items:flex-start}
+  .left{flex:1}
+  .panel{width:320px;padding:12px;border-radius:12px;background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent);border:1px solid rgba(255,255,255,0.03)}
+  .hud{display:flex;justify-content:space-between;align-items:center;padding:10px 0}
+  .info{color:var(--muted);font-size:13px}
+  /* SVG board container sizing */
+  .board-wrap{display:flex;justify-content:center;align-items:center;padding:12px}
+  svg.board{width:min(560px,94vw);height:auto;display:block}
+  .meta{display:flex;flex-direction:column;gap:8px}
+  .stat{font-weight:700}
+  .small{font-size:13px;color:var(--muted)}
+  .footer{text-align:center;color:var(--muted);margin-top:12px;font-size:13px}
+  /* Button-ish controls for mobile */
+  @media(max-width:900px){ .main{flex-direction:column}.panel{width:100%} }
+  /* subtle transitions */
+  .fade { transition: opacity .22s ease, transform .22s ease; }
+  .hidden { opacity: 0.0; transform: translateY(6px); pointer-events: none; }
+  /* winning line animation uses stroke-dashoffset */
+</style>
+</head>
+<body>
+  <div class="wrap" role="application" aria-label="Tic Tac Toe Visual Edition">
+    <div class="top">
+      <div>
+        <div class="brand">⚡ Tic Tac Toe — Visual Edition</div>
+        <div class="small">SVG graphics · animated placements · silent (no sound)</div>
+      </div>
+
+      <div class="controls">
+        <select id="modeSel" class="select" aria-label="Mode">
+          <option value="pvp">2 Player</option>
+          <option value="ai">Play vs AI</option>
+        </select>
+
+        <select id="levelSel" class="select" aria-label="AI Level">
+          <option value="easy">Easy</option>
+          <option value="medium" selected>Medium</option>
+          <option value="hard">Hard</option>
+        </select>
+
+        <button id="newBtn" class="select primary" title="Start new game">New Game</button>
+      </div>
+    </div>
+
+    <div class="main">
+      <div class="left">
+        <div class="board-wrap">
+          <!-- SVG board: we draw grid, and use <g> to hold marks. -->
+          <svg id="boardSvg" class="board" viewBox="0 0 300 300" role="grid" aria-label="Tic Tac Toe board">
+            <!-- background card -->
+            <rect x="6" y="6" width="288" height="288" rx="18" ry="18" fill="url(#bgGrad)" opacity="0.06"></rect>
+
+            <defs>
+              <linearGradient id="bgGrad" x1="0" x2="1">
+                <stop offset="0" stop-color="#ffffff" stop-opacity="0.02"/>
+                <stop offset="1" stop-color="#ffffff" stop-opacity="0.00"/>
+              </linearGradient>
+
+              <!-- X stroke -->
+              <g id="svgX">
+                <line x1="-18" y1="-18" x2="18" y2="18" stroke="#7ad5ff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"></line>
+                <line x1="18" y1="-18" x2="-18" y2="18" stroke="#6ff3c5" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"></line>
+              </g>
+
+              <!-- O stroke -->
+              <g id="svgO">
+                <circle cx="0" cy="0" r="18" fill="none" stroke="#ffd486" stroke-width="6" stroke-linecap="round"></circle>
+              </g>
+
+              <!-- winning line style -->
+              <linearGradient id="winGrad" x1="0" x2="1">
+                <stop offset="0" stop-color="#6ff3c5"/>
+                <stop offset="1" stop-color="#7ad5ff"/>
+              </linearGradient>
+            </defs>
+
+            <!-- grid lines -->
+            <g id="grid" stroke="rgba(255,255,255,0.06)" stroke-width="6" stroke-linecap="round">
+              <line x1="100" y1="12" x2="100" y2="288"></line>
+              <line x1="200" y1="12" x2="200" y2="288"></line>
+              <line x1="12" y1="100" x2="288" y2="100"></line>
+              <line x1="12" y1="200" x2="288" y2="200"></line>
+            </g>
+
+            <!-- marks group -->
+            <g id="marks" transform="translate(150,150)"></g>
+
+            <!-- animated winning line -->
+            <g id="winLayer"></g>
+          </svg>
+        </div>
+
+        <div class="hud">
+          <div id="status" class="meta">
+            <div id="message" class="small">Choose mode and press New Game</div>
+            <div style="display:flex;gap:12px;margin-top:6px">
+              <div class="small">Turn: <strong id="turn">X</strong></div>
+              <div class="small">Moves: <span id="moves">0</span></div>
+            </div>
+          </div>
+
+          <div>
+            <div style="display:flex;gap:8px">
+              <button id="undoBtn" class="select">Undo</button>
+              <button id="shareBtn" class="select">Share</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <aside class="panel" aria-hidden="false">
+        <div class="meta">
+          <div><strong class="small">Stats</strong></div>
+          <div class="stat">X: <span id="scoreX">0</span></div>
+          <div class="stat">O: <span id="scoreO">0</span></div>
+          <div class="stat small">Best streak: <span id="bestStreak">0</span></div>
+        </div>
+
+        <hr style="margin:12px 0;border-color:rgba(255,255,255,0.03)">
+
+        <div>
+          <div class="small">Modes included:</div>
+          <ul class="small" style="margin:6px 0 0 18px;color:var(--muted)">
+            <li>2-player local</li>
+            <li>AI: Easy / Medium / Hard</li>
+            <li>Undo, share, responsive SVG UI</li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+
+    <div class="footer">SVG visuals & animations — silent by request. Want sprites or bespoke art next? I can add them.</div>
+  </div>
+
+  <!-- Confetti canvas (SVG visuals keep things crisp) -->
+  <canvas id="confettiCanvas" style="position:fixed;left:0;top:0;pointer-events:none;width:100%;height:100%"></canvas>
+
+<script>
+/* Visual Tic Tac Toe - SVG + JS
+   - Single-file
+   - No audio
+   - Classic 3x3, VS AI (easy/medium/hard), 2-player
+   - Animated SVG placements (X draws stroke animation, O draws circle)
+*/
+
+// --- DOM references
+const boardSvg = document.getElementById('boardSvg');
+const marksGroup = document.getElementById('marks');
+const winLayer = document.getElementById('winLayer');
+const messageEl = document.getElementById('message');
+const turnEl = document.getElementById('turn');
+const movesEl = document.getElementById('moves');
+const scoreXEl = document.getElementById('scoreX');
+const scoreOEl = document.getElementById('scoreO');
+const bestStreakEl = document.getElementById('bestStreak');
+
+const modeSel = document.getElementById('modeSel');
+const levelSel = document.getElementById('levelSel');
+const newBtn = document.getElementById('newBtn');
+const undoBtn = document.getElementById('undoBtn');
+const shareBtn = document.getElementById('shareBtn');
+
+// confetti canvas
+const confCanvas = document.getElementById('confettiCanvas');
+const confCtx = confCanvas.getContext('2d');
+function resizeConf(){ confCanvas.width = innerWidth; confCanvas.height = innerHeight; }
+addEventListener('resize', resizeConf); resizeConf();
+
+// --- Game state
+let state = {
+  board: Array(9).fill(null), // 'X' / 'O' / 'block' (if used)
+  turn: 'X',
+  moves: 0,
+  over: false,
+  history: [],
+  mode: 'pvp',
+  aiLevel: 'medium',
+  scores: {X:0, O:0},
+  bestStreak: 0,
+  curStreak: 0
+};
+
+// cell coordinates mapping (center of each cell in SVG coords)
+const cellCenters = [
+  [-100,-100], [0,-100], [100,-100],
+  [-100,0],    [0,0],     [100,0],
+  [-100,100],  [0,100],   [100,100]
+];
+
+// initialize UI events
+modeSel.addEventListener('change', e => { state.mode = e.target.value; });
+levelSel.addEventListener('change', e => { state.aiLevel = e.target.value; });
+newBtn.addEventListener('click', ()=> startNewGame());
+undoBtn.addEventListener('click', ()=> undo());
+shareBtn.addEventListener('click', shareResult);
+
+// keyboard shortcuts: 1-9 palette
+window.addEventListener('keydown', (e)=>{
+  if(e.key>='1' && e.key<='9'){ const idx = parseInt(e.key,10)-1; if(!state.over) playAt(idx); }
+  if(e.key.toLowerCase()==='n') startNewGame();
+  if(e.key.toLowerCase()==='u') undo();
+});
+
+// start
+renderBoard();
+updateUI();
+setMessage('Choose mode and press New Game');
+
+// --- Functions
+
+function setMessage(txt){ messageEl.textContent = txt; }
+function updateUI(){
+  turnEl.textContent = state.turn;
+  movesEl.textContent = state.moves;
+  scoreXEl.textContent = state.scores.X;
+  scoreOEl.textContent = state.scores.O;
+  bestStreakEl.textContent = state.bestStreak;
+}
+
+// render empty marks group
+function renderBoard(){
+  marksGroup.innerHTML = ''; // remove previous marks
+  for(let i=0;i<9;i++){
+    const v = state.board[i];
+    if(v==='X') { drawXAt(i, false); }
+    else if(v==='O') { drawOAt(i, false); }
+    else { /* empty */ }
+  }
+}
+
+// draw X with animated strokes (uses <line> elements with stroke-dasharray)
+function drawXAt(index, animate=true){
+  const [cx,cy] = cellCenters[index];
+  // group for transforms
+  const g = document.createElementNS('http://www.w3.org/2000/svg','g');
+  g.setAttribute('transform', `translate(${cx},${cy})`);
+  // stroke 1
+  const l1 = document.createElementNS('http://www.w3.org/2000/svg','line');
+  l1.setAttribute('x1',-28); l1.setAttribute('y1',-28); l1.setAttribute('x2',28); l1.setAttribute('y2',28);
+  l1.setAttribute('stroke','#7ad5ff'); l1.setAttribute('stroke-linecap','round'); l1.setAttribute('stroke-width','8');
+  // stroke 2
+  const l2 = document.createElementNS('http://www.w3.org/2000/svg','line');
+  l2.setAttribute('x1',28); l2.setAttribute('y1',-28); l2.setAttribute('x2',-28); l2.setAttribute('y2',28);
+  l2.setAttribute('stroke','#6ff3c5'); l2.setAttribute('stroke-linecap','round'); l2.setAttribute('stroke-width','8');
+  if(animate){
+    animateStroke(l1, 14);
+    animateStroke(l2, 18);
+  }
+  g.appendChild(l1); g.appendChild(l2);
+  marksGroup.appendChild(g);
+}
+
+// draw O with animated stroke (circle with dash)
+function drawOAt(index, animate=true){
+  const [cx,cy] = cellCenters[index];
+  const g = document.createElementNS('http://www.w3.org/2000/svg','g');
+  g.setAttribute('transform', `translate(${cx},${cy})`);
+  const c = document.createElementNS('http://www.w3.org/2000/svg','circle');
+  c.setAttribute('cx',0); c.setAttribute('cy',0); c.setAttribute('r',22);
+  c.setAttribute('fill','none'); c.setAttribute('stroke','#ffd486'); c.setAttribute('stroke-width','6');
+  if(animate){
+    c.style.strokeDasharray = 140;
+    c.style.strokeDashoffset = 140;
+    c.style.transition = 'stroke-dashoffset .42s cubic-bezier(.2,.9,.2,1)';
+    // trigger after append
+    setTimeout(()=> { c.style.strokeDashoffset = '0'; }, 30);
+  }
+  g.appendChild(c);
+  marksGroup.appendChild(g);
+}
+
+// helper to animate line drawing using stroke-dasharray for lines
+function animateStroke(lineEl, len){
+  lineEl.style.strokeDasharray = len;
+  lineEl.style.strokeDashoffset = len;
+  lineEl.style.transition = 'stroke-dashoffset .28s cubic-bezier(.2,.9,.2,1)';
+  setTimeout(()=> lineEl.style.strokeDashoffset = '0', 20);
+}
+
+// play at a cell index (handles turns, AI, state)
+function playAt(index){
+  if(state.over) return;
+  if(state.board[index]) return;
+  pushHistory();
+  state.board[index] = state.turn;
+  state.moves++;
+  // animated draw
+  if(state.turn==='X') drawXAt(index, true); else drawOAt(index, true);
+  // check win
+  const winCombo = checkWin(state.board);
+  if(winCombo){
+    // animate flourish on win (stroke line)
+    showWinLine(winCombo);
+    state.over = true;
+    endGame(state.turn);
+    return;
+  }
+  if(state.board.every(Boolean)){
+    state.over = true;
+    endGame('draw');
+    return;
+  }
+  // toggle
+  state.turn = state.turn==='X' ? 'O' : 'X';
+  updateUI();
+  // AI move if enabled and now O's turn
+  if(state.mode==='ai' && state.turn==='O' && !state.over){
+    setMessage('AI is thinking...');
+    setTimeout(()=> { aiPick(); }, state.aiLevel==='hard' ? 320 : 180);
+  } else {
+    setMessage(`Player ${state.turn}'s turn`);
+  }
+}
+
+// push snapshot for undo
+function pushHistory(){
+  state.history.push({board: state.board.slice(), turn: state.turn, moves: state.moves, over: state.over});
+  if(state.history.length>8) state.history.shift();
+}
+
+// undo last
+function undo(){
+  if(state.history.length===0) return;
+  const last = state.history.pop();
+  state.board = last.board.slice();
+  state.turn = last.turn;
+  state.moves = last.moves;
+  state.over = last.over;
+  winLayer.innerHTML='';
+  renderBoard();
+  updateUI();
+  setMessage('Undone — Player '+state.turn);
+}
+
+// checkWin returns the winning combo array if found, else null
+function checkWin(board){
+  const lines = [
+    [0,1,2],[3,4,5],[6,7,8],
+    [0,3,6],[1,4,7],[2,5,8],
+    [0,4,8],[2,4,6]
+  ];
+  for(const l of lines){
+    const [a,b,c] = l;
+    if(board[a] && board[a] !== '•' && board[a] === board[b] && board[a] === board[c]) return l;
+  }
+  return null;
+}
+
+// show a smooth winning line connecting centers of combo
+function showWinLine(combo){
+  winLayer.innerHTML = '';
+  const [a,b,c] = combo;
+  const [ax,ay] = cellCenters[a];
+  const [cx,cy] = cellCenters[c];
+  // make path from a to c
+  const path = document.createElementNS('http://www.w3.org/2000/svg','path');
+  const d = `M ${ax} ${ay} L ${cx} ${cy}`;
+  path.setAttribute('d', d);
+  path.setAttribute('stroke', 'url(#winGrad)');
+  path.setAttribute('stroke-width','8');
+  path.setAttribute('stroke-linecap','round');
+  path.setAttribute('fill','none');
+  // shift group to center (marksGroup has translate(150,150) so winLayer should too)
+  path.setAttribute('transform','translate(150,150)');
+  // apply stroke dash animation
+  path.style.strokeDasharray = 1000;
+  path.style.strokeDashoffset = 1000;
+  path.style.transition = 'stroke-dashoffset .6s cubic-bezier(.2,.9,.2,1)';
+  winLayer.appendChild(path);
+  setTimeout(()=> { path.style.strokeDashoffset = '0'; }, 40);
+  // subtle pulse on winning cells
+  setTimeout(()=> {
+    for(const idx of combo){
+      const el = marksGroup.children[idx];
+      if(el) el.animate([{transform:'scale(1)'},{transform:'scale(1.08)'},{transform:'scale(1)'}],{duration:420,iterations:1,easing:'cubic-bezier(.2,.9,.2,1)'});
+    }
+  }, 220);
+}
+
+// finalize end
+function endGame(winner){
+  if(winner==='draw'){
+    setMessage("It's a draw.");
+  } else {
+    setMessage(winner + ' wins!');
+    // stats
+    state.scores[winner] = (state.scores[winner]||0) + 1;
+    if(winner==='X') state.curStreak++; else state.curStreak = 0;
+    state.bestStreak = Math.max(state.bestStreak, state.curStreak);
+    updateUI();
+    // confetti burst centered
+    confettiBurst();
+  }
+  updateUI();
+}
+
+// AI pick
+function aiPick(){
+  // easy = random, medium = win/block + shallow minimax, hard = minimax
+  const lvl = state.aiLevel;
+  if(lvl==='easy'){ const m = randomMove(); playAt(m); return; }
+  if(lvl==='medium'){
+    const win = findWin('O'); if(win!==null){ playAt(win); return; }
+    const block = findWin('X'); if(block!==null){ playAt(block); return; }
+    // sometimes best, sometimes random (human-like)
+    if(Math.random() < 0.6){ const m = minimaxMove('O',3); playAt(m); return; }
+    playAt(randomMove()); return;
+  }
+  // hard
+  const best = minimaxMove('O',9);
+  playAt(best);
+}
+
+// random available index
+function randomMove(){ const avail = state.board.map((v,i)=> v?null:i).filter(v=>v!==null); return avail[Math.floor(Math.random()*avail.length)]; }
+
+// find single-move win for player
+function findWin(player){
+  for(let i=0;i<9;i++){
+    if(state.board[i]) continue;
+    const copy = state.board.slice(); copy[i] = player;
+    if(checkWin(copy)) return i;
+  }
+  return null;
+}
+
+// Minimax for 3x3 (returns index)
+function minimaxMove(player, depthLimit=9){
+  const opponent = player==='X'?'O':'X';
+  function evalBoard(bd, depth){
+    const w = checkWin(bd);
+    if(w) return bd[w[0]]===player ? 10-depth : depth-10;
+    if(bd.every(Boolean)) return 0;
+    return null;
+  }
+  function dfs(bd, isMax, depth){
+    const s = evalBoard(bd, depth); if(s!==null) return s;
+    if(depth >= depthLimit) return 0;
+    if(isMax){
+      let best = -Infinity;
+      for(let i=0;i<9;i++) if(!bd[i]){ bd[i] = player; const val = dfs(bd, false, depth+1); bd[i]=null; best = Math.max(best, val); }
+      return best;
+    } else {
+      let best = Infinity;
+      for(let i=0;i<9;i++) if(!bd[i]){ bd[i] = opponent; const val = dfs(bd, true, depth+1); bd[i]=null; best = Math.min(best, val); }
+      return best;
+    }
+  }
+  let bestScore = -Infinity, bestMove = null;
+  for(let i=0;i<9;i++){
+    if(!state.board[i]){
+      state.board[i] = player;
+      const score = dfs(state.board, false, 0);
+      state.board[i] = null;
+      if(score > bestScore){ bestScore = score; bestMove = i; }
+    }
+  }
+  return bestMove ?? randomMove();
+}
+
+// Confetti (canvas)
+function confettiBurst(){
+  resizeConf(); // ensure size
+  const particles = Array.from({length:120}, ()=>{
+    return {x:innerWidth/2 + (Math.random()-0.5)*200, y: innerHeight/2 + (Math.random()-0.5)*40, dx:(Math.random()-0.5)*6, dy:(Math.random()*-4)-1, r:2+Math.random()*5, color:`hsl(${Math.random()*360} 80% 60%)`};
+  });
+  let frames=0;
+  function loop(){
+    confCtx.clearRect(0,0,confCanvas.width, confCanvas.height);
+    for(const p of particles){
+      p.x += p.dx; p.y += p.dy; p.dy += 0.12;
+      confCtx.fillStyle = p.color;
+      confCtx.fillRect(p.x, p.y, p.r, p.r);
+    }
+    frames++;
+    if(frames < 220) requestAnimationFrame(loop); else confCtx.clearRect(0,0,confCanvas.width, confCanvas.height);
+  }
+  loop();
+}
+
+// share result (text only)
+function shareResult(){
+  const text = `I played Tic Tac Toe — X:${state.scores.X} O:${state.scores.O} — ${state.mode.toUpperCase()}`;
+  if(navigator.share){ navigator.share({title:'Tic Tac Toe result', text}).catch(()=>{}); }
+  else { prompt('Share your result', text); }
+}
+
+// start a new game
+function startNewGame(){
+  state.board = Array(9).fill(null);
+  state.turn = 'X';
+  state.moves = 0;
+  state.over = false;
+  state.history = [];
+  winLayer.innerHTML = '';
+  marksGroup.innerHTML = '';
+  setMessage('Game ready — ' + (state.mode==='ai' ? ('VS AI ('+state.aiLevel+')') : '2 Player'));
+  updateUI();
+}
+
+// initial setup: wire click mapping on the empty board (SVG uses marksGroup positions)
+function renderEmptyGridClickable(){
+  // add transparent rects over each cell to handle clicking reliably
+  // We'll add at top-level for simplicity
+  const existing = document.getElementById('clickLayer');
+  if(existing) existing.remove();
+  const clickLayer = document.createElementNS('http://www.w3.org/2000/svg','g');
+  clickLayer.setAttribute('id','clickLayer');
+  clickLayer.setAttribute('transform','translate(150,150)'); // same group offset as marks
+  for(let i=0;i<9;i++){
+    const [cx,cy] = cellCenters[i];
+    const rect = document.createElementNS('http://www.w3.org/2000/svg','rect');
+    rect.setAttribute('x', cx-50); rect.setAttribute('y', cy-50); rect.setAttribute('width', 100); rect.setAttribute('height', 100);
+    rect.setAttribute('fill','transparent'); rect.style.cursor='pointer';
+    rect.addEventListener('click', ()=> { playAt(i); });
+    clickLayer.appendChild(rect);
+  }
+  boardSvg.appendChild(clickLayer);
+}
+
+// attach and start
+renderEmptyGridClickable();
+startNewGame();
+
+</script>
+</body>
+</html>
