@@ -61,6 +61,69 @@
     animation: pop 0.3s ease-in-out;
     display: inline-block; /* to make transform work */
   }
+
+  /* Invalid move shake animation */
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+  }
+  .shake {
+    animation: shake 0.3s ease-in-out;
+  }
+
+  /* AI thinking ellipsis */
+  @keyframes ellipsis {
+    0%, 100% { content: '.'; }
+    33% { content: '..'; }
+    66% { content: '...'; }
+  }
+  .thinking::after {
+    display: inline-block;
+    content: '.';
+    animation: ellipsis 1.5s infinite;
+  }
+
+  /* Game Over Screen */
+  .game-over-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(7, 20, 40, 0.85);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease-in-out;
+    z-index: 100;
+  }
+  .game-over-screen.visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .game-over-box {
+    background: var(--panel);
+    padding: 40px 60px;
+    border-radius: 16px;
+    text-align: center;
+    transform: scale(0.8);
+    opacity: 0;
+    transition: transform 0.4s cubic-bezier(.2,.9,.2,1), opacity 0.4s ease;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+  }
+  .game-over-screen.visible .game-over-box {
+    transform: scale(1);
+    opacity: 1;
+  }
+  .game-over-message {
+    font-size: 32px;
+    font-weight: 800;
+    margin-bottom: 24px;
+    color: white;
+  }
 </style>
 </head>
 <body>
@@ -183,6 +246,14 @@
   <!-- Confetti canvas (SVG visuals keep things crisp) -->
   <canvas id="confettiCanvas" style="position:fixed;left:0;top:0;pointer-events:none;width:100%;height:100%"></canvas>
 
+  <!-- Game Over Screen -->
+  <div id="gameOverScreen" class="game-over-screen">
+    <div class="game-over-box">
+      <div id="gameOverMessage" class="game-over-message"></div>
+      <button id="playAgainBtn" class="select primary">Play Again</button>
+    </div>
+  </div>
+
 <script>
 /* Visual Tic Tac Toe - SVG + JS
    - Single-file
@@ -212,8 +283,12 @@ const shareBtn = document.getElementById('shareBtn');
 // confetti canvas
 const confCanvas = document.getElementById('confettiCanvas');
 const confCtx = confCanvas.getContext('2d');
+const gameOverScreen = document.getElementById('gameOverScreen');
+const gameOverMessage = document.getElementById('gameOverMessage');
+const playAgainBtn = document.getElementById('playAgainBtn');
 function resizeConf(){ confCanvas.width = innerWidth; confCanvas.height = innerHeight; }
 addEventListener('resize', resizeConf); resizeConf();
+playAgainBtn.addEventListener('click', () => startNewGame());
 
 // --- Game state
 let state = {
@@ -283,6 +358,7 @@ function drawXAt(index, animate=true){
   // group for transforms
   const g = document.createElementNS('http://www.w3.org/2000/svg','g');
   g.setAttribute('transform', `translate(${cx},${cy})`);
+  g.setAttribute('data-index', index);
   // stroke 1
   const l1 = document.createElementNS('http://www.w3.org/2000/svg','line');
   l1.setAttribute('x1',-28); l1.setAttribute('y1',-28); l1.setAttribute('x2',28); l1.setAttribute('y2',28);
@@ -304,6 +380,7 @@ function drawOAt(index, animate=true){
   const [cx,cy] = cellCenters[index];
   const g = document.createElementNS('http://www.w3.org/2000/svg','g');
   g.setAttribute('transform', `translate(${cx},${cy})`);
+  g.setAttribute('data-index', index);
   const c = document.createElementNS('http://www.w3.org/2000/svg','circle');
   c.setAttribute('cx',0); c.setAttribute('cy',0); c.setAttribute('r',22);
   c.setAttribute('fill','none'); c.setAttribute('stroke','#ffd486'); c.setAttribute('stroke-width','6');
@@ -329,7 +406,13 @@ function animateStroke(lineEl, len, delay=20){
 // play at a cell index (handles turns, AI, state)
 function playAt(index){
   if(state.over) return;
-  if(state.board[index]) return;
+  if(state.board[index]) {
+    boardSvg.classList.add('shake');
+    boardSvg.addEventListener('animationend', () => {
+      boardSvg.classList.remove('shake');
+    }, { once: true });
+    return;
+  }
   hideHover();
   pushHistory();
   state.board[index] = state.turn;
@@ -355,8 +438,7 @@ function playAt(index){
   updateUI();
   // AI move if enabled and now O's turn
   if(state.mode==='ai' && state.turn==='O' && !state.over){
-    setMessage('AI is thinking...');
-    setTimeout(()=> { aiPick(); }, state.aiLevel==='hard' ? 320 : 180);
+    aiPick();
   } else {
     setMessage(`Player ${state.turn}'s turn`);
   }
@@ -369,18 +451,53 @@ function pushHistory(){
 }
 
 // undo last
-function undo(){
-  if(state.history.length===0) return;
+function undo() {
+  if (state.history.length === 0) return;
   hideHover();
-  const last = state.history.pop();
-  state.board = last.board.slice();
-  state.turn = last.turn;
-  state.moves = last.moves;
-  state.over = last.over;
-  winLayer.innerHTML='';
+
+  const currentBoard = state.board;
+  const last = state.history[state.history.length - 1]; // Peek, don't pop yet
+  const prevBoard = last.board;
+  let undoneIndex = -1;
+
+  // Find the index of the move being undone
+  for (let i = 0; i < 9; i++) {
+    if (currentBoard[i] !== prevBoard[i]) {
+      undoneIndex = i;
+      break;
+    }
+  }
+
+  // Animate the removal
+  if (undoneIndex !== -1) {
+    const markToRemove = marksGroup.querySelector(`[data-index='${undoneIndex}']`);
+    if (markToRemove) {
+      markToRemove.style.transition = 'transform 0.3s ease, opacity 0.3s ease';
+      markToRemove.style.transform = 'scale(0.5)';
+      markToRemove.style.opacity = '0';
+      markToRemove.addEventListener('transitionend', () => {
+        state.history.pop(); // Now pop the state
+        restoreGameState(last);
+      }, { once: true });
+      return; // Wait for animation to finish
+    }
+  }
+
+  // If no animation is possible for some reason, just undo immediately
+  state.history.pop();
+  restoreGameState(last);
+}
+
+function restoreGameState(gameState) {
+  state.board = gameState.board.slice();
+  state.turn = gameState.turn;
+  state.moves = gameState.moves;
+  state.over = gameState.over;
+  winLayer.innerHTML = '';
+  hideHover();
   renderBoard();
   updateUI();
-  setMessage('Undone — Player '+state.turn);
+  setMessage('Undone — Player ' + state.turn);
 }
 
 // checkWin returns the winning combo array if found, else null
@@ -430,10 +547,13 @@ function showWinLine(combo){
 
 // finalize end
 function endGame(winner){
+  state.over = true; // Make sure game is marked over
+  let message = "";
+
   if(winner==='draw'){
-    setMessage("It's a draw.");
+    message = "It's a Draw!";
   } else {
-    setMessage(winner + ' wins!');
+    message = `${winner} Wins!`;
     // stats
     state.scores[winner] = (state.scores[winner]||0) + 1;
 
@@ -446,28 +566,39 @@ function endGame(winner){
 
     if(winner==='X') state.curStreak++; else state.curStreak = 0;
     state.bestStreak = Math.max(state.bestStreak, state.curStreak);
-    updateUI();
     // confetti burst centered
     confettiBurst();
   }
   updateUI();
+
+  // Show game over screen after a short delay
+  setTimeout(() => {
+    gameOverMessage.textContent = message;
+    gameOverScreen.classList.add('visible');
+  }, 600);
 }
 
 // AI pick
 function aiPick(){
-  // easy = random, medium = win/block + shallow minimax, hard = minimax
+  setMessage('AI is thinking');
+  messageEl.classList.add('thinking');
+
   const lvl = state.aiLevel;
-  if(lvl==='easy'){ const m = randomMove(); playAt(m); return; }
-  if(lvl==='medium'){
-    const win = findWin('O'); if(win!==null){ playAt(win); return; }
-    const block = findWin('X'); if(block!==null){ playAt(block); return; }
-    // sometimes best, sometimes random (human-like)
-    if(Math.random() < 0.6){ const m = minimaxMove('O',3); playAt(m); return; }
-    playAt(randomMove()); return;
-  }
-  // hard
-  const best = minimaxMove('O',9);
-  playAt(best);
+  const delay = lvl === 'hard' ? 700 : (lvl === 'medium' ? 500 : 200);
+
+  setTimeout(() => {
+    messageEl.classList.remove('thinking');
+    if(lvl==='easy'){ const m = randomMove(); playAt(m); return; }
+    if(lvl==='medium'){
+      const win = findWin('O'); if(win!==null){ playAt(win); return; }
+      const block = findWin('X'); if(block!==null){ playAt(block); return; }
+      if(Math.random() < 0.6){ const m = minimaxMove('O',3); playAt(m); return; }
+      playAt(randomMove()); return;
+    }
+    // hard
+    const best = minimaxMove('O',9);
+    playAt(best);
+  }, delay);
 }
 
 // random available index
@@ -546,6 +677,7 @@ function shareResult(){
 
 // start a new game
 function startNewGame(){
+  gameOverScreen.classList.remove('visible');
   hideHover();
   state.board = Array(9).fill(null);
   state.turn = 'X';
