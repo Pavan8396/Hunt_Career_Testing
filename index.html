@@ -11,7 +11,8 @@
     --accent:#7ad5ff; --accent2:#6ff3c5; --muted:#9fb0c7;
     --glass:rgba(255,255,255,0.02);
   }
-  html,body{height:100%;margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Arial;background:linear-gradient(180deg,#021024,#071428);color:#eaf8ff}
+  html,body{height:100%;margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Arial;background:linear-gradient(180deg,#021024,#071428);color:#eaf8ff; background-size: 200% 200%; animation: slow-pan 25s ease-in-out infinite;}
+  @keyframes slow-pan { 0% { background-position: 50% 0%; } 50% { background-position: 50% 100%; } 100% { background-position: 50% 0%; } }
   .wrap{max-width:980px;margin:22px auto;padding:16px;border-radius:14px;background:linear-gradient(180deg,rgba(255,255,255,0.015),transparent);box-shadow:0 12px 40px rgba(0,0,0,0.6)}
   .top{display:flex;justify-content:space-between;align-items:center;gap:12px}
   .brand{font-weight:800;font-size:18px}
@@ -24,8 +25,8 @@
   .hud{display:flex;justify-content:space-between;align-items:center;padding:10px 0}
   .info{color:var(--muted);font-size:13px}
   /* SVG board container sizing */
-  .board-wrap{display:flex;justify-content:center;align-items:center;padding:12px}
-  svg.board{width:min(560px,94vw);height:auto;display:block}
+  .board-wrap{display:flex;justify-content:center;align-items:center;padding:12px; perspective: 1000px;}
+  svg.board{width:min(560px,94vw);height:auto;display:block; transform-style: preserve-3d;}
   .meta{display:flex;flex-direction:column;gap:8px}
   .stat{font-weight:700}
   .small{font-size:13px;color:var(--muted)}
@@ -85,6 +86,68 @@
   }
 
   /* Game Over Screen */
+  .theme-switcher { display: flex; gap: 6px; border-left: 1px solid rgba(255,255,255,0.1); padding-left: 12px; margin-left: 4px; }
+  .theme-btn { width: 20px; height: 20px; border-radius: 50%; border: 2px solid transparent; cursor: pointer; padding: 0; transition: border-color .2s; }
+  .theme-btn:hover { border-color: rgba(255,255,255,0.4); }
+  .theme-btn.active { border-color: var(--accent); }
+  .theme-btn[data-theme="dark"] { background-color: #071428; }
+  .theme-btn[data-theme="light"] { background-color: #f0f4f8; }
+  .theme-btn[data-theme="neon"] { background: linear-gradient(45deg, #ff00ff, #00ffff); }
+
+  body, .select, button, .panel, .wrap, .hud { transition: background .4s ease, background-color .4s ease, color .4s ease, border-color .4s ease; }
+  svg line, svg circle, svg path { transition: stroke .4s ease, fill .4s ease; }
+
+  /* Light Theme */
+  body.theme-light {
+    --bg: #dbe9f7; --panel: #e6eff8; --card: #f0f4f8;
+    --accent: #1e88e5; --accent2: #00acc1; --muted: #546e7a;
+    --glass: rgba(0,0,0,0.02); color: #263238;
+    background: linear-gradient(180deg, #f0f4f8, #dbe9f7);
+  }
+  .theme-light .brand { color: #1a237e; }
+  .theme-light button.primary { color: white; }
+  .theme-light #grid { stroke: rgba(0,0,0,0.08); }
+
+  /* Neon Theme */
+  body.theme-neon {
+    --bg: #1a001a; --panel: #2a002a; --card: #1f001f;
+    --accent: #ff00ff; --accent2: #00ffff; --muted: #cc99cc; --glass: rgba(255,0,255,0.05);
+    color: #f0f; background: linear-gradient(180deg, #1a001a, #000);
+  }
+  .theme-neon .brand { color: #fff; text-shadow: 0 0 5px var(--accent); }
+  .theme-neon button.primary { color: #1a001a; font-weight: 800; }
+  .theme-neon #grid { stroke: rgba(255,0,255,0.2); }
+  .theme-neon #svgX line:nth-child(1) { stroke: var(--accent); }
+  .theme-neon #svgX line:nth-child(2) { stroke: var(--accent2); }
+  .theme-neon #svgO circle { stroke: #ffff00; }
+  .theme-neon .game-over-message { text-shadow: 0 0 10px var(--accent); }
+
+  /* Piece Colors */
+  .x-line1 { stroke: var(--accent); }
+  .x-line2 { stroke: var(--accent2); }
+  .o-circle { stroke: #ffd486; }
+  .theme-neon .o-circle { stroke: #ffff00; } /* Neon 'O' color */
+
+  /* Enhanced Piece Placement Animations */
+  @keyframes drop-in {
+    0% { transform: translateY(-80px) scale(0.8); opacity: 0; }
+    70% { transform: translateY(0) scale(1.05); opacity: 1; }
+    100% { transform: translateY(0) scale(1); opacity: 1; }
+  }
+  .o-placed { animation: drop-in 0.4s cubic-bezier(.2,.9,.2,1); }
+
+  @keyframes slash1 {
+    from { transform: translate(-25px, -25px) scale(0.9); opacity: 0; }
+    to { transform: translate(0, 0) scale(1); opacity: 1; }
+  }
+  @keyframes slash2 {
+    from { transform: translate(25px, -25px) scale(0.9); opacity: 0; }
+    to { transform: translate(0, 0) scale(1); opacity: 1; }
+  }
+  .x-placed .x-line1 { animation: slash1 0.3s cubic-bezier(.2,.9,.2,1); }
+  .x-placed .x-line2 { animation: slash2 0.3s cubic-bezier(.2,.9,.2,1) 50ms; }
+
+
   .game-over-screen {
     position: fixed;
     top: 0;
@@ -135,14 +198,20 @@
       </div>
 
       <div class="controls">
+        <div class="theme-switcher">
+          <button class="theme-btn" data-theme="dark" title="Dark Theme"></button>
+          <button class="theme-btn" data-theme="light" title="Light Theme"></button>
+          <button class="theme-btn" data-theme="neon" title="Neon Theme"></button>
+        </div>
         <select id="modeSel" class="select" aria-label="Mode">
           <option value="pvp">2 Player</option>
           <option value="ai">Play vs AI</option>
         </select>
 
         <select id="levelSel" class="select" aria-label="AI Level">
+          <option value="auto" selected>Auto-Level</option>
           <option value="easy">Easy</option>
-          <option value="medium" selected>Medium</option>
+          <option value="medium">Medium</option>
           <option value="hard">Hard</option>
         </select>
 
@@ -164,15 +233,15 @@
                 <stop offset="1" stop-color="#ffffff" stop-opacity="0.00"/>
               </linearGradient>
 
-              <!-- X stroke -->
+              <!-- X stroke (colors applied via CSS) -->
               <g id="svgX">
-                <line x1="-18" y1="-18" x2="18" y2="18" stroke="#7ad5ff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"></line>
-                <line x1="18" y1="-18" x2="-18" y2="18" stroke="#6ff3c5" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"></line>
+                <line class="x-line1" x1="-18" y1="-18" x2="18" y2="18" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"></line>
+                <line class="x-line2" x1="18" y1="-18" x2="-18" y2="18" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"></line>
               </g>
 
-              <!-- O stroke -->
+              <!-- O stroke (colors applied via CSS) -->
               <g id="svgO">
-                <circle cx="0" cy="0" r="18" fill="none" stroke="#ffd486" stroke-width="6" stroke-linecap="round"></circle>
+                <circle class="o-circle" cx="0" cy="0" r="18" fill="none" stroke-width="6" stroke-linecap="round"></circle>
               </g>
 
               <!-- winning line style -->
@@ -291,6 +360,7 @@ addEventListener('resize', resizeConf); resizeConf();
 playAgainBtn.addEventListener('click', () => startNewGame());
 
 // --- Game state
+let rotation = 0;
 let state = {
   board: Array(9).fill(null), // 'X' / 'O' / 'block' (if used)
   turn: 'X',
@@ -298,7 +368,8 @@ let state = {
   over: false,
   history: [],
   mode: 'pvp',
-  aiLevel: 'medium',
+  aiLevel: 'auto',
+  effectiveAiLevel: 'easy',
   scores: {X:0, O:0},
   bestStreak: 0,
   curStreak: 0
@@ -355,27 +426,24 @@ function renderBoard(){
 // draw X with animated strokes (uses <line> elements with stroke-dasharray)
 function drawXAt(index, animate=true){
   const [cx,cy] = cellCenters[index];
-  // group for transforms
   const g = document.createElementNS('http://www.w3.org/2000/svg','g');
   g.setAttribute('transform', `translate(${cx},${cy})`);
   g.setAttribute('data-index', index);
-  // stroke 1
   const l1 = document.createElementNS('http://www.w3.org/2000/svg','line');
   l1.setAttribute('x1',-28); l1.setAttribute('y1',-28); l1.setAttribute('x2',28); l1.setAttribute('y2',28);
-  l1.setAttribute('stroke','#7ad5ff'); l1.setAttribute('stroke-linecap','round'); l1.setAttribute('stroke-width','8');
-  // stroke 2
+  l1.setAttribute('stroke-linecap','round'); l1.setAttribute('stroke-width','8');
+  l1.classList.add('x-line1');
   const l2 = document.createElementNS('http://www.w3.org/2000/svg','line');
   l2.setAttribute('x1',28); l2.setAttribute('y1',-28); l2.setAttribute('x2',-28); l2.setAttribute('y2',28);
-  l2.setAttribute('stroke','#6ff3c5'); l2.setAttribute('stroke-linecap','round'); l2.setAttribute('stroke-width','8');
+  l2.setAttribute('stroke-linecap','round'); l2.setAttribute('stroke-width','8');
+  l2.classList.add('x-line2');
   if(animate){
-    animateStroke(l1, 14);
-    animateStroke(l2, 18, 100); // 100ms delay for second stroke
+    g.classList.add('x-placed');
   }
   g.appendChild(l1); g.appendChild(l2);
   marksGroup.appendChild(g);
 }
 
-// draw O with animated stroke (circle with dash)
 function drawOAt(index, animate=true){
   const [cx,cy] = cellCenters[index];
   const g = document.createElementNS('http://www.w3.org/2000/svg','g');
@@ -383,24 +451,13 @@ function drawOAt(index, animate=true){
   g.setAttribute('data-index', index);
   const c = document.createElementNS('http://www.w3.org/2000/svg','circle');
   c.setAttribute('cx',0); c.setAttribute('cy',0); c.setAttribute('r',22);
-  c.setAttribute('fill','none'); c.setAttribute('stroke','#ffd486'); c.setAttribute('stroke-width','6');
+  c.setAttribute('fill','none'); c.setAttribute('stroke-width','6');
+  c.classList.add('o-circle');
   if(animate){
-    c.style.strokeDasharray = 140;
-    c.style.strokeDashoffset = 140;
-    c.style.transition = 'stroke-dashoffset .42s cubic-bezier(.2,.9,.2,1)';
-    // trigger after append
-    setTimeout(()=> { c.style.strokeDashoffset = '0'; }, 30);
+    g.classList.add('o-placed');
   }
   g.appendChild(c);
   marksGroup.appendChild(g);
-}
-
-// helper to animate line drawing using stroke-dasharray for lines
-function animateStroke(lineEl, len, delay=20){
-  lineEl.style.strokeDasharray = len;
-  lineEl.style.strokeDashoffset = len;
-  lineEl.style.transition = 'stroke-dashoffset .28s cubic-bezier(.2,.9,.2,1)';
-  setTimeout(()=> lineEl.style.strokeDashoffset = '0', delay);
 }
 
 // play at a cell index (handles turns, AI, state)
@@ -566,6 +623,19 @@ function endGame(winner){
 
     if(winner==='X') state.curStreak++; else state.curStreak = 0;
     state.bestStreak = Math.max(state.bestStreak, state.curStreak);
+
+    // Auto-leveling logic
+    if (state.aiLevel === 'auto') {
+      if (winner === 'X' && state.curStreak >= 2) { // Player won 2 in a row
+        if (state.effectiveAiLevel === 'easy') state.effectiveAiLevel = 'medium';
+        else if (state.effectiveAiLevel === 'medium') state.effectiveAiLevel = 'hard';
+        state.curStreak = 0; // Reset streak after leveling up
+      } else if (winner === 'O') { // AI won
+        if (state.effectiveAiLevel === 'hard') state.effectiveAiLevel = 'medium';
+        else if (state.effectiveAiLevel === 'medium') state.effectiveAiLevel = 'easy';
+      }
+    }
+
     // confetti burst centered
     confettiBurst();
   }
@@ -583,7 +653,7 @@ function aiPick(){
   setMessage('AI is thinking');
   messageEl.classList.add('thinking');
 
-  const lvl = state.aiLevel;
+  const lvl = state.aiLevel === 'auto' ? state.effectiveAiLevel : state.aiLevel;
   const delay = lvl === 'hard' ? 700 : (lvl === 'medium' ? 500 : 200);
 
   setTimeout(() => {
@@ -684,16 +754,39 @@ function startNewGame(){
   state.moves = 0;
   state.over = false;
   state.history = [];
-  winLayer.innerHTML = '';
-  marksGroup.innerHTML = '';
 
-  // Animate grid lines
+  const board = document.getElementById('boardSvg');
   const grid = document.getElementById('grid');
-  grid.classList.remove('animate-grid');
-  void grid.offsetWidth; // Force reflow to restart animation
-  grid.classList.add('animate-grid');
+  const transitionDuration = 800; // ms
 
-  setMessage('Game ready — ' + (state.mode==='ai' ? ('VS AI ('+state.aiLevel+')') : '2 Player'));
+  // Reset grid animation class before starting the flip
+  grid.classList.remove('animate-grid');
+
+  board.style.transition = `transform ${transitionDuration}ms ease-in-out`;
+  rotation += 180;
+  board.style.transform = `rotateY(${rotation}deg)`;
+
+  setTimeout(() => {
+    // Mid-flip: clear marks and re-trigger grid animation
+    winLayer.innerHTML = '';
+    marksGroup.innerHTML = '';
+
+    // Force reflow before re-adding the class
+    void grid.offsetWidth;
+    grid.classList.add('animate-grid');
+
+  }, transitionDuration / 2);
+
+  let messageText = 'Game ready — ';
+  if (state.mode === 'ai') {
+      const levelDisplay = state.aiLevel === 'auto'
+          ? `Auto (${state.effectiveAiLevel})`
+          : state.aiLevel;
+      messageText += `VS AI (${levelDisplay})`;
+  } else {
+      messageText += '2 Player';
+  }
+  setMessage(messageText);
   updateUI();
 }
 
@@ -711,16 +804,19 @@ function showHover(index) {
   if (mark === 'X') {
     const l1 = document.createElementNS('http://www.w3.org/2000/svg', 'line');
     l1.setAttribute('x1',-28); l1.setAttribute('y1',-28); l1.setAttribute('x2',28); l1.setAttribute('y2',28);
-    l1.setAttribute('stroke','#7ad5ff'); l1.setAttribute('stroke-linecap','round'); l1.setAttribute('stroke-width','8');
+    l1.setAttribute('stroke-linecap','round'); l1.setAttribute('stroke-width','8');
+    l1.classList.add('x-line1');
     const l2 = document.createElementNS('http://www.w3.org/2000/svg', 'line');
     l2.setAttribute('x1',28); l2.setAttribute('y1',-28); l2.setAttribute('x2',-28); l2.setAttribute('y2',28);
-    l2.setAttribute('stroke','#6ff3c5'); l2.setAttribute('stroke-linecap','round'); l2.setAttribute('stroke-width','8');
+    l2.setAttribute('stroke-linecap','round'); l2.setAttribute('stroke-width','8');
+    l2.classList.add('x-line2');
     g.appendChild(l1);
     g.appendChild(l2);
   } else { // 'O'
     const c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
     c.setAttribute('cx',0); c.setAttribute('cy',0); c.setAttribute('r',22);
-    c.setAttribute('fill','none'); c.setAttribute('stroke','#ffd486'); c.setAttribute('stroke-width','6');
+    c.setAttribute('fill','none'); c.setAttribute('stroke-width','6');
+    c.classList.add('o-circle');
     g.appendChild(c);
   }
   hoverLayer.appendChild(g);
@@ -754,8 +850,36 @@ function renderEmptyGridClickable(){
 }
 
 // attach and start
+const themeSwitcher = document.querySelector('.theme-switcher');
+const bodyEl = document.body;
+
+themeSwitcher.addEventListener('click', (e) => {
+  if (e.target.classList.contains('theme-btn')) {
+    const theme = e.target.dataset.theme;
+    setTheme(theme);
+  }
+});
+
+function setTheme(theme) {
+  bodyEl.className = ''; // Clear existing theme classes
+  if (theme !== 'dark') { // dark is default, no class needed
+    bodyEl.classList.add(`theme-${theme}`);
+  }
+  // Update active button
+  document.querySelectorAll('.theme-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.theme === theme);
+  });
+  localStorage.setItem('tic-tac-toe-theme', theme);
+}
+
+function loadTheme() {
+  const savedTheme = localStorage.getItem('tic-tac-toe-theme') || 'dark';
+  setTheme(savedTheme);
+}
+
 renderEmptyGridClickable();
 startNewGame();
+loadTheme();
 
 </script>
 </body>
