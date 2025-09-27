@@ -104,7 +104,7 @@ test.describe("Search Tests", () => {
     await homePage.waitUntilVisible(homePage.savedMessage(jobTitle));
     await homePage.waitUntilNotVisible(homePage.savedMessage(jobTitle));
     //await expect(homePage.savedMessage(jobTitle)).toBeVisible();
-    await homePage.openUserMenu.click();
+    //await homePage.saveButton.click();
     await homePage.clickOnSavedJobs.click();
     await expect(savePage.savedJobCard(jobTitle)).toBeVisible();
   });
