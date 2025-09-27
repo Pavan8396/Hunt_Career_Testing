@@ -68,7 +68,12 @@ pipeline {
                 keepAll: true,
                 reportDir: 'Hunt_Career_Playwright/playwright-report',
                 reportFiles: 'index.html',
-                reportName: 'Playwright Test Report'
+                reportName: 'Playwright Test Report',
+                allure([
+                includeProperties: false,
+                jdk: '',
+                results: [[path: 'Hunt_Career_Playwright/allure-results']]
+            ])
             ])
         }
     }
