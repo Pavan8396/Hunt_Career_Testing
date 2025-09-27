@@ -45,7 +45,7 @@ pipeline {
                     echo '----------------------------------------'
                     script {
                         try {
-                            bat 'npx playwright test'
+                            bat 'npx playwright test --reporter=html'
                         } catch (any) {
                             currentBuild.result = 'UNSTABLE'
                             echo "Playwright tests failed."
