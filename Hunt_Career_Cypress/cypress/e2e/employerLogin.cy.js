@@ -1,7 +1,7 @@
 import LoginPage from "../pageObjects/LoginPage";
 import eloginData from "../fixtures/employerLoginData.json"
 
-describe("Job Seeker Login Tests", () => {
+describe("Employer Login Tests", () => {
   let eloginPage;
 
   beforeEach(() => {

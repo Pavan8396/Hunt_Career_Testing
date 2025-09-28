@@ -47,9 +47,19 @@ export function getRandomLastName(){
     return lastName;
 }
 
+export function getRandomCompanyName(){
+    const companyName = faker.company.name();
+    return companyName;
+}
+
+function getRandomSuffix(length = 4) {
+  return Math.random().toString(36).substring(2, 2 + length);
+}
+
 export function generateEmail(type) {
   const dateTime = getCurrentDateTimeString();
-  const baseName = `testuser_${dateTime}`;
+  const random = getRandomSuffix(); 
+  const baseName = `testuser_${dateTime}_${random}`;
 
   switch (type) {
     case "normal":
@@ -83,7 +93,7 @@ export function generateEmail(type) {
     case "twoConsecutiveDots":
       return `u..${baseName}@mailinator.com`;
     case "dotAtBeginning":
-      return `.upavan@mailinator.com`;
+      return `.${baseName}@mailinator.com`;
     case "withQuotation":
       return `'${baseName}@mailinator.com'`;
     case "unclosedQuotation":
@@ -95,7 +105,7 @@ export function generateEmail(type) {
     case "veryLengthyTopLevelDomain":
       return `${baseName}@example.verylonglocalpartthatexceedstheusuallimitstoverifythelimitdoesitexceedornotbyaddingverylongcharacterscom`;
     case "missingSecondLevelDomain":
-      return `pavanu@com`;
+      return `${baseName}@com`;
     case "withComma":
       return `${baseName}@mailinator,com`;
     case "twoConsecutiveAt":
@@ -104,8 +114,14 @@ export function generateEmail(type) {
       return `${baseName}@mailinator.c_m`;
     case "withoutDomain":
       return `${baseName}@.com`;
-
-    default:
+    case "dotBetweenName":
+      return `${baseName}.user@mailinator.com`
+    case "spaceBeforeName":
+      return ` ${baseName}@mailinator.com`
+    case "spaceAfterName":
+      return `${baseName}@mailinator.com `
+    
+      default:
       return `${baseName}@mailinator.com`;
   }
 }

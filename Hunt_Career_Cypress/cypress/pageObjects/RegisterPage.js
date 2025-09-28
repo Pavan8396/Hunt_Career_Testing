@@ -61,6 +61,24 @@ export default class RegisterPage extends BasePage {
     registerLinkHomePage(){
         return cy.xpath("//a[contains(text(), 'Signup')]")
     }
+    employerSignupLink(){
+        return cy.xpath("//a[contains(text(), 'Sign up')]")
+    }
+    employerRegisterNameField(){
+        return cy.xpath("//input[@id='companyName']");
+    }
+    employerRegisterEmailField(){
+        return cy.xpath("//input[@id='email']");
+    }
+    employerRegisterPasswordField(){
+        return cy.xpath("//input[@id='password']");
+    }
+    employerRegisterConfirmPasswordField(){
+        return cy.xpath("//input[@id='confirmPassword']")
+    }
+    employerRegisterSingupButton(){
+        return cy.xpath("//button[@type='submit']");
+    }
 
     // Actions
     enterFirstNameField(firstName) {
@@ -93,6 +111,30 @@ export default class RegisterPage extends BasePage {
             this.typeInElement(this.PhoneNumberField(), phoneNumber);
         }
     }
+    enterNameFieldOfEmployer(name){
+        if(name){
+            this.typeInElement(this.employerRegisterNameField(), name);
+        }
+    }
+
+    enterEmailFieldOfEmployer(email){
+        if(email){
+            this.typeInElement(this.employerRegisterEmailField(), email);
+        }
+    }
+
+    enterPasswordFieldOfEmployer(password){
+        if(password){
+            this.typeInElement(this.employerRegisterPasswordField(), password);
+        }
+    }
+
+    enterConfirmPasswordFieldOfEmployer(confirmPassword){
+        if(confirmPassword){
+            this.typeInElement(this.employerRegisterConfirmPasswordField(), confirmPassword);
+        }
+    }
+
     clickFirstNextButton() {
         this.clickElement(this.FirstNextButton());
     }
@@ -102,11 +144,20 @@ export default class RegisterPage extends BasePage {
     clickSignupButton() {
         this.clickElement(this.SignupButton());
     }
+    clickEmployerSignupButton(){
+        this.clickElement(this.employerRegisterSingupButton());
+    }
+
     navigate(){
         cy.visit('/');
         this.navigateToJobSeeker();
         this.clickElement(this.registerLinkHomePage());
+    }
 
+    EmployerNavigate(){
+        cy.visit("/");
+        this.navigateToEmployer();
+        this.clickElement(this.employerSignupLink());
     }
 
     register(firstName, lastName, email, password, confirmPassword, phoneNumber) {
@@ -135,5 +186,13 @@ export default class RegisterPage extends BasePage {
         this.enterPasswordField(password);
         this.enterConfirmPasswordField(confirmPassword);
         this.clickSecondNextButton();
+    }
+
+    employerRegister(name, email, password, confirmPassword){
+        this.enterNameFieldOfEmployer(name);
+        this.enterEmailFieldOfEmployer(email);
+        this.enterPasswordFieldOfEmployer(password);
+        this.enterConfirmPasswordFieldOfEmployer(confirmPassword);
+        this.clickEmployerSignupButton();
     }
 }
