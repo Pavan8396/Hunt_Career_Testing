@@ -1,7 +1,7 @@
 import RegisterPage from "../pageObjects/RegisterPage";
 import { registerData } from "../fixtures/registerData";
 
-describe("Register Test", () =>{
+describe("Job Seeker Register Test", () =>{
  
     let registerPage;
 
@@ -20,6 +20,14 @@ describe("Register Test", () =>{
         registerPage.register(registerData.duplicateUser.firstName, registerData.duplicateUser.lastName, registerData.duplicateUser.email, registerData.duplicateUser.password, registerData.duplicateUser.confirmPassword, registerData.duplicateUser.phoneNumber);
         registerPage.waitUntilVisible(registerPage.checkDuplicateErrorMessage());
         registerPage.waitUntilNotVisible(registerPage.checkDuplicateErrorMessage());
+    })
+
+    registerData.invalidCases.forEach((user)=>{
+        it.only(`Should show error for invalid email: ${user.description}`, () => {
+          registerPage.register(user.firstName, user.lastName, user.email, user.password, user.confirmPassword, user.phoneNumber)
+          registerPage.waitUntilVisible(registerPage[user.expectedError]);
+          registerPage.waitUntilNotVisible(registerPage[user.expectedError]);  
+        }) 
     })
 
     it("TC-3-Enter without FirstName", () =>{
@@ -89,19 +97,19 @@ describe("Register Test", () =>{
         registerPage.waitUntilNotVisible(registerPage.checkPleaseEnterValidEmailAddressMessage());
     })
 
-    it.only("TC-14-Enter email with dot before at", () =>{
+    it("TC-14-Enter email with dot before at", () =>{
         registerPage.register(registerData.emailDotBeforeAt.firstName, registerData.emailDotBeforeAt.lastName, registerData.emailDotBeforeAt.email, registerData.emailDotBeforeAt.password, registerData.emailDotBeforeAt.confirmPassword, registerData.emailDotBeforeAt.phoneNumber);
         registerPage.waitUntilVisible(registerPage.checkSuccessCreationMessage());
         registerPage.waitUntilNotVisible(registerPage.checkSuccessCreationMessage());
     })
 
-    it.only("TC-15-Enter email without Domain", () =>{
+    it("TC-15-Enter email without Domain", () =>{
         registerPage.registerSecondPage(registerData.emailWithoutDomain.firstName, registerData.emailWithoutDomain.lastName, registerData.emailWithoutDomain.email, registerData.emailWithoutDomain.password, registerData.emailWithoutDomain.confirmPassword);
         registerPage.waitUntilVisible(registerPage.checkPleaseEnterValidEmailAddressMessage());
         registerPage.waitUntilNotVisible(registerPage.checkPleaseEnterValidEmailAddressMessage());
     })
 
-    it.only("TC-16-Enter email without username", () =>{
+    it("TC-16-Enter email without username", () =>{
         registerPage.registerSecondPage(registerData.emailMissingUsername.firstName, registerData.emailMissingUsername.lastName, registerData.emailMissingUsername.email, registerData.emailMissingUsername.password, registerData.emailMissingUsername.confirmPassword);
         registerPage.waitUntilVisible(registerPage.checkPleaseEnterValidEmailAddressMessage());
         registerPage.waitUntilNotVisible(registerPage.checkPleaseEnterValidEmailAddressMessage());

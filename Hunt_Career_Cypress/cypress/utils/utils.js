@@ -47,27 +47,67 @@ export function getRandomLastName(){
     return lastName;
 }
 
-export function generateEmail(type){
-    const dateTime = getCurrentDateTimeString();
-    const baseName = `testuser_${dateTime}`;
-    switch (type) {
-        case "normal":
-            return `${baseName}@mailinator.com`;
-        case "withoutAllDomain":
-            return `${baseName}`;
-        case "withoutTopLevelDomain":
-            return `${baseName}@mailinator`
-        case "doubleAt":
-            return `${baseName}@@mailinator.com`;
-        case "dotBeforeAt":
-            return `${baseName}.@mailinator.com`;
-        case "withoutDomain":
-            return `${baseName}@.com`;
-        case "missingUsername":
-            return `@mailinator.com`;
-        default:
-            return `${baseName}@mailinator.com`;
-    }
+export function generateEmail(type) {
+  const dateTime = getCurrentDateTimeString();
+  const baseName = `testuser_${dateTime}`;
+
+  switch (type) {
+    case "normal":
+      return `${baseName}@mailinator.com`;
+
+    // invalid formats
+    case "plainEmail":
+      return baseName; // no @domain
+    case "noLocalPart":
+      return "@mailinator.com";
+    case "localPartOnly":
+      return `${baseName}@`;
+    case "emailHaving2At":
+      return `u@${baseName}@mailinator.com`;
+    case "withoutTopLevelDomain":
+      return `${baseName}@mailinator`;
+    case "tailingWithDot":
+      return `${baseName}@mailinator.`;
+    case "topLevelDomainTooShort":
+      return `${baseName}@mailinator.c`;
+    case "domainStartsWithHyphen":
+      return `${baseName}@-mailinator.com`;
+    case "doubleDotInDomain":
+      return `${baseName}@mailinator..com`;
+    case "noAtTheRate":
+      return `${baseName}#mailinator.com`;
+    case "illegalCharacters":
+      return `${baseName}<>@mailinator.com`;
+    case "dotAfterName":
+      return `${baseName}.@mailinator.com`;
+    case "twoConsecutiveDots":
+      return `u..${baseName}@mailinator.com`;
+    case "dotAtBeginning":
+      return `.upavan@mailinator.com`;
+    case "withQuotation":
+      return `'${baseName}@mailinator.com'`;
+    case "unclosedQuotation":
+      return `'${baseName}@mailinator.com`;
+    case "veryLengthyLocal":
+      return `verylonglocalpartthatexceedstheusuallimitstoverifythelimitdoesitexceedornotbyaddingverylongcharacters@example.com`;
+    case "veryLengthyDomain":
+      return `${baseName}@verylonglocalpartthatexceedstheusuallimitstoverifythelimitdoesitexceedornotbyaddingverylongcharacters.com`;
+    case "veryLengthyTopLevelDomain":
+      return `${baseName}@example.verylonglocalpartthatexceedstheusuallimitstoverifythelimitdoesitexceedornotbyaddingverylongcharacterscom`;
+    case "missingSecondLevelDomain":
+      return `pavanu@com`;
+    case "withComma":
+      return `${baseName}@mailinator,com`;
+    case "twoConsecutiveAt":
+      return `${baseName}@@mailinator.com`;
+    case "underscoreInTLD":
+      return `${baseName}@mailinator.c_m`;
+    case "withoutDomain":
+      return `${baseName}@.com`;
+
+    default:
+      return `${baseName}@mailinator.com`;
+  }
 }
 
 export function generateRandomPhoneNumber() {
