@@ -1,0 +1,52 @@
+{
+  "validUser":[
+   {"description": "Valid employer", "email": "exigent@mailinator.com", "password": "Test@1234"},
+   {"description":"emailWithDotInbetweenName", "email":"quest.informatics@mailinator.com","password":"Test@1234"},
+   {"description":"spacesBeforeEmail", "email":" exigent@mailinator.com", "password":"Test@1234"},
+   {"description":"spaceAfterEmil", "email":"exigent@mailinator.com ", "password":"Test@1234"}
+  ],
+
+  "invalidEmails":[
+  {"description":"plainEmail", "email": "apple", "password": "Test@12345"}, 
+  {"description":"noLocalPart", "email":"@mailinator.com", "password":"Welcome@1234"},
+  {"description":"localPartOnly", "email":"techMahindra@", "password":"Test@1234"},
+  {"description":"emailhaving2@", "email":"H@CL@mailinator.com","password":"Welcome@1234@1234"},
+  {"description":"noTopLevelDomain", "email": "exigent@mailinator", "password": "Welcome@1234"},
+  {"description":"tailingWithDot", "email":"Urungo@mailinator.", "password":"Welcome@1234"},
+  {"description":"topLevelDomainTooShort", "email":"Kamingo@mailinator.c", "password":"Test@12345"},
+  {"description":"domainStartsWithHypen", "email":"Nuruto@-mailinator.com", "password":"Welcome@1234"},
+  {"description":"doubleDotInDomain", "email":"Super@mailinator..com", "password":"Test@1234"},
+  {"description":"noAtTheRate", "email":"mario#mailinator.com", "password":"Welcome@1234"},
+  {"description":"illegalCharacters", "email":"nintendo<>@mailinator.com", "password":"Test@12346"},
+  {"description":"emailWithDotAfterName", "email":"microsoft.@mailinator.com", "password":"Welcome@1234"},
+  {"description":"twoConsecutiveDotInbetweenName", "email":"super..mario@mailinator.com", "password":"Test@1234"},
+  {"description":"emailWithDotAtBegining", "email":".mogambo@mailinator.com", "password":"Welcome@1234"},
+  {"description":"emailWithQuotation", "email":"'Handi@mailinator.com'", "password":"Test@1234"},
+  {"description":"emailWithUnclosedQuotation", "email":"'orange@mailinator.com", "password":"Welcome@1234"},
+  {"description":"veryLengthyEmail", "email":"verylonglocalpartthatexceedstheusuallimitstoverifythelimitdoesitexceedornotbyaddingverylongcharcaters@example.com", "password":"Test@1234"},
+  {"description":"veryLengthyDomain", "email":"megamail@verylonglocalpartthatexceedstheusuallimitstoverifythelimitdoesitexceedornotbyaddingverylongcharcaters.com", "password":"Test@1234"},
+  {"description":"veryLengthyTopLevelDomain", "email":"sanatani@example.verylonglocalpartthatexceedstheusuallimitstoverifythelimitdoesitexceedornotbyaddingverylongcharcaterscom", "password":"Test@1234"},
+  {"description":"missingSecondLevelDomain", "email":"exigent@com", "password":"Welcome@1234"},
+  {"description":"Emailwithcomma", "email":"commasaparator@mailinator,com", "password":"Welcome@1234"},
+  {"description":"emailhaving2Consecutive@", "email":"mango@@mailinator.com", "password":"Test@1234"},
+  {"description":"underScoreInTopLevelDomain", "email":"underscoreattopleveldomain@mailinator.c_m", "password":"Welcome@1234"},
+  {"description":"EmailwithoutDomain", "email":"nodomainusername@.com", "password":"Welcome@1234"}
+],
+
+  
+  "invalidPassowrd": [
+    {"description":"too short password", "email":"exigent@mailinator.com", "password":"Test"}
+  ],
+  
+  "NoEmail":[
+    {"description":"blank email", "email":" ", "password": "Test@1234"}
+  ],
+
+  "NoPassword":[
+    {"description":"blank Password", "email":"exigent@mailinator.com", "password": " "}
+  ],
+
+  "invalidUser": [
+    {"description":"not registered user", "email": "morae@mailinator.com", "password": "Test@1234"}
+  ]
+}

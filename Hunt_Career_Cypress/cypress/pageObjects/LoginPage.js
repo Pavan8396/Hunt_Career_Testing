@@ -36,11 +36,11 @@ export default class LoginPage extends BasePage{
     }
 
     //Actions
-    enterEmailField(email, options = {}){
-        this.typeInElement(this.EmailField(), email, options)
+    enterEmailField(email){
+        this.typeInElement(this.EmailField(), email)
     }
-    enterPasswordField(password, options = {}){
-        this.typeInElement(this.PasswordField(), password, options)
+    enterPasswordField(password){
+        this.typeInElement(this.PasswordField(), password)
     }
     clickLoginButton(){
         this.clickElement(this.LoginButton());
@@ -56,8 +56,8 @@ export default class LoginPage extends BasePage{
     }
 
     login(email, password){
-        this.enterEmailField(email, { parseSpecialCharSequences: false });
-        this.enterPasswordField(password, { parseSpecialCharSequences: false });
+        this.enterEmailField(email);
+        this.enterPasswordField(password);
         this.clickLoginButton();
     }
 

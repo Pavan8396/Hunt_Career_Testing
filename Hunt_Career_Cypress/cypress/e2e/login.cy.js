@@ -11,7 +11,7 @@ describe("Job Seeker Login Tests", () => {
 
   //Valid Users
   loginData.validUser.forEach((user) => {
-    it(`Should login successfully with valid user: ${user.email}`, () => {
+    it(`Should login successfully with valid user: ${user.description}`, () => {
       loginPage.login(user.email, user.password);
       loginPage.waitUntilVisible(loginPage.checkLoginSuccessMessage());
       loginPage.waitUntilNotVisible(loginPage.checkLoginSuccessMessage());
@@ -29,7 +29,7 @@ describe("Job Seeker Login Tests", () => {
 
   //Invalid Emails
   loginData.invalidEmails.forEach((user) => {
-    it.only(`Should show error for invalid email: ${user.description}`, () => {
+    it(`Should show error for invalid email: ${user.description}`, () => {
       loginPage.login(user.email, user.password);
       loginPage.waitUntilVisible(loginPage.checkPleaseEnterValidEmailAddressMessage());
       loginPage.waitUntilNotVisible(loginPage.checkPleaseEnterValidEmailAddressMessage());

@@ -8,9 +8,15 @@ export class BasePage {
     clickElement(element){
         element.should('be.visible').click();
     }
-    typeInElement(element, text){
-        element.typeTextSafely(text);
+    
+    // typeInElement(element, text){
+    //     element.typeTextSafely(text);
+    // }
+
+    typeInElement(element, text){ 
+        element.should('be.visible').type(text)
     }
+
     navigateToJobSeeker(){
         return cy.xpath("//h2[contains(text(), 'I am a Job Seeker')]").click();
     }

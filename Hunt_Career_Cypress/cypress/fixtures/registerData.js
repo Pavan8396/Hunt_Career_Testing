@@ -65,7 +65,7 @@ export const registerData = {
             lastName: getRandomLastName(),
             email: generateEmail('normal'),
             password: "",
-            confirmPassword: password,  // password field is intentionally empty
+            confirmPassword: password,
             phoneNumber: generateRandomPhoneNumber()
         };
     })(),

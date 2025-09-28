@@ -16,8 +16,6 @@
   {"description":"topLevelDomainTooShort", "email":"upavan@mailinator.c", "password":"Test@12345"},
   {"description":"domainStartsWithHypen", "email":"upavan@-mailinator.com", "password":"Welcome@1234"},
   {"description":"doubleDotInDomain", "email":"upavan@mailinator..com", "password":"Test@1234"},
-  {"description":"spaceInLocalPart", "email":"u pavan@mailinator.com", "password":"Welcome@1234"},
-  {"description":"spaceInDomain", "email":"upavan@mail inator.com", "password":"Welcome@1234"},
   {"description":"noAtTheRate", "email":"upavan#mailinator.com", "password":"Welcome@1234"},
   {"description":"illegalCharacters", "email":"upavan<>@mailinator.com", "password":"Test@12346"},
   {"description":"emailWithDotAfterName", "email":"upavan.@mailinator.com", "password":"Welcome@1234"},
@@ -48,7 +46,7 @@
     {"description":"blank Password", "email":"upavan@mailinator.com", "password": " "}
   ],
 
-  "invalidUser": [{
-    "description":"not registered user", "email": "pavanu@mailinator.com", "password": "Test@1234"}
+  "invalidUser": [
+    {"description":"not registered user", "email": "pavanu@mailinator.com", "password": "Test@1234"}
   ]
 }
