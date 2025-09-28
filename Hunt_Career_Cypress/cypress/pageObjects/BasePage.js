@@ -9,12 +9,12 @@ export class BasePage {
         element.should('be.visible').click();
     }
     typeInElement(element, text){
-        element.should('be.visible').type(text)
+        element.typeTextSafely(text);
     }
     navigateToJobSeeker(){
         return cy.xpath("//h2[contains(text(), 'I am a Job Seeker')]").click();
     }
     navigateToEmployer(){
-        return cy.xpath("//h2[contains(text(), 'I am a Employer')]").click();
+        return cy.xpath("//h2[contains(text(), 'I am an Employer')]").click();
     }
 }

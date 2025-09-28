@@ -14,3 +14,7 @@
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
 import 'cypress-xpath';
+
+Cypress.Commands.add("typeTextSafely", { prevSubject: "element" }, (subject, text) => {
+  cy.wrap(subject).should("be.visible").clear().type(text, { parseSpecialCharSequences: false });
+});

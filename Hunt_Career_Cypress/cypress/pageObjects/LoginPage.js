@@ -10,6 +10,9 @@ export default class LoginPage extends BasePage{
     LoginButton(){
         return cy.xpath("//button[@aria-label='Login']");
     }
+    EmployerLoginButton(){
+        return cy.xpath("//button[@type='submit']");
+    }
     checkLoginSuccessMessage(){
         return cy.xpath("//div[contains(text(), 'Logged in successfully!')]");
     }
@@ -33,14 +36,17 @@ export default class LoginPage extends BasePage{
     }
 
     //Actions
-    enterEmailField(email){
-        this.typeInElement(this.EmailField(), email)
+    enterEmailField(email, options = {}){
+        this.typeInElement(this.EmailField(), email, options)
     }
-    enterPasswordField(password){
-        this.typeInElement(this.PasswordField(), password)
+    enterPasswordField(password, options = {}){
+        this.typeInElement(this.PasswordField(), password, options)
     }
     clickLoginButton(){
         this.clickElement(this.LoginButton());
+    }
+    clickEmployerLoginButton(){
+        this.clickElement(this.EmployerLoginButton());
     }
 
     navigate(){
@@ -50,8 +56,19 @@ export default class LoginPage extends BasePage{
     }
 
     login(email, password){
+        this.enterEmailField(email, { parseSpecialCharSequences: false });
+        this.enterPasswordField(password, { parseSpecialCharSequences: false });
+        this.clickLoginButton();
+    }
+
+    employerNavigate(){
+        cy.visit("/");
+        this.navigateToEmployer();
+    }
+
+    Employerlogin(email, password){
         this.enterEmailField(email);
         this.enterPasswordField(password);
-        this.clickLoginButton();
+        this.clickEmployerLoginButton();
     }
 }

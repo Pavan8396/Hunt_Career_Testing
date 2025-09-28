@@ -1,46 +1,54 @@
 {
-  "validUser": {
-    "email": "upavan@mailinator.com",
-    "password": "Test@1234"
-  },
-  "invalidUser": {
-    "email": "pavanu@mailinator.com",
-    "password": "Test@1234"
-  },
-  "invalidEmail":{
-    "email": "testuser@mailinator",
-    "password": "Test@1234"
-  },
-  "invalidPassowrd": {
-    "email":"upavan@mailinator.com",
-    "password":"Test"
-  },
-  "blankPassword":{
-    "email":"upavan@mailinator.com",
-    "password": " "
-  },
-  "NoEmail":{
-    "email":" ",
-    "password": "Test@1234"
-  },
-  "EmailwithoutDomain":{
-    "email":"pavanu@.com",
-    "password":"Test@1234"
-  },
-  "emailWihoutName":{
-    "email":"@mailinator.com",
-    "password":"Test@1234"
-  },
-  "emailhaving2@":{
-    "email":"upavan@@mailinator.com",
-    "password":"Test@1234"
-  },
-  "emailWithDotAfterName":{
-    "email":"upavan.@mailinator.com",
-    "password":"Test@1234"
-  },
-  "emailWithDotInbetweenName":{
-    "email":"u.pavan@mailinator.com",
-    "password":"Test@1234"
-  }
+  "validUser":[
+   {"description": "Valid user", "email": "upavan@mailinator.com", "password": "Test@1234"},
+   {"description":"emailWithDotInbetweenName", "email":"u.pavan@mailinator.com","password":"Test@1234"},
+   {"description":"spacesBeforeEmail", "email":" upavan@mailinator.com", "password":"Test@1234"},
+   {"description":"spaceAfterEmil", "email":"upavan@mailinator.com ", "password":"Test@1234"}
+  ],
+
+  "invalidEmails":[
+  {"description":"plainEmail", "email": "testuser", "password": "Test@12345"}, 
+  {"description":"noLocalPart", "email":"@mailinator.com", "password":"Welcome@1234"},
+  {"description":"localPartOnly", "email":"testuser@", "password":"Test@1234"},
+  {"description":"emailhaving2@", "email":"u@pavan@mailinator.com","password":"Welcome@1234@1234"},
+  {"description":"noTopLevelDomain", "email": "testuser@mailinator", "password": "Welcome@1234"},
+  {"description":"tailingWithDot", "email":"upavan@mailinator.", "password":"Welcome@1234"},
+  {"description":"topLevelDomainTooShort", "email":"upavan@mailinator.c", "password":"Test@12345"},
+  {"description":"domainStartsWithHypen", "email":"upavan@-mailinator.com", "password":"Welcome@1234"},
+  {"description":"doubleDotInDomain", "email":"upavan@mailinator..com", "password":"Test@1234"},
+  {"description":"spaceInLocalPart", "email":"u pavan@mailinator.com", "password":"Welcome@1234"},
+  {"description":"spaceInDomain", "email":"upavan@mail inator.com", "password":"Welcome@1234"},
+  {"description":"noAtTheRate", "email":"upavan#mailinator.com", "password":"Welcome@1234"},
+  {"description":"illegalCharacters", "email":"upavan<>@mailinator.com", "password":"Test@12346"},
+  {"description":"emailWithDotAfterName", "email":"upavan.@mailinator.com", "password":"Welcome@1234"},
+  {"description":"twoConsecutiveDotInbetweenName", "email":"u..pavan@mailinator.com", "password":"Test@1234"},
+  {"description":"emailWithDotAtBegining", "email":".upavan@mailinator.com", "password":"Welcome@1234"},
+  {"description":"emailWithQuotation", "email":"'upavan@mailinator.com'", "password":"Test@1234"},
+  {"description":"emailWithUnclosedQuotation", "email":"'upavan@mailinator.com", "password":"Welcome@1234"},
+  {"description":"veryLengthyEmail", "email":"verylonglocalpartthatexceedstheusuallimitstoverifythelimitdoesitexceedornotbyaddingverylongcharcaters@example.com", "password":"Test@1234"},
+  {"description":"veryLengthyDomain", "email":"upavan@verylonglocalpartthatexceedstheusuallimitstoverifythelimitdoesitexceedornotbyaddingverylongcharcaters.com", "password":"Test@1234"},
+  {"description":"veryLengthyTopLevelDomain", "email":"upavan@example.verylonglocalpartthatexceedstheusuallimitstoverifythelimitdoesitexceedornotbyaddingverylongcharcaterscom", "password":"Test@1234"},
+  {"description":"missingSecondLevelDomain", "email":"pavanu@com", "password":"Welcome@1234"},
+  {"description":"Emailwithcomma", "email":"upavan@mailinator,com", "password":"Welcome@1234"},
+  {"description":"emailhaving2Consecutive@", "email":"upavan@@mailinator.com", "password":"Test@1234"},
+  {"description":"underScoreInTopLevelDomain", "email":"upavan@mailinator.c_m", "password":"Welcome@1234"},
+  {"description":"EmailwithoutDomain", "email":"upavan@.com", "password":"Welcome@1234"}
+],
+
+  
+  "invalidPassowrd": [
+    {"description":"too short password", "email":"upavan@mailinator.com", "password":"Test"}
+  ],
+  
+  "NoEmail":[
+    {"description":"blank email", "email":" ", "password": "Test@1234"}
+  ],
+
+  "NoPassword":[
+    {"description":"blank Password", "email":"upavan@mailinator.com", "password": " "}
+  ],
+
+  "invalidUser": [{
+    "description":"not registered user", "email": "pavanu@mailinator.com", "password": "Test@1234"}
+  ]
 }
