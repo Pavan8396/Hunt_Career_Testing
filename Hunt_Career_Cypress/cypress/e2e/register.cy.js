@@ -89,20 +89,20 @@ describe("Register Test", () =>{
         registerPage.waitUntilNotVisible(registerPage.checkPleaseEnterValidEmailAddressMessage());
     })
 
-    it("TC-14-Enter email with dot before at", () =>{
+    it.only("TC-14-Enter email with dot before at", () =>{
         registerPage.register(registerData.emailDotBeforeAt.firstName, registerData.emailDotBeforeAt.lastName, registerData.emailDotBeforeAt.email, registerData.emailDotBeforeAt.password, registerData.emailDotBeforeAt.confirmPassword, registerData.emailDotBeforeAt.phoneNumber);
         registerPage.waitUntilVisible(registerPage.checkSuccessCreationMessage());
         registerPage.waitUntilNotVisible(registerPage.checkSuccessCreationMessage());
     })
 
-    it("TC-15-Enter email without Domain", () =>{
-        registerPage.registerSecondPage(registerData.emailWithoutDomain.firstName, registerData.emailWithoutDomain.lastName, registerData.emailWithoutDomain.email, registerData.emailWithoutDomain.password, registerData.emailWithoutDomain.confirmPassword, registerData.emailWithoutDomain.phoneNumber);
+    it.only("TC-15-Enter email without Domain", () =>{
+        registerPage.registerSecondPage(registerData.emailWithoutDomain.firstName, registerData.emailWithoutDomain.lastName, registerData.emailWithoutDomain.email, registerData.emailWithoutDomain.password, registerData.emailWithoutDomain.confirmPassword);
         registerPage.waitUntilVisible(registerPage.checkPleaseEnterValidEmailAddressMessage());
         registerPage.waitUntilNotVisible(registerPage.checkPleaseEnterValidEmailAddressMessage());
     })
 
-    it("TC-16-Enter email without username", () =>{
-        registerPage.registerSecondPage(registerData.emailMissingUsername.firstName, registerData.emailMissingUsername.lastName, registerData.emailMissingUsername.email, registerData.emailMissingUsername.password, registerData.emailMissingUsername.confirmPassword, registerData.emailMissingUsername.phoneNumber);
+    it.only("TC-16-Enter email without username", () =>{
+        registerPage.registerSecondPage(registerData.emailMissingUsername.firstName, registerData.emailMissingUsername.lastName, registerData.emailMissingUsername.email, registerData.emailMissingUsername.password, registerData.emailMissingUsername.confirmPassword);
         registerPage.waitUntilVisible(registerPage.checkPleaseEnterValidEmailAddressMessage());
         registerPage.waitUntilNotVisible(registerPage.checkPleaseEnterValidEmailAddressMessage());
     })
