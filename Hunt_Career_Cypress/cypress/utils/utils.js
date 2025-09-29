@@ -1,16 +1,8 @@
 import { faker } from "@faker-js/faker";
 
-function getCurrentDateTimeString() {
-    const now = new Date();
-    const day = String(now.getDate()).padStart(2, '0');
-    const month = String(now.getMonth() + 1).padStart(2, '0');
-    const year = now.getFullYear();
-    const hours = String(now.getHours()).padStart(2, '0');
-    const minutes = String(now.getMinutes()).padStart(2, '0');
-    const seconds = String(now.getSeconds()).padStart(2, '0');
-    return `${day}-${month}-${year}-${hours}-${minutes}-${seconds}`;
-}
-
+// This custom password generator is retained because it guarantees
+// the presence of different character types, which is often
+// necessary for testing password validation rules.
 export function generateRandomPassword(length = 8) {
     const upperCase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     const lowerCase = 'abcdefghijklmnopqrstuvwxyz';
@@ -20,54 +12,38 @@ export function generateRandomPassword(length = 8) {
 
     let password = '';
     
-    // Ensure at least one from each category
     password += upperCase[Math.floor(Math.random() * upperCase.length)];
     password += lowerCase[Math.floor(Math.random() * lowerCase.length)];
     password += numbers[Math.floor(Math.random() * numbers.length)];
     password += specialChars[Math.floor(Math.random() * specialChars.length)];
 
-    // Fill the rest randomly
     for (let i = 4; i < length; i++) {
         password += allChars[Math.floor(Math.random() * allChars.length)];
     }
 
-    // Shuffle the password to avoid predictable pattern
-    password = password.split('').sort(() => 0.5 - Math.random()).join('');
-
-    return password;
+    return password.split('').sort(() => 0.5 - Math.random()).join('');
 }
 
 export function getRandomFirstName(){
-    const firstName = faker.person.firstName();
-    return firstName;
+    return faker.person.firstName();
 }
 
 export function getRandomLastName(){
-    const lastName= faker.person.lastName();
-    return lastName;
+    return faker.person.lastName();
 }
 
 export function getRandomCompanyName(){
-    const companyName = faker.company.name();
-    return companyName;
-}
-
-function getRandomSuffix(length = 4) {
-  return Math.random().toString(36).substring(2, 2 + length);
+    return faker.company.name();
 }
 
 export function generateEmail(type) {
-  const dateTime = getCurrentDateTimeString();
-  const random = getRandomSuffix(); 
-  const baseName = `testuser_${dateTime}_${random}`;
+  const baseName = `test_${faker.lorem.word()}`;
 
   switch (type) {
     case "normal":
-      return `${baseName}@mailinator.com`;
-
-    // invalid formats
+      return faker.internet.email({ firstName: 'testuser', allowSpecialCharacters: false });
     case "plainEmail":
-      return baseName; // no @domain
+      return baseName;
     case "noLocalPart":
       return "@mailinator.com";
     case "localPartOnly":
@@ -115,21 +91,16 @@ export function generateEmail(type) {
     case "withoutDomain":
       return `${baseName}@.com`;
     case "dotBetweenName":
-      return `${baseName}.user@mailinator.com`
+      return `${faker.person.firstName()}.${faker.person.lastName()}@mailinator.com`;
     case "spaceBeforeName":
-      return ` ${baseName}@mailinator.com`
+      return ` ${faker.internet.email({ firstName: 'testuser', allowSpecialCharacters: false })}`;
     case "spaceAfterName":
-      return `${baseName}@mailinator.com `
-    
-      default:
-      return `${baseName}@mailinator.com`;
+      return `${faker.internet.email({ firstName: 'testuser', allowSpecialCharacters: false })} `;
+    default:
+      return faker.internet.email({ firstName: 'testuser', allowSpecialCharacters: false });
   }
 }
 
 export function generateRandomPhoneNumber() {
-    let phone = '';
-    for (let i = 0; i < 10; i++) {
-        phone += Math.floor(Math.random() * 10);
-    }
-    return phone;
+    return faker.phone.number('##########');
 }

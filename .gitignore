@@ -1,0 +1,9 @@
+# Cypress
+Hunt_Career_Cypress/node_modules/
+Hunt_Career_Cypress/mochawesome-report/
+Hunt_Career_Cypress/cypress/reports/
+
+# General
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
