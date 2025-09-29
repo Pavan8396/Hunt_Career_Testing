@@ -4,15 +4,17 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import com.huntcareer.qa.base.TestBase;
+import com.huntcareer.qa.base.Base;
 import com.huntcareer.qa.pages.EmployerLoginPage;
 import com.huntcareer.qa.pages.LandingPage;
+import com.huntcareer.qa.pages.SearchPage;
 import com.huntcareer.qa.testdata.EmployerLoginData;
 
-public class EmployerLogin extends TestBase {
+public class EmployerLogin extends Base {
 
     LandingPage landingPage;
     EmployerLoginPage employerLoginPage;
+    SearchPage searchPage;
 
     public EmployerLogin() {
         super();
@@ -20,9 +22,11 @@ public class EmployerLogin extends TestBase {
 
     @BeforeMethod
     public void setUp() {
-        initialization();
-        landingPage = new LandingPage();
+        driver = inicializeBrowserAndOpenApplication(prop.getProperty("browser"));
+        driver.get(prop.getProperty("url"));
+        landingPage = new LandingPage(driver);
         employerLoginPage = landingPage.clickEmployerLoginButton();
+        searchPage = new SearchPage(driver);
     }
 
     @Test(dataProvider = "validUsers", dataProviderClass = EmployerLoginData.class)
@@ -30,6 +34,7 @@ public class EmployerLogin extends TestBase {
         employerLoginPage.enterEmail(email);
         employerLoginPage.enterPassword(password);
         employerLoginPage.clickLoginButton();
+        searchPage.verifyLoginSuccessMessage();
     }
 
     @Test(dataProvider = "invalidUsers", dataProviderClass = EmployerLoginData.class)

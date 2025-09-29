@@ -4,15 +4,19 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import com.huntcareer.qa.base.TestBase;
+import com.huntcareer.qa.base.Base;
+import com.huntcareer.qa.pages.HomePage;
+import com.huntcareer.qa.pages.LandingPage;
 import com.huntcareer.qa.pages.LoginPage;
 import com.huntcareer.qa.pages.SearchPage;
 import com.huntcareer.qa.testdata.LoginData;
 
-public class Login extends TestBase {
+public class Login extends Base {
 
     LoginPage loginPage;
     SearchPage searchPage;
+    LandingPage landingPage;
+    HomePage homePage;
 
     public Login() {
         super();
@@ -20,8 +24,11 @@ public class Login extends TestBase {
 
     @BeforeMethod
     public void setUp() {
-        initialization();
-        loginPage = new LoginPage(driver);
+        driver = inicializeBrowserAndOpenApplication(prop.getProperty("browser"));
+        driver.get(prop.getProperty("url"));
+        landingPage = new LandingPage(driver);
+        homePage = landingPage.clickOnJobSeekerRole();
+        loginPage = homePage.clickOnLoginHomeLink();
         searchPage = new SearchPage(driver);
     }
 
