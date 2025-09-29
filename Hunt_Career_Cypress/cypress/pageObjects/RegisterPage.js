@@ -34,8 +34,14 @@ export default class RegisterPage extends BasePage {
     checkDuplicateErrorMessage() {
         return cy.xpath("//div[contains(text(),'User already exists')]");
     }
+    checkDuplicateErrorMessageForEmployer() {
+        return cy.xpath("//div[contains(text(),'Employer already exists')]");
+    }
     checkFirstNameBlankMessage() {
         return cy.xpath("//div[contains(text(),'First Name is required.')]");
+    }
+    checkEmployerNameBlankMessage() {
+        return cy.xpath("//div[contains(text(),'Company Name is required.')]");
     }
     checkLastNameBlankMessage() {
         return cy.xpath("//div[contains(text(),'Last Name is required.')]");
