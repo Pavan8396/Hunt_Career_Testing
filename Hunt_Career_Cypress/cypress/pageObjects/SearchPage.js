@@ -49,6 +49,10 @@ export default class SearchPage extends BasePage {
         return jobCard.find('p.text-sm.text-gray-700.mt-3.line-clamp-3');
     }
 
+    getLoginSuccessMessage() {
+        return cy.xpath("//div[contains(text(), 'Logged in successfully!')]");
+    }
+
     getNoJobsFoundMessage() {
         return cy.get('p').contains('No jobs found.');
     }

@@ -1,4 +1,5 @@
 import { BasePage } from "./BasePage";
+import SearchPage from "./SearchPage";
 
 export default class LoginPage extends BasePage {
     getEmailField() {
@@ -13,12 +14,8 @@ export default class LoginPage extends BasePage {
         return cy.xpath("//button[@aria-label='Login']");
     }
 
-    getEmployerLoginButton() {
-        return cy.xpath("//button[@type='submit']");
-    }
-
-    getLoginSuccessMessage() {
-        return cy.xpath("//div[contains(text(), 'Logged in successfully!')]");
+    getSuccessCreationMessage() {
+        return cy.xpath("//div[contains(text(), 'Registered successfully! Please login.')]");
     }
 
     getInvalidEmailOrPasswordMessage() {
@@ -57,10 +54,6 @@ export default class LoginPage extends BasePage {
         this.clickElement(this.getLoginButton());
     }
 
-    clickEmployerLoginButton() {
-        this.clickElement(this.getEmployerLoginButton());
-    }
-
     navigate() {
         cy.visit("/");
         this.navigateToJobSeeker();
@@ -71,16 +64,5 @@ export default class LoginPage extends BasePage {
         this.enterEmail(email);
         this.enterPassword(password);
         this.clickLoginButton();
-    }
-
-    employerNavigate() {
-        cy.visit("/");
-        this.navigateToEmployer();
-    }
-
-    employerLogin(email, password) {
-        this.enterEmail(email);
-        this.enterPassword(password);
-        this.clickEmployerLoginButton();
     }
 }

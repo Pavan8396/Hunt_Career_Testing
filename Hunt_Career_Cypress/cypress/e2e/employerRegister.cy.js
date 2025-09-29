@@ -1,4 +1,5 @@
 import EmployerRegisterPage from "../pageObjects/EmployerRegisterPage";
+import EmployerLoginPage from "../pageObjects/EmployerLoginPage";
 import { employerRegisterData } from "../fixtures/employerRegisterData";
 
 describe("Employer Registration", () => {
@@ -12,7 +13,8 @@ describe("Employer Registration", () => {
     employerRegisterData.validUsers.forEach((user) => {
         it(`should register successfully with ${user.description}`, () => {
             employerRegisterPage.register(user.name, user.email, user.password, user.confirmPassword);
-            employerRegisterPage.getSuccessCreationMessage().should("be.visible");
+            const employerLoginPage = new EmployerLoginPage();
+            employerLoginPage.getSuccessCreationMessage().should("be.visible");
         });
     });
 

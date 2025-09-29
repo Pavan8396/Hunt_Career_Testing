@@ -1,4 +1,5 @@
 import RegisterPage from "../pageObjects/RegisterPage";
+import LoginPage from "../pageObjects/LoginPage";
 import { registerData } from "../fixtures/registerData";
 
 describe("User Registration", () => {
@@ -12,7 +13,8 @@ describe("User Registration", () => {
     registerData.validUsers.forEach((user) => {
         it(`should register successfully with ${user.description}`, () => {
             registerPage.register(user.firstName, user.lastName, user.email, user.password, user.confirmPassword, user.phoneNumber);
-            registerPage.getSuccessCreationMessage().should("be.visible");
+            const loginPage = new LoginPage();
+            loginPage.getSuccessCreationMessage().should("be.visible");
         });
     });
 

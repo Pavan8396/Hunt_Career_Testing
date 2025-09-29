@@ -1,4 +1,5 @@
 import LoginPage from "../pageObjects/LoginPage";
+import SearchPage from "../pageObjects/SearchPage";
 import loginData from "../fixtures/loginData.json";
 
 describe("Job Seeker Login", () => {
@@ -12,7 +13,8 @@ describe("Job Seeker Login", () => {
   loginData.validUser.forEach((user) => {
     it(`should log in successfully with ${user.description}`, () => {
       loginPage.login(user.email, user.password);
-      loginPage.getLoginSuccessMessage().should("be.visible");
+      const searchPage = new SearchPage();
+      searchPage.getLoginSuccessMessage().should("be.visible");
     });
   });
 

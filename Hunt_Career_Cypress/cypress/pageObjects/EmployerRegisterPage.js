@@ -1,4 +1,5 @@
 import { BasePage } from "./BasePage";
+import EmployerLoginPage from "./EmployerLoginPage";
 
 export default class EmployerRegisterPage extends BasePage {
     getNameField() {
@@ -15,9 +16,6 @@ export default class EmployerRegisterPage extends BasePage {
     }
     getSignupButton() {
         return cy.xpath("//button[@type='submit']");
-    }
-    getSuccessCreationMessage() {
-        return cy.xpath("//div[contains(text(), 'Registered successfully! Please login.')]");
     }
     getDuplicateErrorMessage() {
         return cy.xpath("//div[contains(text(),'Employer already exists')]");

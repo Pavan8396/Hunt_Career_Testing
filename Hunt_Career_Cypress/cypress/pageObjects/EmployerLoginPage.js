@@ -1,4 +1,5 @@
 import { BasePage } from "./BasePage";
+import SearchPage from "./SearchPage";
 
 export default class EmployerLoginPage extends BasePage {
     getEmailField() {
@@ -13,8 +14,8 @@ export default class EmployerLoginPage extends BasePage {
         return cy.xpath("//button[@type='submit']");
     }
 
-    getLoginSuccessMessage() {
-        return cy.xpath("//div[contains(text(), 'Logged in successfully!')]");
+    getSuccessCreationMessage() {
+        return cy.xpath("//div[contains(text(), 'Registered successfully! Please login.')]");
     }
 
     getInvalidEmailOrPasswordMessage() {
