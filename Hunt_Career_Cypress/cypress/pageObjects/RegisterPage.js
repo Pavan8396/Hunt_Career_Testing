@@ -2,88 +2,88 @@ import { BasePage } from "./BasePage";
 
 export default class RegisterPage extends BasePage {
     getFirstNameField() {
-        return cy.get("[data-cy=first-name-field]");
+        return cy.xpath("//input[@id='firstName']");
     }
     getLastNameField() {
-        return cy.get("[data-cy=last-name-field]");
+        return cy.xpath("//input[@id='lastName']");
     }
     getEmailField() {
-        return cy.get("[data-cy=email-field]");
+        return cy.xpath("//input[@id='email']");
     }
     getPasswordField() {
-        return cy.get("[data-cy=password-field]");
+        return cy.xpath("//input[@id='password']");
     }
     getConfirmPasswordField() {
-        return cy.get("[data-cy=confirm-password-field]");
+        return cy.xpath("//input[@id='confirmPassword']");
     }
     getPhoneNumberField() {
-        return cy.get("[data-cy=phone-number-field]");
+        return cy.xpath("//input[@id='phoneNumber']");
     }
     getFirstNextButton() {
-        return cy.get("[data-cy=first-next-button]");
+        return cy.xpath("//button[@type='button']");
     }
     getSecondNextButton() {
-        return cy.get("[data-cy=second-next-button]");
+        return cy.xpath("//button[normalize-space()='Next']");
     }
     getSignupButton() {
-        return cy.get("[data-cy=signup-button]");
+        return cy.xpath("//button[@aria-label='Sign up']");
     }
     getSuccessCreationMessage() {
-        return cy.contains("Registered successfully! Please login.");
+        return cy.xpath("//div[contains(text(), 'Registered successfully! Please login.')]");
     }
     getDuplicateErrorMessage() {
-        return cy.contains("User already exists");
+        return cy.xpath("//div[contains(text(),'User already exists')]");
     }
     getDuplicateErrorMessageForEmployer() {
-        return cy.contains("Employer already exists");
+        return cy.xpath("//div[contains(text(),'Employer already exists')]");
     }
     getFirstNameBlankMessage() {
-        return cy.contains("First Name is required.");
+        return cy.xpath("//div[contains(text(),'First Name is required.')]");
     }
     getEmployerNameBlankMessage() {
-        return cy.contains("Company Name is required.");
+        return cy.xpath("//div[contains(text(),'Company Name is required.')]");
     }
     getLastNameBlankMessage() {
-        return cy.contains("Last Name is required.");
+        return cy.xpath("//div[contains(text(),'Last Name is required.')]");
     }
     getInvalidEmailAddressMessage() {
-        return cy.contains("Please enter a valid email address.");
+        return cy.xpath("//div[contains(text(), 'Please enter a valid email address.')]");
     }
     getEmailBlankMessage() {
-        return cy.contains("Email is required.");
+        return cy.xpath("//div[contains(text(), 'Email is required.')]");
     }
     getPasswordLengthErrorMessage() {
-        return cy.contains("Password must be at least 8 characters long.");
+        return cy.xpath("//div[contains(text(), 'Password must be at least 8 characters long.')]");
     }
     getPasswordMismatchMessage() {
-        return cy.contains("Passwords do not match.");
+        return cy.xpath("//div[contains(text(), 'Passwords do not match.')]");
     }
     getPhoneNumberRequiredMessage() {
-        return cy.contains("Phone Number is required.");
+        return cy.xpath("//div[contains(text(), 'Phone Number is required.')]");
     }
     getInvalidPhoneNumberMessage() {
-        return cy.contains("Please enter a valid 10-digit phone number.");
+        return cy.xpath("//div[contains(text(), 'Please enter a valid 10-digit phone number.')]");
     }
     getRegisterLinkHomePage() {
-        return cy.contains("Signup");
+        return cy.xpath("//a[contains(text(), 'Signup')]");
     }
     getEmployerSignupLink() {
-        return cy.contains("Sign up");
+        return cy.xpath("//a[contains(text(), 'Sign up')]");
     }
     getEmployerRegisterNameField() {
-        return cy.get("[data-cy=employer-name-field]");
+        return cy.xpath("//input[@id='companyName']");
     }
     getEmployerRegisterEmailField() {
-        return cy.get("[data-cy=employer-email-field]");
+        return cy.xpath("//input[@id='email']");
     }
     getEmployerRegisterPasswordField() {
-        return cy.get("[data-cy=employer-password-field]");
+        return cy.xpath("//input[@id='password']");
     }
     getEmployerRegisterConfirmPasswordField() {
-        return cy.get("[data-cy=employer-confirm-password-field]");
+        return cy.xpath("//input[@id='confirmPassword']");
     }
     getEmployerRegisterSignupButton() {
-        return cy.get("[data-cy=employer-signup-button]");
+        return cy.xpath("//button[@type='submit']");
     }
 
     enterFirstName(firstName) {
