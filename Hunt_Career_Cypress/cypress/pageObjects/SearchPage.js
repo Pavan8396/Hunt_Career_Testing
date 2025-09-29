@@ -1,117 +1,115 @@
-import { BasePage } from "./basePage";
+import { BasePage } from "./BasePage";
 
 export default class SearchPage extends BasePage {
-
-    SearchInputField() {
-        return cy.xpath("//input[@placeholder='Search jobs by title, company, or keyword...']");
+    getSearchInputField() {
+        return cy.get("[data-cy=search-input]");
     }
 
-    SearchButton() {
-        return cy.xpath("//button[@aria-label='Search']");
+    getSearchButton() {
+        return cy.get("[data-cy=search-button]");
     }
 
-    LocationButton() {
-        return cy.xpath("//button[@aria-label='Toggle location filter dropdown']")
+    getLocationFilterButton() {
+        return cy.get("[data-cy=location-filter-button]");
     }
 
-    LocationSearchInput() {
-        return cy.xpath("//input[@placeholder='Search location...']")
+    getLocationSearchInput() {
+        return cy.get("[data-cy=location-search-input]");
     }
 
-    LocationOption(location) {
-        return cy.get('label').contains(location).find('input');
+    getLocationOption(location) {
+        return cy.get("[data-cy=location-option]").contains(location);
     }
 
-    JobTypeButton() {
-        return cy.xpath("//button[@aria-label='Toggle job type filter dropdown']");
+    getJobTypeFilterButton() {
+        return cy.get("[data-cy=job-type-filter-button]");
     }
 
-    JobTypeSearchInput() {
-        return cy.xpath("//input[@placeholder='Search job type...']")
+    getJobTypeSearchInput() {
+        return cy.get("[data-cy=job-type-search-input]");
     }
 
-    JobTypeOption(jobType) {
-        return cy.get('label').contains(jobType).find('input');
+    getJobTypeOption(jobType) {
+        return cy.get("[data-cy=job-type-option]").contains(jobType);
     }
 
-    ClearAllFiltersButton() {
-        return cy.xpath("//button[@aria-label='Clear all filters']")
+    getClearAllFiltersButton() {
+        return cy.get("[data-cy=clear-filters-button]");
     }
 
-    jobCardTitle(jobCard) {
-        return jobCard.find('h3.text-lg.font-semibold');
+    getJobCardTitle(jobCard) {
+        return jobCard.find("[data-cy=job-card-title]");
     }
 
-    jobCardCompanyLocation(jobCard) {
-        return jobCard.find('p.text-gray-600');
+    getJobCardCompanyLocation(jobCard) {
+        return jobCard.find("[data-cy=job-card-company-location]");
     }
 
-    jobCardDescription(jobCard) {
-        return jobCard.find('p.text-sm.text-gray-700.mt-3.line-clamp-3');
+    getJobCardDescription(jobCard) {
+        return jobCard.find("[data-cy=job-card-description]");
     }
 
-    NoJobsFoundMessage() {
-        return cy.get('p').contains('No jobs found.');
+    getNoJobsFoundMessage() {
+        return cy.contains("No jobs found.");
     }
 
-    SearchTag(searchTerm) {
-        return cy.xpath(`//span[contains(., "🔍 ${searchTerm}")]`);
+    getSearchTag(searchTerm) {
+        return cy.contains(`🔍 ${searchTerm}`);
     }
 
-    LocationTag(location) {
-        return cy.xpath(`//span[contains(., "📍 ${location}")]`);
+    getLocationTag(location) {
+        return cy.contains(`📍 ${location}`);
     }
 
-    JobTypeTag(jobType) {
-        return cy.xpath(`//span[contains(., "🧾 ${jobType}")]`);
+    getJobTypeTag(jobType) {
+        return cy.contains(`🧾 ${jobType}`);
     }
 
-    // Actions
     enterSearchTerm(searchTerm) {
-        this.typeInElement(this.SearchInputField(), searchTerm);
+        this.typeInElement(this.getSearchInputField(), searchTerm);
     }
 
     clickSearchButton() {
-        this.clickElement(this.SearchButton());
+        this.clickElement(this.getSearchButton());
     }
 
     openLocationDropdown() {
-        this.clickElement(this.LocationButton());
+        this.clickElement(this.getLocationFilterButton());
     }
 
     searchLocation(location) {
-        this.typeInElement(this.LocationSearchInput(), location);
+        this.typeInElement(this.getLocationSearchInput(), location);
     }
 
     selectLocation(location) {
-        this.clickElement(this.LocationOption(location));
+        this.clickElement(this.getLocationOption(location));
     }
 
     closeLocationDropdown() {
-        this.clickElement(this.LocationButton());
+        this.clickElement(this.getLocationFilterButton());
     }
 
     openJobTypeDropdown() {
-        this.clickElement(this.JobTypeButton());
+        this.clickElement(this.getJobTypeFilterButton());
     }
 
     selectJobType(jobType) {
-        this.clickElement(this.JobTypeOption(jobType));
+        this.clickElement(this.getJobTypeOption(jobType));
     }
 
     closeJobTypeDropdown() {
-        this.clickElement(this.JobTypeButton());
+        this.clickElement(this.getJobTypeFilterButton());
     }
 
     clickClearAllFilters() {
-        this.clickElement(this.ClearAllFiltersButton());
+        this.clickElement(this.getClearAllFiltersButton());
     }
-    navigation(){
+
+    navigate() {
         cy.visit("/");
         this.navigateToJobSeeker();
     }
 
-    // Main search action
     search(searchTerm, location = null, jobType = null) {
         this.enterSearchTerm(searchTerm);
         this.clickSearchButton();
@@ -128,13 +126,5 @@ export default class SearchPage extends BasePage {
             this.selectJobType(jobType);
             this.closeJobTypeDropdown();
         }
-    }
-
-    validationMessage(element) {
-        this.waitUntilVisible(element);
-    }
-
-    validationMessageNotExist(element) {
-        this.waitUntilNotVisible(element);
     }
 }

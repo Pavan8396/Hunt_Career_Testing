@@ -1,20 +1,20 @@
-{
-  "validSearch": {
-    "searchTerm": "Developer",
+export const searchData = {
+  validSearch: {
+    searchTerm": "Developer",
     "location": null,
     "jobType": null
   },
-  "invalidSearch": {
+  invalidSearch: {
     "searchTerm": "xyz123",
     "location": null,
     "jobType": null
   },
-  "specialCharSearch": {
+  specialCharSearch: {
     "searchTerm": "AI\\",
     "location": null,
     "jobType": null
   },
-  "searchWithFilters": {
+  searchWithFilters: {
     "searchTerm": "Developer",
     "location": "Bengaluru, Karnataka, India",
     "jobType": "Full-Time"

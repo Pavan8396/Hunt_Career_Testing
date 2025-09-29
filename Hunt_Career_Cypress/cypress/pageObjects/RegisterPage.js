@@ -1,204 +1,178 @@
-import { BasePage } from "./basePage";
+import { BasePage } from "./BasePage";
 
 export default class RegisterPage extends BasePage {
-    FirstNameField() {
-        return cy.xpath("//input[@id='firstName']");
+    getFirstNameField() {
+        return cy.get("[data-cy=first-name-field]");
     }
-    LastNameField() {
-        return cy.xpath("//input[@id='lastName']");
+    getLastNameField() {
+        return cy.get("[data-cy=last-name-field]");
     }
-    EmailField() {
-        return cy.xpath("//input[@id='email']");
+    getEmailField() {
+        return cy.get("[data-cy=email-field]");
     }
-    PasswordField() {
-        return cy.xpath("//input[@id='password']");
+    getPasswordField() {
+        return cy.get("[data-cy=password-field]");
     }
-    ConfirmPasswordField() {
-        return cy.xpath("//input[@id='confirmPassword']");
+    getConfirmPasswordField() {
+        return cy.get("[data-cy=confirm-password-field]");
     }
-    PhoneNumberField() {
-        return cy.xpath("//input[@id='phoneNumber']");
+    getPhoneNumberField() {
+        return cy.get("[data-cy=phone-number-field]");
     }
-    FirstNextButton() {
-        return cy.xpath("//button[@type='button']");
+    getFirstNextButton() {
+        return cy.get("[data-cy=first-next-button]");
     }
-    SecondNextButton() {
-        return cy.xpath("//button[normalize-space()='Next']");
+    getSecondNextButton() {
+        return cy.get("[data-cy=second-next-button]");
     }
-    SignupButton() {
-        return cy.xpath("//button[@aria-label='Sign up']");
+    getSignupButton() {
+        return cy.get("[data-cy=signup-button]");
     }
-    checkSuccessCreationMessage() {
-        return cy.xpath("//div[contains(text(), 'Registered successfully! Please login.')]");
+    getSuccessCreationMessage() {
+        return cy.contains("Registered successfully! Please login.");
     }
-    checkDuplicateErrorMessage() {
-        return cy.xpath("//div[contains(text(),'User already exists')]");
+    getDuplicateErrorMessage() {
+        return cy.contains("User already exists");
     }
-    checkDuplicateErrorMessageForEmployer() {
-        return cy.xpath("//div[contains(text(),'Employer already exists')]");
+    getDuplicateErrorMessageForEmployer() {
+        return cy.contains("Employer already exists");
     }
-    checkFirstNameBlankMessage() {
-        return cy.xpath("//div[contains(text(),'First Name is required.')]");
+    getFirstNameBlankMessage() {
+        return cy.contains("First Name is required.");
     }
-    checkEmployerNameBlankMessage() {
-        return cy.xpath("//div[contains(text(),'Company Name is required.')]");
+    getEmployerNameBlankMessage() {
+        return cy.contains("Company Name is required.");
     }
-    checkLastNameBlankMessage() {
-        return cy.xpath("//div[contains(text(),'Last Name is required.')]");
+    getLastNameBlankMessage() {
+        return cy.contains("Last Name is required.");
     }
-    checkPleaseEnterValidEmailAddressMessage() {
-        return cy.xpath("//div[contains(text(), 'Please enter a valid email address.')]");
+    getInvalidEmailAddressMessage() {
+        return cy.contains("Please enter a valid email address.");
     }
-    checkEmailBlankMessage() {
-        return cy.xpath("//div[contains(text(), 'Email is required.')]");
+    getEmailBlankMessage() {
+        return cy.contains("Email is required.");
     }
-    checkPasswordMustHaveRequiredNumberCharactersMessage() {
-        return cy.xpath("//div[contains(text(), 'Password must be at least 8 characters long.')]");
+    getPasswordLengthErrorMessage() {
+        return cy.contains("Password must be at least 8 characters long.");
     }
-    checkPasswordNotMatchMessage() {
-        return cy.xpath("//div[contains(text(), 'Passwords do not match.')]");
+    getPasswordMismatchMessage() {
+        return cy.contains("Passwords do not match.");
     }
-    checkPhoneNumberRequiredMessage() {
-        return cy.xpath("//div[contains(text(), 'Phone Number is required.')]");
+    getPhoneNumberRequiredMessage() {
+        return cy.contains("Phone Number is required.");
     }
-    checkPhoneNumberInvalidMessage(){
-        return cy.xpath("//div[contains(text(), 'Please enter a valid 10-digit phone number.')]")
+    getInvalidPhoneNumberMessage() {
+        return cy.contains("Please enter a valid 10-digit phone number.");
     }
-    registerLinkHomePage(){
-        return cy.xpath("//a[contains(text(), 'Signup')]")
+    getRegisterLinkHomePage() {
+        return cy.contains("Signup");
     }
-    employerSignupLink(){
-        return cy.xpath("//a[contains(text(), 'Sign up')]")
+    getEmployerSignupLink() {
+        return cy.contains("Sign up");
     }
-    employerRegisterNameField(){
-        return cy.xpath("//input[@id='companyName']");
+    getEmployerRegisterNameField() {
+        return cy.get("[data-cy=employer-name-field]");
     }
-    employerRegisterEmailField(){
-        return cy.xpath("//input[@id='email']");
+    getEmployerRegisterEmailField() {
+        return cy.get("[data-cy=employer-email-field]");
     }
-    employerRegisterPasswordField(){
-        return cy.xpath("//input[@id='password']");
+    getEmployerRegisterPasswordField() {
+        return cy.get("[data-cy=employer-password-field]");
     }
-    employerRegisterConfirmPasswordField(){
-        return cy.xpath("//input[@id='confirmPassword']")
+    getEmployerRegisterConfirmPasswordField() {
+        return cy.get("[data-cy=employer-confirm-password-field]");
     }
-    employerRegisterSingupButton(){
-        return cy.xpath("//button[@type='submit']");
-    }
-
-    // Actions
-    enterFirstNameField(firstName) {
-        if (firstName) {
-            this.typeInElement(this.FirstNameField(), firstName);
-        }
-    }
-    enterLastNameField(lastName) {
-        if (lastName) {
-            this.typeInElement(this.LastNameField(), lastName);
-        }
-    }
-    enterEmailField(email) {
-        if (email) {
-            this.typeInElement(this.EmailField(), email);
-        }
-    }
-    enterPasswordField(password) {
-        if (password) {
-            this.typeInElement(this.PasswordField(), password);
-        }
-    }
-    enterConfirmPasswordField(confirmPassword) {
-        if (confirmPassword) {
-            this.typeInElement(this.ConfirmPasswordField(), confirmPassword);
-        }
-    }
-    enterPhoneNumberField(phoneNumber) {
-        if (phoneNumber) {
-            this.typeInElement(this.PhoneNumberField(), phoneNumber);
-        }
-    }
-    enterNameFieldOfEmployer(name){
-        if(name){
-            this.typeInElement(this.employerRegisterNameField(), name);
-        }
+    getEmployerRegisterSignupButton() {
+        return cy.get("[data-cy=employer-signup-button]");
     }
 
-    enterEmailFieldOfEmployer(email){
-        if(email){
-            this.typeInElement(this.employerRegisterEmailField(), email);
-        }
+    enterFirstName(firstName) {
+        if (firstName) this.typeInElement(this.getFirstNameField(), firstName);
     }
-
-    enterPasswordFieldOfEmployer(password){
-        if(password){
-            this.typeInElement(this.employerRegisterPasswordField(), password);
-        }
+    enterLastName(lastName) {
+        if (lastName) this.typeInElement(this.getLastNameField(), lastName);
     }
-
-    enterConfirmPasswordFieldOfEmployer(confirmPassword){
-        if(confirmPassword){
-            this.typeInElement(this.employerRegisterConfirmPasswordField(), confirmPassword);
-        }
+    enterEmail(email) {
+        if (email) this.typeInElement(this.getEmailField(), email);
+    }
+    enterPassword(password) {
+        if (password) this.typeInElement(this.getPasswordField(), password);
+    }
+    enterConfirmPassword(confirmPassword) {
+        if (confirmPassword) this.typeInElement(this.getConfirmPasswordField(), confirmPassword);
+    }
+    enterPhoneNumber(phoneNumber) {
+        if (phoneNumber) this.typeInElement(this.getPhoneNumberField(), phoneNumber);
+    }
+    enterEmployerName(name) {
+        if (name) this.typeInElement(this.getEmployerRegisterNameField(), name);
+    }
+    enterEmployerEmail(email) {
+        if (email) this.typeInElement(this.getEmployerRegisterEmailField(), email);
+    }
+    enterEmployerPassword(password) {
+        if (password) this.typeInElement(this.getEmployerRegisterPasswordField(), password);
+    }
+    enterEmployerConfirmPassword(confirmPassword) {
+        if (confirmPassword) this.typeInElement(this.getEmployerRegisterConfirmPasswordField(), confirmPassword);
     }
 
     clickFirstNextButton() {
-        this.clickElement(this.FirstNextButton());
+        this.clickElement(this.getFirstNextButton());
     }
     clickSecondNextButton() {
-        this.clickElement(this.SecondNextButton());
+        this.clickElement(this.getSecondNextButton());
     }
     clickSignupButton() {
-        this.clickElement(this.SignupButton());
+        this.clickElement(this.getSignupButton());
     }
-    clickEmployerSignupButton(){
-        this.clickElement(this.employerRegisterSingupButton());
+    clickEmployerSignupButton() {
+        this.clickElement(this.getEmployerRegisterSignupButton());
     }
 
-    navigate(){
-        cy.visit('/');
+    navigate() {
+        cy.visit("/");
         this.navigateToJobSeeker();
-        this.clickElement(this.registerLinkHomePage());
+        this.clickElement(this.getRegisterLinkHomePage());
     }
 
-    EmployerNavigate(){
+    employerNavigate() {
         cy.visit("/");
         this.navigateToEmployer();
-        this.clickElement(this.employerSignupLink());
+        this.clickElement(this.getEmployerSignupLink());
     }
 
     register(firstName, lastName, email, password, confirmPassword, phoneNumber) {
-        this.enterFirstNameField(firstName);
-        this.enterLastNameField(lastName);
+        this.enterFirstName(firstName);
+        this.enterLastName(lastName);
         this.clickFirstNextButton();
-        this.enterEmailField(email);
-        this.enterPasswordField(password);
-        this.enterConfirmPasswordField(confirmPassword);
+        this.enterEmail(email);
+        this.enterPassword(password);
+        this.enterConfirmPassword(confirmPassword);
         this.clickSecondNextButton();
-        this.enterPhoneNumberField(phoneNumber);
+        this.enterPhoneNumber(phoneNumber);
         this.clickSignupButton();
     }
 
-    registerFirstPage(firstName, lastName){
-        this.enterFirstNameField(firstName);
-        this.enterLastNameField(lastName);
+    fillFirstRegistrationPage(firstName, lastName) {
+        this.enterFirstName(firstName);
+        this.enterLastName(lastName);
         this.clickFirstNextButton();
     }
 
-    registerSecondPage(firstName, lastName, email, password, confirmPassword){
-        this.enterFirstNameField(firstName);
-        this.enterLastNameField(lastName);
-        this.clickFirstNextButton();
-        this.enterEmailField(email);
-        this.enterPasswordField(password);
-        this.enterConfirmPasswordField(confirmPassword);
+    fillSecondRegistrationPage(firstName, lastName, email, password, confirmPassword) {
+        this.fillFirstRegistrationPage(firstName, lastName);
+        this.enterEmail(email);
+        this.enterPassword(password);
+        this.enterConfirmPassword(confirmPassword);
         this.clickSecondNextButton();
     }
 
-    employerRegister(name, email, password, confirmPassword){
-        this.enterNameFieldOfEmployer(name);
-        this.enterEmailFieldOfEmployer(email);
-        this.enterPasswordFieldOfEmployer(password);
-        this.enterConfirmPasswordFieldOfEmployer(confirmPassword);
+    employerRegister(name, email, password, confirmPassword) {
+        this.enterEmployerName(name);
+        this.enterEmployerEmail(email);
+        this.enterEmployerPassword(password);
+        this.enterEmployerConfirmPassword(confirmPassword);
         this.clickEmployerSignupButton();
     }
 }

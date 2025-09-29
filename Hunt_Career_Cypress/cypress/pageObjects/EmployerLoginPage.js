@@ -1,6 +1,6 @@
 import { BasePage } from "./BasePage";
 
-export default class LoginPage extends BasePage {
+export default class EmployerLoginPage extends BasePage {
     getEmailField() {
         return cy.get("[data-cy=email-field]");
     }
@@ -11,10 +11,6 @@ export default class LoginPage extends BasePage {
 
     getLoginButton() {
         return cy.get("[data-cy=login-button]");
-    }
-
-    getEmployerLoginButton() {
-        return cy.get("[data-cy=employer-login-button]");
     }
 
     getLoginSuccessMessage() {
@@ -41,10 +37,6 @@ export default class LoginPage extends BasePage {
         return cy.contains("Password is required.");
     }
 
-    getLoginHomeLink() {
-        return cy.contains("Login");
-    }
-
     enterEmail(email) {
         this.typeInElement(this.getEmailField(), email);
     }
@@ -57,30 +49,14 @@ export default class LoginPage extends BasePage {
         this.clickElement(this.getLoginButton());
     }
 
-    clickEmployerLoginButton() {
-        this.clickElement(this.getEmployerLoginButton());
-    }
-
     navigate() {
         cy.visit("/");
-        this.navigateToJobSeeker();
-        this.clickElement(this.getLoginHomeLink());
+        this.navigateToEmployer();
     }
 
     login(email, password) {
         this.enterEmail(email);
         this.enterPassword(password);
         this.clickLoginButton();
-    }
-
-    employerNavigate() {
-        cy.visit("/");
-        this.navigateToEmployer();
-    }
-
-    employerLogin(email, password) {
-        this.enterEmail(email);
-        this.enterPassword(password);
-        this.clickEmployerLoginButton();
     }
 }

@@ -1,65 +1,53 @@
-import LoginPage from "../pageObjects/LoginPage";
-import eloginData from "../fixtures/employerLoginData.json"
+import EmployerLoginPage from "../pageObjects/EmployerLoginPage";
+import employerLoginData from "../fixtures/employerLoginData.json";
 
-describe("Employer Login Tests", () => {
-  let eloginPage;
+describe("Employer Login", () => {
+    let employerLoginPage;
 
-  beforeEach(() => {
-    eloginPage = new LoginPage();
-    eloginPage.employerNavigate();
-  });
-
-  //Valid Users
-  eloginData.validUser.forEach((user) => {
-    it(`Should login successfully with valid user: ${user.description}`, () => {
-      eloginPage.Employerlogin(user.email, user.password);
-      eloginPage.waitUntilVisible(eloginPage.checkLoginSuccessMessage());
-      eloginPage.waitUntilNotVisible(eloginPage.checkLoginSuccessMessage());
+    beforeEach(() => {
+        employerLoginPage = new EmployerLoginPage();
+        employerLoginPage.navigate();
     });
-  });
 
-  //Invalid Users (not registered)
-  eloginData.invalidUser.forEach((user) => {
-    it(`Should show error for invalid user: ${user.description}`, () => {
-      eloginPage.Employerlogin(user.email, user.password);
-      eloginPage.waitUntilVisible(eloginPage.checkInvalidEmailAndPasswordMessage());
-      eloginPage.waitUntilNotVisible(eloginPage.checkInvalidEmailAndPasswordMessage());
+    employerLoginData.validUsers.forEach((user) => {
+        it(`should log in successfully with ${user.description}`, () => {
+            employerLoginPage.login(user.email, user.password);
+            employerLoginPage.getLoginSuccessMessage().should("be.visible");
+        });
     });
-  });
 
-  //Invalid Emails
-  eloginData.invalidEmails.forEach((user) => {
-    it(`Should show error for invalid email: ${user.description}`, () => {
-      eloginPage.Employerlogin(user.email, user.password);
-      eloginPage.waitUntilVisible(eloginPage.checkPleaseEnterValidEmailAddressMessage());
-      eloginPage.waitUntilNotVisible(eloginPage.checkPleaseEnterValidEmailAddressMessage());
+    employerLoginData.invalidUsers.forEach((user) => {
+        it(`should show an error for ${user.description}`, () => {
+            employerLoginPage.login(user.email, user.password);
+            employerLoginPage.getInvalidEmailOrPasswordMessage().should("be.visible");
+        });
     });
-  });
 
-  //Invalid Passwords
-  eloginData.invalidPassowrd.forEach((user) => {
-    it(`Should show error for invalid password: ${user.description}`, () => {
-      eloginPage.Employerlogin(user.email, user.password);
-      eloginPage.waitUntilVisible(eloginPage.checkPasswordMustHaveRequiredNumberCharactersMessage());
-      eloginPage.waitUntilNotVisible(eloginPage.checkPasswordMustHaveRequiredNumberCharactersMessage());
+    employerLoginData.invalidEmails.forEach((user) => {
+        it(`should show an error for an invalid email: ${user.description}`, () => {
+            employerLoginPage.login(user.email, user.password);
+            employerLoginPage.getInvalidEmailAddressMessage().should("be.visible");
+        });
     });
-  });
 
-  //Blank Email
-  eloginData.NoEmail.forEach((user) => {
-    it(`Should show error when email is blank: ${user.description}`, () => {
-      eloginPage.Employerlogin(user.email, user.password);
-      eloginPage.waitUntilVisible(eloginPage.checkEmailIsRequiredMessage());
-      eloginPage.waitUntilNotVisible(eloginPage.checkEmailIsRequiredMessage());
+    employerLoginData.invalidPasswords.forEach((user) => {
+        it(`should show an error for ${user.description}`, () => {
+            employerLoginPage.login(user.email, user.password);
+            employerLoginPage.getPasswordLengthErrorMessage().should("be.visible");
+        });
     });
-  });
 
-  //Blank Password
-  eloginData.NoPassword.forEach((user) => {
-    it(`Should show error when password is blank: ${user.description}`, () => {
-      eloginPage.Employerlogin(user.email, user.password);
-      eloginPage.waitUntilVisible(eloginPage.checkPasswordIsRequiredMessage());
-      eloginPage.waitUntilNotVisible(eloginPage.checkPasswordIsRequiredMessage());
+    employerLoginData.blankEmail.forEach((user) => {
+        it("should show an error when the email is blank", () => {
+            employerLoginPage.login(user.email, user.password);
+            employerLoginPage.getEmptyEmailMessage().should("be.visible");
+        });
     });
-  });
+
+    employerLoginData.blankPassword.forEach((user) => {
+        it("should show an error when the password is blank", () => {
+            employerLoginPage.login(user.email, user.password);
+            employerLoginPage.getEmptyPasswordMessage().should("be.visible");
+        });
+    });
 });
