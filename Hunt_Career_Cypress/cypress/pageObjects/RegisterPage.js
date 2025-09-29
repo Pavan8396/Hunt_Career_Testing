@@ -1,5 +1,4 @@
 import { BasePage } from "./BasePage";
-import LoginPage from "./LoginPage";
 
 export default class RegisterPage extends BasePage {
     getFirstNameField() {

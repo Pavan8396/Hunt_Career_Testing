@@ -102,5 +102,5 @@ export function generateEmail(type) {
 }
 
 export function generateRandomPhoneNumber() {
-    return faker.phone.number('##########');
+    return faker.string.numeric(10);
 }
