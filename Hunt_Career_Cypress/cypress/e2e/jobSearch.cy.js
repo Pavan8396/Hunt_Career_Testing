@@ -1,5 +1,5 @@
 import SearchPage from "../pageObjects/SearchPage";
-import { searchData } from "../fixtures/searchData";
+import { searchData } from "../fixtures/searchData.js";
 
 describe("Job Search", () => {
     let searchPage;

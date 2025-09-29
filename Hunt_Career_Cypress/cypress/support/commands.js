@@ -15,6 +15,9 @@
 
 import 'cypress-xpath';
 
+import LoginPage from "../pageObjects/LoginPage";
+import EmployerLoginPage from "../pageObjects/EmployerLoginPage";
+
 Cypress.Commands.add("typeTextSafely", { prevSubject: "element" }, (subject, text) => {
   cy.wrap(subject).should("be.visible").clear().type(text, { parseSpecialCharSequences: false });
 });

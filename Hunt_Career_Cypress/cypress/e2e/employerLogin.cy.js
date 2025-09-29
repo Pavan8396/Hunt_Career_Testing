@@ -1,4 +1,5 @@
 import EmployerLoginPage from "../pageObjects/EmployerLoginPage";
+import SearchPage from "../pageObjects/SearchPage";
 import employerLoginData from "../fixtures/employerLoginData.json";
 
 describe("Employer Login", () => {
@@ -12,7 +13,8 @@ describe("Employer Login", () => {
     employerLoginData.validUsers.forEach((user) => {
         it(`should log in successfully with ${user.description}`, () => {
             employerLoginPage.login(user.email, user.password);
-            employerLoginPage.getLoginSuccessMessage().should("be.visible");
+            const searchPage = new SearchPage();
+            searchPage.getLoginSuccessMessage().should("be.visible");
         });
     });
 
