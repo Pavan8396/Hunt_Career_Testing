@@ -2,47 +2,47 @@ import { BasePage } from "./BasePage";
 
 export default class LoginPage extends BasePage {
     getEmailField() {
-        return cy.get("[data-cy=email-field]");
+        return cy.xpath("//input[@id='email']");
     }
 
     getPasswordField() {
-        return cy.get("[data-cy=password-field]");
+        return cy.xpath("//input[@id='password']");
     }
 
     getLoginButton() {
-        return cy.get("[data-cy=login-button]");
+        return cy.xpath("//button[@aria-label='Login']");
     }
 
     getEmployerLoginButton() {
-        return cy.get("[data-cy=employer-login-button]");
+        return cy.xpath("//button[@type='submit']");
     }
 
     getLoginSuccessMessage() {
-        return cy.contains("Logged in successfully!");
+        return cy.xpath("//div[contains(text(), 'Logged in successfully!')]");
     }
 
     getInvalidEmailOrPasswordMessage() {
-        return cy.contains("Invalid email or password");
+        return cy.xpath("//div[contains(text(), 'Invalid email or password')]");
     }
 
     getInvalidEmailAddressMessage() {
-        return cy.contains("Please enter a valid email address.");
+        return cy.xpath("//div[contains(text(), 'Please enter a valid email address.')]");
     }
 
     getPasswordLengthErrorMessage() {
-        return cy.contains("Password must be at least 8 characters long.");
+        return cy.xpath("//div[contains(text(), 'Password must be at least 8 characters long.')]");
     }
 
     getEmptyEmailMessage() {
-        return cy.contains("Email is required.");
+        return cy.xpath("//div[contains(text(), 'Email is required.')]");
     }
 
     getEmptyPasswordMessage() {
-        return cy.contains("Password is required.");
+        return cy.xpath("//div[contains(text(), 'Password is required.')]");
     }
 
     getLoginHomeLink() {
-        return cy.contains("Login");
+        return cy.xpath("//a[contains(text(), 'Login')]");
     }
 
     enterEmail(email) {

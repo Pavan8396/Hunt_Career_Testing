@@ -2,67 +2,67 @@ import { BasePage } from "./BasePage";
 
 export default class SearchPage extends BasePage {
     getSearchInputField() {
-        return cy.get("[data-cy=search-input]");
+        return cy.xpath("//input[@placeholder='Search jobs by title, company, or keyword...']");
     }
 
     getSearchButton() {
-        return cy.get("[data-cy=search-button]");
+        return cy.xpath("//button[@aria-label='Search']");
     }
 
     getLocationFilterButton() {
-        return cy.get("[data-cy=location-filter-button]");
+        return cy.xpath("//button[@aria-label='Toggle location filter dropdown']");
     }
 
     getLocationSearchInput() {
-        return cy.get("[data-cy=location-search-input]");
+        return cy.xpath("//input[@placeholder='Search location...']");
     }
 
     getLocationOption(location) {
-        return cy.get("[data-cy=location-option]").contains(location);
+        return cy.get('label').contains(location).find('input');
     }
 
     getJobTypeFilterButton() {
-        return cy.get("[data-cy=job-type-filter-button]");
+        return cy.xpath("//button[@aria-label='Toggle job type filter dropdown']");
     }
 
     getJobTypeSearchInput() {
-        return cy.get("[data-cy=job-type-search-input]");
+        return cy.xpath("//input[@placeholder='Search job type...']");
     }
 
     getJobTypeOption(jobType) {
-        return cy.get("[data-cy=job-type-option]").contains(jobType);
+        return cy.get('label').contains(jobType).find('input');
     }
 
     getClearAllFiltersButton() {
-        return cy.get("[data-cy=clear-filters-button]");
+        return cy.xpath("//button[@aria-label='Clear all filters']");
     }
 
     getJobCardTitle(jobCard) {
-        return jobCard.find("[data-cy=job-card-title]");
+        return jobCard.find('h3.text-lg.font-semibold');
     }
 
     getJobCardCompanyLocation(jobCard) {
-        return jobCard.find("[data-cy=job-card-company-location]");
+        return jobCard.find('p.text-gray-600');
     }
 
     getJobCardDescription(jobCard) {
-        return jobCard.find("[data-cy=job-card-description]");
+        return jobCard.find('p.text-sm.text-gray-700.mt-3.line-clamp-3');
     }
 
     getNoJobsFoundMessage() {
-        return cy.contains("No jobs found.");
+        return cy.get('p').contains('No jobs found.');
     }
 
     getSearchTag(searchTerm) {
-        return cy.contains(`🔍 ${searchTerm}`);
+        return cy.xpath(`//span[contains(., "🔍 ${searchTerm}")]`);
     }
 
     getLocationTag(location) {
-        return cy.contains(`📍 ${location}`);
+        return cy.xpath(`//span[contains(., "📍 ${location}")]`);
     }
 
     getJobTypeTag(jobType) {
-        return cy.contains(`🧾 ${jobType}`);
+        return cy.xpath(`//span[contains(., "🧾 ${jobType}")]`);
     }
 
     enterSearchTerm(searchTerm) {

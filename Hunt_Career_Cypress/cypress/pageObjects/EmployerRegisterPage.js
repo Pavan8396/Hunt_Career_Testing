@@ -2,43 +2,43 @@ import { BasePage } from "./BasePage";
 
 export default class EmployerRegisterPage extends BasePage {
     getNameField() {
-        return cy.get("[data-cy=employer-name-field]");
+        return cy.xpath("//input[@id='companyName']");
     }
     getEmailField() {
-        return cy.get("[data-cy=employer-email-field]");
+        return cy.xpath("//input[@id='email']");
     }
     getPasswordField() {
-        return cy.get("[data-cy=employer-password-field]");
+        return cy.xpath("//input[@id='password']");
     }
     getConfirmPasswordField() {
-        return cy.get("[data-cy=employer-confirm-password-field]");
+        return cy.xpath("//input[@id='confirmPassword']");
     }
     getSignupButton() {
-        return cy.get("[data-cy=employer-signup-button]");
+        return cy.xpath("//button[@type='submit']");
     }
     getSuccessCreationMessage() {
-        return cy.contains("Registered successfully! Please login.");
+        return cy.xpath("//div[contains(text(), 'Registered successfully! Please login.')]");
     }
     getDuplicateErrorMessage() {
-        return cy.contains("Employer already exists");
+        return cy.xpath("//div[contains(text(),'Employer already exists')]");
     }
     getNameBlankMessage() {
-        return cy.contains("Company Name is required.");
+        return cy.xpath("//div[contains(text(),'Company Name is required.')]");
     }
     getInvalidEmailAddressMessage() {
-        return cy.contains("Please enter a valid email address.");
+        return cy.xpath("//div[contains(text(), 'Please enter a valid email address.')]");
     }
     getEmailBlankMessage() {
-        return cy.contains("Email is required.");
+        return cy.xpath("//div[contains(text(), 'Email is required.')]");
     }
     getPasswordLengthErrorMessage() {
-        return cy.contains("Password must be at least 8 characters long.");
+        return cy.xpath("//div[contains(text(), 'Password must be at least 8 characters long.')]");
     }
     getPasswordMismatchMessage() {
-        return cy.contains("Passwords do not match.");
+        return cy.xpath("//div[contains(text(), 'Passwords do not match.')]");
     }
     getRegisterLinkHomePage() {
-        return cy.contains("Sign up");
+        return cy.xpath("//a[contains(text(), 'Sign up')]");
     }
 
     enterName(name) {
