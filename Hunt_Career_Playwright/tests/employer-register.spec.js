@@ -28,9 +28,11 @@ test.describe("Employer Registration", () => {
 
     for (const user of employerRegisterData.invalidCases) {
         test(`should show an error for invalid input: ${user.description}`, async ({ page }) => {
-            const employerRegisterPage = new EmployerRegisterPage(page);
-            await employerRegisterPage.register(user.name, user.email, user.password, user.confirmPassword);
-            await expect(employerRegisterPage[user.expectedError]).toBeVisible();
+            // Re-initialize page object inside the test to ensure a clean state for each iteration
+            const erp = new EmployerRegisterPage(page);
+            await erp.navigate();
+            await erp.register(user.name, user.email, user.password, user.confirmPassword);
+            await expect(erp[user.expectedError]).toBeVisible();
         });
     }
 });

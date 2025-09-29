@@ -11,6 +11,7 @@ export class RegisterPage extends BasePage {
     this.phoneNumberField = page.locator("#phoneNumber");
     this.signupButton = page.locator("//button[@aria-label='Sign up']");
 
+    // Locators for messages
     this.successCreationMessage = page.locator("//div[contains(text(), 'Registered successfully! Please login.')]");
     this.duplicateErrorMessage = page.locator("//div[contains(text(),'User already exists')]");
     this.firstNameRequiredMessage = page.locator("//div[contains(text(),'First Name is required.')]");

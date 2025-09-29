@@ -1,42 +1,59 @@
 {
-  "validUser": {
-    "email": "upavan@mailinator.com",
-    "password": "Test@1234"
-  },
-  "invalidUser": {
-    "email": "pavan@mailinator.com",
-    "password": "Test@1234"
-  },
-  "invalidEmail": {
-    "email": "testuser@mailinator",
-    "password": "Test@1234"
-  },
-  "invalidPassowrd": {
-    "email": "upavan@mailinator.com",
-    "password": "Test"
-  },
-  "blankPassword": {
-    "email": "upavan@mailinator.com",
-    "password": " "
-  },
-  "EmailwithoutDomain": {
-    "email": "pavanu@.com",
-    "password": "Test@1234"
-  },
-  "emailWihoutName": {
-    "email": "@mailinator.com",
-    "password": "Test@1234"
-  },
-  "emailhaving2@": {
-    "email": "upavan@@mailinator.com",
-    "password": "Test@1234"
-  },
-  "emailWithDotAfterName": {
-    "email": "upavan.@mailinator.com",
-    "password": "Test@1234"
-  },
-  "emailWithDotInbetweenName": {
-    "email": "u.pavan@mailinator.com",
-    "password": "Test@1234"
-  }
+    "validUser": [
+        {
+            "description": "a valid user",
+            "email": "upavan@mailinator.com",
+            "password": "Test@1234"
+        }
+    ],
+    "invalidUser": [
+        {
+            "description": "an unregistered user",
+            "email": "pavan@mailinator.com",
+            "password": "Test@1234"
+        }
+    ],
+    "invalidEmails": [
+        {
+            "description": "an email without top-level domain",
+            "email": "testuser@mailinator",
+            "password": "Test@1234"
+        },
+        {
+            "description": "an email without a domain",
+            "email": "pavanu@.com",
+            "password": "Test@1234"
+        },
+        {
+            "description": "an email without a username",
+            "email": "@mailinator.com",
+            "password": "Test@1234"
+        },
+        {
+            "description": "an email with two @ symbols",
+            "email": "upavan@@mailinator.com",
+            "password": "Test@1234"
+        }
+    ],
+    "invalidPassword": [
+        {
+            "description": "a password with less than 8 characters",
+            "email": "upavan@mailinator.com",
+            "password": "Test"
+        }
+    ],
+    "blankEmail": [
+        {
+            "description": "a blank email",
+            "email": "",
+            "password": "Test@1234"
+        }
+    ],
+    "blankPassword": [
+        {
+            "description": "a blank password",
+            "email": "upavan@mailinator.com",
+            "password": ""
+        }
+    ]
 }

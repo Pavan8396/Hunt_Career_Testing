@@ -28,9 +28,10 @@ test.describe("User Registration", () => {
 
     for (const user of registerData.invalidCases) {
         test(`should show an error for invalid input: ${user.description}`, async ({ page }) => {
-            const registerPage = new RegisterPage(page);
-            await registerPage[user.testRunner](user.firstName, user.lastName, user.email, user.password, user.confirmPassword, user.phoneNumber);
-            await expect(registerPage[user.expectedError]).toBeVisible();
+            const regPage = new RegisterPage(page);
+            await regPage.navigate();
+            await regPage[user.testRunner](user.firstName, user.lastName, user.email, user.password, user.confirmPassword, user.phoneNumber);
+            await expect(regPage[user.expectedError]).toBeVisible();
         });
     }
 });

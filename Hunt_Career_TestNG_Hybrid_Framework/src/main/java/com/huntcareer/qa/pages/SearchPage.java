@@ -7,40 +7,35 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.Assert;
 
 public class SearchPage {
 	WebDriver driver;
 	WebDriverWait wait;
 
 	@FindBy(xpath = "//input[@placeholder='Search jobs by title, company, or keyword...']")
-	private WebElement searchInputField;
+	private WebElement SearchInputField;
 
 	@FindBy(xpath = "//button[@aria-label='Search']")
-	private WebElement searchButton;
+	private WebElement SearchButton;
 
 	@FindBy(xpath = "//button[@aria-label='Toggle location filter dropdown']")
-	private WebElement locationButton;
+	private WebElement LocationButton;
 
 	@FindBy(xpath = "//input[@placeholder='Search location...']")
-	private WebElement locationSearchInput;
+	private WebElement LocationSearchInput;
 
 	@FindBy(xpath = "//button[@aria-label='Toggle job type filter dropdown']")
-	private WebElement jobTypeButton;
+	private WebElement JobTypeButton;
 
 	@FindBy(xpath = "//input[@placeholder='Search job type...']")
-	private WebElement jobTypeSearchInput;
+	private WebElement JobTypeSearchInput;
 
 	@FindBy(xpath = "//button[@aria-label='Clear all filters']")
-	private WebElement clearAllFiltersButton;
+	private WebElement ClearAllFiltersButton;
 	
 	@FindBy(xpath = "//p[contains(text(),'No jobs found.')]")
 	private WebElement noJobsFoundMessage;
-
-	@FindBy(xpath = "//div[contains(@class, 'animate-in')]//p[contains(text(), 'Logged in successfully')]")
-	public WebElement loginSuccessMessage;
 
 	public SearchPage(WebDriver driver) {
 		this.driver = driver;
@@ -48,53 +43,65 @@ public class SearchPage {
 		PageFactory.initElements(driver, this);
 	}
 	
-	public void search(String keyword) {
-		searchInputField.sendKeys(keyword);
-		searchButton.click();
+	public void enterKeywordIntoSearchInputField(String searchTerm) {
+		SearchInputField.sendKeys(searchTerm);
 	}
 
-	public void search(String keyword, String location, String jobType) {
-		searchInputField.sendKeys(keyword);
-		if (location != null && !location.isEmpty()) {
-			locationButton.click();
-			selectLocationOption(location);
-			locationButton.click();
-		}
-		if (jobType != null && !jobType.isEmpty()) {
-			jobTypeButton.click();
-			selectJobTypeOption(jobType);
-		}
-		searchButton.click();
+	public void clickOnSearch() {
+		SearchButton.click();
+	}
+
+	public void clickLocationButton() {
+		LocationButton.click();
+	}
+
+	public void enterLocationSearchInput(String locationText) {
+		LocationSearchInput.sendKeys(locationText);
 	}
 	
 	public void selectLocationOption(String location) {
 		driver.findElement(By.xpath("//label[contains(., '" + location + "')]/input")).click();
 	}
 	
+	public void clickJobTypeButton() {
+		JobTypeButton.click();
+	}
+
+	public void enterJobTypeSearchInput(String jobTypeText) {
+		JobTypeSearchInput.sendKeys(jobTypeText);
+	}
+
 	public void selectJobTypeOption(String jobType) {
 		driver.findElement(By.xpath("//label[contains(., '" + jobType + "')]/input")).click();
 	}
 
-	public void verifySearchTag(String searchTerm) {
-        WebElement tag = driver.findElement(By.xpath("//span[contains(text(), '" + searchTerm + "')]"));
-		Assert.assertTrue(wait.until(ExpectedConditions.visibilityOf(tag)).isDisplayed());
-    }
-
-    public void verifyLocationTag(String location) {
-		WebElement tag = driver.findElement(By.xpath("//span[contains(text(), '" + location + "')]"));
-		Assert.assertTrue(wait.until(ExpectedConditions.visibilityOf(tag)).isDisplayed());
-    }
-
-    public void verifyJobTypeTag(String jobType) {
-		WebElement tag = driver.findElement(By.xpath("//span[contains(text(), '" + jobType + "')]"));
-		Assert.assertTrue(wait.until(ExpectedConditions.visibilityOf(tag)).isDisplayed());
-    }
-
-	public void verifyNoJobsFoundMessage() {
-		Assert.assertTrue(wait.until(ExpectedConditions.visibilityOf(noJobsFoundMessage)).isDisplayed());
+	public void clickClearFilterOption() {
+		ClearAllFiltersButton.click();
 	}
 
-	public void verifyLoginSuccessMessage() {
-		Assert.assertTrue(wait.until(ExpectedConditions.visibilityOf(loginSuccessMessage)).isDisplayed());
+	public WebElement getJobCardTitle(WebElement jobcard) {
+		return jobcard.findElement(By.cssSelector("h3.text-lg.font-semibold"));
 	}
+
+	public WebElement jobCardCompanyLocation(WebElement jobcard) {
+		return jobcard.findElement(By.cssSelector("p.text-gray-600"));
+	}
+
+	public WebElement jobCardDescription(WebElement jobcard) {
+		return jobcard.findElement(By.cssSelector("p.text-sm.text-gray-700.mt-3.line-clamp-3"));
+	}
+
+	public void getSearchTag(String searchTerm) {
+        driver.findElement(By.xpath("//span[contains(text(), " + searchTerm + ")]")).isDisplayed();
+    }
+
+    public void getLocationTag(String location) {
+        driver.findElement(By.xpath("//span[contains(text(), " + location + ")]")).isDisplayed();
+    }
+
+    public void getJobTypeTag(String jobType) {
+        driver.findElement(By.xpath("//span[contains(text(), " + jobType + ")]")).isDisplayed();
+    }
+
+
 }

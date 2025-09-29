@@ -21,10 +21,10 @@ export class EmployerRegisterPage extends BasePage {
     }
 
     async register(name, email, password, confirmPassword) {
-        await this.typeInElement(this.nameField, name);
-        await this.typeInElement(this.emailField, email);
-        await this.typeInElement(this.passwordField, password);
-        await this.typeInElement(this.confirmPasswordField, confirmPassword);
+        if(name) await this.typeInElement(this.nameField, name);
+        if(email) await this.typeInElement(this.emailField, email);
+        if(password) await this.typeInElement(this.passwordField, password);
+        if(confirmPassword) await this.typeInElement(this.confirmPasswordField, confirmPassword);
         await this.clickElement(this.registerButton);
     }
 }

@@ -4,7 +4,7 @@ export const registerData = {
             description: "a valid user",
             firstName: "Test",
             lastName: "User",
-            email: "testuser@example.com",
+            email: "testuser_new@example.com",
             password: "password123",
             confirmPassword: "password123",
             phoneNumber: "1234567890"
