@@ -1,0 +1,42 @@
+{
+    "validUsers": [
+        {
+            "description": "a valid user",
+            "email": "testemployer@gmail.com",
+            "password": "password"
+        }
+    ],
+    "invalidUsers": [
+        {
+            "description": "an invalid user",
+            "email": "invalidemployer@gmail.com",
+            "password": "wrongpassword"
+        }
+    ],
+    "invalidEmails": [
+        {
+            "description": "an email without @",
+            "email": "testemail.com",
+            "password": "password"
+        }
+    ],
+    "invalidPasswords": [
+        {
+            "description": "a password with less than 8 characters",
+            "email": "testemployer@gmail.com",
+            "password": "pass"
+        }
+    ],
+    "blankEmail": [
+        {
+            "email": "",
+            "password": "password"
+        }
+    ],
+    "blankPassword": [
+        {
+            "email": "testemployer@gmail.com",
+            "password": ""
+        }
+    ]
+}

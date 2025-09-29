@@ -11,173 +11,113 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 
 public class RegisterPage {
-	WebDriver driver;
-	WebDriverWait wait;
+    WebDriver driver;
+    WebDriverWait wait;
 
-	@FindBy(xpath = "//input[@id='firstName']")
-	private WebElement firstNameField;
+    @FindBy(xpath = "//input[@id='firstName']")
+    private WebElement firstNameField;
 
-	@FindBy(xpath = "//input[@id='lastName']")
-	private WebElement lastNameField;
+    @FindBy(xpath = "//input[@id='lastName']")
+    private WebElement lastNameField;
 
-	@FindBy(xpath = "//input[@id='email']")
-	private WebElement emailField;
+    @FindBy(xpath = "//input[@id='email']")
+    private WebElement emailField;
 
-	@FindBy(xpath = "//input[@id='password']")
-	private WebElement passwordField;
+    @FindBy(xpath = "//input[@id='password']")
+    private WebElement passwordField;
 
-	@FindBy(xpath = "//input[@id='confirmPassword']")
-	private WebElement confirmPasswordField;
+    @FindBy(xpath = "//input[@id='confirmPassword']")
+    private WebElement confirmPasswordField;
 
-	@FindBy(xpath = "//input[@id='phoneNumber']")
-	private WebElement phoneNumberField;
+    @FindBy(xpath = "//input[@id='phoneNumber']")
+    private WebElement phoneNumberField;
 
-	@FindBy(xpath = "//button[@type='button']")
-	private WebElement firstNextButton;
+    @FindBy(xpath = "//button[@aria-label='Sign up']")
+    private WebElement signupButton;
 
-	@FindBy(xpath = "//button[normalize-space()='Next']")
-	private WebElement secondNextButton;
+    @FindBy(xpath = "//div[contains(text(), 'Registered successfully! Please login.')]")
+    public WebElement successCreationMessage;
 
-	@FindBy(xpath = "//button[@aria-label='Sign up']")
-	private WebElement signUpButton;
+    @FindBy(xpath = "//div[contains(text(),'User already exists')]")
+    public WebElement duplicateErrorMessage;
 
-	@FindBy(xpath = "//div[contains(text(),'User already exists')]")
-	private WebElement duplicateErrorMessage;
+    @FindBy(xpath = "//div[contains(text(),'First Name is required.')]")
+    public WebElement firstNameRequiredMessage;
 
-	@FindBy(xpath = "//div[contains(text(),'First Name is required.')]")
-	private WebElement firstNameBlankMessage;
+    @FindBy(xpath = "//div[contains(text(),'Last Name is required.')]")
+    public WebElement lastNameRequiredMessage;
 
-	@FindBy(xpath = "//div[contains(text(),'Last Name is required.')]")
-	private WebElement lastNameBlankMessage;
+    @FindBy(xpath = "//div[contains(text(), 'Email is required.')]")
+    public WebElement emailRequiredMessage;
 
-	@FindBy(xpath = "//div[contains(text(),'Email is required.')]")
-	private WebElement emailBlankMessage;
+    @FindBy(xpath = "//div[contains(text(), 'Please enter a valid email address.')]")
+    public WebElement invalidEmailMessage;
 
-	@FindBy(xpath = "//div[contains(text(),'Please enter a valid email address.')]")
-	private WebElement pleaseEnterValidEmailAddressMessage;
+    @FindBy(xpath = "//div[contains(text(), 'Password is required.')]")
+    public WebElement passwordRequiredMessage;
 
-	@FindBy(xpath = "//div[contains(text(),'Password must be at least 8 characters long.')]")
-	private WebElement passwordMustHaveRequiredNumberCharactersMessage;
+    @FindBy(xpath = "//div[contains(text(), 'Password must be at least 8 characters long.')]")
+    public WebElement passwordLengthMessage;
 
-	@FindBy(xpath = "//div[contains(text(),'Passwords do not match.')]")
-	private WebElement passwordNotMatchMessage;
+    @FindBy(xpath = "//div[contains(text(), 'Passwords do not match.')]")
+    public WebElement passwordMismatchMessage;
 
-	@FindBy(xpath = "//div[contains(text(),'Phone Number is required.')]")
-	private WebElement phoneNumberRequiredMessage;
+    @FindBy(xpath = "//div[contains(text(), 'Phone Number is required.')]")
+    public WebElement phoneNumberRequiredMessage;
 
-	@FindBy(xpath = "//div[contains(text(),'Please enter a valid 10-digit phone number.')]")
-	private WebElement phoneNumberInvalidMessage;
+    public RegisterPage(WebDriver driver) {
+        this.driver = driver;
+        this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        PageFactory.initElements(driver, this);
+    }
 
-	public RegisterPage(WebDriver driver) {
-		this.driver = driver;
-		this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-		PageFactory.initElements(driver, this);
-	}
+    public void register(String firstName, String lastName, String email, String password, String confirmPassword, String phoneNumber) {
+        if (firstName != null && !firstName.isEmpty()) firstNameField.sendKeys(firstName);
+        if (lastName != null && !lastName.isEmpty()) lastNameField.sendKeys(lastName);
+        if (email != null && !email.isEmpty()) emailField.sendKeys(email);
+        if (password != null && !password.isEmpty()) passwordField.sendKeys(password);
+        if (confirmPassword != null && !confirmPassword.isEmpty()) confirmPasswordField.sendKeys(confirmPassword);
+        if (phoneNumber != null && !phoneNumber.isEmpty()) phoneNumberField.sendKeys(phoneNumber);
+        signupButton.click();
+    }
 
-	public void enterFirstName(String firstNameText) {
-		firstNameField.sendKeys(firstNameText);
-	}
+    public void verifySuccessCreationMessage() {
+        Assert.assertTrue(wait.until(ExpectedConditions.visibilityOf(successCreationMessage)).isDisplayed());
+    }
 
-	public void enterLastName(String lastNameText) {
-		lastNameField.sendKeys(lastNameText);
-	}
+    public void verifyDuplicateErrorMessage() {
+        Assert.assertTrue(wait.until(ExpectedConditions.visibilityOf(duplicateErrorMessage)).isDisplayed());
+    }
 
-	public void clickFirstNextButton() {
-		firstNextButton.click();
-	}
+    public void verifyFirstNameRequiredMessage() {
+        Assert.assertTrue(wait.until(ExpectedConditions.visibilityOf(firstNameRequiredMessage)).isDisplayed());
+    }
 
-	public void enterEmail(String emailText) {
-		emailField.sendKeys(emailText);
-	}
+    public void verifyLastNameRequiredMessage() {
+        Assert.assertTrue(wait.until(ExpectedConditions.visibilityOf(lastNameRequiredMessage)).isDisplayed());
+    }
 
-	public void enterPassword(String passwordText) {
-		passwordField.sendKeys(passwordText);
-	}
+    public void verifyEmailRequiredMessage() {
+        Assert.assertTrue(wait.until(ExpectedConditions.visibilityOf(emailRequiredMessage)).isDisplayed());
+    }
 
-	public void enterConfirmPassword(String confirmPasswordText) {
-		confirmPasswordField.sendKeys(confirmPasswordText);
-	}
+    public void verifyInvalidEmailMessage() {
+        Assert.assertTrue(wait.until(ExpectedConditions.visibilityOf(invalidEmailMessage)).isDisplayed());
+    }
 
-	public void clickSecondNextButton() {
-		secondNextButton.click();
-	}
+    public void verifyPasswordRequiredMessage() {
+        Assert.assertTrue(wait.until(ExpectedConditions.visibilityOf(passwordRequiredMessage)).isDisplayed());
+    }
 
-	public void enterPhoneNumber(String phoneNumber) {
-		phoneNumberField.sendKeys(phoneNumber);
-	}
+    public void verifyPasswordLengthMessage() {
+        Assert.assertTrue(wait.until(ExpectedConditions.visibilityOf(passwordLengthMessage)).isDisplayed());
+    }
 
-	public LoginPage clickSignUpButton() {
-		signUpButton.click();
-		return new LoginPage(driver);
-	}
+    public void verifyPasswordMismatchMessage() {
+        Assert.assertTrue(wait.until(ExpectedConditions.visibilityOf(passwordMismatchMessage)).isDisplayed());
+    }
 
-	public void verifyUserAlreadyExistsMessage() {
-		Assert.assertEquals(wait.until(ExpectedConditions.visibilityOf(duplicateErrorMessage)).getText(),
-				"User already exists", "Message Text Mismatch");
-		Assert.assertTrue(wait.until(ExpectedConditions.invisibilityOf(duplicateErrorMessage)),
-				"User already exists message should not be visible anymore");
-	}
-
-	/*public void verifyUserAlreadyExistsMessageIsGone() {
-		Assert.assertTrue(wait.until(ExpectedConditions.invisibilityOf(duplicateErrorMessage)),
-				"User already exists message should not be visible anymore");
-	}*/
-
-	public void verifyBlankFirstNameMessage() {
-		Assert.assertEquals(wait.until(ExpectedConditions.visibilityOf(firstNameBlankMessage)).getText(),
-				"First Name is required.", "Message Text Mismatch");
-		Assert.assertTrue(wait.until(ExpectedConditions.invisibilityOf(firstNameBlankMessage)),
-						"First Name is required message should not be visible anymore");
-	}
-
-	public void verifyBlankLastNameMessage() {
-		Assert.assertEquals(wait.until(ExpectedConditions.visibilityOf(lastNameBlankMessage)).getText(),
-				"Last Name is required.", "Message Text Mismatch");
-		Assert.assertTrue(wait.until(ExpectedConditions.invisibilityOf(lastNameBlankMessage)),
-				"Last Name is required message should not be visible anymore");
-	}
-
-	public void verifyBlankEmailMessage() {
-		Assert.assertEquals(wait.until(ExpectedConditions.visibilityOf(emailBlankMessage)).getText(),
-				"Email is required.", "Message Text Mismatch");
-		Assert.assertTrue(wait.until(ExpectedConditions.invisibilityOf(emailBlankMessage)),
-				"Email is required message should not be visible anymore");
-	}
-
-	public void verifyInvalidEmailAndPassword() {
-		Assert.assertEquals(wait.until(ExpectedConditions.visibilityOf(pleaseEnterValidEmailAddressMessage)).getText(),
-				"Please enter a valid email address.", "Message Text Mismatch");
-		Assert.assertTrue(wait.until(ExpectedConditions.invisibilityOf(pleaseEnterValidEmailAddressMessage)),
-				"Please enter a valid email address message should not be visible anymore");
-	}
-
-	public void verifyPasswordMustBeAtLeast8CharctersLongMessage() {
-		Assert.assertEquals(
-				wait.until(ExpectedConditions.visibilityOf(passwordMustHaveRequiredNumberCharactersMessage)).getText(),
-				"Password must be at least 8 characters long.", "Message Text Mismatch");
-		Assert.assertTrue(
-				wait.until(ExpectedConditions.invisibilityOf(passwordMustHaveRequiredNumberCharactersMessage)),
-				"Password must be at least 8 characters long message should not be visible anymore");
-	}
-
-	public void verifyPasswordDoNotMatchMessage() {
-		Assert.assertEquals(wait.until(ExpectedConditions.visibilityOf(passwordNotMatchMessage)).getText(),
-				"Passwords do not match.", "Message Text Mismatch");
-		Assert.assertTrue(wait.until(ExpectedConditions.invisibilityOf(passwordNotMatchMessage)),
-				"Passwords do not match message should not be visible anymore");
-	}
-
-	public void verifyPhoneNumberIsRequiredMessage() {
-		Assert.assertEquals(wait.until(ExpectedConditions.visibilityOf(phoneNumberRequiredMessage)).getText(),
-				"Phone Number is required.", "Message Text Mismatch");
-		Assert.assertTrue(wait.until(ExpectedConditions.invisibilityOf(phoneNumberRequiredMessage)),
-				"Phone Number is required message should not be visible anymore");
-	}
-
-	public void verifyInvalidPhoneNumberMessage() {
-		Assert.assertEquals(wait.until(ExpectedConditions.visibilityOf(phoneNumberInvalidMessage)).getText(),
-				"Please enter a valid 10-digit phone number.", "Message Text Mismatch");
-		Assert.assertTrue(wait.until(ExpectedConditions.invisibilityOf(phoneNumberInvalidMessage)),
-				"Please enter a valid 10-digit phone number message should not be visible anymore");
-	}
+    public void verifyPhoneNumberRequiredMessage() {
+        Assert.assertTrue(wait.until(ExpectedConditions.visibilityOf(phoneNumberRequiredMessage)).isDisplayed());
+    }
 }

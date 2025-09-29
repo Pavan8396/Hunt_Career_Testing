@@ -9,80 +9,31 @@ export class RegisterPage extends BasePage {
     this.passwordField = page.locator("#password");
     this.confirmPasswordField = page.locator("#confirmPassword");
     this.phoneNumberField = page.locator("#phoneNumber");
-    this.firstNextButton = page.locator("//button[@type='button']");
-    this.secondNextButton = page.locator("//button[normalize-space()='Next']");
     this.signupButton = page.locator("//button[@aria-label='Sign up']");
-    this.checkSuccessCreationMessage = page.locator(
-      "//div[contains(text(), 'Registered successfully! Please login.')]",
-    );
-    this.checkDuplicateErrorMessage = page.locator(
-      "//div[contains(text(),'User already exists')]",
-    );
-    this.checkFirstNameBlankMessage = page.locator(
-      "//div[contains(text(),'First Name is required.')]",
-    );
-    this.checkLastNameBlankMessage = page.locator(
-      "//div[contains(text(),'Last Name is required.')]",
-    );
-    this.checkPleaseEnterValidEmailAddressMessage = page.locator(
-      "//div[contains(text(), 'Please enter a valid email address.')]",
-    );
-    this.checkEmailBlankMessage = page.locator(
-      "//div[contains(text(), 'Email is required.')]",
-    );
-    this.checkPasswordMustHaveRequiredNumberCharactersMessage = page.locator(
-      "//div[contains(text(), 'Password must be at least 8 characters long.')]",
-    );
-    this.checkPasswordNotMatchMessage = page.locator(
-      "//div[contains(text(), 'Passwords do not match.')]",
-    );
-    this.checkPhoneNumberRequiredMessage = page.locator(
-      "//div[contains(text(), 'Phone Number is required.')]",
-    );
+
+    this.successCreationMessage = page.locator("//div[contains(text(), 'Registered successfully! Please login.')]");
+    this.duplicateErrorMessage = page.locator("//div[contains(text(),'User already exists')]");
+    this.firstNameRequiredMessage = page.locator("//div[contains(text(),'First Name is required.')]");
+    this.lastNameRequiredMessage = page.locator("//div[contains(text(),'Last Name is required.')]");
+    this.emailRequiredMessage = page.locator("//div[contains(text(), 'Email is required.')]");
+    this.invalidEmailMessage = page.locator("//div[contains(text(), 'Please enter a valid email address.')]");
+    this.passwordRequiredMessage = page.locator("//div[contains(text(), 'Password is required.')]");
+    this.passwordLengthMessage = page.locator("//div[contains(text(), 'Password must be at least 8 characters long.')]");
+    this.passwordMismatchMessage = page.locator("//div[contains(text(), 'Passwords do not match.')]");
+    this.phoneNumberRequiredMessage = page.locator("//div[contains(text(), 'Phone Number is required.')]");
   }
 
   async navigate() {
     await this.page.goto("/signup");
   }
 
-  async register(
-    firstName,
-    lastName,
-    email,
-    password,
-    confirmPassword,
-    phoneNumber,
-  ) {
-    await this.typeInElement(this.firstNameField, firstName);
-    await this.typeInElement(this.lastNameField, lastName);
-    await this.clickElement(this.firstNextButton);
-    await this.typeInElement(this.emailField, email);
-    await this.typeInElement(this.passwordField, password);
-    await this.typeInElement(this.confirmPasswordField, confirmPassword);
-    await this.clickElement(this.secondNextButton);
-    await this.typeInElement(this.phoneNumberField, phoneNumber);
+  async register(firstName, lastName, email, password, confirmPassword, phoneNumber) {
+    if (firstName) await this.typeInElement(this.firstNameField, firstName);
+    if (lastName) await this.typeInElement(this.lastNameField, lastName);
+    if (email) await this.typeInElement(this.emailField, email);
+    if (password) await this.typeInElement(this.passwordField, password);
+    if (confirmPassword) await this.typeInElement(this.confirmPasswordField, confirmPassword);
+    if (phoneNumber) await this.typeInElement(this.phoneNumberField, phoneNumber);
     await this.clickElement(this.signupButton);
   }
-  async registerFirstPage(firstName, lastName) {
-    await this.typeInElement(this.firstNameField, firstName);
-    await this.typeInElement(this.lastNameField, lastName);
-    await this.clickElement(this.firstNextButton);
-  }
-
-  async registerSecondPage(
-    firstName,
-    lastName,
-    email,
-    password,
-    confirmPassword,
-  ) {
-    await this.typeInElement(this.firstNameField, firstName);
-    await this.typeInElement(this.lastNameField, lastName);
-    await this.clickElement(this.firstNextButton);
-    await this.typeInElement(this.emailField, email);
-    await this.typeInElement(this.passwordField, password);
-    await this.typeInElement(this.confirmPasswordField, confirmPassword);
-    await this.clickElement(this.secondNextButton);
-  }
-
 }
