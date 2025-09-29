@@ -1,34 +1,31 @@
-import RegisterPage from "../pageObjects/RegisterPage";
-import { registerData } from "../fixtures/employerRegisterData"
+import EmployerRegisterPage from "../pageObjects/EmployerRegisterPage";
+import { employerRegisterData } from "../fixtures/employerRegisterData";
 
-describe("Employer Login Tests", () => {
-  let eregisterPage;
+describe("Employer Registration", () => {
+    let employerRegisterPage;
 
-  beforeEach(() => {
-    eregisterPage = new RegisterPage();
-    eregisterPage.EmployerNavigate();
-  });
-
-  //Valid Users
-  registerData.validUser.forEach((user) => {
-    it(`Should register successfully with valid user: ${user.description}`, () => {
-      eregisterPage.employerRegister(user.name, user.email, user.password, user.confirmPassword);
-      eregisterPage.waitUntilVisible(eregisterPage.checkSuccessCreationMessage());
-      eregisterPage.waitUntilNotVisible(eregisterPage.checkSuccessCreationMessage());
+    beforeEach(() => {
+        employerRegisterPage = new EmployerRegisterPage();
+        employerRegisterPage.navigate();
     });
-  });
 
-  it("TC-2-Enter with duplicate credentials", () =>{
-          eregisterPage.employerRegister(registerData.duplicateUser.name, registerData.duplicateUser.email, registerData.duplicateUser.password, registerData.duplicateUser.confirmPassword);
-          eregisterPage.waitUntilVisible(eregisterPage.checkDuplicateErrorMessageForEmployer());
-          eregisterPage.waitUntilNotVisible(eregisterPage.checkDuplicateErrorMessageForEmployer());
-      })
+    employerRegisterData.validUsers.forEach((user) => {
+        it(`should register successfully with ${user.description}`, () => {
+            employerRegisterPage.register(user.name, user.email, user.password, user.confirmPassword);
+            employerRegisterPage.getSuccessCreationMessage().should("be.visible");
+        });
+    });
 
-  registerData.invalidCases.forEach((user)=>{
-    it(`Should show error for invalid: ${user.description}`, () => {
-        eregisterPage.employerRegister(user.name, user.email, user.password, user.confirmPassword)
-        eregisterPage.waitUntilVisible(eregisterPage[user.expectedError]());
-        eregisterPage.waitUntilNotVisible(eregisterPage[user.expectedError]());  
-        }) 
-      })
-  });
+    it("should show an error for duplicate credentials", () => {
+        const user = employerRegisterData.duplicateUser;
+        employerRegisterPage.register(user.name, user.email, user.password, user.confirmPassword);
+        employerRegisterPage.getDuplicateErrorMessage().should("be.visible");
+    });
+
+    employerRegisterData.invalidCases.forEach((user) => {
+        it(`should show an error for invalid input: ${user.description}`, () => {
+            employerRegisterPage.register(user.name, user.email, user.password, user.confirmPassword);
+            employerRegisterPage[user.expectedError]().should("be.visible");
+        });
+    });
+});
