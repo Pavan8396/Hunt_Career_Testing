@@ -1,49 +1,50 @@
+// Function to print a standardized banner
+def printBanner(message) {
+    echo '----------------------------------------'
+    echo "    ${message}"
+    echo '----------------------------------------'
+}
+
 pipeline {
     agent any
 
     stages {
-        stage('Run Cypress Tests') {
+        stage('Triggering Downstream Pipelines') {
             steps {
-                echo '----------------------------------------'
-                echo '        TRIGGERING CYPRESS PIPELINE'
-                echo '----------------------------------------'
-                build job: 'huntcareer-ui-tests-cypress', wait: true
-            }
-        }
+                script {
+                    // Define the downstream jobs
+                    def jobs = [
+                        'Cypress': 'huntcareer-ui-tests-cypress',
+                        'Playwright': 'huntcareer-ui-tests-playwright',
+                        'TestNG': 'huntcareer-ui-tests-selenium'
+                    ]
 
-        stage('Run Playwright Tests') {
-            steps {
-                echo '----------------------------------------'
-                echo '      TRIGGERING PLAYWRIGHT PIPELINE'
-                echo '----------------------------------------'
-                build job: 'huntcareer-ui-tests-playwright', wait: true
-            }
-        }
-
-        stage('Run TestNG Tests') {
-            steps {
-                echo '----------------------------------------'
-                echo '         TRIGGERING TESTNG PIPELINE'
-                echo '----------------------------------------'
-                build job: 'huntcareer-ui-tests-selenium', wait: true
+                    // Trigger jobs in parallel
+                    parallel jobs.collectEntries { jobName, jobPath ->
+                        ["${jobName} Tests": {
+                            stage("Run ${jobName} Tests") {
+                                printBanner("TRIGGERING ${jobName.toUpperCase()} PIPELINE")
+                                build job: jobPath, wait: true
+                            }
+                        }]
+                    }
+                }
             }
         }
     }
 
     post {
         always {
-            echo '----------------------------------------'
-            echo '          MASTER PIPELINE FINISHED'
-            echo '----------------------------------------'
+            printBanner('MASTER PIPELINE FINISHED')
         }
         success {
-            echo 'All downstream pipelines executed successfully.'
+            echo '✅ All downstream pipelines executed successfully.'
         }
         failure {
-            echo 'One of the downstream pipelines failed.'
+            echo '❌ One or more downstream pipelines failed.'
         }
         unstable {
-            echo 'One of the downstream pipelines is unstable.'
+            echo '⚠️ One or more downstream pipelines are unstable.'
         }
     }
 }
