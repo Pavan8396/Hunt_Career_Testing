@@ -1,16 +1,22 @@
 export const searchData = {
     validSearch: {
-        searchTerm: "Developer"
+        searchTerm: "Developer",
+        location: null,
+        jobType: null,
     },
     invalidSearch: {
-        searchTerm: "xyz123"
+        searchTerm: "xyz123",
+        location: null,
+        jobType: null,
     },
     specialCharSearch: {
-        searchTerm: "AI\\"
+        searchTerm: "AI\\",
+        location: null,
+        jobType: null,
     },
     searchWithFilters: {
         searchTerm: "Developer",
         location: "Bengaluru, Karnataka, India",
         jobType: "Full-Time",
-    }
+    },
 };
