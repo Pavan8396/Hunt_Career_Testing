@@ -5,7 +5,7 @@ export const searchData = {
         jobType: null,
     },
     invalidSearch: {
-        searchTerm: "xyz123",
+        searchTerm: "xyz123938kfshkd",
         location: null,
         jobType: null,
     },

@@ -25,8 +25,6 @@ test.describe("User Registration", () => {
   });
   for (const user of registerData.invalidCases) {
     test(`should show an error for invalid input: ${user.description}`, async () => {
-      //const regPage = new RegisterPage(page);
-      //await regPage.navigate();
       await registerPage[user.testRunner](user.firstName, user.lastName, user.email, user.password, user.confirmPassword, user.phoneNumber);
       await expect(registerPage[user.expectedError]).toBeVisible();
     });

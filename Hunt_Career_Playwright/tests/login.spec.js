@@ -3,15 +3,6 @@ import loginData from "../data/loginData.json";
 import { LoginPage } from "../pages/LoginPage.js";
 import { SearchPage } from "../pages/SearchPage.js";
 
-// const test = baseTest.extend({
-//   loginPage: async ({ page }, use) => {
-//     await use(new LoginPage(page));
-//   },
-//   homePage: async ({ page }, use) => {
-//     await use(new HomePage(page));
-//   },
-// });
-
 test.describe("Job Seeker Login", () => {
   let loginPage;
   let searchPage;
@@ -24,7 +15,7 @@ test.describe("Job Seeker Login", () => {
   for (const user of loginData.validUser) {
     test(`should log in successfully with ${user.description}`, async () => {
       await loginPage.login(user.email, user.password);
-      await expect(searchPage.getLoginSuccessMessage).toBeVisible();
+      await expect(searchPage.loginSuccessMessage).toBeVisible();
     })
   }
   for (const user of loginData.invalidUser) {

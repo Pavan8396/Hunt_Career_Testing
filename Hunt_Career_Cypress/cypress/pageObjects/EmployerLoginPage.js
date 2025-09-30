@@ -1,5 +1,4 @@
 import { BasePage } from "./BasePage";
-import SearchPage from "./SearchPage";
 
 export default class EmployerLoginPage extends BasePage {
     getEmailField() {
