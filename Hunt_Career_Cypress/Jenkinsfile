@@ -32,8 +32,18 @@ pipeline {
                     echo '----------------------------------------'
                     echo '      INSTALLING NPM DEPENDENCIES'
                     echo '----------------------------------------'
-                    // npm ci is faster and more reliable for CI than npm install
                     bat 'npm ci'
+                }
+            }
+        }
+
+        stage('Verify Cypress Installation') {
+            steps {
+                dir('Hunt_Career_Cypress') {
+                    echo '----------------------------------------'
+                    echo '        VERIFYING CYPRESS BINARY'
+                    echo '----------------------------------------'
+                    bat 'npx cypress install'
                 }
             }
         }
@@ -46,7 +56,8 @@ pipeline {
                     echo '----------------------------------------'
                     script {
                         try {
-                            bat 'npm run test:run:report'
+                            // Headless mode for CI (default: Electron, you can add --browser chrome)
+                            bat 'npx cypress run --headless --reporter mochawesome'
                         } catch (err) {
                             echo "⚠️ Cypress tests failed: ${err}"
                             currentBuild.result = 'FAILURE'
@@ -78,7 +89,7 @@ pipeline {
         }
 
         failure {
-            mail to: 'pavanumashankar8@gmail.com',
+            mail to: 'qa-team@example.com',
                  subject: "❌ Cypress Pipeline Failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
                  body: "Please check Jenkins for details: ${env.BUILD_URL}"
         }
