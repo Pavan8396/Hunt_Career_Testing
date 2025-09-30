@@ -5,12 +5,24 @@ pipeline {
         nodejs 'NodeJS'
     }
 
+    options {
+        timestamps()
+        ansiColor('xterm')
+        timeout(time: 30, unit: 'MINUTES')
+    }
+
+    parameters {
+        string(name: 'BRANCH', defaultValue: 'main', description: 'Git branch to build from')
+        choice(name: 'ENV', choices: ['dev', 'qa', 'staging'], description: 'Target environment')
+    }
+
     stages {
         stage('Checkout') {
             steps {
                 echo '----------------------------------------'
-                echo '        CHECKING OUT SOURCE CODE'
+                echo "   CHECKING OUT SOURCE CODE: ${params.BRANCH}"
                 echo '----------------------------------------'
+                cleanWs()
                 checkout scm
             }
         }
@@ -21,7 +33,8 @@ pipeline {
                     echo '----------------------------------------'
                     echo '      INSTALLING NPM DEPENDENCIES'
                     echo '----------------------------------------'
-                    bat 'npm install'
+                    // Use npm ci for clean + deterministic installs
+                    bat 'npm ci'
                 }
             }
         }
@@ -30,14 +43,15 @@ pipeline {
             steps {
                 dir('Hunt_Career_Cypress') {
                     echo '----------------------------------------'
-                    echo '          RUNNING CYPRESS TESTS'
+                    echo "   RUNNING CYPRESS TESTS ON ${params.ENV}"
                     echo '----------------------------------------'
                     script {
                         try {
                             bat 'npm run test:run:report'
-                        } catch (any) {
-                            currentBuild.result = 'UNSTABLE'
-                            echo "Cypress tests failed."
+                        } catch (err) {
+                            echo "⚠️ Cypress tests failed: ${err}"
+                            currentBuild.result = 'FAILURE'
+                            throw err
                         }
                     }
                 }
@@ -48,11 +62,12 @@ pipeline {
     post {
         always {
             echo '----------------------------------------'
-            echo '        ARCHIVING & PUBLISHING REPORTS'
+            echo '    ARCHIVING & PUBLISHING REPORTS'
             echo '----------------------------------------'
-            archiveArtifacts artifacts: 'Hunt_Career_Cypress/mochawesome-report/mochawesome.html', allowEmptyArchive: true
+            archiveArtifacts artifacts: 'Hunt_Career_Cypress/mochawesome-report/**', allowEmptyArchive: true
             archiveArtifacts artifacts: 'Hunt_Career_Cypress/cypress/screenshots/**/*.png', allowEmptyArchive: true
             archiveArtifacts artifacts: 'Hunt_Career_Cypress/cypress/videos/**/*.mp4', allowEmptyArchive: true
+
             publishHTML(target: [
                 allowMissing: true,
                 alwaysLinkToLastBuild: true,
@@ -61,6 +76,12 @@ pipeline {
                 reportFiles: 'mochawesome.html',
                 reportName: 'Cypress Test Report'
             ])
+        }
+
+        failure {
+            mail to: 'pavanumashankar8@gmail.com',
+                 subject: "❌ Cypress Pipeline Failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                 body: "Please check Jenkins for details: ${env.BUILD_URL}"
         }
     }
 }
