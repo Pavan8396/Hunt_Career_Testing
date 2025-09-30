@@ -1,5 +1,5 @@
 import { expect, test as baseTest } from "@playwright/test";
-import searchData from "../data/searchData.json";
+import { searchData } from "../data/searchData.js";
 import loginData from "../data/loginData.json";
 import { SearchPage } from "../pages/SearchPage.js";
 import { loginAsValidUser } from "../utils/loginHelper.js";
@@ -28,55 +28,45 @@ const test = baseTest.extend({
 
 test.describe("Search Tests", () => {
   test.beforeEach(async ({ searchPage }) => {
-    await searchPage.navigate();
+    await searchPage.navigateTo();
   });
 
-  test("STC-1: Search with a valid keyword", async ({ searchPage }) => {
-    const searchTerm = searchData.validSearch.searchTerm;
+  test("should return results for a valid keyword search", async ({
+    searchPage,
+  }) => {
+    const { searchTerm } = searchData.validSearch;
     await searchPage.search(searchTerm);
     await expect(searchPage.searchTag(searchTerm)).toBeVisible();
   });
 
-  test("STC-2-Search with a invalid keyword", async ({ searchPage }) => {
-    const searchTerm = searchData.invalidSearch.searchTerm;
+  test("should show a 'no jobs found' message for an invalid keyword", async ({
+    searchPage,
+  }) => {
+    const { searchTerm } = searchData.invalidSearch;
     await searchPage.search(searchTerm);
     await expect(searchPage.searchTag(searchTerm)).toBeVisible();
     await expect(searchPage.noJobsFoundMessage).toBeVisible();
   });
 
-  test("STC-3: Search with a special character", async ({ searchPage }) => {
-    const searchTerm = searchData.specialCharSearch.searchTerm;
+  test("should show a 'no jobs found' message for a search with special characters", async ({
+    searchPage,
+  }) => {
+    const { searchTerm } = searchData.specialCharSearch;
     await searchPage.search(searchTerm);
     await expect(searchPage.searchTag(searchTerm)).toBeVisible();
   });
 
-  test("STC-4: Search with filter", async ({ searchPage }) => {
-    const searchTerm = searchData.searchWithFilters.searchTerm;
-    await searchPage.search(searchTerm);
+  test("should display correct tags when searching with location and job type filters", async ({
+    searchPage,
+  }) => {
+    const { searchTerm, location, jobType } = searchData.searchWithFilters;
+    await searchPage.search(searchTerm, location, jobType);
     await expect(searchPage.searchTag(searchTerm)).toBeVisible();
-    await searchPage.locationButton.click();
-    await searchPage.locationSearchInput.fill(
-      searchData.searchWithFilters.location,
-    );
-    await searchPage
-      .locationOption(searchData.searchWithFilters.location)
-      .click();
-    await expect(
-      searchPage.locationTag(searchData.searchWithFilters.location),
-    ).toBeVisible();
-    await searchPage.jobTypeButton.click();
-    await searchPage.jobTypeSearchInput.fill(
-      searchData.searchWithFilters.jobType,
-    );
-    await searchPage
-      .jobTypeOption(searchData.searchWithFilters.jobType)
-      .click();
-    await expect(
-      searchPage.jobTypeTag(searchData.searchWithFilters.jobType),
-    ).toBeVisible();
+    await expect(searchPage.locationTag(location)).toBeVisible();
+    await expect(searchPage.jobTypeTag(jobType)).toBeVisible();
   });
 
-  test("STC-5-Login and Search and click on view discription page", async ({
+  test("should allow a logged-in user to view job details from search results", async ({
     searchPage,
     loginPage,
     homePage,
@@ -88,7 +78,7 @@ test.describe("Search Tests", () => {
     await expect(viewDetailsPage.ApplyButton).toBeVisible();
   });
 
-  test("STC-6-Login and Save the job and view the saved job in saved jobs page", async ({
+  test("should allow a logged-in user to save a job and see it in the saved jobs page", async ({
     page,
     loginPage,
     homePage,
@@ -103,7 +93,6 @@ test.describe("Search Tests", () => {
     await homePage.saveConfirmationPopup.click();
     await homePage.waitUntilVisible(homePage.savedMessage(jobTitle));
     await homePage.waitUntilNotVisible(homePage.savedMessage(jobTitle));
-    //await expect(homePage.savedMessage(jobTitle)).toBeVisible();
     await homePage.clickOnSavedJobs.click();
     await expect(savePage.savedJobCard(jobTitle)).toBeVisible();
   });
