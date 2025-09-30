@@ -1,42 +1,46 @@
 {
-  "validUser": {
-    "email": "upavan@mailinator.com",
-    "password": "Test@1234"
-  },
-  "invalidUser": {
-    "email": "pavan@mailinator.com",
-    "password": "Test@1234"
-  },
-  "invalidEmail": {
-    "email": "testuser@mailinator",
-    "password": "Test@1234"
-  },
-  "invalidPassowrd": {
-    "email": "upavan@mailinator.com",
-    "password": "Test"
-  },
-  "blankPassword": {
-    "email": "upavan@mailinator.com",
-    "password": " "
-  },
-  "EmailwithoutDomain": {
-    "email": "pavanu@.com",
-    "password": "Test@1234"
-  },
-  "emailWihoutName": {
-    "email": "@mailinator.com",
-    "password": "Test@1234"
-  },
-  "emailhaving2@": {
-    "email": "upavan@@mailinator.com",
-    "password": "Test@1234"
-  },
-  "emailWithDotAfterName": {
-    "email": "upavan.@mailinator.com",
-    "password": "Test@1234"
-  },
-  "emailWithDotInbetweenName": {
-    "email": "u.pavan@mailinator.com",
-    "password": "Test@1234"
-  }
+  "validUser": [
+    { "description": "a valid user", "email": "upavan@mailinator.com", "password": "Test@1234" },
+    { "description": "an email with a dot in the name", "email": "u.pavan@mailinator.com", "password": "Test@1234" },
+    { "description": "an email with spaces before it", "email": " upavan@mailinator.com", "password": "Test@1234" },
+    { "description": "an email with a space after it", "email": "upavan@mailinator.com ", "password": "Test@1234" }
+  ],
+  "invalidEmails": [
+    { "description": "a plain email", "email": "testuser", "password": "Test@12345" },
+    { "description": "an email with no local part", "email": "@mailinator.com", "password": "Welcome@1234" },
+    { "description": "an email with a local part only", "email": "testuser@", "password": "Test@1234" },
+    { "description": "an email with two @ symbols", "email": "u@pavan@mailinator.com", "password": "Welcome@1234@1234" },
+    { "description": "an email with no top-level domain", "email": "testuser@mailinator", "password": "Welcome@1234" },
+    { "description": "an email tailing with a dot", "email": "upavan@mailinator.", "password": "Welcome@1234" },
+    { "description": "an email with a top-level domain that is too short", "email": "upavan@mailinator.c", "password": "Test@12345" },
+    { "description": "a domain that starts with a hyphen", "email": "upavan@-mailinator.com", "password": "Welcome@1234" },
+    { "description": "a double dot in the domain", "email": "upavan@mailinator..com", "password": "Test@1234" },
+    { "description": "an email with no @ symbol", "email": "upavan#mailinator.com", "password": "Welcome@1234" },
+    { "description": "an email with illegal characters", "email": "upavan<>@mailinator.com", "password": "Test@12346" },
+    { "description": "an email with a dot after the name", "email": "upavan.@mailinator.com", "password": "Welcome@1234" },
+    { "description": "an email with two consecutive dots in the name", "email": "u..pavan@mailinator.com", "password": "Test@1234" },
+    { "description": "an email with a dot at the beginning", "email": ".upavan@mailinator.com", "password": "Welcome@1234" },
+    { "description": "an email with quotation marks", "email": "'upavan@mailinator.com'", "password": "Test@1234" },
+    { "description": "an email with an unclosed quotation mark", "email": "'upavan@mailinator.com", "password": "Welcome@1234" },
+    { "description": "a very long email", "email": "verylonglocalpartthatexceedstheusuallimitstoverifythelimitdoesitexceedornotbyaddingverylongcharcaters@example.com", "password": "Test@1234" },
+    { "description": "a very long domain", "email": "upavan@verylonglocalpartthatexceedstheusuallimitstoverifythelimitdoesitexceedornotbyaddingverylongcharcaters.com", "password": "Test@1234" },
+    { "description": "a very long top-level domain", "email": "upavan@example.verylonglocalpartthatexceedstheusuallimitstoverifythelimitdoesitexceedornotbyaddingverylongcharcaterscom", "password": "Test@1234" },
+    { "description": "a missing second-level domain", "email": "pavanu@com", "password": "Welcome@1234" },
+    { "description": "an email with a comma", "email": "upavan@mailinator,com", "password": "Welcome@1234" },
+    { "description": "an email with two consecutive @ symbols", "email": "upavan@@mailinator.com", "password": "Test@1234" },
+    { "description": "an underscore in the top-level domain", "email": "upavan@mailinator.c_m", "password": "Welcome@1234" },
+    { "description": "an email without a domain", "email": "upavan@.com", "password": "Welcome@1234" }
+  ],
+  "invalidPassword": [
+    { "description": "a password that is too short", "email": "upavan@mailinator.com", "password": "Test" }
+  ],
+  "blankEmail": [
+    { "description": "a blank email", "email": " ", "password": "Test@1234" }
+  ],
+  "blankPassword": [
+    { "description": "a blank password", "email": "upavan@mailinator.com", "password": " " }
+  ],
+  "invalidUser": [
+    { "description": "a user that is not registered", "email": "pavanu@mailinator.com", "password": "Test@1234" }
+  ]
 }

@@ -1,183 +1,396 @@
 import {
-  generateEmail,
-  generateRandomPassword,
-  generateRandomPhoneNumber,
-  getRandomFirstName,
-  getRandomLastName,
+    generateEmail,
+    generateRandomPassword,
+    generateRandomPhoneNumber,
+    getRandomFirstName,
+    getRandomLastName,
 } from "../utils/utils";
 
+const createValidUser = (description, emailType) => {
+    const password = generateRandomPassword();
+    return {
+        description,
+        firstName: getRandomFirstName(),
+        lastName: getRandomLastName(),
+        email: generateEmail(emailType),
+        password,
+        confirmPassword: password,
+        phoneNumber: generateRandomPhoneNumber(),
+        expectedSuccess: "getSuccessCreationMessage",
+    };
+};
+
 export const registerData = {
-  validUser: (() => {
-    const password = generateRandomPassword();
-    return {
-      firstName: getRandomFirstName(),
-      lastName: getRandomLastName(),
-      email: generateEmail("normal"),
-      password: password,
-      confirmPassword: password,
-      phoneNumber: generateRandomPhoneNumber(),
-    };
-  })(),
+    validUsers: [
+        createValidUser("a valid user", "normal"),
+        createValidUser("an email with a dot in the name", "dotBetweenName"),
+        createValidUser("an email with a space before the name", "spaceBeforeName"),
+        createValidUser("an email with a space after the name", "spaceAfterName"),
+    ],
 
-  duplicateUser: {
-    firstName: "Pavan",
-    lastName: "U",
-    email: "upavan@mailinator.com",
-    password: "Test@1234",
-    confirmPassword: "Test@1234",
-    phoneNumber: "1234567890",
-  },
+    duplicateUser: {
+        description: "a duplicate user",
+        firstName: "Pavan",
+        lastName: "U",
+        email: "upavan@mailinator.com",
+        password: "Test@1234",
+        confirmPassword: "Test@1234",
+        phoneNumber: "1234567890",
+        expectedError: "getDuplicateErrorMessage"
+    },
 
-  noFirstName: (() => {
-    const password = generateRandomPassword();
-    return {
-      firstName: " ",
-      lastName: getRandomLastName(),
-      email: generateEmail("normal"),
-      password: password,
-      confirmPassword: password,
-      phoneNumber: generateRandomPhoneNumber(),
-    };
-  })(),
-
-  noLastName: (() => {
-    const password = generateRandomPassword();
-    return {
-      firstName: getRandomFirstName(),
-      lastName: " ",
-      email: generateEmail("normal"),
-      password: password,
-      confirmPassword: password,
-      phoneNumber: generateRandomPhoneNumber(),
-    };
-  })(),
-
-  noEmailName: (() => {
-    const password = generateRandomPassword();
-    return {
-      firstName: getRandomFirstName(),
-      lastName: getRandomLastName(),
-      email: "",
-      password: password,
-      confirmPassword: password,
-      phoneNumber: generateRandomPhoneNumber(),
-    };
-  })(),
-
-  noPasswordName: (() => {
-    const password = generateRandomPassword();
-    return {
-      firstName: getRandomFirstName(),
-      lastName: getRandomLastName(),
-      email: generateEmail("normal"),
-      password: "",
-      confirmPassword: password, // password field is intentionally empty
-      phoneNumber: generateRandomPhoneNumber(),
-    };
-  })(),
-
-  passwordWithLessCharacters: {
-    firstName: getRandomFirstName(),
-    lastName: getRandomLastName(),
-    email: generateEmail("normal"),
-    password: "Test",
-    confirmPassword: "Test",
-    phoneNumber: generateRandomPhoneNumber(),
-  },
-
-  noConfirmPasswordName: (() => {
-    const password = generateRandomPassword();
-    return {
-      firstName: getRandomFirstName(),
-      lastName: getRandomLastName(),
-      email: generateEmail("normal"),
-      password: password,
-      confirmPassword: "", // confirm password intentionally empty
-      phoneNumber: generateRandomPhoneNumber(),
-    };
-  })(),
-
-  noPhoneNumberName: (() => {
-    const password = generateRandomPassword();
-    return {
-      firstName: getRandomFirstName(),
-      lastName: getRandomLastName(),
-      email: generateEmail("normal"),
-      password: password,
-      confirmPassword: password,
-      phoneNumber: "",
-    };
-  })(),
-
-  emailWithoutAllDomain: (() => {
-    const password = generateRandomPassword();
-    return {
-      firstName: getRandomFirstName(),
-      lastName: getRandomLastName(),
-      email: generateEmail("withoutAllDomain"),
-      password: password,
-      confirmPassword: password,
-      phoneNumber: generateRandomPhoneNumber(),
-    };
-  })(),
-
-  emailWithoutTopLevelDomain: (() => {
-    const password = generateRandomPassword();
-    return {
-      firstName: getRandomFirstName(),
-      lastName: getRandomLastName(),
-      email: generateEmail("withoutTopLevelDomain"),
-      password: password,
-      confirmPassword: password,
-      phoneNumber: generateRandomPhoneNumber(),
-    };
-  })(),
-
-  emailDoubleAt: (() => {
-    const password = generateRandomPassword();
-    return {
-      firstName: getRandomFirstName(),
-      lastName: getRandomLastName(),
-      email: generateEmail("doubleAt"),
-      password: password,
-      confirmPassword: password,
-      phoneNumber: generateRandomPhoneNumber(),
-    };
-  })(),
-
-  emailDotBeforeAt: (() => {
-    const password = generateRandomPassword();
-    return {
-      firstName: getRandomFirstName(),
-      lastName: getRandomLastName(),
-      email: generateEmail("dotBeforeAt"),
-      password: password,
-      confirmPassword: password,
-      phoneNumber: generateRandomPhoneNumber(),
-    };
-  })(),
-
-  emailWithoutDomain: (() => {
-    const password = generateRandomPassword();
-    return {
-      firstName: getRandomFirstName(),
-      lastName: getRandomLastName(),
-      email: generateEmail("withoutDomain"),
-      password: password,
-      confirmPassword: password,
-      phoneNumber: generateRandomPhoneNumber(),
-    };
-  })(),
-
-  emailMissingUsername: (() => {
-    const password = generateRandomPassword();
-    return {
-      firstName: getRandomFirstName(),
-      lastName: getRandomLastName(),
-      email: generateEmail("missingUsername"),
-      password: password,
-      confirmPassword: password,
-      phoneNumber: generateRandomPhoneNumber(),
-    };
-  })(),
+    invalidCases: [
+        {
+            description: "a missing first name",
+            firstName: "",
+            lastName: getRandomLastName(),
+            email: generateEmail("normal"),
+            password: "Test@1234",
+            confirmPassword: "Test@1234",
+            phoneNumber: generateRandomPhoneNumber(),
+            expectedError: "getFirstNameBlankMessage",
+            testRunner: "fillFirstRegistrationPage",
+        },
+        {
+            description: "a missing last name",
+            firstName: getRandomFirstName(),
+            lastName: "",
+            email: generateEmail("normal"),
+            password: "Test@1234",
+            confirmPassword: "Test@1234",
+            phoneNumber: generateRandomPhoneNumber(),
+            expectedError: "getLastNameBlankMessage",
+            testRunner: "fillFirstRegistrationPage",
+        },
+        {
+            description: "a missing email",
+            firstName: getRandomFirstName(),
+            lastName: getRandomLastName(),
+            email: "",
+            password: "Test@1234",
+            confirmPassword: "Test@1234",
+            phoneNumber: generateRandomPhoneNumber(),
+            expectedError: "getEmailBlankMessage",
+            testRunner: "fillSecondRegistrationPage",
+        },
+        {
+            description: "an invalid email (plain)",
+            firstName: getRandomFirstName(),
+            lastName: getRandomLastName(),
+            email: generateEmail("plainEmail"),
+            password: "Test@1234",
+            confirmPassword: "Test@1234",
+            phoneNumber: generateRandomPhoneNumber(),
+            expectedError: "getInvalidEmailAddressMessage",
+            testRunner: "fillSecondRegistrationPage",
+        },
+        {
+            description: "an invalid email (no local part)",
+            firstName: getRandomFirstName(),
+            lastName: getRandomLastName(),
+            email: generateEmail("noLocalPart"),
+            password: "Test@1234",
+            confirmPassword: "Test@1234",
+            phoneNumber: generateRandomPhoneNumber(),
+            expectedError: "getInvalidEmailAddressMessage",
+            testRunner: "fillSecondRegistrationPage",
+        },
+        {
+            description: "an invalid email (local part only)",
+            firstName: getRandomFirstName(),
+            lastName: getRandomLastName(),
+            email: generateEmail("localPartOnly"),
+            password: "Test@1234",
+            confirmPassword: "Test@1234",
+            phoneNumber: generateRandomPhoneNumber(),
+            expectedError: "getInvalidEmailAddressMessage",
+            testRunner: "fillSecondRegistrationPage",
+        },
+        {
+            description: "an invalid email (two @ symbols)",
+            firstName: getRandomFirstName(),
+            lastName: getRandomLastName(),
+            email: generateEmail("twoConsecutiveAt"),
+            password: "Test@1234",
+            confirmPassword: "Test@1234",
+            phoneNumber: generateRandomPhoneNumber(),
+            expectedError: "getInvalidEmailAddressMessage",
+            testRunner: "fillSecondRegistrationPage",
+        },
+        {
+            description: "an invalid email (no top-level domain)",
+            firstName: getRandomFirstName(),
+            lastName: getRandomLastName(),
+            email: generateEmail("withoutTopLevelDomain"),
+            password: "Test@1234",
+            confirmPassword: "Test@1234",
+            phoneNumber: generateRandomPhoneNumber(),
+            expectedError: "getInvalidEmailAddressMessage",
+            testRunner: "fillSecondRegistrationPage",
+        },
+        {
+            description: "an invalid email (trailing dot)",
+            firstName: getRandomFirstName(),
+            lastName: getRandomLastName(),
+            email: generateEmail("tailingWithDot"),
+            password: "Test@1234",
+            confirmPassword: "Test@1234",
+            phoneNumber: generateRandomPhoneNumber(),
+            expectedError: "getInvalidEmailAddressMessage",
+            testRunner: "fillSecondRegistrationPage",
+        },
+        {
+            description: "an invalid email (short TLD)",
+            firstName: getRandomFirstName(),
+            lastName: getRandomLastName(),
+            email: generateEmail("topLevelDomainTooShort"),
+            password: "Test@1234",
+            confirmPassword: "Test@1234",
+            phoneNumber: generateRandomPhoneNumber(),
+            expectedError: "getInvalidEmailAddressMessage",
+            testRunner: "fillSecondRegistrationPage",
+        },
+        {
+            description: "an invalid email (domain starts with hyphen)",
+            firstName: getRandomFirstName(),
+            lastName: getRandomLastName(),
+            email: generateEmail("domainStartsWithHyphen"),
+            password: "Test@1234",
+            confirmPassword: "Test@1234",
+            phoneNumber: generateRandomPhoneNumber(),
+            expectedError: "getInvalidEmailAddressMessage",
+            testRunner: "fillSecondRegistrationPage",
+        },
+        {
+            description: "an invalid email (double dot in domain)",
+            firstName: getRandomFirstName(),
+            lastName: getRandomLastName(),
+            email: generateEmail("doubleDotInDomain"),
+            password: "Test@1234",
+            confirmPassword: "Test@1234",
+            phoneNumber: generateRandomPhoneNumber(),
+            expectedError: "getInvalidEmailAddressMessage",
+            testRunner: "fillSecondRegistrationPage",
+        },
+        {
+            description: "an invalid email (no @ symbol)",
+            firstName: getRandomFirstName(),
+            lastName: getRandomLastName(),
+            email: generateEmail("noAtTheRate"),
+            password: "Test@1234",
+            confirmPassword: "Test@1234",
+            phoneNumber: generateRandomPhoneNumber(),
+            expectedError: "getInvalidEmailAddressMessage",
+            testRunner: "fillSecondRegistrationPage",
+        },
+        {
+            description: "an invalid email (illegal characters)",
+            firstName: getRandomFirstName(),
+            lastName: getRandomLastName(),
+            email: generateEmail("illegalCharacters"),
+            password: "Test@1234",
+            confirmPassword: "Test@1234",
+            phoneNumber: generateRandomPhoneNumber(),
+            expectedError: "getInvalidEmailAddressMessage",
+            testRunner: "fillSecondRegistrationPage",
+        },
+        {
+            description: "an invalid email (dot after name)",
+            firstName: getRandomFirstName(),
+            lastName: getRandomLastName(),
+            email: generateEmail("dotAfterName"),
+            password: "Test@1234",
+            confirmPassword: "Test@1234",
+            phoneNumber: generateRandomPhoneNumber(),
+            expectedError: "getInvalidEmailAddressMessage",
+            testRunner: "fillSecondRegistrationPage",
+        },
+        {
+            description: "an invalid email (two consecutive dots)",
+            firstName: getRandomFirstName(),
+            lastName: getRandomLastName(),
+            email: generateEmail("twoConsecutiveDots"),
+            password: "Test@1234",
+            confirmPassword: "Test@1234",
+            phoneNumber: generateRandomPhoneNumber(),
+            expectedError: "getInvalidEmailAddressMessage",
+            testRunner: "fillSecondRegistrationPage",
+        },
+        {
+            description: "an invalid email (dot at beginning)",
+            firstName: getRandomFirstName(),
+            lastName: getRandomLastName(),
+            email: generateEmail("dotAtBeginning"),
+            password: "Test@1234",
+            confirmPassword: "Test@1234",
+            phoneNumber: generateRandomPhoneNumber(),
+            expectedError: "getInvalidEmailAddressMessage",
+            testRunner: "fillSecondRegistrationPage",
+        },
+        {
+            description: "an invalid email (with quotation)",
+            firstName: getRandomFirstName(),
+            lastName: getRandomLastName(),
+            email: generateEmail("withQuotation"),
+            password: "Test@1234",
+            confirmPassword: "Test@1234",
+            phoneNumber: generateRandomPhoneNumber(),
+            expectedError: "getInvalidEmailAddressMessage",
+            testRunner: "fillSecondRegistrationPage",
+        },
+        {
+            description: "an invalid email (unclosed quotation)",
+            firstName: getRandomFirstName(),
+            lastName: getRandomLastName(),
+            email: generateEmail("unclosedQuotation"),
+            password: "Test@1234",
+            confirmPassword: "Test@1234",
+            phoneNumber: generateRandomPhoneNumber(),
+            expectedError: "getInvalidEmailAddressMessage",
+            testRunner: "fillSecondRegistrationPage",
+        },
+        {
+            description: "an invalid email (very long local part)",
+            firstName: getRandomFirstName(),
+            lastName: getRandomLastName(),
+            email: generateEmail("veryLengthyLocal"),
+            password: "Test@1234",
+            confirmPassword: "Test@1234",
+            phoneNumber: generateRandomPhoneNumber(),
+            expectedError: "getInvalidEmailAddressMessage",
+            testRunner: "fillSecondRegistrationPage",
+        },
+        {
+            description: "an invalid email (very long domain)",
+            firstName: getRandomFirstName(),
+            lastName: getRandomLastName(),
+            email: generateEmail("veryLengthyDomain"),
+            password: "Test@1234",
+            confirmPassword: "Test@1234",
+            phoneNumber: generateRandomPhoneNumber(),
+            expectedError: "getInvalidEmailAddressMessage",
+            testRunner: "fillSecondRegistrationPage",
+        },
+        {
+            description: "an invalid email (very long TLD)",
+            firstName: getRandomFirstName(),
+            lastName: getRandomLastName(),
+            email: generateEmail("veryLengthyTopLevelDomain"),
+            password: "Test@1234",
+            confirmPassword: "Test@1234",
+            phoneNumber: generateRandomPhoneNumber(),
+            expectedError: "getInvalidEmailAddressMessage",
+            testRunner: "fillSecondRegistrationPage",
+        },
+        {
+            description: "an invalid email (missing second-level domain)",
+            firstName: getRandomFirstName(),
+            lastName: getRandomLastName(),
+            email: generateEmail("missingSecondLevelDomain"),
+            password: "Test@1234",
+            confirmPassword: "Test@1234",
+            phoneNumber: generateRandomPhoneNumber(),
+            expectedError: "getInvalidEmailAddressMessage",
+            testRunner: "fillSecondRegistrationPage",
+        },
+        {
+            description: "an invalid email (with comma)",
+            firstName: getRandomFirstName(),
+            lastName: getRandomLastName(),
+            email: generateEmail("withComma"),
+            password: "Test@1234",
+            confirmPassword: "Test@1234",
+            phoneNumber: generateRandomPhoneNumber(),
+            expectedError: "getInvalidEmailAddressMessage",
+            testRunner: "fillSecondRegistrationPage",
+        },
+        {
+            description: "an invalid email (underscore in TLD)",
+            firstName: getRandomFirstName(),
+            lastName: getRandomLastName(),
+            email: generateEmail("underscoreInTLD"),
+            password: "Test@1234",
+            confirmPassword: "Test@1234",
+            phoneNumber: generateRandomPhoneNumber(),
+            expectedError: "getInvalidEmailAddressMessage",
+            testRunner: "fillSecondRegistrationPage",
+        },
+        {
+            description: "an invalid email (without domain)",
+            firstName: getRandomFirstName(),
+            lastName: getRandomLastName(),
+            email: generateEmail("withoutDomain"),
+            password: "Test@1234",
+            confirmPassword: "Test@1234",
+            phoneNumber: generateRandomPhoneNumber(),
+            expectedError: "getInvalidEmailAddressMessage",
+            testRunner: "fillSecondRegistrationPage",
+        },
+        {
+            description: "a short password",
+            firstName: getRandomFirstName(),
+            lastName: getRandomLastName(),
+            email: generateEmail("normal"),
+            password: "Test",
+            confirmPassword: "Test",
+            phoneNumber: generateRandomPhoneNumber(),
+            expectedError: "getPasswordLengthErrorMessage",
+            testRunner: "fillSecondRegistrationPage",
+        },
+        {
+            description: "a password mismatch",
+            firstName: getRandomFirstName(),
+            lastName: getRandomLastName(),
+            email: generateEmail("normal"),
+            password: "Test@1234",
+            confirmPassword: "Mismatch@1234",
+            phoneNumber: generateRandomPhoneNumber(),
+            expectedError: "getPasswordMismatchMessage",
+            testRunner: "fillSecondRegistrationPage",
+        },
+        {
+            description: "a missing phone number",
+            firstName: getRandomFirstName(),
+            lastName: getRandomLastName(),
+            email: generateEmail("normal"),
+            password: "Test@1234",
+            confirmPassword: "Test@1234",
+            phoneNumber: "",
+            expectedError: "getPhoneNumberRequiredMessage",
+            testRunner: "register",
+        },
+        {
+            description: "an invalid phone number",
+            firstName: getRandomFirstName(),
+            lastName: getRandomLastName(),
+            email: generateEmail("normal"),
+            password: "Test@1234",
+            confirmPassword: "Test@1234",
+            phoneNumber: "abcd1234567",
+            expectedError: "getInvalidPhoneNumberMessage",
+            testRunner: "register",
+        },
+        {
+            description: "a missing password",
+            firstName: getRandomFirstName(),
+            lastName: getRandomLastName(),
+            email: generateEmail("normal"),
+            password: " ",
+            confirmPassword: "Test@1234",
+            phoneNumber: "abcd1234567",
+            expectedError: "getPasswordLengthErrorMessage",
+            testRunner: "fillSecondRegistrationPage",
+        },
+        {
+            description: "a missing confirm password",
+            firstName: getRandomFirstName(),
+            lastName: getRandomLastName(),
+            email: generateEmail("normal"),
+            password: "Test@1234",
+            confirmPassword: " ",
+            phoneNumber: "abcd1234567",
+            expectedError: "getPasswordMismatchMessage",
+            testRunner: "fillSecondRegistrationPage",
+        },
+    ],
 };

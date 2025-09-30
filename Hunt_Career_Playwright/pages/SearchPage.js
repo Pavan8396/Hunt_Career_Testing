@@ -6,50 +6,51 @@ export class SearchPage extends BasePage {
     this.page = page;
 
     // Elements
-    this.searchInputField = page.locator(
+    this.getSearchInputField = page.locator(
       "//input[@placeholder='Search jobs by title, company, or keyword...']",
     );
-    this.searchButton = page.locator("//button[@aria-label='Search']");
-    this.locationButton = page.locator(
+    this.getSearchButton = page.locator("//button[@aria-label='Search']");
+    this.getLocationFilterButton = page.locator(
       "//button[@aria-label='Toggle location filter dropdown']",
     );
-    this.locationSearchInput = page.locator(
+    this.getLocationSearchInput = page.locator(
       "//input[@placeholder='Search location...']",
     );
-    this.jobTypeButton = page.locator(
+    this.getJobTypeFilterButton = page.locator(
       "//button[@aria-label='Toggle job type filter dropdown']",
     );
-    this.jobTypeSearchInput = page.locator(
+    this.getJobTypeSearchInput = page.locator(
       "//input[@placeholder='Search job type...']",
     );
-    this.clearAllFiltersButton = page.locator(
+    this.getClearAllFiltersButton = page.locator(
       "//button[@aria-label='Clear all filters']",
     );
-    this.noJobsFoundMessage = page.locator('p:has-text("No jobs found.")');
+    this.getLoginSuccessMessage = page.locator("//div[contains(text(), 'Logged in successfully!')]");
+    this.getNoJobsFoundMessage = page.locator('p:has-text("No jobs found.")');
   }
 
   // Dynamic locators
-  searchTag(searchTerm) {
+  getSearchTag(searchTerm) {
     return this.page.locator(`//span[contains(., "🔍 ${searchTerm}")]`);
   }
 
-  locationTag(location) {
+  getLocationTag(location) {
     return this.page.locator(`//span[contains(., "📍 ${location}")]`);
   }
 
-  jobTypeTag(jobType) {
+  getJobTypeTag(jobType) {
     return this.page.locator(`//span[contains(., "🧾 ${jobType}")]`);
   }
 
-  locationOption(location) {
+  getLocationOption(location) {
     return this.page.locator(`//label[contains(., "${location}")]//input`);
   }
 
-  jobTypeOption(jobType) {
+  getJobTypeOption(jobType) {
     return this.page.locator(`//label[contains(., "${jobType}")]//input`);
   }
 
-  jobCardTitle(index) {
+  getJobCardTitle(index) {
     return this.page
       .locator(
         "//h3[contains(@class, 'text-lg') and contains(@class, 'font-semibold')]",
@@ -57,29 +58,29 @@ export class SearchPage extends BasePage {
       .nth(index);
   }
 
-  jobCardCompanyLocation(jobCard) {
+  getJobCardCompanyLocation(jobCard) {
     return jobCard.locator("p.text-gray-600");
   }
 
-  jobCardDescription(jobCard) {
+  getJobCardDescription(jobCard) {
     return jobCard.locator("p.text-sm.text-gray-700.mt-3.line-clamp-3");
   }
 
   // Actions
   async enterSearchTerm(searchTerm) {
-    await this.searchInputField.fill(searchTerm);
+    await this.getSearchInputField.fill(searchTerm);
   }
 
   async clickSearchButton() {
-    await this.searchButton.click();
+    await this.getSearchButton.click();
   }
 
   async openLocationDropdown() {
-    await this.locationButton.click();
+    await this.getLocationFilterButton.click();
   }
 
   async searchLocation(location) {
-    await this.locationSearchInput.fill(location);
+    await this.getLocationSearchInput.fill(location);
   }
 
   async selectLocation(location) {
@@ -87,11 +88,11 @@ export class SearchPage extends BasePage {
   }
 
   async closeLocationDropdown() {
-    await this.locationButton.click();
+    await this.getLocationFilterButton.click();
   }
 
   async openJobTypeDropdown() {
-    await this.jobTypeButton.click();
+    await this.getJobTypeFilterButton.click();
   }
 
   async selectJobType(jobType) {
@@ -99,11 +100,11 @@ export class SearchPage extends BasePage {
   }
 
   async closeJobTypeDropdown() {
-    await this.jobTypeButton.click();
+    await this.getJobTypeFilterButton.click();
   }
 
   async clickClearAllFilters() {
-    await this.clearAllFiltersButton.click();
+    await this.getClearAllFiltersButton.click();
   }
 
   // Actions

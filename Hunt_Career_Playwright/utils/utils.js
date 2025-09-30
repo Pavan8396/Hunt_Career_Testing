@@ -1,82 +1,106 @@
 import { faker } from "@faker-js/faker";
 
-function getCurrentDateTimeString() {
-  const now = new Date();
-  const day = String(now.getDate()).padStart(2, "0");
-  const month = String(now.getMonth() + 1).padStart(2, "0");
-  const year = now.getFullYear();
-  const hours = String(now.getHours()).padStart(2, "0");
-  const minutes = String(now.getMinutes()).padStart(2, "0");
-  const seconds = String(now.getSeconds()).padStart(2, "0");
-  return `${day}-${month}-${year}-${hours}-${minutes}-${seconds}`;
-}
-
+// This custom password generator is retained because it guarantees
+// the presence of different character types, which is often
+// necessary for testing password validation rules.
 export function generateRandomPassword(length = 8) {
-  const upperCase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-  const lowerCase = "abcdefghijklmnopqrstuvwxyz";
-  const numbers = "0123456789";
-  const specialChars = "!@#$%^&*";
-  const allChars = upperCase + lowerCase + numbers + specialChars;
+    const upperCase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const lowerCase = 'abcdefghijklmnopqrstuvwxyz';
+    const numbers = '0123456789';
+    const specialChars = '!@#$%^&*';
+    const allChars = upperCase + lowerCase + numbers + specialChars;
 
-  let password = "";
+    let password = '';
+    
+    password += upperCase[Math.floor(Math.random() * upperCase.length)];
+    password += lowerCase[Math.floor(Math.random() * lowerCase.length)];
+    password += numbers[Math.floor(Math.random() * numbers.length)];
+    password += specialChars[Math.floor(Math.random() * specialChars.length)];
 
-  // Ensure at least one from each category
-  password += upperCase[Math.floor(Math.random() * upperCase.length)];
-  password += lowerCase[Math.floor(Math.random() * lowerCase.length)];
-  password += numbers[Math.floor(Math.random() * numbers.length)];
-  password += specialChars[Math.floor(Math.random() * specialChars.length)];
+    for (let i = 4; i < length; i++) {
+        password += allChars[Math.floor(Math.random() * allChars.length)];
+    }
 
-  // Fill the rest randomly
-  for (let i = 4; i < length; i++) {
-    password += allChars[Math.floor(Math.random() * allChars.length)];
-  }
-
-  // Shuffle the password to avoid predictable pattern
-  password = password
-    .split("")
-    .sort(() => 0.5 - Math.random())
-    .join("");
-
-  return password;
+    return password.split('').sort(() => 0.5 - Math.random()).join('');
 }
 
-export function getRandomFirstName() {
-  const firstName = faker.person.firstName();
-  return firstName;
+export function getRandomFirstName(){
+    return faker.person.firstName();
 }
 
-export function getRandomLastName() {
-  const lastName = faker.person.lastName();
-  return lastName;
+export function getRandomLastName(){
+    return faker.person.lastName();
+}
+
+export function getRandomCompanyName(){
+    return faker.company.name();
 }
 
 export function generateEmail(type) {
-  const dateTime = getCurrentDateTimeString();
-  const baseName = `testuser_${dateTime}`;
+  const baseName = `test_${faker.lorem.word()}`;
+
   switch (type) {
     case "normal":
-      return `${baseName}@mailinator.com`;
-    case "withoutAllDomain":
-      return `${baseName}`;
+      return faker.internet.email({ firstName: 'testuser', allowSpecialCharacters: false });
+    case "plainEmail":
+      return baseName;
+    case "noLocalPart":
+      return "@mailinator.com";
+    case "localPartOnly":
+      return `${baseName}@`;
+    case "emailHaving2At":
+      return `u@${baseName}@mailinator.com`;
     case "withoutTopLevelDomain":
       return `${baseName}@mailinator`;
-    case "doubleAt":
-      return `${baseName}@@mailinator.com`;
-    case "dotBeforeAt":
+    case "tailingWithDot":
+      return `${baseName}@mailinator.`;
+    case "topLevelDomainTooShort":
+      return `${baseName}@mailinator.c`;
+    case "domainStartsWithHyphen":
+      return `${baseName}@-mailinator.com`;
+    case "doubleDotInDomain":
+      return `${baseName}@mailinator..com`;
+    case "noAtTheRate":
+      return `${baseName}#mailinator.com`;
+    case "illegalCharacters":
+      return `${baseName}<>@mailinator.com`;
+    case "dotAfterName":
       return `${baseName}.@mailinator.com`;
+    case "twoConsecutiveDots":
+      return `u..${baseName}@mailinator.com`;
+    case "dotAtBeginning":
+      return `.${baseName}@mailinator.com`;
+    case "withQuotation":
+      return `'${baseName}@mailinator.com'`;
+    case "unclosedQuotation":
+      return `'${baseName}@mailinator.com`;
+    case "veryLengthyLocal":
+      return `verylonglocalpartthatexceedstheusuallimitstoverifythelimitdoesitexceedornotbyaddingverylongcharacters@example.com`;
+    case "veryLengthyDomain":
+      return `${baseName}@verylonglocalpartthatexceedstheusuallimitstoverifythelimitdoesitexceedornotbyaddingverylongcharacters.com`;
+    case "veryLengthyTopLevelDomain":
+      return `${baseName}@example.verylonglocalpartthatexceedstheusuallimitstoverifythelimitdoesitexceedornotbyaddingverylongcharacterscom`;
+    case "missingSecondLevelDomain":
+      return `${baseName}@com`;
+    case "withComma":
+      return `${baseName}@mailinator,com`;
+    case "twoConsecutiveAt":
+      return `${baseName}@@mailinator.com`;
+    case "underscoreInTLD":
+      return `${baseName}@mailinator.c_m`;
     case "withoutDomain":
       return `${baseName}@.com`;
-    case "missingUsername":
-      return `@mailinator.com`;
+    case "dotBetweenName":
+      return `${faker.person.firstName()}.${faker.person.lastName()}@mailinator.com`;
+    case "spaceBeforeName":
+      return ` ${faker.internet.email({ firstName: 'testuser', allowSpecialCharacters: false })}`;
+    case "spaceAfterName":
+      return `${faker.internet.email({ firstName: 'testuser', allowSpecialCharacters: false })} `;
     default:
-      return `${baseName}@mailinator.com`;
+      return faker.internet.email({ firstName: 'testuser', allowSpecialCharacters: false });
   }
 }
 
 export function generateRandomPhoneNumber() {
-  let phone = "";
-  for (let i = 0; i < 10; i++) {
-    phone += Math.floor(Math.random() * 10);
-  }
-  return phone;
+    return faker.string.numeric(10);
 }
