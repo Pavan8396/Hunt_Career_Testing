@@ -7,7 +7,7 @@ export async function loginAsValidUser(
 ) {
   await loginPage.navigate();
   await loginPage.login(
-    loginData.validUser.email,
-    loginData.validUser.password,
+    loginData.validUser[0].email,
+    loginData.validUser[0].password,
   );
 }

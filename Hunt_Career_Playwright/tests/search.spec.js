@@ -34,16 +34,16 @@ test.describe("Search Tests", () => {
   test("should return results for a valid keyword search", async ({
     searchPage,
   }) => {
-    const { searchTerm } = searchData.validSearch;
-    await searchPage.search(searchTerm);
+    const { searchTerm, location, jobType } = searchData.validSearch;
+    await searchPage.search(searchTerm, location, jobType);
     await expect(searchPage.searchTag(searchTerm)).toBeVisible();
   });
 
   test("should show a 'no jobs found' message for an invalid keyword", async ({
     searchPage,
   }) => {
-    const { searchTerm } = searchData.invalidSearch;
-    await searchPage.search(searchTerm);
+    const { searchTerm, location, jobType } = searchData.invalidSearch;
+    await searchPage.search(searchTerm, location, jobType);
     await expect(searchPage.searchTag(searchTerm)).toBeVisible();
     await expect(searchPage.noJobsFoundMessage).toBeVisible();
   });
@@ -51,8 +51,8 @@ test.describe("Search Tests", () => {
   test("should show a 'no jobs found' message for a search with special characters", async ({
     searchPage,
   }) => {
-    const { searchTerm } = searchData.specialCharSearch;
-    await searchPage.search(searchTerm);
+    const { searchTerm, location, jobType } = searchData.specialCharSearch;
+    await searchPage.search(searchTerm, location, jobType);
     await expect(searchPage.searchTag(searchTerm)).toBeVisible();
   });
 
@@ -73,7 +73,8 @@ test.describe("Search Tests", () => {
     viewDetailsPage,
   }) => {
     await loginAsValidUser(loginPage, loginData);
-    await searchPage.search(searchData.validSearch.searchTerm);
+    const { searchTerm, location, jobType } = searchData.validSearch;
+    await searchPage.search(searchTerm, location, jobType);
     await homePage.viewDetailsLink.first().click();
     await expect(viewDetailsPage.ApplyButton).toBeVisible();
   });
@@ -86,7 +87,8 @@ test.describe("Search Tests", () => {
     savePage,
   }) => {
     await loginAsValidUser(loginPage, loginData, page);
-    await searchPage.search(searchData.validSearch.searchTerm);
+    const { searchTerm, location, jobType } = searchData.validSearch;
+    await searchPage.search(searchTerm, location, jobType);
     const jobIndex = 1;
     const jobTitle = await searchPage.jobCardTitle(jobIndex).textContent();
     await homePage.saveButton.nth(jobIndex).click();
