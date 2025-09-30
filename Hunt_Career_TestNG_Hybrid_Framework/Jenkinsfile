@@ -1,3 +1,10 @@
+// Function to print a standardized banner
+def printBanner(message) {
+    echo '----------------------------------------'
+    echo "    ${message}"
+    echo '----------------------------------------'
+}
+
 pipeline {
     agent any
 
@@ -6,39 +13,47 @@ pipeline {
         maven 'MAVEN'
     }
 
+    options {
+        timestamps()
+        timeout(time: 30, unit: 'MINUTES')
+        // Clean workspace before build
+        skipDefaultCheckout true
+    }
+
+    parameters {
+        string(name: 'BRANCH', defaultValue: 'main', description: 'Git branch to build from')
+    }
+
     stages {
         stage('Checkout') {
             steps {
-                echo '----------------------------------------'
-                echo '        CHECKING OUT SOURCE CODE'
-                echo '----------------------------------------'
+                printBanner("CHECKING OUT SOURCE CODE: ${params.BRANCH}")
+                cleanWs()
                 checkout scm
             }
         }
 
-        stage('Build') {
+        // Grouping all TestNG-related steps
+        stage('TestNG Execution') {
             steps {
                 dir('Hunt_Career_TestNG_Hybrid_Framework') {
-                    echo '----------------------------------------'
-                    echo '          BUILDING THE PROJECT'
-                    echo '----------------------------------------'
-                    bat 'mvn -B clean install -DskipTests'
-                }
-            }
-        }
-
-        stage('Test') {
-            steps {
-                dir('Hunt_Career_TestNG_Hybrid_Framework') {
-                    echo '----------------------------------------'
-                    echo '           RUNNING TESTNG TESTS'
-                    echo '----------------------------------------'
                     script {
                         try {
-                            bat 'mvn -B test'
-                        } catch (any) {
-                            currentBuild.result = 'UNSTABLE'
-                            echo "TestNG tests failed."
+                            stage('Build') {
+                                printBanner('BUILDING THE PROJECT')
+                                bat 'mvn -B clean install -DskipTests'
+                            }
+
+                            stage('Test') {
+                                printBanner('RUNNING TESTNG TESTS')
+                                bat 'mvn -B test'
+                            }
+                        } catch (err) {
+                            echo "❌ TestNG tests failed: ${err.message}"
+                            // Mark the build as failed
+                            currentBuild.result = 'FAILURE'
+                            // Re-throw the error to ensure the pipeline stops
+                            error("Pipeline failed due to TestNG test failures.")
                         }
                     }
                 }
@@ -48,18 +63,30 @@ pipeline {
 
     post {
         always {
-            echo '----------------------------------------'
-            echo '        ARCHIVING & PUBLISHING REPORTS'
-            echo '----------------------------------------'
-            junit testResults: 'Hunt_Career_TestNG_Hybrid_Framework/target/surefire-reports/testng-results.xml', allowEmptyResults: true
-            publishHTML(target: [
-                allowMissing: true,
-                alwaysLinkToLastBuild: true,
-                keepAll: true,
-                reportDir: 'Hunt_Career_TestNG_Hybrid_Framework/test-output/ExtentReports',
-                reportFiles: 'extentReport.html',
-                reportName: 'Extent Test Report'
-            ])
+            // This block will always run, regardless of the pipeline's status
+            dir('Hunt_Career_TestNG_Hybrid_Framework') {
+                printBanner('ARCHIVING & PUBLISHING REPORTS')
+
+                // Archive and publish JUnit test results
+                junit testResults: 'target/surefire-reports/testng-results.xml', allowEmptyResults: true
+
+                // Publish HTML reports
+                publishHTML(target: [
+                    allowMissing: true,
+                    alwaysLinkToLastBuild: true,
+                    keepAll: true,
+                    reportDir: 'test-output/ExtentReports',
+                    reportFiles: 'extentReport.html',
+                    reportName: 'Extent Test Report'
+                ])
+            }
+        }
+
+        failure {
+            // Send email notification on failure
+            mail to: 'qa-team@example.com',
+                 subject: "❌ TestNG Pipeline Failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                 body: "The TestNG test pipeline failed. Please check Jenkins for details: ${env.BUILD_URL}"
         }
     }
 }

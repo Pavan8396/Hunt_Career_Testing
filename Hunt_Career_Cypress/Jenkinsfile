@@ -1,3 +1,10 @@
+// Function to print a standardized banner
+def printBanner(message) {
+    echo '----------------------------------------'
+    echo "    ${message}"
+    echo '----------------------------------------'
+}
+
 pipeline {
     agent any
 
@@ -8,6 +15,8 @@ pipeline {
     options {
         timestamps()
         timeout(time: 30, unit: 'MINUTES')
+        // Clean workspace before build
+        skipDefaultCheckout true
     }
 
     parameters {
@@ -18,50 +27,38 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                echo '----------------------------------------'
-                echo "   CHECKING OUT SOURCE CODE: ${params.BRANCH}"
-                echo '----------------------------------------'
+                printBanner("CHECKING OUT SOURCE CODE: ${params.BRANCH}")
                 cleanWs()
                 checkout scm
             }
         }
 
-        stage('Install Dependencies') {
+        // Grouping all Cypress-related steps
+        stage('Cypress Execution') {
             steps {
                 dir('Hunt_Career_Cypress') {
-                    echo '----------------------------------------'
-                    echo '      INSTALLING NPM DEPENDENCIES'
-                    echo '----------------------------------------'
-                    bat 'npm ci'
-                }
-            }
-        }
-
-        stage('Verify Cypress Installation') {
-            steps {
-                dir('Hunt_Career_Cypress') {
-                    echo '----------------------------------------'
-                    echo '        VERIFYING CYPRESS BINARY'
-                    echo '----------------------------------------'
-                    bat 'npx cypress install'
-                }
-            }
-        }
-
-        stage('Run Cypress Tests') {
-            steps {
-                dir('Hunt_Career_Cypress') {
-                    echo '----------------------------------------'
-                    echo "   RUNNING CYPRESS TESTS ON ${params.ENV}"
-                    echo '----------------------------------------'
                     script {
                         try {
-                            // Headless mode for CI (default: Electron, you can add --browser chrome)
-                            bat 'npx cypress run --headless --reporter mochawesome'
+                            stage('Install Dependencies') {
+                                printBanner('INSTALLING NPM DEPENDENCIES')
+                                bat 'npm ci'
+                            }
+
+                            stage('Verify Cypress Installation') {
+                                printBanner('VERIFYING CYPRESS BINARY')
+                                bat 'npx cypress install'
+                            }
+
+                            stage('Run Cypress Tests') {
+                                printBanner("RUNNING CYPRESS TESTS ON ${params.ENV}")
+                                // Headless mode for CI
+                                bat 'npx cypress run --headless --reporter mochawesome'
+                            }
                         } catch (err) {
-                            echo "⚠️ Cypress tests failed: ${err}"
+                            echo "❌ Cypress tests failed: ${err.message}"
                             currentBuild.result = 'FAILURE'
-                            throw err
+                            // Re-throw the error to ensure the pipeline stops
+                            error("Pipeline failed due to Cypress test failures.")
                         }
                     }
                 }
@@ -71,27 +68,32 @@ pipeline {
 
     post {
         always {
-            echo '----------------------------------------'
-            echo '    ARCHIVING & PUBLISHING REPORTS'
-            echo '----------------------------------------'
-            archiveArtifacts artifacts: 'Hunt_Career_Cypress/mochawesome-report/**', allowEmptyArchive: true
-            archiveArtifacts artifacts: 'Hunt_Career_Cypress/cypress/screenshots/**/*.png', allowEmptyArchive: true
-            archiveArtifacts artifacts: 'Hunt_Career_Cypress/cypress/videos/**/*.mp4', allowEmptyArchive: true
+            // This block will always run, regardless of the pipeline's status
+            dir('Hunt_Career_Cypress') {
+                printBanner('ARCHIVING & PUBLISHING REPORTS')
 
-            publishHTML(target: [
-                allowMissing: true,
-                alwaysLinkToLastBuild: true,
-                keepAll: true,
-                reportDir: 'Hunt_Career_Cypress/mochawesome-report',
-                reportFiles: 'mochawesome.html',
-                reportName: 'Cypress Test Report'
-            ])
+                // Archive test reports and artifacts
+                archiveArtifacts artifacts: 'mochawesome-report/**', allowEmptyArchive: true
+                archiveArtifacts artifacts: 'cypress/screenshots/**/*.png', allowEmptyArchive: true
+                archiveArtifacts artifacts: 'cypress/videos/**/*.mp4', allowEmptyArchive: true
+
+                // Publish HTML reports
+                publishHTML(target: [
+                    allowMissing: true,
+                    alwaysLinkToLastBuild: true,
+                    keepAll: true,
+                    reportDir: 'mochawesome-report',
+                    reportFiles: 'mochawesome.html',
+                    reportName: 'Cypress Test Report'
+                ])
+            }
         }
 
         failure {
+            // Send email notification on failure
             mail to: 'qa-team@example.com',
                  subject: "❌ Cypress Pipeline Failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                 body: "Please check Jenkins for details: ${env.BUILD_URL}"
+                 body: "The Cypress test pipeline failed. Please check Jenkins for details: ${env.BUILD_URL}"
         }
     }
 }
