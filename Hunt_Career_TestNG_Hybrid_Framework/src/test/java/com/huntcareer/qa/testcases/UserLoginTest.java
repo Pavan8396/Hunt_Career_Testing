@@ -25,36 +25,36 @@ public class UserLoginTest extends TestBase {
 
     @DataProvider(name = "validUsers")
     public Object[][] getValidUsers() {
-        return JsonUtils.getTestData("src/test/resource/fixtures/userLoginData.json", "validUser", "email", "password");
+        return JsonUtils.getTestData("src/test/resource/fixtures/userLoginData.json", "validUser", "description", "email", "password");
     }
 
     @DataProvider(name = "invalidUsers")
     public Object[][] getInvalidUsers() {
-        return JsonUtils.getTestData("src/test/resource/fixtures/userLoginData.json", "invalidUser", "email", "password");
+        return JsonUtils.getTestData("src/test/resource/fixtures/userLoginData.json", "invalidUser", "description", "email", "password");
     }
 
     @DataProvider(name = "invalidEmails")
     public Object[][] getInvalidEmails() {
-        return JsonUtils.getTestData("src/test/resource/fixtures/userLoginData.json", "invalidEmails", "email", "password");
+        return JsonUtils.getTestData("src/test/resource/fixtures/userLoginData.json", "invalidEmails", "description", "email", "password");
     }
 
     @DataProvider(name = "invalidPasswords")
     public Object[][] getInvalidPasswords() {
-        return JsonUtils.getTestData("src/test/resource/fixtures/userLoginData.json", "invalidPassword", "email", "password");
+        return JsonUtils.getTestData("src/test/resource/fixtures/userLoginData.json", "invalidPassword", "description", "email", "password");
     }
 
     @DataProvider(name = "blankEmail")
     public Object[][] getBlankEmail() {
-        return JsonUtils.getTestData("src/test/resource/fixtures/userLoginData.json", "blankEmail", "email", "password");
+        return JsonUtils.getTestData("src/test/resource/fixtures/userLoginData.json", "blankEmail", "description", "email", "password");
     }
 
     @DataProvider(name = "blankPassword")
     public Object[][] getBlankPassword() {
-        return JsonUtils.getTestData("src/test/resource/fixtures/userLoginData.json", "blankPassword", "email", "password");
+        return JsonUtils.getTestData("src/test/resource/fixtures/userLoginData.json", "blankPassword", "description", "email", "password");
     }
 
     @Test(dataProvider = "validUsers")
-    public void testSuccessfulLogin(String email, String password) {
+    public void testSuccessfulLogin(String description, String email, String password) {
         searchPage = loginPage.login(email, password);
         SoftAssert softAssert = new SoftAssert();
         softAssert.assertTrue(searchPage.getLoginSuccessMessage().isDisplayed());
@@ -62,7 +62,7 @@ public class UserLoginTest extends TestBase {
     }
 
     @Test(dataProvider = "invalidUsers")
-    public void testInvalidCredentials(String email, String password) {
+    public void testInvalidCredentials(String description, String email, String password) {
         loginPage.login(email, password);
         SoftAssert softAssert = new SoftAssert();
         softAssert.assertTrue(loginPage.getInvalidEmailOrPasswordMessage().isDisplayed());
@@ -70,7 +70,7 @@ public class UserLoginTest extends TestBase {
     }
 
     @Test(dataProvider = "invalidEmails")
-    public void testInvalidEmailFormat(String email, String password) {
+    public void testInvalidEmailFormat(String description, String email, String password) {
         loginPage.login(email, password);
         SoftAssert softAssert = new SoftAssert();
         softAssert.assertTrue(loginPage.getInvalidEmailAddressMessage().isDisplayed());
@@ -78,7 +78,7 @@ public class UserLoginTest extends TestBase {
     }
 
     @Test(dataProvider = "invalidPasswords")
-    public void testPasswordTooShort(String email, String password) {
+    public void testPasswordTooShort(String description, String email, String password) {
         loginPage.login(email, password);
         SoftAssert softAssert = new SoftAssert();
         softAssert.assertTrue(loginPage.getPasswordLengthErrorMessage().isDisplayed());
@@ -86,7 +86,7 @@ public class UserLoginTest extends TestBase {
     }
 
     @Test(dataProvider = "blankEmail")
-    public void testBlankEmail(String email, String password) {
+    public void testBlankEmail(String description, String email, String password) {
         loginPage.login(email, password);
         SoftAssert softAssert = new SoftAssert();
         softAssert.assertTrue(loginPage.getEmptyEmailMessage().isDisplayed());
@@ -94,7 +94,7 @@ public class UserLoginTest extends TestBase {
     }
 
     @Test(dataProvider = "blankPassword")
-    public void testBlankPassword(String email, String password) {
+    public void testBlankPassword(String description, String email, String password) {
         loginPage.login(email, password);
         SoftAssert softAssert = new SoftAssert();
         softAssert.assertTrue(loginPage.getEmptyPasswordMessage().isDisplayed());

@@ -3,6 +3,7 @@ package com.huntcareer.qa.testcases;
 import java.util.Map;
 
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 
@@ -22,6 +23,28 @@ public class EmployerRegisterTest extends TestBase {
         driver = initialization();
         landingPage = new LandingPage(driver);
         employerRegisterPage = landingPage.clickEmployerRegisterLink();
+    }
+
+    @DataProvider(name = "invalidEmailTypes")
+    public Object[][] invalidEmailTypes() {
+        return new Object[][] {
+            {"plainEmail"},
+            {"noLocalPart"},
+            {"localPartOnly"},
+            {"twoConsecutiveAt"},
+            {"withoutTopLevelDomain"},
+            {"tailingWithDot"},
+            {"topLevelDomainTooShort"},
+            {"domainStartsWithHyphen"},
+            {"doubleDotInDomain"},
+            {"noAtTheRate"},
+            {"illegalCharacters"},
+            {"dotAfterName"},
+            {"twoConsecutiveDots"},
+            {"dotAtBeginning"},
+            {"withoutDomain"},
+            {"withoutUserName"}
+        };
     }
 
     @Test(priority = 1)
@@ -67,9 +90,9 @@ public class EmployerRegisterTest extends TestBase {
         employerRegisterPage.verifyPasswordMustBeAtLeast8CharctersLongMessage();
     }
 
-    @Test(priority = 6)
-    public void testInvalidEmail() {
-        Map<String, String> user = EmployerRegisterData.invalidEmail("plainEmail");
+    @Test(priority = 6, dataProvider = "invalidEmailTypes")
+    public void testInvalidEmail(String emailType) {
+        Map<String, String> user = EmployerRegisterData.invalidEmail(emailType);
         employerRegisterPage.register(user.get("name"), user.get("email"), user.get("password"), user.get("confirmPassword"));
         employerRegisterPage.verifyInvalidEmailAddressMessage();
     }
@@ -85,6 +108,16 @@ public class EmployerRegisterTest extends TestBase {
     public void testPasswordMismatch() {
         Map<String, String> user = EmployerRegisterData.passwordMismatch();
         employerRegisterPage.register(user.get("name"), user.get("email"), user.get("password"), user.get("confirmPassword"));
+        employerRegisterPage.verifyPasswordMismatchMessage();
+    }
+
+    @Test(priority = 9)
+    public void testNoConfirmPassword() {
+        Map<String, String> user = EmployerRegisterData.noConfirmPassword();
+        employerRegisterPage.enterName(user.get("name"));
+        employerRegisterPage.enterEmail(user.get("email"));
+        employerRegisterPage.enterPassword(user.get("password"));
+        employerRegisterPage.clickRegisterButton();
         employerRegisterPage.verifyPasswordMismatchMessage();
     }
 }

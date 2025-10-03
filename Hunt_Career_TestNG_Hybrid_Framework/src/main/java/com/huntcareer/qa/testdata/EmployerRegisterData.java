@@ -78,4 +78,12 @@ public class EmployerRegisterData {
         data.put("confirmPassword", "Mismatch@1234");
         return data;
     }
+
+    public static Map<String, String> noConfirmPassword() {
+        Map<String, String> data = new HashMap<>();
+        data.put("name", Utilities.getCompanyName());
+        data.put("email", Utilities.getEmail("normal"));
+        data.put("password", "Test@1234");
+        return data;
+    }
 }

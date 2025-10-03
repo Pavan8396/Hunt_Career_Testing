@@ -6,13 +6,11 @@ import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 
 import com.huntcareer.qa.base.TestBase;
-import com.huntcareer.qa.pages.LandingPage;
 import com.huntcareer.qa.pages.SearchPage;
 import com.huntcareer.qa.utils.JsonUtils;
 
 public class Search extends TestBase {
     SearchPage searchPage;
-    LandingPage landingPage;
 
     @BeforeMethod
     public void setup() {
