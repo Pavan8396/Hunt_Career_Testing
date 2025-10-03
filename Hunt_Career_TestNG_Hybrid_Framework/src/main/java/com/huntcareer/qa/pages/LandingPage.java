@@ -15,7 +15,7 @@ public class LandingPage {
 	@FindBy(xpath = "//h2[contains(text(), 'I am a Job Seeker')]")
 	private WebElement jobSeekerRole;
 
-	@FindBy(xpath = "//h2[contains(text(), 'I am a Employer')]")
+	@FindBy(xpath = "//h2[contains(text(), 'I am an Employer')]")
 	private WebElement employerRole;
 
 	public LandingPage(WebDriver driver) {
