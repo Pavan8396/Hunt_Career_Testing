@@ -26,14 +26,30 @@ public class UserRegisterTest extends TestBase {
 	@Test(priority = 1)
 	public void testRegisterWithValidData() {
 		Map<String, String> user = RegisterData.validUser();
-		loginPage = registerPage.register(user.get("firstName"), user.get("lastName"), user.get("email"), user.get("password"), user.get("confirmPassword"), user.get("phoneNumber"));
+		registerPage.enterFirstName(user.get("firstName"));
+		registerPage.enterLastName(user.get("lastName"));
+		registerPage.clickFirstNextButton();
+		registerPage.enterEmail(user.get("email"));
+		registerPage.enterPassword(user.get("password"));
+		registerPage.enterConfirmPassword(user.get("confirmPassword"));
+		registerPage.clickSecondNextButton();
+		registerPage.enterPhoneNumber(user.get("phoneNumber"));
+		loginPage = registerPage.clickSignUpButton();
 		loginPage.verifyRegisterSuccess();
 	}
 
 	@Test(priority = 2)
 	public void testDuplicateData() {
 		Map<String, String> user = RegisterData.duplicateUser();
-		registerPage.register(user.get("firstName"), user.get("lastName"), user.get("email"), user.get("password"), user.get("confirmPassword"), user.get("phoneNumber"));
+		registerPage.enterFirstName(user.get("firstName"));
+		registerPage.enterLastName(user.get("lastName"));
+		registerPage.clickFirstNextButton();
+		registerPage.enterEmail(user.get("email"));
+		registerPage.enterPassword(user.get("password"));
+		registerPage.enterConfirmPassword(user.get("confirmPassword"));
+		registerPage.clickSecondNextButton();
+		registerPage.enterPhoneNumber(user.get("phoneNumber"));
+		registerPage.clickSignUpButton();
 		registerPage.verifyUserAlreadyExistsMessage();
 	}
 

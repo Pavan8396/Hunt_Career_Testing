@@ -111,18 +111,6 @@ public class RegisterPage {
 		return new LoginPage(driver);
 	}
 
-    public void register(String fn, String ln, String em, String pwd, String cpwd, String ph) {
-        enterFirstName(fn);
-        enterLastName(ln);
-        clickFirstNextButton();
-        enterEmail(em);
-        enterPassword(pwd);
-        enterConfirmPassword(cpwd);
-        clickSecondNextButton();
-        enterPhoneNumber(ph);
-        clickSignUpButton();
-    }
-
 	public WebElement getDuplicateErrorMessage() {
 		return duplicateErrorMessage;
 	}
