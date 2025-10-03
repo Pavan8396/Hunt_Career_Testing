@@ -1,54 +1,79 @@
 package com.huntcareer.qa.testcases;
 
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
-import org.testng.asserts.SoftAssert;
+import java.util.Map;
 
-import com.github.javafaker.Faker;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
 import com.huntcareer.qa.base.TestBase;
 import com.huntcareer.qa.pages.LandingPage;
 import com.huntcareer.qa.pages.LoginPage;
 import com.huntcareer.qa.pages.RegisterPage;
-import com.huntcareer.qa.utils.JsonUtils;
+import com.huntcareer.qa.testdata.RegisterData;
 
 public class UserRegisterTest extends TestBase {
-    LandingPage landingPage;
-    RegisterPage registerPage;
-    LoginPage loginPage;
-    Faker faker;
+	RegisterPage registerPage;
+	LoginPage loginPage;
+	LandingPage landingPage;
 
-    @BeforeMethod
-    public void setUp() {
-        driver = initialization();
-        landingPage = new LandingPage(driver);
-        faker = new Faker();
-        registerPage = landingPage.clickUserRegisterLink();
-    }
+	@BeforeMethod
+	public void setup() {
+		driver = initialization();
+		landingPage = new LandingPage(driver);
+		registerPage = landingPage.clickUserRegisterLink();
+	}
 
-    @DataProvider(name = "validUsers")
-    public Object[][] getValidUsers() {
-        return JsonUtils.getTestData("src/test/resource/fixtures/registerData.json", "validUsers", "firstName", "lastName", "email", "password", "confirmPassword", "phoneNumber");
-    }
+	@Test(priority = 1)
+	public void testRegisterWithValidData() {
+		Map<String, String> user = RegisterData.validUser();
+		loginPage = registerPage.register(user.get("firstName"), user.get("lastName"), user.get("email"), user.get("password"), user.get("confirmPassword"), user.get("phoneNumber"));
+		loginPage.verifyRegisterSuccess();
+	}
 
-    @DataProvider(name = "duplicateUser")
-    public Object[][] getDuplicateUser() {
-        return JsonUtils.getTestData("src/test/resource/fixtures/registerData.json", "duplicateUser", "firstName", "lastName", "email", "password", "confirmPassword", "phoneNumber");
-    }
+	@Test(priority = 2)
+	public void testDuplicateData() {
+		Map<String, String> user = RegisterData.duplicateUser();
+		registerPage.register(user.get("firstName"), user.get("lastName"), user.get("email"), user.get("password"), user.get("confirmPassword"), user.get("phoneNumber"));
+		registerPage.verifyUserAlreadyExistsMessage();
+	}
 
-    @Test(dataProvider = "validUsers")
-    public void testSuccessfulRegistration(String firstName, String lastName, String email, String password, String confirmPassword, String phoneNumber) {
-        loginPage = registerPage.register(faker.name().firstName(), faker.name().lastName(), faker.internet().emailAddress(), password, confirmPassword, faker.phoneNumber().cellPhone());
-        SoftAssert softAssert = new SoftAssert();
-        softAssert.assertTrue(loginPage.getSuccessCreationMessage().isDisplayed());
-        softAssert.assertAll();
-    }
+	@Test(priority = 3)
+	public void testNoFirstNameData() {
+		Map<String, String> user = RegisterData.noFirstName();
+		registerPage.enterLastName(user.get("lastName"));
+		registerPage.clickFirstNextButton();
+		registerPage.verifyBlankFirstNameMessage();
+	}
 
-    @Test(dataProvider = "duplicateUser")
-    public void testDuplicateRegistration(String firstName, String lastName, String email, String password, String confirmPassword, String phoneNumber) {
-        registerPage.register(firstName, lastName, email, password, confirmPassword, phoneNumber);
-        SoftAssert softAssert = new SoftAssert();
-        softAssert.assertTrue(registerPage.getDuplicateErrorMessage().isDisplayed());
-        softAssert.assertAll();
-    }
+	@Test(priority = 4)
+	public void testNoLastNameData() {
+		Map<String, String> user = RegisterData.noLastName();
+		registerPage.enterFirstName(user.get("firstName"));
+		registerPage.clickFirstNextButton();
+		registerPage.verifyBlankLastNameMessage();
+	}
+
+	@Test(priority = 5)
+	public void testNoEmailData() {
+		Map<String, String> user = RegisterData.noEmail();
+		registerPage.enterFirstName(user.get("firstName"));
+		registerPage.enterLastName(user.get("lastName"));
+		registerPage.clickFirstNextButton();
+		registerPage.enterPassword(user.get("password"));
+		registerPage.enterConfirmPassword(user.get("confirmPassword"));
+		registerPage.clickSecondNextButton();
+		registerPage.verifyBlankEmailMessage();
+	}
+
+	@Test(priority = 6)
+	public void testNoPasswordData() {
+		Map<String, String> user = RegisterData.noPassword();
+		registerPage.enterFirstName(user.get("firstName"));
+		registerPage.enterLastName(user.get("lastName"));
+		registerPage.clickFirstNextButton();
+		registerPage.enterEmail(user.get("email"));
+		registerPage.enterConfirmPassword(user.get("confirmPassword"));
+		registerPage.clickSecondNextButton();
+		registerPage.verifyPasswordMustBeAtLeast8CharctersLongMessage();
+	}
 }
