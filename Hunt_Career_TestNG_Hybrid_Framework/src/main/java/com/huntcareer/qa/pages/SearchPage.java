@@ -37,6 +37,9 @@ public class SearchPage {
 	@FindBy(xpath = "//p[contains(text(),'No jobs found.')]")
 	private WebElement noJobsFoundMessage;
 
+    @FindBy(xpath = "//div[contains(text(),'Logged in successfully!')]")
+    private WebElement loginSuccessMessage;
+
 	public SearchPage(WebDriver driver) {
 		this.driver = driver;
 		this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
@@ -103,5 +106,7 @@ public class SearchPage {
         driver.findElement(By.xpath("//span[contains(text(), " + jobType + ")]")).isDisplayed();
     }
     
-    
+    public WebElement getLoginSuccessMessage() {
+        return loginSuccessMessage;
+    }
 }

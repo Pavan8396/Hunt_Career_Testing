@@ -1,0 +1,35 @@
+{
+  "validUsers": [
+    {
+      "description": "a valid user",
+      "firstName": "Pavan",
+      "lastName": "U",
+      "email": "upavan@mailinator.com",
+      "password": "Test@1234",
+      "confirmPassword": "Test@1234",
+      "phoneNumber": "1234567890"
+    }
+  ],
+  "duplicateUser": [
+    {
+      "description": "a duplicate user",
+      "firstName": "Pavan",
+      "lastName": "U",
+      "email": "upavan@mailinator.com",
+      "password": "Test@1234",
+      "confirmPassword": "Test@1234",
+      "phoneNumber": "1234567890"
+    }
+  ],
+  "invalidCases": [
+    {
+      "description": "a missing first name",
+      "firstName": "",
+      "lastName": "U",
+      "email": "upavan@mailinator.com",
+      "password": "Test@1234",
+      "confirmPassword": "Test@1234",
+      "phoneNumber": "1234567890"
+    }
+  ]
+}

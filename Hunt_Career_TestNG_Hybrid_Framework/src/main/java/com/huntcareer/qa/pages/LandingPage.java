@@ -29,7 +29,28 @@ public class LandingPage {
 		return new HomePage(driver);
 	}
 	
-	public void clickOnEmployerRole() {
+	public HomePage clickOnEmployerRole() {
 		employerRole.click();
+        return new HomePage(driver);
 	}
+
+    public LoginPage clickUserLoginLink() {
+        HomePage homePage = clickOnJobSeekerRole();
+        return homePage.clickOnLoginHomeLink();
+    }
+
+    public RegisterPage clickUserRegisterLink() {
+        HomePage homePage = clickOnJobSeekerRole();
+        return homePage.clickOnRegisterHomeLink();
+    }
+
+    public EmployerLoginPage clickEmployerLoginLink() {
+        HomePage homePage = clickOnEmployerRole();
+        return homePage.clickOnEmployerLoginHomeLink();
+    }
+
+    public EmployerRegisterPage clickEmployerRegisterLink() {
+        HomePage homePage = clickOnEmployerRole();
+        return homePage.clickOnEmployerRegisterHomeLink();
+    }
 }

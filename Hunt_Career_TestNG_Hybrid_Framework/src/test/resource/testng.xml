@@ -6,8 +6,10 @@
 	</listeners>
 	<test thread-count="5" name="Test">
 		<classes>
-			<class name="com.huntcareer.qa.testcases.Login" />
-			<class name="com.huntcareer.qa.testcases.Register" />
+			<class name="com.huntcareer.qa.testcases.UserLoginTest" />
+			<class name="com.huntcareer.qa.testcases.UserRegisterTest" />
+			<class name="com.huntcareer.qa.testcases.EmployerLoginTest" />
+			<class name="com.huntcareer.qa.testcases.EmployerRegisterTest" />
 			<class name="com.huntcareer.qa.testcases.Search" />
 		</classes>
 	</test> <!--

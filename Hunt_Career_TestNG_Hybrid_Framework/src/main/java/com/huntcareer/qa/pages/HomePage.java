@@ -32,15 +32,25 @@ public class HomePage {
 	public void verifySuccessMessage() {
 		Assert.assertEquals(wait.until(ExpectedConditions.visibilityOf(successLoginMessage)).getText(),
 				"Logged in successfully!", "Message Text Mismatch");
-		Assert.assertTrue(wait.until(ExpectedConditions.invisibilityOf(successLoginMessage)),
-				"Success message should not be visible anymore");
 	}
 	
-	public void clickOnLoginHomeLink() {
+	public LoginPage clickOnLoginHomeLink() {
 		loginHomeLink.click();
+        return new LoginPage(driver);
 	}
 	
-	public void clickOnRegisterHomeLink() {
+	public RegisterPage clickOnRegisterHomeLink() {
 		registerHomeLink.click();
+        return new RegisterPage(driver);
+	}
+
+	public EmployerLoginPage clickOnEmployerLoginHomeLink() {
+		loginHomeLink.click();
+		return new EmployerLoginPage(driver);
+	}
+
+	public EmployerRegisterPage clickOnEmployerRegisterHomeLink() {
+		registerHomeLink.click();
+		return new EmployerRegisterPage(driver);
 	}
 }

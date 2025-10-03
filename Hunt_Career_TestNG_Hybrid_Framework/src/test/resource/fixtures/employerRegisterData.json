@@ -1,0 +1,29 @@
+{
+  "validUsers": [
+    {
+      "description": "a valid user",
+      "name": "Exigent Services Pvt Ltd",
+      "email": "exigent@mailinator.com",
+      "password": "Test@1234",
+      "confirmPassword": "Test@1234"
+    }
+  ],
+  "duplicateUser": [
+    {
+      "description": "a duplicate employer",
+      "name": "Exigent Services Pvt Ltd",
+      "email": "exigent@mailinator.com",
+      "password": "Test@1234",
+      "confirmPassword": "Test@1234"
+    }
+  ],
+  "invalidCases": [
+    {
+      "description": "a missing name",
+      "name": "",
+      "email": "exigent@mailinator.com",
+      "password": "Test@1234",
+      "confirmPassword": "Test@1234"
+    }
+  ]
+}

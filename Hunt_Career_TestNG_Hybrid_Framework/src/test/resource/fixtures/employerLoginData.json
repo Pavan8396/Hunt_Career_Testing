@@ -1,0 +1,46 @@
+{
+  "validUsers": [
+    { "description": "a valid employer", "email": "exigent@mailinator.com", "password": "Test@1234" },
+    { "description": "an email with a dot in the name", "email": "quest.informatics@mailinator.com", "password": "Test@1234" },
+    { "description": "an email with spaces before it", "email": " exigent@mailinator.com", "password": "Test@1234" },
+    { "description": "an email with a space after it", "email": "exigent@mailinator.com ", "password": "Test@1234" }
+  ],
+  "invalidEmails": [
+    { "description": "a plain email", "email": "apple", "password": "Test@12345" },
+    { "description": "an email with no local part", "email": "@mailinator.com", "password": "Welcome@1234" },
+    { "description": "an email with a local part only", "email": "techMahindra@", "password": "Test@1234" },
+    { "description": "an email with two @ symbols", "email": "H@CL@mailinator.com", "password": "Welcome@1234@1234" },
+    { "description": "an email with no top-level domain", "email": "exigent@mailinator", "password": "Welcome@1234" },
+    { "description": "an email tailing with a dot", "email": "Urungo@mailinator.", "password": "Welcome@1234" },
+    { "description": "a top-level domain that is too short", "email": "Kamingo@mailinator.c", "password": "Test@12345" },
+    { "description": "a domain that starts with a hyphen", "email": "Nuruto@-mailinator.com", "password": "Welcome@1234" },
+    { "description": "a double dot in the domain", "email": "Super@mailinator..com", "password": "Test@1234" },
+    { "description": "an email with no @ symbol", "email": "mario#mailinator.com", "password": "Welcome@1234" },
+    { "description": "an email with illegal characters", "email": "nintendo<>@mailinator.com", "password": "Test@12346" },
+    { "description": "an email with a dot after the name", "email": "microsoft.@mailinator.com", "password": "Welcome@1234" },
+    { "description": "an email with two consecutive dots in the name", "email": "super..mario@mailinator.com", "password": "Test@1234" },
+    { "description": "an email with a dot at the beginning", "email": ".mogambo@mailinator.com", "password": "Welcome@1234" },
+    { "description": "an email with quotation marks", "email": "'Handi@mailinator.com'", "password": "Test@1234" },
+    { "description": "an email with an unclosed quotation mark", "email": "'orange@mailinator.com", "password": "Welcome@1234" },
+    { "description": "a very long email", "email": "verylonglocalpartthatexceedstheusuallimitstoverifythelimitdoesitexceedornotbyaddingverylongcharcaters@example.com", "password": "Test@1234" },
+    { "description": "a very long domain", "email": "megamail@verylonglocalpartthatexceedstheusuallimitstoverifythelimitdoesitexceedornotbyaddingverylongcharcaters.com", "password": "Test@1234" },
+    { "description": "a very long top-level domain", "email": "sanatani@example.verylonglocalpartthatexceedstheusuallimitstoverifythelimitdoesitexceedornotbyaddingverylongcharcaterscom", "password": "Test@1234" },
+    { "description": "a missing second-level domain", "email": "exigent@com", "password": "Welcome@1234" },
+    { "description": "an email with a comma", "email": "commasaparator@mailinator,com", "password": "Welcome@1234" },
+    { "description": "an email with two consecutive @ symbols", "email": "mango@@mailinator.com", "password": "Test@1234" },
+    { "description": "an underscore in the top-level domain", "email": "underscoreattopleveldomain@mailinator.c_m", "password": "Welcome@1234" },
+    { "description": "an email without a domain", "email": "nodomainusername@.com", "password": "Welcome@1234" }
+  ],
+  "invalidPasswords": [
+    { "description": "a password that is too short", "email": "exigent@mailinator.com", "password": "Test" }
+  ],
+  "blankEmail": [
+    { "description": "a blank email", "email": " ", "password": "Test@1234" }
+  ],
+  "blankPassword": [
+    { "description": "a blank password", "email": "exigent@mailinator.com", "password": " " }
+  ],
+  "invalidUsers": [
+    { "description": "a user that is not registered", "email": "morae@mailinator.com", "password": "Test@1234" }
+  ]
+}
