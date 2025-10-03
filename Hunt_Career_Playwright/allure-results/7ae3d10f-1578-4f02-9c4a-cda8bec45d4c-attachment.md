@@ -1,0 +1,104 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e2]:
+  - generic [ref=e3]:
+    - navigation [ref=e4]:
+      - generic [ref=e5]:
+        - link "Hunt-Career" [ref=e6] [cursor=pointer]:
+          - /url: /
+        - generic [ref=e7]:
+          - link "Login" [ref=e8] [cursor=pointer]:
+            - /url: /login
+          - link "Signup" [ref=e9] [cursor=pointer]:
+            - /url: /signup
+    - main [ref=e10]:
+      - generic [ref=e11]:
+        - generic [ref=e12]:
+          - generic [ref=e13]:
+            - textbox "Search jobs" [ref=e14]: xyz123938kfshkd
+            - button "Clear search" [ref=e15] [cursor=pointer]: ×
+          - button "Search" [ref=e16] [cursor=pointer]
+        - generic [ref=e18]:
+          - button "Toggle location filter dropdown" [ref=e20] [cursor=pointer]:
+            - text: Location
+            - generic [ref=e21] [cursor=pointer]: ▼
+          - button "Toggle job type filter dropdown" [ref=e23] [cursor=pointer]:
+            - text: Job Type
+            - generic [ref=e24] [cursor=pointer]: ▼
+          - combobox "Sort jobs" [ref=e26]:
+            - 'option "Sort By: Default" [selected]'
+            - option "Title (A-Z)"
+            - option "Title (Z-A)"
+            - option "Company (A-Z)"
+        - generic [ref=e27]:
+          - generic [ref=e28]:
+            - text: 🔍 xyz123938kfshkd
+            - button "Clear search term filter" [ref=e29] [cursor=pointer]: ×
+          - button "Clear all filters" [ref=e30] [cursor=pointer]: Clear All Filters
+        - generic [ref=e31]:
+          - generic [ref=e32] [cursor=pointer]:
+            - button "View details for Software Engineer III at Google" [ref=e33] [cursor=pointer]:
+              - heading "Software Engineer III" [level=3] [ref=e34] [cursor=pointer]
+              - paragraph [ref=e35] [cursor=pointer]: Google
+              - paragraph [ref=e36] [cursor=pointer]: Full-Time • Bengaluru, Karnataka, India
+              - paragraph [ref=e37] [cursor=pointer]: "Minimum qualifications: - Bachelor’s degree or equivalent practical experience. - 2 years of experience with software development in one or more programming languages, or 1 year of experience with an advanced degree. - 2 years of experience with data structures or algorithms in either an academic or industry setting. Preferred qualifications: - Master’s degree or PhD in Computer Science or related technical fields. - 2 years of experience building and developing infrastructure, distributed systems or networks, or experience with compute technologies, storage, or hardware architecture. - Experience developing accessible technologies. About the job: Google's software engineers develop the next-generation technologies that change how billions of users connect, explore, and interact with information. We're looking for engineers who bring fresh ideas from all areas. You will work on a specific project critical to Google’s needs with opportunities to switch teams and projects. We need our engineers to be versatile, display leadership qualities and be enthusiastic to take on new problems across the full-stack. Responsibilities: - Write product or system development code. - Participate in or lead design reviews. - Review code and provide feedback. - Contribute to documentation or educational content. - Triage and resolve system issues."
+            - generic [ref=e38] [cursor=pointer]:
+              - button "View details for Software Engineer III" [ref=e39] [cursor=pointer]: View Details →
+              - button "Save Software Engineer III" [ref=e41] [cursor=pointer]: Save
+          - generic [ref=e42] [cursor=pointer]:
+            - button "View details for AI Research Scientist at Microsoft" [ref=e43] [cursor=pointer]:
+              - heading "AI Research Scientist" [level=3] [ref=e44] [cursor=pointer]
+              - paragraph [ref=e45] [cursor=pointer]: Microsoft
+              - paragraph [ref=e46] [cursor=pointer]: Full-Time • Redmond, WA
+              - paragraph [ref=e47] [cursor=pointer]: Microsoft’s AI team is pushing the boundaries of intelligence, and as an AI Research Scientist, you’ll develop models for Azure Cognitive Services, powering applications like speech recognition and translation. You’ll design algorithms using PyTorch or TensorFlow, publish research, and collaborate with engineers to deploy models at scale. Responsibilities include experimenting with deep learning architectures, optimizing for cloud performance, and presenting findings at conferences like ICML. We seek candidates with a PhD in Computer Science or related fields, 4+ years of AI research experience, and expertise in Python and ML frameworks. Knowledge of cloud platforms like Azure is a plus. Microsoft’s Redmond campus features modern workspaces, free shuttles, and on-site cafes. Our benefits include health coverage, stock awards, and learning stipends for certifications. We support hybrid work (2–3 days in-office) and foster inclusion through groups like Blacks@Microsoft. This role may involve travel (up to 20%) for conferences or team summits. You’ll have access to Microsoft Research’s resources and mentorship for career growth. If you’re excited to advance AI for global users, join us. Microsoft is where innovation meets purpose—apply now to create intelligent solutions that empower businesses and individuals worldwide!
+            - generic [ref=e48] [cursor=pointer]:
+              - button "View details for AI Research Scientist" [ref=e49] [cursor=pointer]: View Details →
+              - button "Save AI Research Scientist" [ref=e51] [cursor=pointer]: Save
+          - generic [ref=e52] [cursor=pointer]:
+            - button "View details for DevOps Engineer, E-Commerce at Amazon" [ref=e53] [cursor=pointer]:
+              - heading "DevOps Engineer, E-Commerce" [level=3] [ref=e54] [cursor=pointer]
+              - paragraph [ref=e55] [cursor=pointer]: Amazon
+              - paragraph [ref=e56] [cursor=pointer]: Full-Time • Seattle, WA
+              - paragraph [ref=e57] [cursor=pointer]: Amazon’s E-Commerce platform serves millions daily, and as a DevOps Engineer, you’ll automate and scale its infrastructure using AWS. You’ll deploy services with Terraform and Docker, optimize CI/CD pipelines, and ensure 99.99% uptime for storefront features. Responsibilities include monitoring systems with CloudWatch, scripting in Python or Bash, and collaborating with developers to improve deployment cycles. You’ll handle incident responses and drive automation to reduce toil. We seek candidates with a BS/MS in Computer Science, 3+ years of DevOps experience, and expertise in AWS, Terraform, and Kubernetes. Familiarity with microservices is a plus. Amazon’s Seattle office offers dog-friendly spaces, free snacks, and bike storage. Our benefits include health plans, stock units, and relocation support, plus programs like Amazon Future Engineer. We follow Leadership Principles like “Dive Deep” and support inclusion through affinity groups. This role involves hybrid work (3 days in-office) and on-call rotations (compensated). You’ll have access to AWS certifications and career paths. If you’re passionate about reliable systems, join us. Amazon is where builders thrive—apply now to power the world’s largest e-commerce platform and deliver for customers globally!
+            - generic [ref=e58] [cursor=pointer]:
+              - button "View details for DevOps Engineer, E-Commerce" [ref=e59] [cursor=pointer]: View Details →
+              - button "Save DevOps Engineer, E-Commerce" [ref=e61] [cursor=pointer]: Save
+          - generic [ref=e62] [cursor=pointer]:
+            - button "View details for UI Engineer, Mobile Apps at Netflix" [ref=e63] [cursor=pointer]:
+              - heading "UI Engineer, Mobile Apps" [level=3] [ref=e64] [cursor=pointer]
+              - paragraph [ref=e65] [cursor=pointer]: Netflix
+              - paragraph [ref=e66] [cursor=pointer]: Full-Time • Los Gatos, CA
+              - paragraph [ref=e67] [cursor=pointer]: Netflix brings stories to 200 million subscribers, and as a UI Engineer for Mobile Apps, you’ll craft seamless interfaces for our iOS and Android platforms. You’ll code in React Native, designing responsive UIs for features like offline downloads and personalized recommendations. Responsibilities include prototyping designs, optimizing app performance, and collaborating with backend engineers to integrate APIs. You’ll conduct A/B tests and ensure accessibility compliance. We seek candidates with a BS/MS in Computer Science, 4+ years of mobile UI experience, and expertise in React Native or Swift/Kotlin. Knowledge of streaming UX is a plus. Netflix’s culture of freedom and responsibility offers flexible hours and unlimited PTO, focusing on impact. Our Los Gatos office features modern workspaces, free snacks, and shuttles. Benefits include top-tier health plans, stock options, and parental leave. We prefer hybrid work (1–2 days in-office) and support inclusion through groups like Women@Netflix. This role may involve occasional travel for team syncs. You’ll have opportunities to innovate and grow technically. If you’re excited to enhance streaming experiences, join us. Netflix is where tech meets storytelling—apply now to create UIs that make every watch unforgettable!
+            - generic [ref=e68] [cursor=pointer]:
+              - button "View details for UI Engineer, Mobile Apps" [ref=e69] [cursor=pointer]: View Details →
+              - button "Save UI Engineer, Mobile Apps" [ref=e71] [cursor=pointer]: Save
+          - generic [ref=e72] [cursor=pointer]:
+            - button "View details for Silicon Design Engineer at Apple" [ref=e73] [cursor=pointer]:
+              - heading "Silicon Design Engineer" [level=3] [ref=e74] [cursor=pointer]
+              - paragraph [ref=e75] [cursor=pointer]: Apple
+              - paragraph [ref=e76] [cursor=pointer]: Full-Time • Cupertino, CA
+              - paragraph [ref=e77] [cursor=pointer]: Apple’s Silicon team designs chips like the M2 that power our devices, and as a Silicon Design Engineer, you’ll create next-generation processors. You’ll use Verilog and VHDL to design CPU, GPU, and neural engine components, optimizing for power and performance. Responsibilities include synthesizing designs, running simulations, and collaborating with firmware teams to validate chips. You’ll work in cutting-edge labs, ensuring silicon meets Apple’s quality standards. We seek candidates with a BS/MS in Electrical Engineering, 5+ years of ASIC design experience, and expertise in Verilog and synthesis tools. Knowledge of ARM architectures is a plus. Apple’s Cupertino campus offers state-of-the-art facilities, free meals, and wellness centers. Our benefits include health coverage, stock grants, and employee discounts. We support hybrid work (3 days in-office) and foster inclusion through groups like Diversity Network Associations. This role may involve travel for supplier visits, with relocation support offered. You’ll have access to Apple University for growth. If you’re passionate about groundbreaking hardware, join us. Apple is where precision meets innovation—apply now to design chips that redefine technology!
+            - generic [ref=e78] [cursor=pointer]:
+              - button "View details for Silicon Design Engineer" [ref=e79] [cursor=pointer]: View Details →
+              - button "Save Silicon Design Engineer" [ref=e81] [cursor=pointer]: Save
+          - generic [ref=e82] [cursor=pointer]:
+            - button "View details for Product Manager, WhatsApp at Meta" [ref=e83] [cursor=pointer]:
+              - heading "Product Manager, WhatsApp" [level=3] [ref=e84] [cursor=pointer]
+              - paragraph [ref=e85] [cursor=pointer]: Meta
+              - paragraph [ref=e86] [cursor=pointer]: Full-Time • Remote
+              - paragraph [ref=e87] [cursor=pointer]: WhatsApp, part of Meta, connects billions, and as a Product Manager, you’ll define its feature roadmap, from messaging to payments. You’ll gather user insights, prioritize features, and collaborate with engineers and designers to launch enhancements like group calls or end-to-end encryption. Responsibilities include creating specs, driving Agile sprints, and analyzing metrics to improve engagement. You’ll present strategies to leadership and ensure global scalability. We seek candidates with a BS/MBA, 4+ years of product management experience, and proficiency in Agile and data analysis (e.g., SQL, Tableau). Mobile app experience is a plus. Meta supports remote work with flexible hours, virtual collaboration via Workplace, and hardware stipends. Our benefits include health coverage, stock options, and learning budgets. We prioritize inclusion through groups like Latin@Meta. This role involves virtual syncs and occasional travel for user research. You’ll have opportunities to impact billions and grow into leadership. If you’re excited to build connected experiences, join us. Meta is where ideas become realities—apply now to shape WhatsApp’s future and empower global communication!
+            - generic [ref=e88] [cursor=pointer]:
+              - button "View details for Product Manager, WhatsApp" [ref=e89] [cursor=pointer]: View Details →
+              - button "Save Product Manager, WhatsApp" [ref=e91] [cursor=pointer]: Save
+        - paragraph [ref=e92]: Page 1 of 25
+        - generic [ref=e93]:
+          - button "Previous page" [disabled] [ref=e94]: ◀ Prev
+          - button "Go to page 1" [ref=e95] [cursor=pointer]: "1"
+          - button "Go to page 2" [ref=e96] [cursor=pointer]: "2"
+          - button "Go to page 3" [ref=e97] [cursor=pointer]: "3"
+          - button "Go to page 4" [ref=e98] [cursor=pointer]: "4"
+          - button "Go to page 5" [ref=e99] [cursor=pointer]: "5"
+          - button "Next page" [ref=e100] [cursor=pointer]: Next ▶
+  - region "Notifications Alt+T"
+```
