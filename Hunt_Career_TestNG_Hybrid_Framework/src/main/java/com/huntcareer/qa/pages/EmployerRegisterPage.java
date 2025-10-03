@@ -42,6 +42,12 @@ public class EmployerRegisterPage {
     @FindBy(xpath = "//div[contains(text(),'Password must be at least 8 characters long.')]")
 	private WebElement passwordMustHaveRequiredNumberCharactersMessage;
 
+    @FindBy(xpath = "//div[contains(text(),'Please enter a valid email address.')]")
+    private WebElement pleaseEnterValidEmailAddressMessage;
+
+    @FindBy(xpath = "//div[contains(text(),'Passwords do not match.')]")
+    private WebElement passwordNotMatchMessage;
+
     // Initializing the Page Objects:
     public EmployerRegisterPage(WebDriver driver) {
         this.driver = driver;
@@ -100,4 +106,14 @@ public class EmployerRegisterPage {
 				wait.until(ExpectedConditions.visibilityOf(passwordMustHaveRequiredNumberCharactersMessage)).getText(),
 				"Password must be at least 8 characters long.", "Message Text Mismatch");
 	}
+
+    public void verifyInvalidEmailAddressMessage() {
+        Assert.assertEquals(wait.until(ExpectedConditions.visibilityOf(pleaseEnterValidEmailAddressMessage)).getText(),
+                "Please enter a valid email address.", "Message Text Mismatch");
+    }
+
+    public void verifyPasswordMismatchMessage() {
+        Assert.assertEquals(wait.until(ExpectedConditions.visibilityOf(passwordNotMatchMessage)).getText(),
+                "Passwords do not match.", "Message Text Mismatch");
+    }
 }

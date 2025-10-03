@@ -33,23 +33,32 @@ public class Utilities {
     public static String getLastName() {
     	return faker.name().lastName();
     }
-    
+
     public static String getCompanyName() {
         return faker.company().name();
     }
-
-    public static String getEmail(String type) {
     
-    	switch(type) {
-    	
-    	case "withoutAllDomain": return genarateEmailTimeStamp();
-    	case "withoutTopLevelDomain": return genarateEmailTimeStamp()+"@mailinator";
-    	case "doubleAt": return genarateEmailTimeStamp()+"@@mailinator.com";
-    	case "dotBeforeAt": return genarateEmailTimeStamp()+".@mailinator.com";
-    	case "withoutDomain": return genarateEmailTimeStamp()+"@.com";
-    	case "withoutUserName": return "@mailinator.com";
-    	default: return genarateEmailTimeStamp()+"@mailinator.com";
-    	}
+    public static String getEmail(String type) {
+        String timestamp = genarateEmailTimeStamp();
+        switch(type) {
+            case "plainEmail": return "testuser";
+            case "noLocalPart": return "@mailinator.com";
+            case "localPartOnly": return timestamp + "@";
+            case "twoConsecutiveAt": return timestamp + "@@mailinator.com";
+            case "withoutTopLevelDomain": return timestamp + "@mailinator";
+            case "tailingWithDot": return timestamp + "@mailinator.";
+            case "topLevelDomainTooShort": return timestamp + "@mailinator.c";
+            case "domainStartsWithHyphen": return timestamp + "@-mailinator.com";
+            case "doubleDotInDomain": return timestamp + "@mailinator..com";
+            case "noAtTheRate": return timestamp + "#mailinator.com";
+            case "illegalCharacters": return timestamp + "<>@mailinator.com";
+            case "dotAfterName": return timestamp + ".@mailinator.com";
+            case "twoConsecutiveDots": return "user..name" + "@mailinator.com";
+            case "dotAtBeginning": return ".username" + "@mailinator.com";
+            case "withoutDomain": return timestamp + "@.com";
+            case "withoutUserName": return "@mailinator.com";
+            default: return timestamp + "@mailinator.com";
+        }
     }
     
     public static String generateRandomPassword() {
@@ -122,5 +131,4 @@ public class Utilities {
 		}
 		return destinationScreenshotPath;
 	}
-
 }

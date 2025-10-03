@@ -66,4 +66,25 @@ public class EmployerRegisterTest extends TestBase {
         employerRegisterPage.clickRegisterButton();
         employerRegisterPage.verifyPasswordMustBeAtLeast8CharctersLongMessage();
     }
+
+    @Test(priority = 6)
+    public void testInvalidEmail() {
+        Map<String, String> user = EmployerRegisterData.invalidEmail("plainEmail");
+        employerRegisterPage.register(user.get("name"), user.get("email"), user.get("password"), user.get("confirmPassword"));
+        employerRegisterPage.verifyInvalidEmailAddressMessage();
+    }
+
+    @Test(priority = 7)
+    public void testShortPassword() {
+        Map<String, String> user = EmployerRegisterData.shortPassword();
+        employerRegisterPage.register(user.get("name"), user.get("email"), user.get("password"), user.get("confirmPassword"));
+        employerRegisterPage.verifyPasswordMustBeAtLeast8CharctersLongMessage();
+    }
+
+    @Test(priority = 8)
+    public void testPasswordMismatch() {
+        Map<String, String> user = EmployerRegisterData.passwordMismatch();
+        employerRegisterPage.register(user.get("name"), user.get("email"), user.get("password"), user.get("confirmPassword"));
+        employerRegisterPage.verifyPasswordMismatchMessage();
+    }
 }

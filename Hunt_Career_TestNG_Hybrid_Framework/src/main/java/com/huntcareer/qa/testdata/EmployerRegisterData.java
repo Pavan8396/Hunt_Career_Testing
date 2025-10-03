@@ -50,4 +50,32 @@ public class EmployerRegisterData {
         data.put("confirmPassword", "Test@1234");
         return data;
     }
+
+    public static Map<String, String> invalidEmail(String emailType) {
+        String password = Utilities.generateRandomPassword();
+        Map<String, String> data = new HashMap<>();
+        data.put("name", Utilities.getCompanyName());
+        data.put("email", Utilities.getEmail(emailType));
+        data.put("password", password);
+        data.put("confirmPassword", password);
+        return data;
+    }
+
+    public static Map<String, String> shortPassword() {
+        Map<String, String> data = new HashMap<>();
+        data.put("name", Utilities.getCompanyName());
+        data.put("email", Utilities.getEmail("normal"));
+        data.put("password", "Test");
+        data.put("confirmPassword", "Test");
+        return data;
+    }
+
+    public static Map<String, String> passwordMismatch() {
+        Map<String, String> data = new HashMap<>();
+        data.put("name", Utilities.getCompanyName());
+        data.put("email", Utilities.getEmail("normal"));
+        data.put("password", "Test@1234");
+        data.put("confirmPassword", "Mismatch@1234");
+        return data;
+    }
 }
