@@ -34,6 +34,10 @@ public class Utilities {
     	return faker.name().lastName();
     }
     
+    public static String getCompanyName() {
+        return faker.company().name();
+    }
+
     public static String getEmail(String type) {
     
     	switch(type) {
