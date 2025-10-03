@@ -94,19 +94,43 @@ public class SearchPage {
 		return jobcard.findElement(By.cssSelector("p.text-sm.text-gray-700.mt-3.line-clamp-3"));
 	}
 	
-	public void getSearchTag(String searchTerm) {
-        driver.findElement(By.xpath("//span[contains(text(), " + searchTerm + ")]")).isDisplayed();
+	public WebElement getSearchTag(String searchTerm) {
+        return driver.findElement(By.xpath("//span[contains(text(), '" + searchTerm + "')]"));
     }
 
-    public void getLocationTag(String location) {
-        driver.findElement(By.xpath("//span[contains(text(), " + location + ")]")).isDisplayed();
+    public WebElement getLocationTag(String location) {
+        return driver.findElement(By.xpath("//span[contains(text(), '" + location + "')]"));
     }
 
-    public void getJobTypeTag(String jobType) {
-        driver.findElement(By.xpath("//span[contains(text(), " + jobType + ")]")).isDisplayed();
+    public WebElement getJobTypeTag(String jobType) {
+        return driver.findElement(By.xpath("//span[contains(text(), '" + jobType + "')]"));
     }
     
     public WebElement getLoginSuccessMessage() {
         return loginSuccessMessage;
+    }
+
+    public WebElement getNoJobsFoundMessage() {
+        return noJobsFoundMessage;
+    }
+
+    public void search(String searchTerm) {
+        enterKeywordIntoSearchInputField(searchTerm);
+        clickOnSearch();
+    }
+
+    public void search(String searchTerm, String location, String jobType) {
+        enterKeywordIntoSearchInputField(searchTerm);
+        if (location != null) {
+            clickLocationButton();
+            selectLocationOption(location);
+            clickLocationButton();
+        }
+        if (jobType != null) {
+            clickJobTypeButton();
+            selectJobTypeOption(jobType);
+            clickJobTypeButton();
+        }
+        clickOnSearch();
     }
 }

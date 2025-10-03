@@ -1,81 +1,78 @@
 package com.huntcareer.qa.testcases;
 
-import org.openqa.selenium.WebDriver;
-import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+import org.testng.asserts.SoftAssert;
 
-import com.huntcareer.qa.base.Base;
-import com.huntcareer.qa.pages.HomePage;
+import com.huntcareer.qa.base.TestBase;
 import com.huntcareer.qa.pages.LandingPage;
 import com.huntcareer.qa.pages.SearchPage;
+import com.huntcareer.qa.utils.JsonUtils;
 
-public class Search extends Base {
-	WebDriver driver;
-	SearchPage sp;
-	LandingPage ldp;
-	HomePage hp;
-	
-	public Search() {
-		super();
-	}
+public class Search extends TestBase {
+    SearchPage searchPage;
+    LandingPage landingPage;
 
-	@BeforeMethod
-	public void setup() {
-		// loadPropertiesFile();
-		driver = inicializeBrowserAndOpenApplication(prop.getProperty("browser"));
-		// driver.get(loadPropertiesFile().getProperty("url")+"/signup");
-		driver.get(prop.getProperty("url"));
-		ldp = new LandingPage(driver);
-		hp = ldp.clickOnJobSeekerRole();
-	}
+    @BeforeMethod
+    public void setup() {
+        driver = initialization();
+        searchPage = new SearchPage(driver);
+    }
 
-	@AfterMethod
-	public void tearDown() {
-		driver.quit();
-	}
-	
-	@Test(priority = 1, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-	public void TC_1_verifyValidSearch() {
+    @DataProvider(name = "validSearch")
+    public Object[][] getValidSearch() {
+        return JsonUtils.getTestData("src/test/resource/fixtures/searchData.json", "validSearch", "searchTerm");
+    }
 
-		sp = new SearchPage(driver);
-		sp.enterKeywordIntoSearchInputField(dataProp.getProperty("validSearchTerm"));
-		sp.clickOnSearch();
-		sp.getSearchTag("validSearchTerm");
-	}
-	
-	@Test(priority = 2, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-	public void TC_2_verifyInvalidSearch() {
-		sp = new SearchPage(driver);
-		sp.enterKeywordIntoSearchInputField(dataProp.getProperty("invalidSearchTerm"));
-		sp.clickOnSearch();
-		sp.getSearchTag("invalidSearchTerm");
-	}
-	
-	@Test(priority = 3, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-	public void TC_3_verifySearchWithSpecialCharcters() {
-		sp = new SearchPage(driver);
-		sp.enterKeywordIntoSearchInputField(dataProp.getProperty("specialCharctersSearchTerm"));
-		sp.clickOnSearch();
-		sp.getSearchTag("specialCharctersSearchTerm");
-	}
-	
-	@Test(priority = 4, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-	public void TC_4_verifySearchWithFilters() {
-		sp = new SearchPage(driver);
-		sp.enterKeywordIntoSearchInputField(dataProp.getProperty("validSearchTerm"));
-		sp.clickLocationButton();
-		sp.selectLocationOption(dataProp.getProperty("filterLocation"));
-		sp.clickLocationButton();
-		sp.clickJobTypeButton();
-		sp.selectJobTypeOption(dataProp.getProperty("filterJobType"));
-		sp.getSearchTag("validSearchTerm");
-		sp.getLocationTag("filterLocation");
-		sp.getJobTypeTag("filterJobType");
-	}
-	
-	@Test(priority = 4, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-	public void TC_5_Login_and_Save_the_job_and_view_the_saved_job_in_saved_jobs_page() {
-		
-	}
+    @DataProvider(name = "invalidSearch")
+    public Object[][] getInvalidSearch() {
+        return JsonUtils.getTestData("src/test/resource/fixtures/searchData.json", "invalidSearch", "searchTerm");
+    }
+
+    @DataProvider(name = "specialCharSearch")
+    public Object[][] getSpecialCharSearch() {
+        return JsonUtils.getTestData("src/test/resource/fixtures/searchData.json", "specialCharSearch", "searchTerm");
+    }
+
+    @DataProvider(name = "searchWithFilters")
+    public Object[][] getSearchWithFilters() {
+        return JsonUtils.getTestData("src/test/resource/fixtures/searchData.json", "searchWithFilters", "searchTerm", "location", "jobType");
+    }
+
+    @Test(dataProvider = "validSearch")
+    public void testValidKeywordSearch(String searchTerm) {
+        searchPage.search(searchTerm);
+        SoftAssert softAssert = new SoftAssert();
+        softAssert.assertTrue(searchPage.getSearchTag(searchTerm).isDisplayed());
+        softAssert.assertAll();
+    }
+
+    @Test(dataProvider = "invalidSearch")
+    public void testInvalidKeywordSearch(String searchTerm) {
+        searchPage.search(searchTerm);
+        SoftAssert softAssert = new SoftAssert();
+        softAssert.assertTrue(searchPage.getSearchTag(searchTerm).isDisplayed());
+        softAssert.assertTrue(searchPage.getNoJobsFoundMessage().isDisplayed());
+        softAssert.assertAll();
+    }
+
+    @Test(dataProvider = "specialCharSearch")
+    public void testSpecialCharacterSearch(String searchTerm) {
+        searchPage.search(searchTerm);
+        SoftAssert softAssert = new SoftAssert();
+        softAssert.assertTrue(searchPage.getSearchTag(searchTerm).isDisplayed());
+        softAssert.assertTrue(searchPage.getNoJobsFoundMessage().isDisplayed());
+        softAssert.assertAll();
+    }
+
+    @Test(dataProvider = "searchWithFilters")
+    public void testSearchWithFilters(String searchTerm, String location, String jobType) {
+        searchPage.search(searchTerm, location, jobType);
+        SoftAssert softAssert = new SoftAssert();
+        softAssert.assertTrue(searchPage.getSearchTag(searchTerm).isDisplayed());
+        softAssert.assertTrue(searchPage.getLocationTag(location).isDisplayed());
+        softAssert.assertTrue(searchPage.getJobTypeTag(jobType).isDisplayed());
+        softAssert.assertAll();
+    }
 }
