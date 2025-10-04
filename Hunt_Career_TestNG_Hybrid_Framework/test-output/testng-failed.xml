@@ -3,14 +3,13 @@
 <suite name="Failed suite [Default suite]" guice-stage="DEVELOPMENT">
   <test thread-count="5" name="Default test(failed)">
     <classes>
-      <class name="com.huntcareer.qa.testcases.EmployerLogin">
+      <class name="com.huntcareer.qa.testcases.EmployerRegister">
         <methods>
-          <include name="TC_15_verifyinvalidEmailOnlyEmaielpart"/>
-          <include name="TC_14_verifyinvalidEmailNoLocaelpart"/>
+          <include name="TC_1_verifyRegisterWithValidData"/>
           <include name="tearDown"/>
           <include name="setup"/>
         </methods>
-      </class> <!-- com.huntcareer.qa.testcases.EmployerLogin -->
+      </class> <!-- com.huntcareer.qa.testcases.EmployerRegister -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->

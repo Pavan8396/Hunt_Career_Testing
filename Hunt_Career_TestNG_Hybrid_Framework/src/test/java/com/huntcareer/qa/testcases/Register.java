@@ -188,10 +188,10 @@ public class Register extends Base {
 	}
 
 	@Test(priority = 11, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-	public void TC_11_verifyEmailWithoutAllDomainData() {
+	public void TC_11_verifyplainEmail() {
 
 		rp = new RegisterPage(driver);
-		Map<String, String> user = RegisterData.emailWithoutAllDomain();
+		Map<String, String> user = RegisterData.plainEmail();
 		rp.enterFirstName(user.get("firstName"));
 		rp.enterLastName(user.get("lastName"));
 		rp.clickFirstNextButton();
@@ -203,10 +203,10 @@ public class Register extends Base {
 	}
 
 	@Test(priority = 12, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-	public void TC_12_verifyWithoutTopLevelDomainData() {
+	public void TC_12_verifynoLocalPart() {
 
 		rp = new RegisterPage(driver);
-		Map<String, String> user = RegisterData.emailwithoutTopLevelDomain();
+		Map<String, String> user = RegisterData.noLocalPart();
 		rp.enterFirstName(user.get("firstName"));
 		rp.enterLastName(user.get("lastName"));
 		rp.clickFirstNextButton();
@@ -218,10 +218,10 @@ public class Register extends Base {
 	}
 
 	@Test(priority = 13, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-	public void TC_13_verifyEmailWithDoubleAtData() {
+	public void TC_13_verifyEmailonlyLocalPart() {
 
 		rp = new RegisterPage(driver);
-		Map<String, String> user = RegisterData.emailwithdoubleAt();
+		Map<String, String> user = RegisterData.onlyLocalPart();
 		rp.enterFirstName(user.get("firstName"));
 		rp.enterLastName(user.get("lastName"));
 		rp.clickFirstNextButton();
@@ -233,10 +233,295 @@ public class Register extends Base {
 	}
 
 	@Test(priority = 14, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-	public void TC_14_verifyDotBeforeAtTheRateData() {
+	public void TC_14_verifydoubleAt() {
 
 		rp = new RegisterPage(driver);
-		Map<String, String> user = RegisterData.emailWithdotBeforeAt();
+		Map<String, String> user = RegisterData.doubleAt();
+		rp.enterFirstName(user.get("firstName"));
+		rp.enterLastName(user.get("lastName"));
+		rp.clickFirstNextButton();
+		rp.enterEmail(user.get("email"));
+		rp.enterPassword(user.get("password"));
+		rp.enterConfirmPassword(user.get("confirmPassword"));
+		rp.clickSecondNextButton();
+		rp.verifyInvalidEmailAndPassword();
+	}
+
+	@Test(priority = 15, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
+	public void TC_15_verifyEmailwithoutTopLevelDomain() {
+
+		rp = new RegisterPage(driver);
+		Map<String, String> user = RegisterData.withoutTopLevelDomain();
+		rp.enterFirstName(user.get("firstName"));
+		rp.enterLastName(user.get("lastName"));
+		rp.clickFirstNextButton();
+		rp.enterEmail(user.get("email"));
+		rp.enterPassword(user.get("password"));
+		rp.enterConfirmPassword(user.get("confirmPassword"));
+		rp.clickSecondNextButton();
+		rp.verifyInvalidEmailAndPassword();
+	}
+	
+	@Test(priority = 16, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
+	public void TC_16_verifytailingWithDot() {
+
+		rp = new RegisterPage(driver);
+		Map<String, String> user = RegisterData.tailingWithDot();
+		rp.enterFirstName(user.get("firstName"));
+		rp.enterLastName(user.get("lastName"));
+		rp.clickFirstNextButton();
+		rp.enterEmail(user.get("email"));
+		rp.enterPassword(user.get("password"));
+		rp.enterConfirmPassword(user.get("confirmPassword"));
+		rp.clickSecondNextButton();
+		rp.verifyInvalidEmailAndPassword();
+	}
+
+	@Test(priority = 17, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
+	public void TC_17_verifytopLevelDomainTooShort() {
+
+		rp = new RegisterPage(driver);
+		Map<String, String> user = RegisterData.topLevelDomainTooShort();
+		rp.enterFirstName(user.get("firstName"));
+		rp.enterLastName(user.get("lastName"));
+		rp.clickFirstNextButton();
+		rp.enterEmail(user.get("email"));
+		rp.enterPassword(user.get("password"));
+		rp.enterConfirmPassword(user.get("confirmPassword"));
+		rp.clickSecondNextButton();
+		rp.verifyInvalidEmailAndPassword();
+	}
+
+	@Test(priority = 18, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
+	public void TC_18_verifydomainStartsWithHyphen() {
+
+		rp = new RegisterPage(driver);
+		Map<String, String> user = RegisterData.domainStartsWithHyphen();
+		rp.enterFirstName(user.get("firstName"));
+		rp.enterLastName(user.get("lastName"));
+		rp.clickFirstNextButton();
+		rp.enterEmail(user.get("email"));
+		rp.enterPassword(user.get("password"));
+		rp.enterConfirmPassword(user.get("confirmPassword"));
+		rp.clickSecondNextButton();
+		rp.verifyInvalidEmailAndPassword();
+	}
+
+	@Test(priority = 19, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
+	public void TC_19_verifydoubleDotInDomain() {
+
+		rp = new RegisterPage(driver);
+		Map<String, String> user = RegisterData.doubleDotInDomain();
+		rp.enterFirstName(user.get("firstName"));
+		rp.enterLastName(user.get("lastName"));
+		rp.clickFirstNextButton();
+		rp.enterEmail(user.get("email"));
+		rp.enterPassword(user.get("password"));
+		rp.enterConfirmPassword(user.get("confirmPassword"));
+		rp.clickSecondNextButton();
+		rp.verifyInvalidEmailAndPassword();
+	}
+
+	@Test(priority = 20, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
+	public void TC_20_verifynoAtTheRate() {
+
+		rp = new RegisterPage(driver);
+		Map<String, String> user = RegisterData.noAtTheRate();
+		rp.enterFirstName(user.get("firstName"));
+		rp.enterLastName(user.get("lastName"));
+		rp.clickFirstNextButton();
+		rp.enterEmail(user.get("email"));
+		rp.enterPassword(user.get("password"));
+		rp.enterConfirmPassword(user.get("confirmPassword"));
+		rp.clickSecondNextButton();
+		rp.verifyInvalidEmailAndPassword();
+	}
+
+	@Test(priority = 21, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
+	public void TC_21_verifyillegalChars() {
+
+		rp = new RegisterPage(driver);
+		Map<String, String> user = RegisterData.illegalChars();
+		rp.enterFirstName(user.get("firstName"));
+		rp.enterLastName(user.get("lastName"));
+		rp.clickFirstNextButton();
+		rp.enterEmail(user.get("email"));
+		rp.enterPassword(user.get("password"));
+		rp.enterConfirmPassword(user.get("confirmPassword"));
+		rp.clickSecondNextButton();
+		rp.verifyInvalidEmailAndPassword();
+	}
+
+	@Test(priority = 22, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
+	public void TC_22_verifytwoConsicutiveDots() {
+
+		rp = new RegisterPage(driver);
+		Map<String, String> user = RegisterData.twoConsicutiveDots();
+		rp.enterFirstName(user.get("firstName"));
+		rp.enterLastName(user.get("lastName"));
+		rp.clickFirstNextButton();
+		rp.enterEmail(user.get("email"));
+		rp.enterPassword(user.get("password"));
+		rp.enterConfirmPassword(user.get("confirmPassword"));
+		rp.clickSecondNextButton();
+		rp.verifyInvalidEmailAndPassword();
+	}
+
+	@Test(priority = 23, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
+	public void TC_23_verifydotAtBeginning() {
+
+		rp = new RegisterPage(driver);
+		Map<String, String> user = RegisterData.dotAtBeginning();
+		rp.enterFirstName(user.get("firstName"));
+		rp.enterLastName(user.get("lastName"));
+		rp.clickFirstNextButton();
+		rp.enterEmail(user.get("email"));
+		rp.enterPassword(user.get("password"));
+		rp.enterConfirmPassword(user.get("confirmPassword"));
+		rp.clickSecondNextButton();
+		rp.verifyInvalidEmailAndPassword();
+	}
+
+	@Test(priority = 24, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
+	public void TC_24_verifywithQuotation() {
+
+		rp = new RegisterPage(driver);
+		Map<String, String> user = RegisterData.withQuotation();
+		rp.enterFirstName(user.get("firstName"));
+		rp.enterLastName(user.get("lastName"));
+		rp.clickFirstNextButton();
+		rp.enterEmail(user.get("email"));
+		rp.enterPassword(user.get("password"));
+		rp.enterConfirmPassword(user.get("confirmPassword"));
+		rp.clickSecondNextButton();
+		rp.verifyInvalidEmailAndPassword();
+	}
+
+	@Test(priority = 25, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
+	public void TC_25_verifyunclosedQuotation() {
+
+		rp = new RegisterPage(driver);
+		Map<String, String> user = RegisterData.unclosedQuotation();
+		rp.enterFirstName(user.get("firstName"));
+		rp.enterLastName(user.get("lastName"));
+		rp.clickFirstNextButton();
+		rp.enterEmail(user.get("email"));
+		rp.enterPassword(user.get("password"));
+		rp.enterConfirmPassword(user.get("confirmPassword"));
+		rp.clickSecondNextButton();
+		rp.verifyInvalidEmailAndPassword();
+	}
+
+	@Test(priority = 26, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
+	public void TC_26_verifyveryLengthyLocal() {
+
+		rp = new RegisterPage(driver);
+		Map<String, String> user = RegisterData.veryLengthyLocal();
+		rp.enterFirstName(user.get("firstName"));
+		rp.enterLastName(user.get("lastName"));
+		rp.clickFirstNextButton();
+		rp.enterEmail(user.get("email"));
+		rp.enterPassword(user.get("password"));
+		rp.enterConfirmPassword(user.get("confirmPassword"));
+		rp.clickSecondNextButton();
+		rp.verifyInvalidEmailAndPassword();
+	}
+
+	@Test(priority = 27, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
+	public void TC_27_verifyveryLengthyDomain() {
+
+		rp = new RegisterPage(driver);
+		Map<String, String> user = RegisterData.veryLengthyDomain();
+		rp.enterFirstName(user.get("firstName"));
+		rp.enterLastName(user.get("lastName"));
+		rp.clickFirstNextButton();
+		rp.enterEmail(user.get("email"));
+		rp.enterPassword(user.get("password"));
+		rp.enterConfirmPassword(user.get("confirmPassword"));
+		rp.clickSecondNextButton();
+		rp.verifyInvalidEmailAndPassword();
+	}
+
+	@Test(priority = 28, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
+	public void TC_28_verifyveryLengthyTLD() {
+
+		rp = new RegisterPage(driver);
+		Map<String, String> user = RegisterData.veryLengthyTLD();
+		rp.enterFirstName(user.get("firstName"));
+		rp.enterLastName(user.get("lastName"));
+		rp.clickFirstNextButton();
+		rp.enterEmail(user.get("email"));
+		rp.enterPassword(user.get("password"));
+		rp.enterConfirmPassword(user.get("confirmPassword"));
+		rp.clickSecondNextButton();
+		rp.verifyInvalidEmailAndPassword();
+	}
+
+	@Test(priority = 29, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
+	public void TC_29_verifymissingSecondLevelDomain() {
+
+		rp = new RegisterPage(driver);
+		Map<String, String> user = RegisterData.missingSecondLevelDomain();
+		rp.enterFirstName(user.get("firstName"));
+		rp.enterLastName(user.get("lastName"));
+		rp.clickFirstNextButton();
+		rp.enterEmail(user.get("email"));
+		rp.enterPassword(user.get("password"));
+		rp.enterConfirmPassword(user.get("confirmPassword"));
+		rp.clickSecondNextButton();
+		rp.verifyInvalidEmailAndPassword();
+	}
+
+	@Test(priority = 30, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
+	public void TC_30_verifywithComma() {
+
+		rp = new RegisterPage(driver);
+		Map<String, String> user = RegisterData.withComma();
+		rp.enterFirstName(user.get("firstName"));
+		rp.enterLastName(user.get("lastName"));
+		rp.clickFirstNextButton();
+		rp.enterEmail(user.get("email"));
+		rp.enterPassword(user.get("password"));
+		rp.enterConfirmPassword(user.get("confirmPassword"));
+		rp.clickSecondNextButton();
+		rp.verifyInvalidEmailAndPassword();
+	}
+
+	@Test(priority = 31, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
+	public void TC_31_verifydoubleConsicutiveAt() {
+
+		rp = new RegisterPage(driver);
+		Map<String, String> user = RegisterData.doubleConsicutiveAt();
+		rp.enterFirstName(user.get("firstName"));
+		rp.enterLastName(user.get("lastName"));
+		rp.clickFirstNextButton();
+		rp.enterEmail(user.get("email"));
+		rp.enterPassword(user.get("password"));
+		rp.enterConfirmPassword(user.get("confirmPassword"));
+		rp.clickSecondNextButton();
+		rp.verifyInvalidEmailAndPassword();
+	}
+
+	@Test(priority = 32, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
+	public void TC_32_verifyunderscoreInTLD() {
+
+		rp = new RegisterPage(driver);
+		Map<String, String> user = RegisterData.underscoreInTLD();
+		rp.enterFirstName(user.get("firstName"));
+		rp.enterLastName(user.get("lastName"));
+		rp.clickFirstNextButton();
+		rp.enterEmail(user.get("email"));
+		rp.enterPassword(user.get("password"));
+		rp.enterConfirmPassword(user.get("confirmPassword"));
+		rp.clickSecondNextButton();
+		rp.verifyInvalidEmailAndPassword();
+	}
+
+	@Test(priority = 33, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
+	public void TC_33_verifydotBetweenName() {
+
+		rp = new RegisterPage(driver);
+		Map<String, String> user = RegisterData.dotBetweenName();
 		rp.enterFirstName(user.get("firstName"));
 		rp.enterLastName(user.get("lastName"));
 		rp.clickFirstNextButton();
@@ -249,11 +534,45 @@ public class Register extends Base {
 		lp.verifyRegisterSuccess();
 	}
 
-	@Test(priority = 15, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-	public void TC_15_verifyEmailWithoutDomainData() {
+	@Test(priority = 34, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
+	public void TC_34_verifyspaceBeforeName() {
 
 		rp = new RegisterPage(driver);
-		Map<String, String> user = RegisterData.emailwithoutDomain();
+		Map<String, String> user = RegisterData.spaceBeforeName();
+		rp.enterFirstName(user.get("firstName"));
+		rp.enterLastName(user.get("lastName"));
+		rp.clickFirstNextButton();
+		rp.enterEmail(user.get("email"));
+		rp.enterPassword(user.get("password"));
+		rp.enterConfirmPassword(user.get("confirmPassword"));
+		rp.clickSecondNextButton();
+		rp.enterPhoneNumber(user.get("phoneNumber"));
+		lp = rp.clickSignUpButton();
+		lp.verifyRegisterSuccess();
+	}
+
+	@Test(priority = 35, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
+	public void TC_35_verifyspaceAfterName() {
+
+		rp = new RegisterPage(driver);
+		Map<String, String> user = RegisterData.spaceAfterName();
+		rp.enterFirstName(user.get("firstName"));
+		rp.enterLastName(user.get("lastName"));
+		rp.clickFirstNextButton();
+		rp.enterEmail(user.get("email"));
+		rp.enterPassword(user.get("password"));
+		rp.enterConfirmPassword(user.get("confirmPassword"));
+		rp.clickSecondNextButton();
+		rp.enterPhoneNumber(user.get("phoneNumber"));
+		lp = rp.clickSignUpButton();
+		lp.verifyRegisterSuccess();
+	}
+
+	@Test(priority = 36, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
+	public void TC_36_verifydotBeforeAt() {
+
+		rp = new RegisterPage(driver);
+		Map<String, String> user = RegisterData.dotBeforeAt();
 		rp.enterFirstName(user.get("firstName"));
 		rp.enterLastName(user.get("lastName"));
 		rp.clickFirstNextButton();
@@ -263,12 +582,12 @@ public class Register extends Base {
 		rp.clickSecondNextButton();
 		rp.verifyInvalidEmailAndPassword();
 	}
-	
-	@Test(priority = 16, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-	public void TC_16_verifyWithoutUserNameData() {
+
+	@Test(priority = 37, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
+	public void TC_37_verifywithoutDomain() {
 
 		rp = new RegisterPage(driver);
-		Map<String, String> user = RegisterData.emailwithoutUserName();
+		Map<String, String> user = RegisterData.withoutDomain();
 		rp.enterFirstName(user.get("firstName"));
 		rp.enterLastName(user.get("lastName"));
 		rp.clickFirstNextButton();

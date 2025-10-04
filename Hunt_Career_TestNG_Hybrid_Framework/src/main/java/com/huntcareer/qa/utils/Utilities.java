@@ -26,6 +26,10 @@ public class Utilities {
 	private static final Faker faker = new Faker(new Locale("en-IND"));
     private static final Random random = new Random();
 	
+	public static String getCompanyName(){
+		return faker.company().name();
+	}
+
     public static String getFirstName() {
     	return faker.name().firstName();
     }
@@ -38,12 +42,34 @@ public class Utilities {
     
     	switch(type) {
     	
-    	case "withoutAllDomain": return genarateEmailTimeStamp();
-    	case "withoutTopLevelDomain": return genarateEmailTimeStamp()+"@mailinator";
-    	case "doubleAt": return genarateEmailTimeStamp()+"@@mailinator.com";
+    	case "plainEmail": return genarateEmailTimeStamp();
+    	case "noLocalPart": return "@mailinator.com";
+		case "localPartOnly": return genarateEmailTimeStamp()+"@";
+		case "doubleAt": return "u@"+genarateEmailTimeStamp()+"@mailinator.com";
+		case "withoutTopLevelDomain": return genarateEmailTimeStamp()+"@mailinator";
+		case "tailingWithDot": return genarateEmailTimeStamp()+"@mailinator.";
+		case "topLevelDomainTooShort": return genarateEmailTimeStamp()+"@mailinator.c";
+		case "domainStartsWithHyphen": return genarateEmailTimeStamp()+"@-mailinator.com";
+    	case "doubleDotInDomain": return genarateEmailTimeStamp()+"@mailinator..com";
+		case "noAtTheRate": return genarateEmailTimeStamp()+"#mailinator.com";
+		case "illegalChars": return genarateEmailTimeStamp()+"<>@mailinator.com";
+		case "twoConsicutiveDots": return "u.."+genarateEmailTimeStamp()+"@mailinator.com";
+		case "dotAtBeginning": return "."+genarateEmailTimeStamp()+"@mailinator.com";
+		case "withQuotation":return "\"" + genarateEmailTimeStamp() + "@mailinator.com" + "\"";
+		case "unclosedQuotation":return "\"" + genarateEmailTimeStamp() + "@mailinator.com" ;
+		case "veryLengthyLocal": return "verylonglocalpartthatexceedstheusuallimitstoverifythelimitdoesitexceedornotbyaddingverylongcharacters@example.com";
+		case "veryLengthyDomain": return "example@verylonglocalpartthatexceedstheusuallimitstoverifythelimitdoesitexceedornotbyaddingverylongcharacters.com";
+		case "veryLenghtyTLD": return genarateEmailTimeStamp()+"@example.verylonglocalpartthatexceedstheusuallimitstoverifythelimitdoesitexceedornotbyaddingverylongcharacters";
+		case "missingSecondLevelDomain": return genarateEmailTimeStamp()+"com";
+		case "withComma": return genarateEmailTimeStamp()+"@mailinator,com";
+		case "doubleConsicutiveAt": return genarateEmailTimeStamp()+"@@mailinator.com";
+		case "underscoreInTLD": return genarateEmailTimeStamp()+"@mailinator.c_m";
+		case "dotBetweenName":return "u."+genarateEmailTimeStamp()+".s@mailinator.com";
+		case "spaceBeforeName": return ""+genarateEmailTimeStamp()+"@mailinator.com";
+		case "spaceAfterName": return genarateEmailTimeStamp()+"@mailinator.com"+"";
     	case "dotBeforeAt": return genarateEmailTimeStamp()+".@mailinator.com";
     	case "withoutDomain": return genarateEmailTimeStamp()+"@.com";
-    	case "withoutUserName": return "@mailinator.com";
+    	
     	default: return genarateEmailTimeStamp()+"@mailinator.com";
     	}
     }

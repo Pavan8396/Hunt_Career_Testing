@@ -29,7 +29,8 @@ public class LandingPage {
 		return new HomePage(driver);
 	}
 	
-	public void clickOnEmployerRole() {
+	public EmployerRegisterPage clickOnEmployerRole() {
 		employerRole.click();
+		return new EmployerRegisterPage(driver);
 	}
 }
