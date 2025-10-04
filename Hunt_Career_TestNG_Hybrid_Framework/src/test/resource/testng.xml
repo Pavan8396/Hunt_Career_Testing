@@ -7,7 +7,9 @@
 	<test thread-count="5" name="Test">
 		<classes>
 			<class name="com.huntcareer.qa.testcases.Login" />
+			<class name="com.huntcareer.qa.testcases.EmployerLogin" />
 			<class name="com.huntcareer.qa.testcases.Register" />
+			<class name="com.huntcareer.qa.testcases.EmployerRegister" />
 			<class name="com.huntcareer.qa.testcases.Search" />
 		</classes>
 	</test> <!--
