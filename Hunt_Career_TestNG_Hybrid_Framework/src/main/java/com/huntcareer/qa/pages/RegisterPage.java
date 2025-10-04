@@ -75,39 +75,39 @@ public class RegisterPage {
 	}
 
 	public void enterFirstName(String firstNameText) {
-		firstNameField.sendKeys(firstNameText);
+		wait.until(ExpectedConditions.visibilityOf(firstNameField)).sendKeys(firstNameText);
 	}
 
 	public void enterLastName(String lastNameText) {
-		lastNameField.sendKeys(lastNameText);
+		wait.until(ExpectedConditions.visibilityOf(lastNameField)).sendKeys(lastNameText);
 	}
 
 	public void clickFirstNextButton() {
-		firstNextButton.click();
+		wait.until(ExpectedConditions.elementToBeClickable(firstNextButton)).click();
 	}
 
 	public void enterEmail(String emailText) {
-		emailField.sendKeys(emailText);
+		wait.until(ExpectedConditions.visibilityOf(emailField)).sendKeys(emailText);
 	}
 
 	public void enterPassword(String passwordText) {
-		passwordField.sendKeys(passwordText);
+		wait.until(ExpectedConditions.visibilityOf(passwordField)).sendKeys(passwordText);
 	}
 
 	public void enterConfirmPassword(String confirmPasswordText) {
-		confirmPasswordField.sendKeys(confirmPasswordText);
+		wait.until(ExpectedConditions.visibilityOf(confirmPasswordField)).sendKeys(confirmPasswordText);
 	}
 
 	public void clickSecondNextButton() {
-		secondNextButton.click();
+		wait.until(ExpectedConditions.elementToBeClickable(secondNextButton)).click();
 	}
 
 	public void enterPhoneNumber(String phoneNumber) {
-		phoneNumberField.sendKeys(phoneNumber);
+		wait.until(ExpectedConditions.visibilityOf(phoneNumberField)).sendKeys(phoneNumber);
 	}
 
 	public LoginPage clickSignUpButton() {
-		signUpButton.click();
+		wait.until(ExpectedConditions.elementToBeClickable(signUpButton)).click();
 		return new LoginPage(driver);
 	}
 

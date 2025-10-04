@@ -68,20 +68,20 @@ export class SearchPage extends BasePage {
   }
 
   async search(searchTerm, location = null, jobType = null) {
-    await this.searchInput.fill(searchTerm);
-    await this.searchButton.click();
+      await this.typeInElement(this.searchInput, searchTerm);
+      await this.clickElement(this.searchButton);
 
     if (location) {
-      await this.locationButton.click();
-      await this.locationSearchInput.fill(location);
-      await this.locationOption(location).click();
-      await this.locationButton.click();
+      await this.clickElement(this.locationButton);
+      await this.typeInElement(this.locationSearchInput, location);
+      await this.clickElement(this.locationOption(location));
+      await this.clickElement(this.locationButton);
     }
 
     if (jobType) {
-      await this.jobTypeButton.click();
-      await this.jobTypeOption(jobType).click();
-      await this.jobTypeButton.click();
+      await this.clickElement(this.jobTypeButton);
+      await this.clickElement(this.jobTypeOption(jobType));
+      await this.clickElement(this.jobTypeButton);
     }
   }
 }

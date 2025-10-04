@@ -6,6 +6,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class LandingPage {
@@ -25,12 +26,12 @@ public class LandingPage {
 	}
 
 	public HomePage clickOnJobSeekerRole() {
-		jobSeekerRole.click();
+		wait.until(ExpectedConditions.elementToBeClickable(jobSeekerRole)).click();
 		return new HomePage(driver);
 	}
 	
 	public EmployerRegisterPage clickOnEmployerRole() {
-		employerRole.click();
+		wait.until(ExpectedConditions.elementToBeClickable(employerRole)).click();
 		return new EmployerRegisterPage(driver);
 	}
 }

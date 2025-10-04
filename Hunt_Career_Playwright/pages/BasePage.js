@@ -12,10 +12,12 @@ export class BasePage {
   }
 
   async clickElement(locator) {
+    await this.waitUntilVisible(locator);
     await locator.click();
   }
 
   async typeInElement(locator, text) {
+    await this.waitUntilVisible(locator);
     await locator.fill(text);
   }
 

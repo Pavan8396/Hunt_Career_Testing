@@ -7,6 +7,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class SearchPage {
@@ -44,19 +45,19 @@ public class SearchPage {
 	}
 	
 	public void enterKeywordIntoSearchInputField(String searchTerm) {
-		SearchInputField.sendKeys(searchTerm);
+		wait.until(ExpectedConditions.visibilityOf(SearchInputField)).sendKeys(searchTerm);
 	}
 	
 	public void clickOnSearch() {
-		SearchButton.click();
+		wait.until(ExpectedConditions.elementToBeClickable(SearchButton)).click();
 	}
 	
 	public void clickLocationButton() {
-		LocationButton.click();
+		wait.until(ExpectedConditions.elementToBeClickable(LocationButton)).click();
 	}
 	
 	public void enterLocationSearchInput(String locationText) {
-		LocationSearchInput.sendKeys(locationText);
+		wait.until(ExpectedConditions.visibilityOf(LocationSearchInput)).sendKeys(locationText);
 	}
 	
 	public void selectLocationOption(String location) {
@@ -64,11 +65,11 @@ public class SearchPage {
 	}
 	
 	public void clickJobTypeButton() {
-		JobTypeButton.click();
+		wait.until(ExpectedConditions.elementToBeClickable(JobTypeButton)).click();
 	}
 	
 	public void enterJobTypeSearchInput(String jobTypeText) {
-		JobTypeSearchInput.sendKeys(jobTypeText);
+		wait.until(ExpectedConditions.visibilityOf(JobTypeSearchInput)).sendKeys(jobTypeText);
 	}
 	
 	public void selectJobTypeOption(String jobType) {
@@ -76,7 +77,7 @@ public class SearchPage {
 	}
 	
 	public void clickClearFilterOption() {
-		ClearAllFiltersButton.click();
+		wait.until(ExpectedConditions.elementToBeClickable(ClearAllFiltersButton)).click();
 	}
 
 	public WebElement getJobCardTitle(WebElement jobcard) {

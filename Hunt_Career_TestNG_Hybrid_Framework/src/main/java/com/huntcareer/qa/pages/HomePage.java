@@ -36,11 +36,13 @@ public class HomePage {
 				"Success message should not be visible anymore");
 	}
 	
-	public void clickOnLoginHomeLink() {
-		loginHomeLink.click();
+	public LoginPage clickOnLoginHomeLink() {
+		wait.until(ExpectedConditions.elementToBeClickable(loginHomeLink)).click();
+		return new LoginPage(driver);
 	}
 	
-	public void clickOnRegisterHomeLink() {
-		registerHomeLink.click();
+	public RegisterPage clickOnRegisterHomeLink() {
+		wait.until(ExpectedConditions.elementToBeClickable(registerHomeLink)).click();
+		return new RegisterPage(driver);
 	}
 }

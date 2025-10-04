@@ -57,27 +57,27 @@ public class EmployerRegisterPage {
 	}
 
 	public void enterCompanyName(String companyNameText) {
-		companyNameFeild.sendKeys(companyNameText);
+		wait.until(ExpectedConditions.visibilityOf(companyNameFeild)).sendKeys(companyNameText);
 	}
 
 	public void enterEmail(String emailText) {
-		emailField.sendKeys(emailText);
+		wait.until(ExpectedConditions.visibilityOf(emailField)).sendKeys(emailText);
 	}
 
 	public void enterPassword(String passwordText) {
-		passwordField.sendKeys(passwordText);
+		wait.until(ExpectedConditions.visibilityOf(passwordField)).sendKeys(passwordText);
 	}
 
 	public void enterConfirmPassword(String confirmPasswordText) {
-		confirmPasswordField.sendKeys(confirmPasswordText);
+		wait.until(ExpectedConditions.visibilityOf(confirmPasswordField)).sendKeys(confirmPasswordText);
 	}
 
 	public void clickSignupLink(){
-		SignupLink.click();
+		wait.until(ExpectedConditions.elementToBeClickable(SignupLink)).click();
 	}
 
 	public EmployerLoginPage clickSignUpButton() {
-		signUpButton.click();
+		wait.until(ExpectedConditions.elementToBeClickable(signUpButton)).click();
 		return new EmployerLoginPage(driver);
 	}
 

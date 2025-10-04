@@ -48,15 +48,15 @@ public class EmployerLoginPage {
 	}
 
 	public void enterEmail(String emailText) {
-		emailField.sendKeys(emailText);
+		wait.until(ExpectedConditions.visibilityOf(emailField)).sendKeys(emailText);
 	}
 
 	public void enterPassword(String passwordText) {
-		passwordField.sendKeys(passwordText);
+		wait.until(ExpectedConditions.visibilityOf(passwordField)).sendKeys(passwordText);
 	}
 
 	public HomePage clickLoginButton() {
-		loginButton.click();
+		wait.until(ExpectedConditions.elementToBeClickable(loginButton)).click();
 		return new HomePage(driver);
 	}
 
