@@ -41,18 +41,13 @@ pipeline {
                         try {
                             stage('Install Dependencies') {
                                 printBanner('INSTALLING NPM DEPENDENCIES')
-                                bat 'npm install'
-                            }
-
-                            stage('Verify Cypress Installation') {
-                                printBanner('VERIFYING CYPRESS BINARY')
-                                bat 'npx cypress install'
+                                sh 'npm install'
                             }
 
                             stage('Run Cypress Tests') {
                                 printBanner("RUNNING CYPRESS TESTS ON ${params.ENV}")
                                 // Headless mode for CI
-                                bat 'npx cypress run --headless --reporter mochawesome'
+                                sh 'npx cypress run --headless --reporter mochawesome'
                             }
                         } catch (err) {
                             echo "❌ Cypress tests failed: ${err.message}"
