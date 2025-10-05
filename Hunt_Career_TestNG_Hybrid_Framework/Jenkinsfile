@@ -41,12 +41,12 @@ pipeline {
                         try {
                             stage('Build') {
                                 printBanner('BUILDING THE PROJECT')
-                                bat 'mvn -B clean install -DskipTests'
+                                sh 'mvn -B clean install -DskipTests'
                             }
 
                             stage('Test') {
                                 printBanner('RUNNING TESTNG TESTS')
-                                bat 'mvn -B test'
+                                sh 'mvn -B test'
                             }
                         } catch (err) {
                             echo "❌ TestNG tests failed: ${err.message}"

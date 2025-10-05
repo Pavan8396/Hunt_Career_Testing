@@ -9,6 +9,13 @@ pipeline {
     agent any
 
     stages {
+        stage('Clean Workspace') {
+            steps {
+                printBanner('CLEANING WORKSPACE')
+                cleanWs()
+            }
+        }
+
         stage('Triggering Downstream Pipelines') {
             steps {
                 script {
@@ -19,15 +26,15 @@ pipeline {
                         'TestNG': 'huntcareer-ui-tests-selenium'
                     ]
 
-                    // Trigger jobs in parallel
-                    parallel jobs.collectEntries { jobName, jobPath ->
+                    // Trigger jobs in parallel, failing fast
+                    parallel(jobs.collectEntries { jobName, jobPath ->
                         ["${jobName} Tests": {
                             stage("Run ${jobName} Tests") {
                                 printBanner("TRIGGERING ${jobName.toUpperCase()} PIPELINE")
                                 build job: jobPath, wait: true
                             }
                         }]
-                    }
+                    } + [failFast: true])
                 }
             }
         }
