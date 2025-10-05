@@ -7,53 +7,76 @@ import java.util.Properties;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.edge.EdgeOptions;
 
 import com.huntcareer.qa.utils.Utilities;
 
 public class Base {
-	WebDriver driver;
-	public Properties prop;
-	public Properties dataProp;
+    public WebDriver driver;
+    public Properties prop;
+    public Properties dataProp;
 
-	// public Properties loadPropertiesFile(){
-	public Base() {
+    public Base() {
+        prop = new Properties();
+        dataProp = new Properties();
 
-		prop = new Properties();
-		File propFile = new File(
-				System.getProperty("user.dir") + "\\src\\main\\java\\com\\huntcareer\\qa\\config\\Config.properties");
+        try {
+            File propFile = new File(System.getProperty("user.dir")
+                    + "\\src\\main\\java\\com\\huntcareer\\qa\\config\\Config.properties");
+            File dataFile = new File(System.getProperty("user.dir")
+                    + "\\src\\main\\java\\com\\huntcareer\\qa\\testdata\\testdata.properties");
 
-		dataProp = new Properties();
-		File dataFile = new File(System.getProperty("user.dir")
-				+ "\\src\\main\\java\\com\\huntcareer\\qa\\testdata\\testdata.properties");
-		try {
-		FileInputStream fis1 = new FileInputStream(dataFile);
-		dataProp.load(fis1);
-		}catch(Throwable e) {
-			e.printStackTrace();
-		}
-		try {
-			FileInputStream fis = new FileInputStream(propFile);
-			prop.load(fis);
-		} catch (Throwable e) {
-			e.printStackTrace();
-		}
-		// return prop;
-	}
+            FileInputStream fis = new FileInputStream(propFile);
+            prop.load(fis);
 
-	public WebDriver inicializeBrowserAndOpenApplication(String browserName) {
+            FileInputStream fis1 = new FileInputStream(dataFile);
+            dataProp.load(fis1);
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+    }
 
-		if (browserName.equalsIgnoreCase("chrome")) {
-			driver = new ChromeDriver();
-		} else if (browserName.equalsIgnoreCase("firefox")) {
-			driver = new FirefoxDriver();
-		} else if (browserName.equalsIgnoreCase("edge")) {
-			driver = new EdgeDriver();
-		}
-		driver.manage().window().maximize();
-		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(Utilities.IMPLICIT_WAIT_TIME));
-		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(Utilities.PAGE_WAIT_TIME));
-		return driver;
-	}
+    public WebDriver inicializeBrowserAndOpenApplication(String browserName) {
+
+        // Read headless mode flag from Config.properties (optional)
+        boolean isHeadless = Boolean.parseBoolean(prop.getProperty("headless", "false"));
+
+        if (browserName.equalsIgnoreCase("chrome")) {
+            ChromeOptions options = new ChromeOptions();
+            if (isHeadless) {
+                options.addArguments("--headless=new"); // For modern Chrome versions
+                options.addArguments("--disable-gpu");
+                options.addArguments("--window-size=1920,1080");
+            }
+            driver = new ChromeDriver(options);
+
+        } else if (browserName.equalsIgnoreCase("firefox")) {
+            FirefoxOptions options = new FirefoxOptions();
+            if (isHeadless) {
+                options.addArguments("--headless");
+            }
+            driver = new FirefoxDriver(options);
+
+        } else if (browserName.equalsIgnoreCase("edge")) {
+            EdgeOptions options = new EdgeOptions();
+            if (isHeadless) {
+                options.addArguments("--headless");
+                options.addArguments("--disable-gpu");
+                options.addArguments("--window-size=1920,1080");
+            }
+            driver = new EdgeDriver(options);
+        }
+
+        driver.manage().window().maximize();
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(Utilities.IMPLICIT_WAIT_TIME));
+        driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(Utilities.PAGE_WAIT_TIME));
+
+        // Open application URL from Config.properties
+        driver.get(prop.getProperty("url"));
+        return driver;
+    }
 }
