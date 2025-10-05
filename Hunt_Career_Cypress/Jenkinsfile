@@ -19,9 +19,8 @@ pipeline {
         skipDefaultCheckout true
     }
 
-    parameters {
+   parameters {
         string(name: 'BRANCH', defaultValue: 'main', description: 'Git branch to build from')
-        choice(name: 'ENV', choices: ['dev', 'qa', 'staging'], description: 'Target environment')
     }
 
     stages {
