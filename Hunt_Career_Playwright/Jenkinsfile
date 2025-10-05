@@ -40,17 +40,17 @@ pipeline {
                         try {
                             stage('Install Dependencies') {
                                 printBanner('INSTALLING NPM DEPENDENCIES')
-                                sh 'npm install'
+                                bat 'npm install'
                             }
 
                             stage('Install Playwright Browsers') {
                                 printBanner('INSTALLING PLAYWRIGHT BROWSERS')
-                                sh 'npx playwright install --with-deps'
+                                bat 'npx playwright install --with-deps'
                             }
 
                             stage('Run Playwright Tests') {
                                 printBanner('RUNNING PLAYWRIGHT TESTS')
-                                sh 'npx playwright test'
+                                bat 'npx playwright test'
                             }
                         } catch (err) {
                             echo "❌ Playwright tests failed: ${err.message}"
