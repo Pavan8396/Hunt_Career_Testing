@@ -52,7 +52,7 @@ pipeline {
                             stage('Run Cypress Tests') {
                                 printBanner("RUNNING CYPRESS TESTS ON ${params.ENV}")
                                 // Headless mode for CI
-                                bat 'npx cypress run --headless --reporter mochawesome'
+                                bat 'npx cypress run --headless'
                             }
                         } catch (err) {
                             echo "❌ Cypress tests failed: ${err.message}"
@@ -90,10 +90,15 @@ pipeline {
         }
 
         failure {
-            // Send email notification on failure
-            mail to: 'qa-team@example.com',
-                 subject: "❌ Cypress Pipeline Failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                 body: "The Cypress test pipeline failed. Please check Jenkins for details: ${env.BUILD_URL}"
-        }
+            // Send email notification on failure, wrapped in a try-catch block
+            script {
+                try {
+                    mail to: 'qa-team@example.com',
+                         subject: "❌ Cypress Pipeline Failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                         body: "The Cypress test pipeline failed. Please check Jenkins for details: ${env.BUILD_URL}"
+                } catch (err) {
+                    echo "⚠️ Failed to send email notification: ${err.message}"
+                }
+            }
     }
 }
