@@ -56,6 +56,7 @@ public class Base {
             FirefoxOptions options = new FirefoxOptions();
             if (isHeadless) {
                 options.addArguments("--headless");
+                System.out.println("Headless mode: " + isHeadless + ", Browser: " + browserName);
             }
             driver = new FirefoxDriver(options);
 
