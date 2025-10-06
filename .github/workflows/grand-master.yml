@@ -5,8 +5,8 @@ on:
 
 jobs:
   frontend-backend:
-    uses: Pavan8396/Hunt_Career/.github/workflows/master-1.yml
+    uses: Pavan8396/Hunt_Career/.github/workflows/master-1.yml@main
 
   automation:
     needs: frontend-backend
-    uses: Pavan8396/Hunt_Career_Testing/.github/workflows/master-2.yml
+    uses: Pavan8396/Hunt_Career_Testing/.github/workflows/master-2.yml@main

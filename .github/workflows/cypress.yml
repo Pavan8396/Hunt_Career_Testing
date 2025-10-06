@@ -1,7 +1,7 @@
 name: Cypress CI
 
 on:
-  workflow_dispatch:
+  workflow_call:  # Reusable workflow
 
 jobs:
   cypress-tests:
@@ -32,7 +32,7 @@ jobs:
         run: npx cypress run
         working-directory: cypress
 
-      - name: Upload Cypress Videos and Screenshots
+      - name: Upload Cypress Artifacts
         if: always()
         uses: actions/upload-artifact@v3
         with:
