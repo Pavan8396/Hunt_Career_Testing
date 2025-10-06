@@ -48,8 +48,10 @@ public class Base {
         if (browserName.equalsIgnoreCase("chrome")) {
             ChromeOptions options = new ChromeOptions();
             if (isHeadless) {
-                options.addArguments("--headless=new"); // For modern Chrome versions
+                options.addArguments("--headless=new"); // run in headless mode
                 options.addArguments("--disable-gpu");
+                options.addArguments("--no-sandbox");
+                options.addArguments("--disable-dev-shm-usage");
                 options.addArguments("--window-size=1920,1080");
             }
             driver = new ChromeDriver(options);
