@@ -4,9 +4,66 @@ on:
   workflow_dispatch:
 
 jobs:
-  frontend-backend:
-    uses: Pavan8396/Hunt_Career/.github/workflows/master-1.yml@main
+  start-app:
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout application repo
+      - name: Checkout Hunt_Career
+        uses: actions/checkout@v3
+        with:
+          repository: Pavan8396/Hunt_Career
+          path: Hunt_Career
 
-  automation:
-    needs: frontend-backend
-    uses: Pavan8396/Hunt_Career_Testing/.github/workflows/master-2.yml@main
+      # Install and start frontend
+      - name: Install frontend dependencies
+        run: npm install
+        working-directory: Hunt_Career/frontend
+
+      - name: Start frontend server
+        run: nohup npm start &
+        working-directory: Hunt_Career/frontend
+
+      # Install and start backend
+      - name: Install backend dependencies
+        run: npm install
+        working-directory: Hunt_Career/backend
+
+      - name: Start backend server
+        run: nohup npm start &
+        working-directory: Hunt_Career/backend
+
+      - name: Wait for backend to start
+        run: |
+          for i in {1..30}; do
+            nc -z localhost 5000 && echo "Backend up!" && exit 0
+            echo "Waiting for backend..."
+            sleep 2
+          done
+          echo "Backend did not start in time" && exit 1
+        working-directory: Hunt_Career/backend
+
+  run-tests:
+    needs: start-app
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout testing repo
+      - name: Checkout Hunt_Career_Testing
+        uses: actions/checkout@v3
+        with:
+          repository: Pavan8396/Hunt_Career_Testing
+          path: Hunt_Career_Testing
+
+      # Selenium tests
+      - name: Run Selenium Tests
+        run: mvn clean test
+        working-directory: Hunt_Career_Testing/Hunt_Career_TestNG_Hybrid_Framework
+
+      # Cypress tests
+      - name: Run Cypress Tests
+        run: npx cypress run
+        working-directory: Hunt_Career_Testing/Hunt_Career_Cypress
+
+      # Playwright tests
+      - name: Run Playwright Tests
+        run: npx playwright test
+        working-directory: Hunt_Career_Testing/Hunt_Career_Playwright
