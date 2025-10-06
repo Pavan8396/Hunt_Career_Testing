@@ -55,7 +55,9 @@ jobs:
             echo "Waiting for frontend..."
             sleep 3
           done
-          echo "❌ Frontend did not start in time" && exit 1
+          echo "❌ Frontend did not start in time"
+          cat Hunt_Career/frontend/frontend.log || true
+          exit 1
 
       - name: Install backend dependencies
         run: npm install
@@ -73,7 +75,9 @@ jobs:
             echo "Waiting for backend..."
             sleep 2
           done
-          echo "❌ Backend did not start in time" && exit 1
+          echo "❌ Backend did not start in time"
+          cat Hunt_Career/backend/backend.log || true
+          exit 1
 
   run-tests:
     needs: start-app
@@ -91,6 +95,9 @@ jobs:
           distribution: 'temurin'
           java-version: '21'
 
+      - name: Set up Chrome
+        uses: browser-actions/setup-chrome@v1
+
       - name: Run Selenium Tests (Headless)
         run: mvn clean test
         working-directory: Hunt_Career_Testing/Hunt_Career_TestNG_Hybrid_Framework
@@ -107,6 +114,22 @@ jobs:
         run: npm install
         working-directory: Hunt_Career_Testing/Hunt_Career_Playwright
 
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+        working-directory: Hunt_Career_Testing/Hunt_Career_Playwright
+
       - name: Run Playwright Tests
         run: npx playwright test
         working-directory: Hunt_Career_Testing/Hunt_Career_Playwright
+
+      - name: Upload Test Reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-reports
+          path: |
+            Hunt_Career_Testing/**/target/surefire-reports/**
+            Hunt_Career_Testing/**/cypress/reports/**
+            Hunt_Career_Testing/**/playwright-report/**
+            Hunt_Career/frontend/frontend.log
+            Hunt_Career/backend/backend.log
