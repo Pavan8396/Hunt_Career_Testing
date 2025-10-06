@@ -1,0 +1,42 @@
+name: Cypress CI
+
+on:
+  workflow_dispatch:
+
+jobs:
+  cypress-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Cache Node Modules
+        uses: actions/cache@v3
+        with:
+          path: cypress/node_modules
+          key: ${{ runner.os }}-node-cypress-${{ hashFiles('cypress/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-cypress-
+
+      - name: Install Dependencies
+        run: npm install
+        working-directory: cypress
+
+      - name: Run Cypress Tests
+        run: npx cypress run
+        working-directory: cypress
+
+      - name: Upload Cypress Videos and Screenshots
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: cypress-artifacts
+          path: |
+            cypress/videos
+            cypress/screenshots

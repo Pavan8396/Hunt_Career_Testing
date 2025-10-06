@@ -1,0 +1,12 @@
+name: Grand Master Pipeline
+
+on:
+  workflow_dispatch:
+
+jobs:
+  frontend-backend:
+    uses: https://github.com/Pavan8396/Hunt_Career.git/.github/workflows/master-1.yml
+
+  automation:
+    needs: frontend-backend
+    uses: https://github.com/Pavan8396/Hunt_Career_Testing.git/.github/workflows/master-2.yml
