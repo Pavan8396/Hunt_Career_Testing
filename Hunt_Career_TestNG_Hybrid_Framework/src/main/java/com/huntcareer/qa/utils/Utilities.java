@@ -95,7 +95,7 @@ public class Utilities {
 
 	public static Object[][] getTestDataFromExcel(String sheetName) {
 		File file = new File(
-				System.getProperty("user.dir") + "\\src\\main\\java\\com\\huntcareer\\qa\\testdata\\DDTFile.xlsx");
+				System.getProperty("user.dir") + "/src/main/java/com/huntcareer/qa/testdata/DDTFile.xlsx");
 		XSSFWorkbook workbook = null;
 		try {
 			FileInputStream fis = new FileInputStream(file);
@@ -136,7 +136,7 @@ public class Utilities {
 
 	public static String captureScreenshot(WebDriver driver, String testName) {
 		File srcSreenShot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
-		String destinationScreenshotPath = System.getProperty("user.dir") + "\\Screenshots\\" + testName + ".png";
+		String destinationScreenshotPath = System.getProperty("user.dir") + "/Screenshots/" + testName + ".png";
 		try {
 			FileHandler.copy(srcSreenShot, new File(destinationScreenshotPath));
 		} catch (IOException e) {
