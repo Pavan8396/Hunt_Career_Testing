@@ -6,6 +6,11 @@ on:
 jobs:
   start-app:
     runs-on: ubuntu-latest
+    env:
+      MONGO_URI: ${{ secrets.MONGO_URI }}
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      CLIENT_URL: ${{ secrets.CLIENT_URL }}
+      PORT: 5000
     steps:
       - name: Checkout Hunt_Career
         uses: actions/checkout@v3
@@ -13,7 +18,7 @@ jobs:
           repository: Pavan8396/Hunt_Career
           path: Hunt_Career
 
-      - name: Install dependencies (frontend)
+      - name: Install frontend dependencies
         run: npm install
         working-directory: Hunt_Career/frontend
 
@@ -21,30 +26,25 @@ jobs:
         run: nohup npm start &
         working-directory: Hunt_Career/frontend
 
-      - name: Install dependencies (backend)
+      - name: Install backend dependencies
         run: npm install
         working-directory: Hunt_Career/backend
 
-      - name: Start backend server
-        run: nohup npm start &
+      # Run backend in foreground for debugging; logs/errors show in Actions output
+      - name: Start backend server (debug)
+        run: npm start
         working-directory: Hunt_Career/backend
 
-      - name: Print backend logs
-        run: sleep 5 && cat Hunt_Career/backend/nohup.out || true
-
-      - name: Wait for backend to start
-        run: |
-          for i in {1..60}; do
-            nc -z localhost 5000 && echo "Backend up!" && exit 0
-            echo "Waiting for backend..."
-            sleep 2
-          done
-          echo "Backend did not start in time" && exit 1
-        working-directory: Hunt_Career/backend
-    env:
-      MONGO_URI: ${{ secrets.MONGO_URI }}
-      JWT_SECRET: ${{ secrets.JWT_SECRET }}
-      CLIENT_URL: ${{ secrets.CLIENT_URL }}
+      # Optional: Wait for backend to start if you background this step
+      # - name: Wait for backend to start
+      #   run: |
+      #     for i in {1..60}; do
+      #       nc -z localhost 5000 && echo "Backend up!" && exit 0
+      #       echo "Waiting for backend..."
+      #       sleep 2
+      #     done
+      #     echo "Backend did not start in time" && exit 1
+      #   working-directory: Hunt_Career/backend
 
   run-tests:
     needs: start-app
