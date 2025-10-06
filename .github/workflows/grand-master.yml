@@ -4,20 +4,29 @@ on:
   workflow_dispatch:
 
 jobs:
-  start-app:
+  full-pipeline:
     runs-on: ubuntu-22.04
     env:
       MONGO_URI: mongodb://localhost:27017/hcdb
       JWT_SECRET: ${{ secrets.JWT_SECRET }}
-      CLIENT_URL: ${{ secrets.CLIENT_URL }}
+      CLIENT_URL: http://localhost:3000
       PORT: 5000
+
     steps:
+      # --- Checkout source and test repos ---
       - name: Checkout Hunt_Career
         uses: actions/checkout@v3
         with:
           repository: Pavan8396/Hunt_Career
           path: Hunt_Career
 
+      - name: Checkout Hunt_Career_Testing
+        uses: actions/checkout@v3
+        with:
+          repository: Pavan8396/Hunt_Career_Testing
+          path: Hunt_Career_Testing
+
+      # --- Install MongoDB and restore dump ---
       - name: Install MongoDB
         run: |
           wget -qO - https://www.mongodb.org/static/pgp/server-6.0.asc | sudo apt-key add -
@@ -26,7 +35,6 @@ jobs:
           sudo apt-get install -y mongodb-org
           sudo systemctl start mongod
           sleep 5
-          sudo systemctl status mongod
 
       - name: Extract mongo dump
         run: tar -xvf mongo_dump.tar
@@ -36,63 +44,85 @@ jobs:
         run: mongorestore --uri="mongodb://localhost:27017/hcdb" ./mongo_dump/hcdb
         working-directory: Hunt_Career
 
+      # --- Install dependencies ---
       - name: Install frontend dependencies
         run: npm install
-        working-directory: Hunt_Career/frontend
-
-      - name: Start frontend server
-        run: nohup BROWSER=none HOST=0.0.0.0 PORT=3000 npm start > frontend.log 2>&1 &
-        working-directory: Hunt_Career/frontend
-
-      - name: Wait for frontend ready
-        run: |
-          npm install -g wait-on
-          npx wait-on http://localhost:3000
         working-directory: Hunt_Career/frontend
 
       - name: Install backend dependencies
         run: npm install
         working-directory: Hunt_Career/backend
 
+      # --- Build frontend if needed ---
+      - name: Build frontend (if needed)
+        run: |
+          if [ -f package.json ] && grep -q '"build"' package.json; then
+            npm run build || true
+          fi
+        working-directory: Hunt_Career/frontend
+
+      # --- Start frontend & backend ---
+      - name: Start frontend server
+        run: nohup BROWSER=none HOST=0.0.0.0 PORT=3000 npm start > ../frontend.log 2>&1 &
+        working-directory: Hunt_Career/frontend
+
       - name: Start backend server
-        run: nohup npm start > backend.log 2>&1 &
+        run: nohup PORT=5000 npm start > ../backend.log 2>&1 &
         working-directory: Hunt_Career/backend
 
-      - name: Wait for backend ready
+      # --- Wait for frontend (HTTP check) ---
+      - name: Wait for frontend to start
+        run: |
+          echo "⏳ Waiting for frontend (http://localhost:3000)..."
+          for i in {1..60}; do
+            if curl -fsS http://localhost:3000 >/dev/null; then
+              echo "✅ Frontend is up!"
+              exit 0
+            fi
+            echo "Waiting for frontend..."
+            sleep 2
+          done
+          echo "❌ Frontend did not start in time. Showing logs:"
+          cat Hunt_Career/frontend.log || true
+          exit 1
+
+      # --- Wait for backend (port and HTTP check) ---
+      - name: Wait for backend to start
         run: |
           echo "⏳ Waiting for backend on port 5000..."
           for i in {1..60}; do
-            nc -z localhost 5000 && echo "✅ Backend is up!" && exit 0
+            if nc -z localhost 5000; then
+              # Optional: If backend has a health endpoint, e.g., /api/health
+              if curl -fsS http://localhost:5000/api/health >/dev/null 2>&1; then
+                echo "✅ Backend is up and healthy!"
+                exit 0
+              fi
+              echo "Port open, waiting for API..."
+            fi
             echo "Waiting for backend..."
             sleep 2
           done
-          echo "❌ Backend did not start in time"
-          cat Hunt_Career/backend/backend.log || true
+          echo "❌ Backend did not start in time. Showing logs:"
+          cat Hunt_Career/backend.log || true
           exit 1
 
-  run-tests:
-    needs: start-app
-    runs-on: ubuntu-22.04
-    steps:
-      - name: Checkout Hunt_Career_Testing
-        uses: actions/checkout@v3
-        with:
-          repository: Pavan8396/Hunt_Career_Testing
-          path: Hunt_Career_Testing
-
+      # --- Set up JDK 21 for Selenium ---
       - name: Set up JDK 21
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
           java-version: '21'
 
+      # --- Set up Chrome for Selenium ---
       - name: Set up Chrome
         uses: browser-actions/setup-chrome@v1
 
+      # --- Run Selenium Tests ---
       - name: Run Selenium Tests (Headless)
         run: mvn clean test
         working-directory: Hunt_Career_Testing/Hunt_Career_TestNG_Hybrid_Framework
 
+      # --- Cypress ---
       - name: Install Cypress dependencies
         run: npm install
         working-directory: Hunt_Career_Testing/Hunt_Career_Cypress
@@ -101,6 +131,7 @@ jobs:
         run: npx cypress run
         working-directory: Hunt_Career_Testing/Hunt_Career_Cypress
 
+      # --- Playwright ---
       - name: Install Playwright dependencies
         run: npm install
         working-directory: Hunt_Career_Testing/Hunt_Career_Playwright
@@ -113,14 +144,15 @@ jobs:
         run: npx playwright test
         working-directory: Hunt_Career_Testing/Hunt_Career_Playwright
 
-      - name: Upload Test Reports
+      # --- Upload logs and test reports ---
+      - name: Upload Test Reports and Logs
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: test-reports
+          name: test-reports-and-logs
           path: |
             Hunt_Career_Testing/**/target/surefire-reports/**
             Hunt_Career_Testing/**/cypress/reports/**
             Hunt_Career_Testing/**/playwright-report/**
-            Hunt_Career/frontend/frontend.log
-            Hunt_Career/backend/backend.log
+            Hunt_Career/frontend.log
+            Hunt_Career/backend.log
