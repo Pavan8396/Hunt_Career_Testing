@@ -1,7 +1,7 @@
 name: Automation Master Pipeline
 
 on:
-  workflow_dispatch:
+  workflow_call:
 
 jobs:
   selenium:
