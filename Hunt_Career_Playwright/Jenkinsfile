@@ -69,28 +69,27 @@ pipeline {
         always {
             // This block will always run, regardless of the pipeline's status
             dir('Hunt_Career_Playwright') {
-                printBanner('ARCHIVING & PUBLISHING REPORTS')
+                script {
+                    try {
+                        printBanner('ARCHIVING & PUBLISHING REPORTS')
 
-                // Archive test reports and artifacts
-                archiveArtifacts artifacts: 'playwright-report/**/*', allowEmptyArchive: true
+                        // Archive test reports and artifacts
+                        archiveArtifacts artifacts: 'playwright-report/**/*', allowEmptyArchive: true
 
-                // Publish HTML reports
-                publishHTML(target: [
-                    allowMissing: true,
-                    alwaysLinkToLastBuild: true,
-                    keepAll: true,
-                    reportDir: 'playwright-report',
-                    reportFiles: 'index.html',
-                    reportName: 'Playwright Test Report'
-                ])
+                        // Publish HTML reports
+                        publishHTML(target: [
+                            allowMissing: true,
+                            alwaysLinkToLastBuild: true,
+                            keepAll: true,
+                            reportDir: 'playwright-report',
+                            reportFiles: 'index.html',
+                            reportName: 'Playwright Test Report'
+                        ])
+                    } catch (err) {
+                        echo "⚠️  Could not publish reports: ${err.message}"
+                    }
+                }
             }
-        }
-
-        failure {
-            // Send email notification on failure
-            mail to: 'qa-team@example.com',
-                 subject: "❌ Playwright Pipeline Failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                 body: "The Playwright test pipeline failed. Please check Jenkins for details: ${env.BUILD_URL}"
         }
     }
 }

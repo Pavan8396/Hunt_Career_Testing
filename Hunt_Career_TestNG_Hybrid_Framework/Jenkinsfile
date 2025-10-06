@@ -65,28 +65,27 @@ pipeline {
         always {
             // This block will always run, regardless of the pipeline's status
             dir('Hunt_Career_TestNG_Hybrid_Framework') {
-                printBanner('ARCHIVING & PUBLISHING REPORTS')
+                script {
+                    try {
+                        printBanner('ARCHIVING & PUBLISHING REPORTS')
 
-                // Archive and publish JUnit test results
-                junit testResults: 'target/surefire-reports/testng-results.xml', allowEmptyResults: true
+                        // Archive and publish JUnit test results
+                        junit testResults: 'target/surefire-reports/testng-results.xml', allowEmptyResults: true
 
-                // Publish HTML reports
-                publishHTML(target: [
-                    allowMissing: true,
-                    alwaysLinkToLastBuild: true,
-                    keepAll: true,
-                    reportDir: 'test-output/ExtentReports',
-                    reportFiles: 'extentReport.html',
-                    reportName: 'Extent Test Report'
-                ])
+                        // Publish HTML reports
+                        publishHTML(target: [
+                            allowMissing: true,
+                            alwaysLinkToLastBuild: true,
+                            keepAll: true,
+                            reportDir: 'test-output/ExtentReports',
+                            reportFiles: 'extentReport.html',
+                            reportName: 'Extent Test Report'
+                        ])
+                    } catch (err) {
+                        echo "⚠️  Could not publish reports: ${err.message}"
+                    }
+                }
             }
-        }
-
-        failure {
-            // Send email notification on failure
-            mail to: 'qa-team@example.com',
-                 subject: "❌ TestNG Pipeline Failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                 body: "The TestNG test pipeline failed. Please check Jenkins for details: ${env.BUILD_URL}"
         }
     }
 }
