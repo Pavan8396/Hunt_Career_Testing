@@ -26,9 +26,9 @@ public class Base {
 
         try {
             File propFile = new File(System.getProperty("user.dir")
-                    + "\\src\\main\\java\\com\\huntcareer\\qa\\config\\Config.properties");
+                    + "/src/main/java/com/huntcareer/qa/config/Config.properties");
             File dataFile = new File(System.getProperty("user.dir")
-                    + "\\src\\main\\java\\com\\huntcareer\\qa\\testdata\\testdata.properties");
+                    + "/src/main/java/com/huntcareer/qa/testdata/testdata.properties");
 
             FileInputStream fis = new FileInputStream(propFile);
             prop.load(fis);
