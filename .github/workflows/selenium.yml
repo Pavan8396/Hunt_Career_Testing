@@ -6,7 +6,6 @@ on:
 jobs:
   selenium-tests:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -18,7 +17,7 @@ jobs:
           java-version: '17'
 
       - name: Cache Maven packages
-        uses: actions/cache@v4
+        uses: actions/cache@v3
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('Hunt_Career_TestNG_Hybrid_Framework/pom.xml') }}
@@ -40,7 +39,7 @@ jobs:
 
       - name: Upload Selenium Test Results
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
           name: selenium-test-results
           path: Hunt_Career_TestNG_Hybrid_Framework/target/surefire-reports
