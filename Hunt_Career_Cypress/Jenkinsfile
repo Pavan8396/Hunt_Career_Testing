@@ -69,36 +69,30 @@ pipeline {
         always {
             // This block will always run, regardless of the pipeline's status
             dir('Hunt_Career_Cypress') {
-                printBanner('ARCHIVING & PUBLISHING REPORTS')
+                script {
+                    try {
+                        printBanner('ARCHIVING & PUBLISHING REPORTS')
 
-                // Archive test reports and artifacts
-                archiveArtifacts artifacts: 'mochawesome-report/**', allowEmptyArchive: true
-                archiveArtifacts artifacts: 'cypress/screenshots/**/*.png', allowEmptyArchive: true
-                archiveArtifacts artifacts: 'cypress/videos/**/*.mp4', allowEmptyArchive: true
+                        // Archive test reports and artifacts
+                        archiveArtifacts artifacts: 'mochawesome-report/**', allowEmptyArchive: true
+                        archiveArtifacts artifacts: 'cypress/screenshots/**/*.png', allowEmptyArchive: true
+                        archiveArtifacts artifacts: 'cypress/videos/**/*.mp4', allowEmptyArchive: true
 
-                // Publish HTML reports
-                publishHTML(target: [
-                    allowMissing: true,
-                    alwaysLinkToLastBuild: true,
-                    keepAll: true,
-                    reportDir: 'mochawesome-report',
-                    reportFiles: 'mochawesome.html',
-                    reportName: 'Cypress Test Report'
-                ])
-            }
-        }
-
-        failure {
-            // Send email notification on failure, wrapped in a try-catch block
-            script {
-                try {
-                    mail to: 'qa-team@example.com',
-                         subject: "❌ Cypress Pipeline Failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                         body: "The Cypress test pipeline failed. Please check Jenkins for details: ${env.BUILD_URL}"
-                } catch (err) {
-                    echo "⚠️ Failed to send email notification: ${err.message}"
+                        // Publish HTML reports
+                        publishHTML(target: [
+                            allowMissing: true,
+                            alwaysLinkToLastBuild: true,
+                            keepAll: true,
+                            reportDir: 'mochawesome-report',
+                            reportFiles: 'mochawesome.html',
+                            reportName: 'Cypress Test Report'
+                        ])
+                    } catch (err) {
+                        echo "⚠️  Could not publish reports: ${err.message}"
+                    }
                 }
             }
+        }
     }
 }
 }
