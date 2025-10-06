@@ -30,7 +30,7 @@ jobs:
           sudo systemctl status mongod
 
       - name: Extract mongo dump
-        run: tar -xzvf mongo_dump.tar.gz
+        run: tar -xzvf mongo_dump.tar
         working-directory: Hunt_Career
 
       - name: Restore database
