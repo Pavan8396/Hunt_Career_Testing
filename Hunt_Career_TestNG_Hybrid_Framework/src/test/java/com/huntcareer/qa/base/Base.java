@@ -6,6 +6,7 @@ import java.time.Duration;
 import java.util.Properties;
 
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -41,14 +42,16 @@ public class Base {
     }
 
     public WebDriver inicializeBrowserAndOpenApplication(String browserName) {
-
-        // Read headless mode flag from Config.properties (optional)
         boolean isHeadless = Boolean.parseBoolean(prop.getProperty("headless", "false"));
 
         if (browserName.equalsIgnoreCase("chrome")) {
             ChromeOptions options = new ChromeOptions();
             if (isHeadless) {
-                options.addArguments("--headless");
+                options.addArguments("--headless=new");
+                options.addArguments("--disable-gpu");
+                options.addArguments("--no-sandbox");
+                options.addArguments("--disable-dev-shm-usage");
+                options.addArguments("--window-size=1920,1080");
             }
             driver = new ChromeDriver(options);
 
@@ -56,7 +59,8 @@ public class Base {
             FirefoxOptions options = new FirefoxOptions();
             if (isHeadless) {
                 options.addArguments("--headless");
-                System.out.println("Headless mode: " + isHeadless + ", Browser: " + browserName);
+                options.addArguments("--disable-gpu");
+                options.addArguments("--no-sandbox");
             }
             driver = new FirefoxDriver(options);
 
@@ -64,6 +68,8 @@ public class Base {
             EdgeOptions options = new EdgeOptions();
             if (isHeadless) {
                 options.addArguments("--headless");
+                options.addArguments("--disable-gpu");
+                options.addArguments("--window-size=1920,1080");
             }
             driver = new EdgeDriver(options);
         }
@@ -72,8 +78,31 @@ public class Base {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(Utilities.IMPLICIT_WAIT_TIME));
         driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(Utilities.PAGE_WAIT_TIME));
 
-        // Open application URL from Config.properties
-        driver.get(prop.getProperty("url"));
+        String appUrl = prop.getProperty("url");
+        int maxRetries = 5;
+
+        System.out.println("Attempting to launch application: " + appUrl);
+
+        // Retry logic in case the app isn’t ready (e.g., frontend still starting)
+        for (int i = 1; i <= maxRetries; i++) {
+            try {
+                driver.get(appUrl);
+                System.out.println("✅ Successfully opened application on attempt " + i);
+                break;
+            } catch (WebDriverException e) {
+                System.out.println("⚠️ Attempt " + i + " failed to open app (frontend may not be ready). Retrying...");
+                if (i == maxRetries) {
+                    System.out.println("❌ Application not reachable after " + maxRetries + " attempts.");
+                    e.printStackTrace();
+                }
+                try {
+                    Thread.sleep(5000); // wait 5s before retrying
+                } catch (InterruptedException ie) {
+                    Thread.currentThread().interrupt();
+                }
+            }
+        }
+
         return driver;
     }
 }
