@@ -88,15 +88,12 @@ jobs:
           cat Hunt_Career/frontend.log || true
           exit 1
 
-      # --- Wait for backend (port and HTTP check) ---
+      # --- Wait for backend (port check) ---
       - name: Wait for backend to start
         run: |
           echo "⏳ Waiting for backend on port 5000..."
           for i in {1..60}; do
-            if nc -z localhost 5000; then
-              echo "✅ Backend is up!"
-              exit 0
-            fi
+            nc -z localhost 5000 && echo "✅ Backend is up!" && exit 0
             echo "Waiting for backend..."
             sleep 2
           done
@@ -104,23 +101,30 @@ jobs:
           cat Hunt_Career/backend.log || true
           exit 1
 
-      # --- Set up JDK 21 for Selenium ---
+      # --- Selenium: JDK 21 and Chrome ---
       - name: Set up JDK 21
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
           java-version: '21'
 
-      # --- Set up Chrome for Selenium ---
       - name: Set up Chrome
         uses: browser-actions/setup-chrome@v1
 
-      # --- Run Selenium Tests ---
       - name: Run Selenium Tests (Headless)
         run: mvn clean test
         working-directory: Hunt_Career_Testing/Hunt_Career_TestNG_Hybrid_Framework
 
-      # --- Cypress ---
+      # --- Cypress: Node.js 22 ---
+      - name: Use Node.js 22 for Cypress
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Clear Cypress cache
+        run: npx cypress cache clear
+        working-directory: Hunt_Career_Testing/Hunt_Career_Cypress
+
       - name: Install Cypress dependencies
         run: npm install
         working-directory: Hunt_Career_Testing/Hunt_Career_Cypress
@@ -129,7 +133,12 @@ jobs:
         run: npx cypress run
         working-directory: Hunt_Career_Testing/Hunt_Career_Cypress
 
-      # --- Playwright ---
+      # --- Playwright: Node.js 22 and browser install ---
+      - name: Use Node.js 22 for Playwright
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
       - name: Install Playwright dependencies
         run: npm install
         working-directory: Hunt_Career_Testing/Hunt_Career_Playwright
