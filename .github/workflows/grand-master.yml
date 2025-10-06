@@ -29,12 +29,14 @@ jobs:
           sleep 5
           sudo systemctl status mongod
 
+      # Extract mongo dump (.tar, not .tar.gz)
       - name: Extract mongo dump
         run: tar -xvf mongo_dump.tar
         working-directory: Hunt_Career
 
+      # Restore MongoDB data (use database subfolder)
       - name: Restore database
-        run: mongorestore --uri="mongodb://localhost:27017/hcdb" ./mongo_dump
+        run: mongorestore --uri="mongodb://localhost:27017/hcdb" ./mongo_dump/hcdb
         working-directory: Hunt_Career
 
       - name: Install frontend dependencies
