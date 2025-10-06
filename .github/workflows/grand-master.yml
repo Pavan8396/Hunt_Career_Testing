@@ -5,7 +5,7 @@ on:
 
 jobs:
   start-app:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     env:
       MONGO_URI: mongodb://localhost:27017/hcdb
       JWT_SECRET: ${{ secrets.JWT_SECRET }}
@@ -18,23 +18,21 @@ jobs:
           repository: Pavan8396/Hunt_Career
           path: Hunt_Career
 
-      # Install MongoDB using official repo (Ubuntu)
+      # Install MongoDB using official repo (Ubuntu 22.04)
       - name: Install MongoDB
         run: |
           wget -qO - https://www.mongodb.org/static/pgp/server-6.0.asc | sudo apt-key add -
-          echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu $(lsb_release -cs)/mongodb-org/6.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-6.0.list
+          echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/6.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-6.0.list
           sudo apt-get update
           sudo apt-get install -y mongodb-org
           sudo systemctl start mongod
           sleep 5
           sudo systemctl status mongod
 
-      # Extract mongo dump (assumes mongo_dump.tar.gz is in Hunt_Career/)
       - name: Extract mongo dump
         run: tar -xzvf mongo_dump.tar.gz
         working-directory: Hunt_Career
 
-      # Restore MongoDB data
       - name: Restore database
         run: mongorestore --uri="mongodb://localhost:27017/hcdb" ./mongo_dump
         working-directory: Hunt_Career
@@ -55,7 +53,6 @@ jobs:
         run: nohup npm start &
         working-directory: Hunt_Career/backend
 
-      # Wait for backend to be up before running tests
       - name: Wait for backend to start
         run: |
           for i in {1..60}; do
@@ -67,7 +64,7 @@ jobs:
 
   run-tests:
     needs: start-app
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - name: Checkout Hunt_Career_Testing
         uses: actions/checkout@v3
@@ -75,17 +72,14 @@ jobs:
           repository: Pavan8396/Hunt_Career_Testing
           path: Hunt_Career_Testing
 
-      # Selenium (Java, Maven)
       - name: Run Selenium Tests
         run: mvn clean test
         working-directory: Hunt_Career_Testing/Hunt_Career_TestNG_Hybrid_Framework
 
-      # Cypress (JavaScript)
       - name: Run Cypress Tests
         run: npx cypress run
         working-directory: Hunt_Career_Testing/Hunt_Career_Cypress
 
-      # Playwright (JavaScript or TypeScript)
       - name: Run Playwright Tests
         run: npx playwright test
         working-directory: Hunt_Career_Testing/Hunt_Career_Playwright
