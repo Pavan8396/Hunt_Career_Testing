@@ -48,11 +48,7 @@ public class Base {
         if (browserName.equalsIgnoreCase("chrome")) {
             ChromeOptions options = new ChromeOptions();
             if (isHeadless) {
-                options.addArguments("--headless=new"); // run in headless mode
-                options.addArguments("--disable-gpu");
-                options.addArguments("--no-sandbox");
-                options.addArguments("--disable-dev-shm-usage");
-                options.addArguments("--window-size=1920,1080");
+                options.addArguments("--headless");
             }
             driver = new ChromeDriver(options);
 
@@ -67,8 +63,6 @@ public class Base {
             EdgeOptions options = new EdgeOptions();
             if (isHeadless) {
                 options.addArguments("--headless");
-                options.addArguments("--disable-gpu");
-                options.addArguments("--window-size=1920,1080");
             }
             driver = new EdgeDriver(options);
         }
