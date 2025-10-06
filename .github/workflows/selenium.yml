@@ -4,30 +4,43 @@ on:
   workflow_call:
 
 jobs:
-  run-selenium-tests:
+  selenium-tests:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
+      - name: Setup Java
+        uses: actions/setup-java@v3
         with:
+          distribution: temurin
           java-version: '17'
-          distribution: 'temurin'
 
-      - name: Install Chrome and ChromeDriver
+      - name: Cache Maven packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('Hunt_Career_TestNG_Hybrid_Framework/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - name: Install Xvfb
         run: |
           sudo apt-get update
-          sudo apt-get install -y google-chrome-stable
-          CHROME_BIN=$(which google-chrome)
-          echo "Chrome installed at $CHROME_BIN"
-          wget -N https://chromedriver.storage.googleapis.com/$(curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE)/chromedriver_linux64.zip
-          unzip chromedriver_linux64.zip
-          sudo mv chromedriver /usr/local/bin/chromedriver
-          sudo chmod +x /usr/local/bin/chromedriver
+          sudo apt-get install -y xvfb
+          Xvfb :99 -screen 0 1920x1080x24 &
+          export DISPLAY=:99
 
-      - name: Run Selenium Tests (Headless)
-        working-directory: Hunt_Career_TestNG_Hybrid_Framework
+      - name: Run Selenium Tests
         run: mvn clean test
+        working-directory: Hunt_Career_TestNG_Hybrid_Framework
+        env:
+          DISPLAY: ":99"
+
+      - name: Upload Selenium Test Results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: selenium-test-results
+          path: Hunt_Career_TestNG_Hybrid_Framework/target/surefire-reports
