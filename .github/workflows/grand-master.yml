@@ -7,7 +7,7 @@ jobs:
   start-app:
     runs-on: ubuntu-latest
     env:
-      MONGO_URI: ${{ secrets.MONGO_URI }}
+      MONGO_URI: mongodb://localhost:27017/hcdb
       JWT_SECRET: ${{ secrets.JWT_SECRET }}
       CLIENT_URL: ${{ secrets.CLIENT_URL }}
       PORT: 5000
@@ -17,6 +17,21 @@ jobs:
         with:
           repository: Pavan8396/Hunt_Career
           path: Hunt_Career
+
+      - name: Install MongoDB
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y mongodb
+          sudo systemctl start mongodb
+
+      # If you want to restore your local MongoDB data, upload mongo_dump.tar.gz to your repo or artifact,
+      # and uncomment these steps:
+      # - name: Extract mongo dump
+      #   run: tar -xzvf mongo_dump.tar.gz
+      #   working-directory: Hunt_Career
+      # - name: Restore database
+      #   run: mongorestore --uri="mongodb://localhost:27017/hcdb" ./mongo_dump
+      #   working-directory: Hunt_Career
 
       - name: Install frontend dependencies
         run: npm install
@@ -30,21 +45,9 @@ jobs:
         run: npm install
         working-directory: Hunt_Career/backend
 
-      # Run backend in foreground for debugging; logs/errors show in Actions output
       - name: Start backend server (debug)
         run: npm start
         working-directory: Hunt_Career/backend
-
-      # Optional: Wait for backend to start if you background this step
-      # - name: Wait for backend to start
-      #   run: |
-      #     for i in {1..60}; do
-      #       nc -z localhost 5000 && echo "Backend up!" && exit 0
-      #       echo "Waiting for backend..."
-      #       sleep 2
-      #     done
-      #     echo "Backend did not start in time" && exit 1
-      #   working-directory: Hunt_Career/backend
 
   run-tests:
     needs: start-app
