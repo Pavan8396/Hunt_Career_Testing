@@ -41,7 +41,7 @@ public class MyListeners implements ITestListener {
 		WebDriver driver = null;
 		try {
 			Field field = result.getTestClass().getRealClass().getDeclaredField("driver");
-			field.setAccessible(true);		
+			field.setAccessible(true);
 			driver = (WebDriver) field.get(result.getInstance());
 		} catch (Throwable e) {
 			e.printStackTrace();
@@ -64,12 +64,15 @@ public class MyListeners implements ITestListener {
 	public void onFinish(ITestContext context) {
 		extentReport.flush();
 
-		String pathOfExtentReport = System.getProperty("user.dir") + "\\test-output\\ExtentReports\\extentReport.html";
+		String pathOfExtentReport = System.getProperty("user.dir") + "/test-output/ExtentReports/extentReport.html";
 		File extentReport = new File(pathOfExtentReport);
-		try {
-			Desktop.getDesktop().browse(extentReport.toURI());
-		} catch (IOException e) {
-			e.printStackTrace();
+		// Only open the report locally, NOT in CI
+		if (System.getenv("CI") == null) {
+			try {
+				Desktop.getDesktop().browse(extentReport.toURI());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 }
