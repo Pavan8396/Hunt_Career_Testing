@@ -53,7 +53,7 @@ jobs:
         run: npm install
         working-directory: Hunt_Career/backend
 
-      # --- Build frontend if needed ---
+      # --- Build frontend (if needed) ---
       - name: Build frontend (if needed)
         run: |
           if [ -f package.json ] && grep -q '"build"' package.json; then
@@ -63,11 +63,13 @@ jobs:
 
       # --- Start frontend & backend ---
       - name: Start frontend server
-        run: nohup BROWSER=none HOST=0.0.0.0 PORT=3000 npm start > ../frontend.log 2>&1 &
+        run: |
+          BROWSER=none HOST=0.0.0.0 PORT=3000 nohup npm start > ../frontend.log 2>&1 &
         working-directory: Hunt_Career/frontend
 
       - name: Start backend server
-        run: nohup PORT=5000 npm start > ../backend.log 2>&1 &
+        run: |
+          PORT=5000 nohup npm start > ../backend.log 2>&1 &
         working-directory: Hunt_Career/backend
 
       # --- Wait for frontend (HTTP check) ---
@@ -92,12 +94,8 @@ jobs:
           echo "⏳ Waiting for backend on port 5000..."
           for i in {1..60}; do
             if nc -z localhost 5000; then
-              # Optional: If backend has a health endpoint, e.g., /api/health
-              if curl -fsS http://localhost:5000/api/health >/dev/null 2>&1; then
-                echo "✅ Backend is up and healthy!"
-                exit 0
-              fi
-              echo "Port open, waiting for API..."
+              echo "✅ Backend is up!"
+              exit 0
             fi
             echo "Waiting for backend..."
             sleep 2
