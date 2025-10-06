@@ -18,20 +18,26 @@ jobs:
           repository: Pavan8396/Hunt_Career
           path: Hunt_Career
 
+      # Install MongoDB using official repo (Ubuntu)
       - name: Install MongoDB
         run: |
+          wget -qO - https://www.mongodb.org/static/pgp/server-6.0.asc | sudo apt-key add -
+          echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu $(lsb_release -cs)/mongodb-org/6.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-6.0.list
           sudo apt-get update
-          sudo apt-get install -y mongodb
-          sudo systemctl start mongodb
+          sudo apt-get install -y mongodb-org
+          sudo systemctl start mongod
+          sleep 5
+          sudo systemctl status mongod
 
-      # If you want to restore your local MongoDB data, upload mongo_dump.tar.gz to your repo or artifact,
-      # and uncomment these steps:
-      # - name: Extract mongo dump
-      #   run: tar -xzvf mongo_dump.tar.gz
-      #   working-directory: Hunt_Career
-      # - name: Restore database
-      #   run: mongorestore --uri="mongodb://localhost:27017/hcdb" ./mongo_dump
-      #   working-directory: Hunt_Career
+      # Extract mongo dump (assumes mongo_dump.tar.gz is in Hunt_Career/)
+      - name: Extract mongo dump
+        run: tar -xzvf mongo_dump.tar.gz
+        working-directory: Hunt_Career
+
+      # Restore MongoDB data
+      - name: Restore database
+        run: mongorestore --uri="mongodb://localhost:27017/hcdb" ./mongo_dump
+        working-directory: Hunt_Career
 
       - name: Install frontend dependencies
         run: npm install
@@ -45,9 +51,19 @@ jobs:
         run: npm install
         working-directory: Hunt_Career/backend
 
-      - name: Start backend server (debug)
-        run: npm start
+      - name: Start backend server
+        run: nohup npm start &
         working-directory: Hunt_Career/backend
+
+      # Wait for backend to be up before running tests
+      - name: Wait for backend to start
+        run: |
+          for i in {1..60}; do
+            nc -z localhost 5000 && echo "Backend up!" && exit 0
+            echo "Waiting for backend..."
+            sleep 2
+          done
+          echo "Backend did not start in time" && exit 1
 
   run-tests:
     needs: start-app
@@ -59,14 +75,17 @@ jobs:
           repository: Pavan8396/Hunt_Career_Testing
           path: Hunt_Career_Testing
 
+      # Selenium (Java, Maven)
       - name: Run Selenium Tests
         run: mvn clean test
         working-directory: Hunt_Career_Testing/Hunt_Career_TestNG_Hybrid_Framework
 
+      # Cypress (JavaScript)
       - name: Run Cypress Tests
         run: npx cypress run
         working-directory: Hunt_Career_Testing/Hunt_Career_Cypress
 
+      # Playwright (JavaScript or TypeScript)
       - name: Run Playwright Tests
         run: npx playwright test
         working-directory: Hunt_Career_Testing/Hunt_Career_Playwright
