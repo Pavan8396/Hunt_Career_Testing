@@ -115,15 +115,11 @@ jobs:
         run: mvn clean test
         working-directory: Hunt_Career_Testing/Hunt_Career_TestNG_Hybrid_Framework
 
-      # --- Cypress: Node.js 22 ---
-      - name: Use Node.js 22 for Cypress
+            # --- CYPRESS ---
+      - name: Set up Node.js 22 for Cypress
         uses: actions/setup-node@v4
         with:
           node-version: '22'
-
-      - name: Clear Cypress cache
-        run: npx cypress cache clear
-        working-directory: Hunt_Career_Testing/Hunt_Career_Cypress
 
       - name: Install Cypress dependencies
         run: npm install
@@ -133,8 +129,8 @@ jobs:
         run: npx cypress run
         working-directory: Hunt_Career_Testing/Hunt_Career_Cypress
 
-      # --- Playwright: Node.js 22 and browser install ---
-      - name: Use Node.js 22 for Playwright
+      # --- PLAYWRIGHT ---
+      - name: Set up Node.js 22 for Playwright
         uses: actions/setup-node@v4
         with:
           node-version: '22'
