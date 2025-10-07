@@ -1,10 +1,10 @@
-name: Grand Master Pipeline
+name: 🚀 Grand Master Pipeline
 
 on:
   workflow_dispatch:
 
 jobs:
-  start-app:
+  full-pipeline:
     runs-on: ubuntu-22.04
     env:
       MONGO_URI: mongodb://localhost:27017/hcdb
@@ -13,15 +13,25 @@ jobs:
       PORT: 5000
 
     steps:
-      # --- Checkout source repo ---
-      - name: Checkout Hunt_Career
+      # ---------------------------------------------------------------------
+      # 📦 CHECKOUT
+      # ---------------------------------------------------------------------
+      - name: ⬇️ Checkout Application Source
         uses: actions/checkout@v3
         with:
           repository: Pavan8396/Hunt_Career
           path: Hunt_Career
 
-      # --- Install MongoDB and restore dump ---
-      - name: Install MongoDB
+      - name: ⬇️ Checkout Test Automation Source
+        uses: actions/checkout@v3
+        with:
+          repository: Pavan8396/Hunt_Career_Testing
+          path: Hunt_Career_Testing
+
+      # ---------------------------------------------------------------------
+      # 🗄️ DATABASE SETUP
+      # ---------------------------------------------------------------------
+      - name: 🏗️ Install MongoDB
         run: |
           wget -qO - https://www.mongodb.org/static/pgp/server-6.0.asc | sudo apt-key add -
           echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/6.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-6.0.list
@@ -30,160 +40,138 @@ jobs:
           sudo systemctl start mongod
           sleep 5
 
-      - name: Extract mongo dump
-        run: tar -xvf mongo_dump.tar
+      - name: 📦 Extract and Restore MongoDB Dump
+        run: |
+          tar -xvf mongo_dump.tar
+          mongorestore --uri="mongodb://localhost:27017/hcdb" ./mongo_dump/hcdb
         working-directory: Hunt_Career
 
-      - name: Restore database
-        run: mongorestore --uri="mongodb://localhost:27017/hcdb" ./mongo_dump/hcdb
-        working-directory: Hunt_Career
-
-      # --- Install dependencies ---
-      - name: Install frontend dependencies
-        run: npm install
+      # ---------------------------------------------------------------------
+      # ⚙️ DEPENDENCY INSTALLATION
+      # ---------------------------------------------------------------------
+      - name: 📦 Install Frontend Dependencies
+        run: npm ci
         working-directory: Hunt_Career/frontend
 
-      - name: Install backend dependencies
-        run: npm install
+      - name: 📦 Install Backend Dependencies
+        run: npm ci
         working-directory: Hunt_Career/backend
 
-      # --- Build frontend (if needed) ---
-      - name: Build frontend (if needed)
+      # ---------------------------------------------------------------------
+      # 🏗️ BUILD & START APP
+      # ---------------------------------------------------------------------
+      - name: 🏗️ Build Frontend (if needed)
         run: |
-          if [ -f package.json ] && grep -q '"build"' package.json; then
-            npm run build || true
+          if grep -q '"build"' package.json; then
+            npm run build
           fi
         working-directory: Hunt_Career/frontend
 
-      # --- Start frontend & backend ---
-      - name: Start frontend server
+      - name: 🚀 Start Frontend Server
         run: |
           BROWSER=none HOST=0.0.0.0 PORT=3000 nohup npm start > ../frontend.log 2>&1 &
         working-directory: Hunt_Career/frontend
 
-      - name: Start backend server
+      - name: 🚀 Start Backend Server
         run: |
           PORT=5000 nohup npm start > ../backend.log 2>&1 &
         working-directory: Hunt_Career/backend
 
-      # --- Wait for frontend (HTTP check) ---
-      - name: Wait for frontend to start
+      # ---------------------------------------------------------------------
+      # ⏳ WAIT FOR APP TO BE READY
+      # ---------------------------------------------------------------------
+      - name: ⏳ Wait for Frontend (port 3000)
         run: |
-          echo "⏳ Waiting for frontend (http://localhost:3000)..."
           for i in {1..60}; do
             if curl -fsS http://localhost:3000 >/dev/null; then
               echo "✅ Frontend is up!"
               exit 0
             fi
-            echo "Waiting for frontend..."
             sleep 2
           done
           echo "❌ Frontend did not start in time. Showing logs:"
           cat Hunt_Career/frontend.log || true
           exit 1
 
-      # --- Wait for backend (port check) ---
-      - name: Wait for backend to start
+      - name: ⏳ Wait for Backend (port 5000)
         run: |
-          echo "⏳ Waiting for backend on port 5000..."
           for i in {1..60}; do
             nc -z localhost 5000 && echo "✅ Backend is up!" && exit 0
-            echo "Waiting for backend..."
             sleep 2
           done
           echo "❌ Backend did not start in time. Showing logs:"
           cat Hunt_Career/backend.log || true
           exit 1
 
-      # --- Upload logs (optional, for debugging if app fails to start) ---
-      - name: Upload Startup Logs
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: startup-logs
-          path: |
-            Hunt_Career/frontend.log
-            Hunt_Career/backend.log
-
-  run-tests:
-    needs: start-app
-    runs-on: ubuntu-22.04
-
-    steps:
-      # --- Checkout both repos (must repeat for composite workspace!) ---
-      - name: Checkout Hunt_Career
-        uses: actions/checkout@v3
-        with:
-          repository: Pavan8396/Hunt_Career
-          path: Hunt_Career
-
-      - name: Checkout Hunt_Career_Testing
-        uses: actions/checkout@v3
-        with:
-          repository: Pavan8396/Hunt_Career_Testing
-          path: Hunt_Career_Testing
-
-      # --- Selenium: JDK 21 and Chrome ---
-      - name: Set up JDK 21
+      # ---------------------------------------------------------------------
+      # ☕ SELENIUM (JAVA + CHROME)
+      # ---------------------------------------------------------------------
+      - name: ☕ Set up JDK 21
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
           java-version: '21'
 
-      - name: Set up Chrome
+      - name: 🌐 Set up Chrome
         uses: browser-actions/setup-chrome@v1
 
-      - name: Run Selenium Tests (Headless)
+      - name: 🤖 Run Selenium Tests (TestNG Hybrid)
         run: mvn clean test
         working-directory: Hunt_Career_Testing/Hunt_Career_TestNG_Hybrid_Framework
 
-      # --- CYPRESS ---
-      - name: Use Node.js 22 for Cypress
+      # ---------------------------------------------------------------------
+      # 🧪 CYPRESS
+      # ---------------------------------------------------------------------
+      - name: 🟩 Use Node.js 22 for Cypress
         uses: actions/setup-node@v4
         with:
           node-version: '22'
 
-      - name: Clear Cypress Cache
+      - name: 🧹 Clear Cypress Cache
         run: |
           npx cypress cache clear || true
           rm -rf ~/.cache/Cypress || true
         working-directory: Hunt_Career_Testing/Hunt_Career_Cypress
 
-      - name: Install Cypress dependencies
+      - name: 📦 Install Cypress Dependencies
         run: |
           npm ci
           npx cypress install
           chmod +x node_modules/.bin/cypress
         working-directory: Hunt_Career_Testing/Hunt_Career_Cypress
 
-      - name: Verify Cypress Installation
+      - name: ✅ Verify Cypress Installation
         run: npx cypress verify
         working-directory: Hunt_Career_Testing/Hunt_Career_Cypress
 
-      - name: Run Cypress Tests
+      - name: 🧪 Run Cypress Tests
         run: npx cypress run
         working-directory: Hunt_Career_Testing/Hunt_Career_Cypress
 
-      # --- PLAYWRIGHT ---
-      - name: Set up Node.js 22 for Playwright
+      # ---------------------------------------------------------------------
+      # 🎭 PLAYWRIGHT
+      # ---------------------------------------------------------------------
+      - name: 🟦 Use Node.js 22 for Playwright
         uses: actions/setup-node@v4
         with:
           node-version: '22'
 
-      - name: Install Playwright dependencies
-        run: npm install
+      - name: 📦 Install Playwright Dependencies
+        run: npm ci
         working-directory: Hunt_Career_Testing/Hunt_Career_Playwright
 
-      - name: Install Playwright browsers
+      - name: 🎭 Install Playwright Browsers
         run: npx playwright install --with-deps
         working-directory: Hunt_Career_Testing/Hunt_Career_Playwright
 
-      - name: Run Playwright Tests
+      - name: 🎭 Run Playwright Tests
         run: npx playwright test
         working-directory: Hunt_Career_Testing/Hunt_Career_Playwright
 
-      # --- Upload logs and test reports ---
-      - name: Upload Test Reports and Logs
+      # ---------------------------------------------------------------------
+      # 🗂️ ARTIFACTS
+      # ---------------------------------------------------------------------
+      - name: 📤 Upload Test Reports and Logs
         uses: actions/upload-artifact@v4
         if: always()
         with:
