@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  full-pipeline:
+  unified-test-pipeline:
     runs-on: ubuntu-22.04
     env:
       MONGO_URI: mongodb://localhost:27017/hcdb
