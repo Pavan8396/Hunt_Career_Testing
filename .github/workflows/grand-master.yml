@@ -63,7 +63,7 @@ jobs:
       - name: 🏗️ Build Frontend (if needed)
         run: |
           if grep -q '"build"' package.json; then
-            npm run build
+            CI='' npm run build
           fi
         working-directory: Hunt_Career/frontend
 
