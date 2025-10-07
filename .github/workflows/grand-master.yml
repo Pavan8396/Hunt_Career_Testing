@@ -115,14 +115,26 @@ jobs:
         run: mvn clean test
         working-directory: Hunt_Career_Testing/Hunt_Career_TestNG_Hybrid_Framework
 
-            # --- CYPRESS ---
-      - name: Set up Node.js 22 for Cypress
+      - name: Use Node.js 22 for Cypress
         uses: actions/setup-node@v4
         with:
           node-version: '22'
 
+      - name: Clear Cypress Cache
+        run: |
+          npx cypress cache clear || true
+          rm -rf ~/.cache/Cypress || true
+        working-directory: Hunt_Career_Testing/Hunt_Career_Cypress
+
       - name: Install Cypress dependencies
-        run: npm install
+        run: |
+          npm ci
+          npx cypress install
+          chmod +x node_modules/.bin/cypress
+        working-directory: Hunt_Career_Testing/Hunt_Career_Cypress
+
+      - name: Verify Cypress Installation
+        run: npx cypress verify
         working-directory: Hunt_Career_Testing/Hunt_Career_Cypress
 
       - name: Run Cypress Tests
