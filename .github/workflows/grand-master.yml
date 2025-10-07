@@ -4,7 +4,10 @@ on:
   workflow_dispatch:
 
 jobs:
-  full-pipeline:
+  # ===============================================================
+  #  JOB 1: Start and verify application stack (DB + FE + BE)
+  # ===============================================================
+  start-app:
     runs-on: ubuntu-22.04
     env:
       MONGO_URI: mongodb://localhost:27017/hcdb
@@ -13,20 +16,13 @@ jobs:
       PORT: 5000
 
     steps:
-      # --- Checkout source and test repos ---
       - name: Checkout Hunt_Career
         uses: actions/checkout@v3
         with:
           repository: Pavan8396/Hunt_Career
           path: Hunt_Career
 
-      - name: Checkout Hunt_Career_Testing
-        uses: actions/checkout@v3
-        with:
-          repository: Pavan8396/Hunt_Career_Testing
-          path: Hunt_Career_Testing
-
-      # --- Install MongoDB and restore dump ---
+      # --- MongoDB setup ---
       - name: Install MongoDB
         run: |
           wget -qO - https://www.mongodb.org/static/pgp/server-6.0.asc | sudo apt-key add -
@@ -44,7 +40,7 @@ jobs:
         run: mongorestore --uri="mongodb://localhost:27017/hcdb" ./mongo_dump/hcdb
         working-directory: Hunt_Career
 
-      # --- Install dependencies ---
+      # --- Dependencies ---
       - name: Install frontend dependencies
         run: npm install
         working-directory: Hunt_Career/frontend
@@ -53,7 +49,7 @@ jobs:
         run: npm install
         working-directory: Hunt_Career/backend
 
-      # --- Build frontend (if needed) ---
+      # --- Build (optional) ---
       - name: Build frontend (if needed)
         run: |
           if [ -f package.json ] && grep -q '"build"' package.json; then
@@ -72,8 +68,8 @@ jobs:
           PORT=5000 nohup npm start > ../backend.log 2>&1 &
         working-directory: Hunt_Career/backend
 
-      # --- Wait for frontend (HTTP check) ---
-      - name: Wait for frontend to start
+      # --- Wait for frontend ---
+      - name: Wait for frontend
         run: |
           echo "⏳ Waiting for frontend (http://localhost:3000)..."
           for i in {1..60}; do
@@ -84,24 +80,49 @@ jobs:
             echo "Waiting for frontend..."
             sleep 2
           done
-          echo "❌ Frontend did not start in time. Showing logs:"
+          echo "❌ Frontend did not start in time"
           cat Hunt_Career/frontend.log || true
           exit 1
 
-      # --- Wait for backend (port check) ---
-      - name: Wait for backend to start
+      # --- Wait for backend ---
+      - name: Wait for backend
         run: |
-          echo "⏳ Waiting for backend on port 5000..."
+          echo "⏳ Waiting for backend (port 5000)..."
           for i in {1..60}; do
             nc -z localhost 5000 && echo "✅ Backend is up!" && exit 0
             echo "Waiting for backend..."
             sleep 2
           done
-          echo "❌ Backend did not start in time. Showing logs:"
+          echo "❌ Backend did not start in time"
           cat Hunt_Career/backend.log || true
           exit 1
 
-      # --- Selenium: JDK 21 and Chrome ---
+      # --- Upload logs for debugging (optional) ---
+      - name: Upload Application Logs
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: application-logs
+          path: |
+            Hunt_Career/frontend.log
+            Hunt_Career/backend.log
+
+
+  # ===============================================================
+  #  JOB 2: Run all automation frameworks (Selenium + Cypress + PW)
+  # ===============================================================
+  run-tests:
+    needs: start-app
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout Hunt_Career_Testing
+        uses: actions/checkout@v3
+        with:
+          repository: Pavan8396/Hunt_Career_Testing
+          path: Hunt_Career_Testing
+
+      # --- Selenium Setup ---
       - name: Set up JDK 21
         uses: actions/setup-java@v3
         with:
@@ -115,7 +136,8 @@ jobs:
         run: mvn clean test
         working-directory: Hunt_Career_Testing/Hunt_Career_TestNG_Hybrid_Framework
 
-      - name: Use Node.js 22 for Cypress
+      # --- Cypress Setup ---
+      - name: Set up Node.js 22 for Cypress
         uses: actions/setup-node@v4
         with:
           node-version: '22'
@@ -141,7 +163,7 @@ jobs:
         run: npx cypress run
         working-directory: Hunt_Career_Testing/Hunt_Career_Cypress
 
-      # --- PLAYWRIGHT ---
+      # --- Playwright Setup ---
       - name: Set up Node.js 22 for Playwright
         uses: actions/setup-node@v4
         with:
@@ -159,15 +181,13 @@ jobs:
         run: npx playwright test
         working-directory: Hunt_Career_Testing/Hunt_Career_Playwright
 
-      # --- Upload logs and test reports ---
-      - name: Upload Test Reports and Logs
+      # --- Upload Reports ---
+      - name: Upload Test Reports
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: test-reports-and-logs
+          name: test-reports
           path: |
             Hunt_Career_Testing/**/target/surefire-reports/**
             Hunt_Career_Testing/**/cypress/reports/**
             Hunt_Career_Testing/**/playwright-report/**
-            Hunt_Career/frontend.log
-            Hunt_Career/backend.log
