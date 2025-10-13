@@ -11,6 +11,8 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 
+import com.huntcareer.qa.utils.Utilities;
+
 public class EmployerPostJobPage {
 	WebDriver driver;
 	WebDriverWait wait;
@@ -24,7 +26,7 @@ public class EmployerPostJobPage {
 	@FindBy(xpath = "//input[@id='company']")
 	private WebElement companyTitleField;
 	
-	@FindBy(xpath = "//input[@id='description']")
+	@FindBy(xpath = "//textarea[@id='description']")
 	private WebElement descriptionField;
 	
 	@FindBy(xpath = "//input[@id='candidate_required_location']")
@@ -81,8 +83,9 @@ public class EmployerPostJobPage {
 		wait.until(ExpectedConditions.elementToBeClickable(jobTypeOption)).click();
 	}
 	
-	public void selectJobTypeOption(String jobType) {
-		driver.findElement(By.xpath("//label[contains(., '" + jobType + "')]/input")).click();
+	public void selectJobTypeOption() {
+		 By jobTypeOption = By.xpath("//option[contains(text(),'" + Utilities.getRandomJobType() + "')]");
+		    wait.until(ExpectedConditions.visibilityOfElementLocated(jobTypeOption)).click();
 	}
 	
 	public void clickPostJobSubmitButton() {

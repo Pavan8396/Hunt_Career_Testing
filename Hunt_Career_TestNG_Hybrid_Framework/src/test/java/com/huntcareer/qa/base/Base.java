@@ -47,7 +47,7 @@ public class Base {
         if (browserName.equalsIgnoreCase("chrome")) {
             ChromeOptions options = new ChromeOptions();
             if (isHeadless) {
-                options.addArguments("--headless=new");
+//                options.addArguments("--headless=new");
                 options.addArguments("--disable-gpu");
                 options.addArguments("--no-sandbox");
                 options.addArguments("--disable-dev-shm-usage");
@@ -87,12 +87,11 @@ public class Base {
         for (int i = 1; i <= maxRetries; i++) {
             try {
                 driver.get(appUrl);
-                System.out.println("✅ Successfully opened application on attempt " + i);
                 break;
             } catch (WebDriverException e) {
-                System.out.println("⚠️ Attempt " + i + " failed to open app (frontend may not be ready). Retrying...");
+                System.out.println("Attempt " + i + " failed to open app (frontend may not be ready). Retrying...");
                 if (i == maxRetries) {
-                    System.out.println("❌ Application not reachable after " + maxRetries + " attempts.");
+                    System.out.println("Application not reachable after " + maxRetries + " attempts.");
                     e.printStackTrace();
                 }
                 try {

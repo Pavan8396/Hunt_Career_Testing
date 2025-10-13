@@ -3,13 +3,13 @@
 <suite name="Failed suite [Default suite]" guice-stage="DEVELOPMENT">
   <test thread-count="5" name="Default test(failed)">
     <classes>
-      <class name="com.huntcareer.qa.testcases.EmployerRegister">
+      <class name="com.huntcareer.qa.testcases.EmployerJobPost">
         <methods>
-          <include name="TC_1_verifyRegisterWithValidData"/>
-          <include name="tearDown"/>
+          <include name="TC_1_Create_Job_Post_With_Valid_Data"/>
           <include name="setup"/>
+          <include name="tearDown"/>
         </methods>
-      </class> <!-- com.huntcareer.qa.testcases.EmployerRegister -->
+      </class> <!-- com.huntcareer.qa.testcases.EmployerJobPost -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->
