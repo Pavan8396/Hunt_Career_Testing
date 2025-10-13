@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.xssf.usermodel.XSSFCell;
@@ -24,64 +25,110 @@ public class Utilities {
 	public static final int PAGE_WAIT_TIME = 5;
 
 	private static final Faker faker = new Faker(new Locale("en-IND"));
-    private static final Random random = new Random();
-	
-	public static String getCompanyName(){
+	private static final Random random = new Random();
+
+	public static String getCompanyName() {
 		return faker.company().name();
 	}
 
-    public static String getFirstName() {
-    	return faker.name().firstName();
-    }
-    
-    public static String getLastName() {
-    	return faker.name().lastName();
-    }
-    
-    public static String getEmail(String type) {
-    
-    	switch(type) {
-    	
-    	case "plainEmail": return genarateEmailTimeStamp();
-    	case "noLocalPart": return "@mailinator.com";
-		case "localPartOnly": return genarateEmailTimeStamp()+"@";
-		case "doubleAt": return "u@"+genarateEmailTimeStamp()+"@mailinator.com";
-		case "withoutTopLevelDomain": return genarateEmailTimeStamp()+"@mailinator";
-		case "tailingWithDot": return genarateEmailTimeStamp()+"@mailinator.";
-		case "topLevelDomainTooShort": return genarateEmailTimeStamp()+"@mailinator.c";
-		case "domainStartsWithHyphen": return genarateEmailTimeStamp()+"@-mailinator.com";
-    	case "doubleDotInDomain": return genarateEmailTimeStamp()+"@mailinator..com";
-		case "noAtTheRate": return genarateEmailTimeStamp()+"#mailinator.com";
-		case "illegalChars": return genarateEmailTimeStamp()+"<>@mailinator.com";
-		case "twoConsicutiveDots": return "u.."+genarateEmailTimeStamp()+"@mailinator.com";
-		case "dotAtBeginning": return "."+genarateEmailTimeStamp()+"@mailinator.com";
-		case "withQuotation":return "\"" + genarateEmailTimeStamp() + "@mailinator.com" + "\"";
-		case "unclosedQuotation":return "\"" + genarateEmailTimeStamp() + "@mailinator.com" ;
-		case "veryLengthyLocal": return "verylonglocalpartthatexceedstheusuallimitstoverifythelimitdoesitexceedornotbyaddingverylongcharacters@example.com";
-		case "veryLengthyDomain": return "example@verylonglocalpartthatexceedstheusuallimitstoverifythelimitdoesitexceedornotbyaddingverylongcharacters.com";
-		case "veryLenghtyTLD": return genarateEmailTimeStamp()+"@example.verylonglocalpartthatexceedstheusuallimitstoverifythelimitdoesitexceedornotbyaddingverylongcharacters";
-		case "missingSecondLevelDomain": return genarateEmailTimeStamp()+"com";
-		case "withComma": return genarateEmailTimeStamp()+"@mailinator,com";
-		case "doubleConsicutiveAt": return genarateEmailTimeStamp()+"@@mailinator.com";
-		case "underscoreInTLD": return genarateEmailTimeStamp()+"@mailinator.c_m";
-		case "dotBetweenName":return "u."+genarateEmailTimeStamp()+".s@mailinator.com";
-		case "spaceBeforeName": return ""+genarateEmailTimeStamp()+"@mailinator.com";
-		case "spaceAfterName": return genarateEmailTimeStamp()+"@mailinator.com"+"";
-    	case "dotBeforeAt": return genarateEmailTimeStamp()+".@mailinator.com";
-    	case "withoutDomain": return genarateEmailTimeStamp()+"@.com";
-    	
-    	default: return genarateEmailTimeStamp()+"@mailinator.com";
-    	}
-    }
-    
-    public static String generateRandomPassword() {
-    	return "Test@"+random.nextInt(1000);
-    }
-    
-    public static String generateRandomPhoneNumber() {
-    	return faker.phoneNumber().cellPhone().replaceAll("[^0-9]", "").substring(0, 10);
-    }
-    
+	public static String getFirstName() {
+		return faker.name().firstName();
+	}
+
+	public static String getLastName() {
+		return faker.name().lastName();
+	}
+
+	public static String getEmail(String type) {
+
+		switch (type) {
+
+		case "plainEmail":
+			return genarateEmailTimeStamp();
+		case "noLocalPart":
+			return "@mailinator.com";
+		case "localPartOnly":
+			return genarateEmailTimeStamp() + "@";
+		case "doubleAt":
+			return "u@" + genarateEmailTimeStamp() + "@mailinator.com";
+		case "withoutTopLevelDomain":
+			return genarateEmailTimeStamp() + "@mailinator";
+		case "tailingWithDot":
+			return genarateEmailTimeStamp() + "@mailinator.";
+		case "topLevelDomainTooShort":
+			return genarateEmailTimeStamp() + "@mailinator.c";
+		case "domainStartsWithHyphen":
+			return genarateEmailTimeStamp() + "@-mailinator.com";
+		case "doubleDotInDomain":
+			return genarateEmailTimeStamp() + "@mailinator..com";
+		case "noAtTheRate":
+			return genarateEmailTimeStamp() + "#mailinator.com";
+		case "illegalChars":
+			return genarateEmailTimeStamp() + "<>@mailinator.com";
+		case "twoConsicutiveDots":
+			return "u.." + genarateEmailTimeStamp() + "@mailinator.com";
+		case "dotAtBeginning":
+			return "." + genarateEmailTimeStamp() + "@mailinator.com";
+		case "withQuotation":
+			return "\"" + genarateEmailTimeStamp() + "@mailinator.com" + "\"";
+		case "unclosedQuotation":
+			return "\"" + genarateEmailTimeStamp() + "@mailinator.com";
+		case "veryLengthyLocal":
+			return "verylonglocalpartthatexceedstheusuallimitstoverifythelimitdoesitexceedornotbyaddingverylongcharacters@example.com";
+		case "veryLengthyDomain":
+			return "example@verylonglocalpartthatexceedstheusuallimitstoverifythelimitdoesitexceedornotbyaddingverylongcharacters.com";
+		case "veryLenghtyTLD":
+			return genarateEmailTimeStamp()
+					+ "@example.verylonglocalpartthatexceedstheusuallimitstoverifythelimitdoesitexceedornotbyaddingverylongcharacters";
+		case "missingSecondLevelDomain":
+			return genarateEmailTimeStamp() + "com";
+		case "withComma":
+			return genarateEmailTimeStamp() + "@mailinator,com";
+		case "doubleConsicutiveAt":
+			return genarateEmailTimeStamp() + "@@mailinator.com";
+		case "underscoreInTLD":
+			return genarateEmailTimeStamp() + "@mailinator.c_m";
+		case "dotBetweenName":
+			return "u." + genarateEmailTimeStamp() + ".s@mailinator.com";
+		case "spaceBeforeName":
+			return "" + genarateEmailTimeStamp() + "@mailinator.com";
+		case "spaceAfterName":
+			return genarateEmailTimeStamp() + "@mailinator.com" + "";
+		case "dotBeforeAt":
+			return genarateEmailTimeStamp() + ".@mailinator.com";
+		case "withoutDomain":
+			return genarateEmailTimeStamp() + "@.com";
+
+		default:
+			return genarateEmailTimeStamp() + "@mailinator.com";
+		}
+	}
+
+	public static String generateRandomPassword() {
+		return "Test@" + random.nextInt(1000);
+	}
+
+	public static String generateRandomPhoneNumber() {
+		return faker.phoneNumber().cellPhone().replaceAll("[^0-9]", "").substring(0, 10);
+	}
+
+	public static String generateRandomJobNames() {
+		return faker.job().title();
+	}
+
+	public static String generateRandomJobDescription() {
+		return faker.job().keySkills();
+	}
+
+	public static String generateRandomLocation() {
+		return faker.country().name();
+	}
+
+	public static String getRandomJobType() {
+		String[] jobs = { "Full-Time", "Part-Time", "Contract", "Internship", "Freelance" };
+		return jobs[ThreadLocalRandom.current().nextInt(jobs.length)];
+	}
+
 	public static String generateTimeStamp() {
 		Date date = new Date();
 		return date.toString().replace(" ", "_").replace(":", "_");
@@ -94,8 +141,7 @@ public class Utilities {
 	}
 
 	public static Object[][] getTestDataFromExcel(String sheetName) {
-		File file = new File(
-				System.getProperty("user.dir") + "/src/main/java/com/huntcareer/qa/testdata/DDTFile.xlsx");
+		File file = new File(System.getProperty("user.dir") + "/src/main/java/com/huntcareer/qa/testdata/DDTFile.xlsx");
 		XSSFWorkbook workbook = null;
 		try {
 			FileInputStream fis = new FileInputStream(file);
