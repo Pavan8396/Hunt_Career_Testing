@@ -15,4 +15,14 @@ public class PostAJob {
 		data.put("jobType", Utilities.getRandomJobType());
 		return data;
 	}
+	
+	public static Map<String, String> blankJob(){
+		Map<String, String> data = new HashMap<>();
+		data.put("title", "");
+		data.put("companyName", "");
+		data.put("description", "");
+		data.put("location", "");
+		data.put("jobType", "");
+		return data;
+	}
 }

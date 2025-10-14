@@ -32,9 +32,6 @@ public class EmployerPostJobPage {
 	@FindBy(xpath = "//input[@id='candidate_required_location']")
 	private WebElement locationField;
 	
-	@FindBy(xpath = "//select[@id='job_type']")
-	private WebElement jobTypeOption;
-	
 	@FindBy(xpath = "//button[contains(text(), 'Post Job')]")
 	private WebElement clickPostJobSubmitButton;
 	
@@ -78,11 +75,7 @@ public class EmployerPostJobPage {
 	public void enterLocation(String location) {
 		wait.until(ExpectedConditions.visibilityOf(locationField)).sendKeys(location);
 	}
-	
-	public void clickJobTypeOption() {
-		wait.until(ExpectedConditions.elementToBeClickable(jobTypeOption)).click();
-	}
-	
+
 	public void selectJobTypeOption() {
 		 By jobTypeOption = By.xpath("//option[contains(text(),'" + Utilities.getRandomJobType() + "')]");
 		    wait.until(ExpectedConditions.visibilityOfElementLocated(jobTypeOption)).click();

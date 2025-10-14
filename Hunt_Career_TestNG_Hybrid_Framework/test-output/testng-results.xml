@@ -1,21 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testng-results ignored="0" total="1" passed="1" failed="0" skipped="0">
+<testng-results ignored="0" total="2" passed="2" failed="0" skipped="0">
   <reporter-output>
   </reporter-output>
-  <suite started-at="2025-10-13T19:20:47 IST" name="Default suite" finished-at="2025-10-13T19:20:58 IST" duration-ms="11148">
+  <suite started-at="2025-10-13T19:42:44 IST" name="Default suite" finished-at="2025-10-13T19:43:04 IST" duration-ms="20261">
     <groups>
     </groups>
-    <test started-at="2025-10-13T19:20:47 IST" name="Default test" finished-at="2025-10-13T19:20:58 IST" duration-ms="11148">
+    <test started-at="2025-10-13T19:42:44 IST" name="Default test" finished-at="2025-10-13T19:43:04 IST" duration-ms="20261">
       <class name="com.huntcareer.qa.testcases.EmployerJobPost">
-        <test-method is-config="true" signature="setup()[pri:0, instance:com.huntcareer.qa.testcases.EmployerJobPost@1522d8a0]" started-at="2025-10-13T19:20:47 IST" name="setup" finished-at="2025-10-13T19:20:51 IST" duration-ms="4217" status="PASS">
+        <test-method is-config="true" signature="setup()[pri:0, instance:com.huntcareer.qa.testcases.EmployerJobPost@758a34ce]" started-at="2025-10-13T19:42:44 IST" name="setup" finished-at="2025-10-13T19:42:49 IST" duration-ms="4371" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- setup -->
-        <test-method signature="TC_1_Create_Job_Post_With_Valid_Data()[pri:0, instance:com.huntcareer.qa.testcases.EmployerJobPost@1522d8a0]" started-at="2025-10-13T19:20:51 IST" name="TC_1_Create_Job_Post_With_Valid_Data" finished-at="2025-10-13T19:20:58 IST" duration-ms="6504" status="PASS">
+        <test-method signature="TC_1_Create_Job_Post_With_Valid_Data()[pri:1, instance:com.huntcareer.qa.testcases.EmployerJobPost@758a34ce]" started-at="2025-10-13T19:42:49 IST" name="TC_1_Create_Job_Post_With_Valid_Data" finished-at="2025-10-13T19:42:55 IST" duration-ms="6105" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- TC_1_Create_Job_Post_With_Valid_Data -->
-        <test-method is-config="true" signature="tearDown()[pri:0, instance:com.huntcareer.qa.testcases.EmployerJobPost@1522d8a0]" started-at="2025-10-13T19:20:58 IST" name="tearDown" finished-at="2025-10-13T19:20:58 IST" duration-ms="344" status="PASS">
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:com.huntcareer.qa.testcases.EmployerJobPost@758a34ce]" started-at="2025-10-13T19:42:55 IST" name="tearDown" finished-at="2025-10-13T19:42:55 IST" duration-ms="228" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+        <test-method is-config="true" signature="setup()[pri:0, instance:com.huntcareer.qa.testcases.EmployerJobPost@758a34ce]" started-at="2025-10-13T19:42:55 IST" name="setup" finished-at="2025-10-13T19:42:58 IST" duration-ms="3481" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setup -->
+        <test-method signature="TC_2_Blank_Job_Post()[pri:2, instance:com.huntcareer.qa.testcases.EmployerJobPost@758a34ce]" started-at="2025-10-13T19:42:58 IST" name="TC_2_Blank_Job_Post" finished-at="2025-10-13T19:43:04 IST" duration-ms="5640" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- TC_2_Blank_Job_Post -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:com.huntcareer.qa.testcases.EmployerJobPost@758a34ce]" started-at="2025-10-13T19:43:04 IST" name="tearDown" finished-at="2025-10-13T19:43:04 IST" duration-ms="363" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- tearDown -->

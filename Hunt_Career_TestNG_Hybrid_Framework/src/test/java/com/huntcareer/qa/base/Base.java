@@ -47,7 +47,7 @@ public class Base {
         if (browserName.equalsIgnoreCase("chrome")) {
             ChromeOptions options = new ChromeOptions();
             if (isHeadless) {
-//                options.addArguments("--headless=new");
+                options.addArguments("--headless=new");
                 options.addArguments("--disable-gpu");
                 options.addArguments("--no-sandbox");
                 options.addArguments("--disable-dev-shm-usage");
@@ -81,7 +81,7 @@ public class Base {
         String appUrl = prop.getProperty("url");
         int maxRetries = 5;
 
-        System.out.println("Attempting to launch application: " + appUrl);
+        //System.out.println("Attempting to launch application: " + appUrl);
 
         // Retry logic in case the app isn’t ready (e.g., frontend still starting)
         for (int i = 1; i <= maxRetries; i++) {

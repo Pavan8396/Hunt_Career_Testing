@@ -42,7 +42,7 @@ public class EmployerJobPost extends Base {
 		}
 	}
 	
-	@Test
+	@Test(priority = 1)
 	public void TC_1_Create_Job_Post_With_Valid_Data() {
 		jp = new EmployerPostJobPage(driver);
 		Map<String, String> job = PostAJob.validJob();
@@ -51,9 +51,22 @@ public class EmployerJobPost extends Base {
 		jp.enterCompanyName(job.get("companyName"));
 		jp.enterDescription(job.get("description"));
 		jp.enterLocation(job.get("location"));
-		jp.clickJobTypeOption();
 		jp.selectJobTypeOption();
 		jp.clickPostJobSubmitButton();
 		jp.verifyJobPostSuccess();
+	}
+	
+	@Test(priority = 2)
+	public void TC_2_Blank_Job_Post() {
+		jp = new EmployerPostJobPage(driver);
+		Map<String, String> job = PostAJob.blankJob();
+		jp.clickPostAJobNavigationButton();
+		jp.enterJobTitle(job.get("title"));
+		jp.enterCompanyName(job.get("companyName"));
+		jp.enterDescription(job.get("description"));
+		jp.enterLocation(job.get("location"));
+		jp.selectJobTypeOption();
+		jp.clickPostJobSubmitButton();
+		jp.verifyJobTitleRequiredErrorMessage();
 	}
 }

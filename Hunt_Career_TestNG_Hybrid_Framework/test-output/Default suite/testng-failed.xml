@@ -5,7 +5,7 @@
     <classes>
       <class name="com.huntcareer.qa.testcases.EmployerJobPost">
         <methods>
-          <include name="TC_1_Create_Job_Post_With_Valid_Data"/>
+          <include name="TC_2_Blank_Job_Post"/>
           <include name="setup"/>
           <include name="tearDown"/>
         </methods>
