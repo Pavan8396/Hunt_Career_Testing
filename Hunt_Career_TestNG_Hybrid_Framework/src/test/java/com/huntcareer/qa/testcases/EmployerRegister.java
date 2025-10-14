@@ -53,7 +53,7 @@ public class EmployerRegister extends Base {
         erp.enterPassword(user.get("password"));
         erp.enterConfirmPassword(user.get("confirmPassword"));
         elp = erp.clickSignUpButton();
-        elp.verifyRegisterSuccess();
+        elp.verifyRegisterSuccess(dataProp.getProperty("RegisterSuccessMessage"));
     }
 
     @Test(priority = 2, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
@@ -66,7 +66,7 @@ public class EmployerRegister extends Base {
         erp.enterPassword(user.get("password"));
         erp.enterConfirmPassword(user.get("confirmPassword"));
         erp.clickSignUpButton();
-        erp.verifyUserAlreadyExistsMessage();
+        erp.verifyUserAlreadyExistsMessage(dataProp.getProperty("UserAlreadyExistsMessage"));
     }
 
     @Test(priority = 3, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
@@ -78,7 +78,7 @@ public class EmployerRegister extends Base {
         erp.enterPassword(user.get("password"));
         erp.enterConfirmPassword(user.get("confirmPassword"));
         erp.clickSignUpButton();
-        erp.verifyBlankCompanyNameMessage();
+        erp.verifyBlankCompanyNameMessage(dataProp.getProperty("CompanyNameIsRequiredMessage"));
     }
 
     @Test(priority = 5, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
@@ -90,7 +90,7 @@ public class EmployerRegister extends Base {
         erp.enterPassword(user.get("password"));
         erp.enterConfirmPassword(user.get("confirmPassword"));
         erp.clickSignUpButton();
-        erp.verifyBlankEmailMessage();
+        erp.verifyBlankEmailMessage(dataProp.getProperty("EmailIsRequiredMessage"));
     }
 
     @Test(priority = 6, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
@@ -102,7 +102,7 @@ public class EmployerRegister extends Base {
         erp.enterEmail(user.get("email"));
         erp.enterConfirmPassword(user.get("confirmPassword"));
         erp.clickSignUpButton();
-        erp.verifyPasswordMustBeAtLeast8CharctersLongMessage();
+        erp.verifyPasswordMustBeAtLeast8CharctersLongMessage(dataProp.getProperty("PasswordMustBeAtLeast8CharactersLongMessage"));
     }
 
     @Test(priority = 7, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
@@ -115,7 +115,7 @@ public class EmployerRegister extends Base {
         erp.enterPassword(user.get("password"));
         erp.enterConfirmPassword(user.get("confirmPassword"));
         erp.clickSignUpButton();
-        erp.verifyPasswordMustBeAtLeast8CharctersLongMessage();
+        erp.verifyPasswordMustBeAtLeast8CharctersLongMessage(dataProp.getProperty("PasswordMustBeAtLeast8CharactersLongMessage"));
     }
 
     @Test(priority = 8, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
@@ -127,7 +127,7 @@ public class EmployerRegister extends Base {
         erp.enterEmail(user.get("email"));
         erp.enterPassword(user.get("password"));
         erp.clickSignUpButton();
-        erp.verifyPasswordDoNotMatchMessage();
+        erp.verifyPasswordDoNotMatchMessage(dataProp.getProperty("PasswordsDoNotMatchMessage"));
     }
 
     @Test(priority = 11, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
@@ -140,7 +140,7 @@ public class EmployerRegister extends Base {
         erp.enterPassword(user.get("password"));
         erp.enterConfirmPassword(user.get("confirmPassword"));
         erp.clickSignUpButton();
-        erp.verifyInvalidEmailAndPassword();
+        erp.verifyInvalidEmailAndPassword(dataProp.getProperty("PleaseEnterAValidEmailAddressMessage"));
     }
 
     @Test(priority = 12, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
@@ -153,7 +153,7 @@ public class EmployerRegister extends Base {
         erp.enterPassword(user.get("password"));
         erp.enterConfirmPassword(user.get("confirmPassword"));
         erp.clickSignUpButton();
-        erp.verifyInvalidEmailAndPassword();
+        erp.verifyInvalidEmailAndPassword(dataProp.getProperty("PleaseEnterAValidEmailAddressMessage"));
     }
 
     @Test(priority = 13, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
@@ -166,7 +166,7 @@ public class EmployerRegister extends Base {
         erp.enterPassword(user.get("password"));
         erp.enterConfirmPassword(user.get("confirmPassword"));
         erp.clickSignUpButton();
-        erp.verifyInvalidEmailAndPassword();
+        erp.verifyInvalidEmailAndPassword(dataProp.getProperty("PleaseEnterAValidEmailAddressMessage"));
     }
 
     @Test(priority = 14, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
@@ -179,7 +179,7 @@ public class EmployerRegister extends Base {
         erp.enterPassword(user.get("password"));
         erp.enterConfirmPassword(user.get("confirmPassword"));
         erp.clickSignUpButton();
-        erp.verifyInvalidEmailAndPassword();
+        erp.verifyInvalidEmailAndPassword(dataProp.getProperty("PleaseEnterAValidEmailAddressMessage"));
     }
 
     @Test(priority = 15, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
@@ -192,7 +192,7 @@ public class EmployerRegister extends Base {
         erp.enterPassword(user.get("password"));
         erp.enterConfirmPassword(user.get("confirmPassword"));
         erp.clickSignUpButton();
-        erp.verifyInvalidEmailAndPassword();
+        erp.verifyInvalidEmailAndPassword(dataProp.getProperty("PleaseEnterAValidEmailAddressMessage"));
     }
 
     @Test(priority = 16, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
@@ -205,7 +205,7 @@ public class EmployerRegister extends Base {
         erp.enterPassword(user.get("password"));
         erp.enterConfirmPassword(user.get("confirmPassword"));
         erp.clickSignUpButton();
-        erp.verifyInvalidEmailAndPassword();
+        erp.verifyInvalidEmailAndPassword(dataProp.getProperty("PleaseEnterAValidEmailAddressMessage"));
     }
 
     @Test(priority = 17, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
@@ -218,7 +218,7 @@ public class EmployerRegister extends Base {
         erp.enterPassword(user.get("password"));
         erp.enterConfirmPassword(user.get("confirmPassword"));
         erp.clickSignUpButton();
-        erp.verifyInvalidEmailAndPassword();
+        erp.verifyInvalidEmailAndPassword(dataProp.getProperty("PleaseEnterAValidEmailAddressMessage"));
     }
 
     @Test(priority = 18, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
@@ -231,7 +231,7 @@ public class EmployerRegister extends Base {
         erp.enterPassword(user.get("password"));
         erp.enterConfirmPassword(user.get("confirmPassword"));
         erp.clickSignUpButton();
-        erp.verifyInvalidEmailAndPassword();
+        erp.verifyInvalidEmailAndPassword(dataProp.getProperty("PleaseEnterAValidEmailAddressMessage"));
     }
 
     @Test(priority = 19, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
@@ -244,7 +244,7 @@ public class EmployerRegister extends Base {
         erp.enterPassword(user.get("password"));
         erp.enterConfirmPassword(user.get("confirmPassword"));
         erp.clickSignUpButton();
-        erp.verifyInvalidEmailAndPassword();
+        erp.verifyInvalidEmailAndPassword(dataProp.getProperty("PleaseEnterAValidEmailAddressMessage"));
     }
 
     @Test(priority = 20, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
@@ -257,7 +257,7 @@ public class EmployerRegister extends Base {
         erp.enterPassword(user.get("password"));
         erp.enterConfirmPassword(user.get("confirmPassword"));
         erp.clickSignUpButton();
-        erp.verifyInvalidEmailAndPassword();
+        erp.verifyInvalidEmailAndPassword(dataProp.getProperty("PleaseEnterAValidEmailAddressMessage"));
     }
 
     @Test(priority = 21, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
@@ -270,7 +270,7 @@ public class EmployerRegister extends Base {
         erp.enterPassword(user.get("password"));
         erp.enterConfirmPassword(user.get("confirmPassword"));
         erp.clickSignUpButton();
-        erp.verifyInvalidEmailAndPassword();
+        erp.verifyInvalidEmailAndPassword(dataProp.getProperty("PleaseEnterAValidEmailAddressMessage"));
     }
 
     @Test(priority = 22, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
@@ -283,7 +283,7 @@ public class EmployerRegister extends Base {
         erp.enterPassword(user.get("password"));
         erp.enterConfirmPassword(user.get("confirmPassword"));
         erp.clickSignUpButton();
-        erp.verifyInvalidEmailAndPassword();
+        erp.verifyInvalidEmailAndPassword(dataProp.getProperty("PleaseEnterAValidEmailAddressMessage"));
     }
 
     @Test(priority = 23, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
@@ -296,7 +296,7 @@ public class EmployerRegister extends Base {
         erp.enterPassword(user.get("password"));
         erp.enterConfirmPassword(user.get("confirmPassword"));
         erp.clickSignUpButton();
-        erp.verifyInvalidEmailAndPassword();
+        erp.verifyInvalidEmailAndPassword(dataProp.getProperty("PleaseEnterAValidEmailAddressMessage"));
     }
 
     @Test(priority = 24, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
@@ -309,7 +309,7 @@ public class EmployerRegister extends Base {
         erp.enterPassword(user.get("password"));
         erp.enterConfirmPassword(user.get("confirmPassword"));
         erp.clickSignUpButton();
-        erp.verifyInvalidEmailAndPassword();
+        erp.verifyInvalidEmailAndPassword(dataProp.getProperty("PleaseEnterAValidEmailAddressMessage"));
     }
 
     @Test(priority = 25, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
@@ -322,7 +322,7 @@ public class EmployerRegister extends Base {
         erp.enterPassword(user.get("password"));
         erp.enterConfirmPassword(user.get("confirmPassword"));
         erp.clickSignUpButton();
-        erp.verifyInvalidEmailAndPassword();
+        erp.verifyInvalidEmailAndPassword(dataProp.getProperty("PleaseEnterAValidEmailAddressMessage"));
     }
 
     @Test(priority = 26, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
@@ -335,7 +335,7 @@ public class EmployerRegister extends Base {
         erp.enterPassword(user.get("password"));
         erp.enterConfirmPassword(user.get("confirmPassword"));
         erp.clickSignUpButton();
-        erp.verifyInvalidEmailAndPassword();
+        erp.verifyInvalidEmailAndPassword(dataProp.getProperty("PleaseEnterAValidEmailAddressMessage"));
     }
 
     @Test(priority = 27, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
@@ -348,7 +348,7 @@ public class EmployerRegister extends Base {
         erp.enterPassword(user.get("password"));
         erp.enterConfirmPassword(user.get("confirmPassword"));
         erp.clickSignUpButton();
-        erp.verifyInvalidEmailAndPassword();
+        erp.verifyInvalidEmailAndPassword(dataProp.getProperty("PleaseEnterAValidEmailAddressMessage"));
     }
 
     @Test(priority = 28, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
@@ -361,7 +361,7 @@ public class EmployerRegister extends Base {
         erp.enterPassword(user.get("password"));
         erp.enterConfirmPassword(user.get("confirmPassword"));
         erp.clickSignUpButton();
-        erp.verifyInvalidEmailAndPassword();
+        erp.verifyInvalidEmailAndPassword(dataProp.getProperty("PleaseEnterAValidEmailAddressMessage"));
     }
 
     @Test(priority = 29, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
@@ -374,7 +374,7 @@ public class EmployerRegister extends Base {
         erp.enterPassword(user.get("password"));
         erp.enterConfirmPassword(user.get("confirmPassword"));
         erp.clickSignUpButton();
-        erp.verifyInvalidEmailAndPassword();
+        erp.verifyInvalidEmailAndPassword(dataProp.getProperty("PleaseEnterAValidEmailAddressMessage"));
     }
 
     @Test(priority = 30, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
@@ -387,7 +387,7 @@ public class EmployerRegister extends Base {
         erp.enterPassword(user.get("password"));
         erp.enterConfirmPassword(user.get("confirmPassword"));
         erp.clickSignUpButton();
-        erp.verifyInvalidEmailAndPassword();
+        erp.verifyInvalidEmailAndPassword(dataProp.getProperty("PleaseEnterAValidEmailAddressMessage"));
     }
 
     @Test(priority = 31, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
@@ -400,7 +400,7 @@ public class EmployerRegister extends Base {
         erp.enterPassword(user.get("password"));
         erp.enterConfirmPassword(user.get("confirmPassword"));
         erp.clickSignUpButton();
-        erp.verifyInvalidEmailAndPassword();
+        erp.verifyInvalidEmailAndPassword(dataProp.getProperty("PleaseEnterAValidEmailAddressMessage"));
     }
 
     @Test(priority = 32, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
@@ -413,7 +413,7 @@ public class EmployerRegister extends Base {
         erp.enterPassword(user.get("password"));
         erp.enterConfirmPassword(user.get("confirmPassword"));
         erp.clickSignUpButton();
-        erp.verifyInvalidEmailAndPassword();
+        erp.verifyInvalidEmailAndPassword(dataProp.getProperty("PleaseEnterAValidEmailAddressMessage"));
     }
 
     @Test(priority = 33, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
@@ -426,7 +426,7 @@ public class EmployerRegister extends Base {
         erp.enterPassword(user.get("password"));
         erp.enterConfirmPassword(user.get("confirmPassword"));
         elp = erp.clickSignUpButton();
-        elp.verifyRegisterSuccess();
+        elp.verifyRegisterSuccess(dataProp.getProperty("RegisterSuccessMessage"));
     }
 
     @Test(priority = 34, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
@@ -439,7 +439,7 @@ public class EmployerRegister extends Base {
         erp.enterPassword(user.get("password"));
         erp.enterConfirmPassword(user.get("confirmPassword"));
         elp = erp.clickSignUpButton();
-        elp.verifyRegisterSuccess();
+        elp.verifyRegisterSuccess(dataProp.getProperty("RegisterSuccessMessage"));
     }
 
     @Test(priority = 35, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
@@ -452,7 +452,7 @@ public class EmployerRegister extends Base {
         erp.enterPassword(user.get("password"));
         erp.enterConfirmPassword(user.get("confirmPassword"));
         elp = erp.clickSignUpButton();
-        elp.verifyRegisterSuccess();
+        elp.verifyRegisterSuccess(dataProp.getProperty("RegisterSuccessMessage"));
     }
 
     @Test(priority = 36, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
@@ -465,7 +465,7 @@ public class EmployerRegister extends Base {
         erp.enterPassword(user.get("password"));
         erp.enterConfirmPassword(user.get("confirmPassword"));
         erp.clickSignUpButton();
-        erp.verifyInvalidEmailAndPassword();
+        erp.verifyInvalidEmailAndPassword(dataProp.getProperty("PleaseEnterAValidEmailAddressMessage"));
     }
 
     @Test(priority = 37, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
@@ -478,6 +478,6 @@ public class EmployerRegister extends Base {
         erp.enterPassword(user.get("password"));
         erp.enterConfirmPassword(user.get("confirmPassword"));
         erp.clickSignUpButton();
-        erp.verifyInvalidEmailAndPassword();
+        erp.verifyInvalidEmailAndPassword(dataProp.getProperty("PleaseEnterAValidEmailAddressMessage"));
     }
 }

@@ -24,22 +24,13 @@ public class ExtentReport {
 
 		File extentReportFile = new File(System.getProperty("user.dir")+ prop.getProperty("extentReportPath"));
 		ExtentSparkReporter sparkreport = new ExtentSparkReporter(extentReportFile);
-		
+
 		sparkreport.config().setTheme(Theme.DARK);
 		sparkreport.config().setReportName("Hunt Career Project Test Results");
 		sparkreport.config().setDocumentTitle("Hunt Career Automation Result");
 		sparkreport.config().setTimeStampFormat("dd/MM/yyyy hh:mm:ss");
 		extentReport.attachReporter(sparkreport);
-		
-		Properties prop = new Properties();
-		File configPropFile = new File(System.getProperty("user.dir")+"/src/main/java/com/huntcareer/qa/config/Config.properties");
-		
-		try {
-		FileInputStream fisConfigProp = new FileInputStream(configPropFile);
-		prop.load(fisConfigProp);
-		} catch(Throwable e) {
-			e.printStackTrace();
-		}
+
 		extentReport.setSystemInfo("Application URL", prop.getProperty("url"));
 		extentReport.setSystemInfo("Browser Name", prop.getProperty("browser"));
 		extentReport.setSystemInfo("Operating System Name ", System.getProperty("os.name"));
