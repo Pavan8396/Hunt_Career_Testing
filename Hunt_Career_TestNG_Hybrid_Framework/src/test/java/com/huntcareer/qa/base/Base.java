@@ -13,6 +13,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.edge.EdgeOptions;
+import io.github.bonigarcia.wdm.WebDriverManager;
 
 import com.huntcareer.qa.utils.Utilities;
 
@@ -45,6 +46,7 @@ public class Base {
         boolean isHeadless = Boolean.parseBoolean(prop.getProperty("headless", "false"));
 
         if (browserName.equalsIgnoreCase("chrome")) {
+		WebDriverManager.chromedriver().setup();
             ChromeOptions options = new ChromeOptions();
             if (isHeadless) {
                 options.addArguments("--headless=new");
@@ -52,10 +54,12 @@ public class Base {
                 options.addArguments("--no-sandbox");
                 options.addArguments("--disable-dev-shm-usage");
                 options.addArguments("--window-size=1920,1080");
+                options.setBinary("/home/jules/.cache/selenium/chrome/linux64/141.0.7390.76/chrome");
             }
             driver = new ChromeDriver(options);
 
         } else if (browserName.equalsIgnoreCase("firefox")) {
+		WebDriverManager.firefoxdriver().setup();
             FirefoxOptions options = new FirefoxOptions();
             if (isHeadless) {
                 options.addArguments("--headless");
@@ -65,6 +69,7 @@ public class Base {
             driver = new FirefoxDriver(options);
 
         } else if (browserName.equalsIgnoreCase("edge")) {
+		WebDriverManager.edgedriver().setup();
             EdgeOptions options = new EdgeOptions();
             if (isHeadless) {
                 options.addArguments("--headless");
@@ -79,23 +84,7 @@ public class Base {
         driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(Utilities.PAGE_WAIT_TIME));
 
         String appUrl = prop.getProperty("url");
-        int maxRetries = 5;
-
-        System.out.println("Attempting to launch application: " + appUrl);
-
-        // Retry logic in case the app isn’t ready (e.g., frontend still starting)
-        for (int i = 1; i <= maxRetries; i++) {
-            try {
-                driver.get(appUrl);
-                break;
-            } catch (WebDriverException e) {
-                System.out.println("Attempt " + i + " failed to open app (frontend may not be ready). Retrying...");
-                if (i == maxRetries) {
-                    System.out.println("Application not reachable after " + maxRetries + " attempts.");
-                    e.printStackTrace();
-                }
-            }
-        }
+        driver.get(appUrl);
 
         return driver;
     }

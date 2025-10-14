@@ -9,10 +9,13 @@ import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 import com.aventstack.extentreports.reporter.configuration.Theme;
 
 public class ExtentReport {
+
+	public static Properties prop;
+
 	public static ExtentReports generateExtentReport() {
 		ExtentReports extentReport = new ExtentReports();
 		
-		Properties prop = new Properties();
+		prop = new Properties();
 		File configPropFile = new File(System.getProperty("user.dir")+"/src/main/java/com/huntcareer/qa/config/Config.properties");
 
 		try {

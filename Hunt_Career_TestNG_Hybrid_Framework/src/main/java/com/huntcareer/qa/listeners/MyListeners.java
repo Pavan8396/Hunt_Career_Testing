@@ -1,6 +1,5 @@
 package com.huntcareer.qa.listeners;
 
-import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -47,7 +46,7 @@ public class MyListeners implements ITestListener {
 			e.printStackTrace();
 		}
 
-		String destinationScreenshotPath = Utilities.captureScreenshot(driver, result.getName(), result.getTestContext().getCurrentXmlTest().getParameter("screenshotsPath"));
+		String destinationScreenshotPath = Utilities.captureScreenshot(driver, result.getName(), ExtentReport.prop.getProperty("screenshotsPath"));
 
 		extentTest.addScreenCaptureFromPath(destinationScreenshotPath);
 		extentTest.log(Status.INFO, result.getThrowable());
@@ -63,16 +62,5 @@ public class MyListeners implements ITestListener {
 	@Override
 	public void onFinish(ITestContext context) {
 		extentReport.flush();
-
-		String pathOfExtentReport = System.getProperty("user.dir") + context.getCurrentXmlTest().getParameter("extentReportPath");
-		File extentReport = new File(pathOfExtentReport);
-		// Only open the report locally, NOT in CI
-		if (System.getenv("CI") == null) {
-			try {
-				Desktop.getDesktop().browse(extentReport.toURI());
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
 	}
 }
