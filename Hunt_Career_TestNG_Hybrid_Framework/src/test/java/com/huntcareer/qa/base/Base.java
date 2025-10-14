@@ -47,7 +47,7 @@ public class Base {
         if (browserName.equalsIgnoreCase("chrome")) {
             ChromeOptions options = new ChromeOptions();
             if (isHeadless) {
-//                options.addArguments("--headless=new");
+                options.addArguments("--headless=new");
                 options.addArguments("--disable-gpu");
                 options.addArguments("--no-sandbox");
                 options.addArguments("--disable-dev-shm-usage");
@@ -93,11 +93,6 @@ public class Base {
                 if (i == maxRetries) {
                     System.out.println("Application not reachable after " + maxRetries + " attempts.");
                     e.printStackTrace();
-                }
-                try {
-                    Thread.sleep(5000); // wait 5s before retrying
-                } catch (InterruptedException ie) {
-                    Thread.currentThread().interrupt();
                 }
             }
         }

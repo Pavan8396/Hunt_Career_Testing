@@ -111,9 +111,9 @@ public class RegisterPage {
 		return new LoginPage(driver);
 	}
 
-	public void verifyUserAlreadyExistsMessage() {
+	public void verifyUserAlreadyExistsMessage(String expectedMessage) {
 		Assert.assertEquals(wait.until(ExpectedConditions.visibilityOf(duplicateErrorMessage)).getText(),
-				"User already exists", "Message Text Mismatch");
+				expectedMessage, "Message Text Mismatch");
 		Assert.assertTrue(wait.until(ExpectedConditions.invisibilityOf(duplicateErrorMessage)),
 				"User already exists message should not be visible anymore");
 	}
@@ -123,60 +123,60 @@ public class RegisterPage {
 				"User already exists message should not be visible anymore");
 	}*/
 
-	public void verifyBlankFirstNameMessage() {
+	public void verifyBlankFirstNameMessage(String expectedMessage) {
 		Assert.assertEquals(wait.until(ExpectedConditions.visibilityOf(firstNameBlankMessage)).getText(),
-				"First Name is required.", "Message Text Mismatch");
+				expectedMessage, "Message Text Mismatch");
 		Assert.assertTrue(wait.until(ExpectedConditions.invisibilityOf(firstNameBlankMessage)),
 						"First Name is required message should not be visible anymore");
 	}
 
-	public void verifyBlankLastNameMessage() {
+	public void verifyBlankLastNameMessage(String expectedMessage) {
 		Assert.assertEquals(wait.until(ExpectedConditions.visibilityOf(lastNameBlankMessage)).getText(),
-				"Last Name is required.", "Message Text Mismatch");
+				expectedMessage, "Message Text Mismatch");
 		Assert.assertTrue(wait.until(ExpectedConditions.invisibilityOf(lastNameBlankMessage)),
 				"Last Name is required message should not be visible anymore");
 	}
 
-	public void verifyBlankEmailMessage() {
+	public void verifyBlankEmailMessage(String expectedMessage) {
 		Assert.assertEquals(wait.until(ExpectedConditions.visibilityOf(emailBlankMessage)).getText(),
-				"Email is required.", "Message Text Mismatch");
+				expectedMessage, "Message Text Mismatch");
 		Assert.assertTrue(wait.until(ExpectedConditions.invisibilityOf(emailBlankMessage)),
 				"Email is required message should not be visible anymore");
 	}
 
-	public void verifyInvalidEmailAndPassword() {
+	public void verifyInvalidEmailAndPassword(String expectedMessage) {
 		Assert.assertEquals(wait.until(ExpectedConditions.visibilityOf(pleaseEnterValidEmailAddressMessage)).getText(),
-				"Please enter a valid email address.", "Message Text Mismatch");
+				expectedMessage, "Message Text Mismatch");
 		Assert.assertTrue(wait.until(ExpectedConditions.invisibilityOf(pleaseEnterValidEmailAddressMessage)),
 				"Please enter a valid email address message should not be visible anymore");
 	}
 
-	public void verifyPasswordMustBeAtLeast8CharctersLongMessage() {
+	public void verifyPasswordMustBeAtLeast8CharctersLongMessage(String expectedMessage) {
 		Assert.assertEquals(
 				wait.until(ExpectedConditions.visibilityOf(passwordMustHaveRequiredNumberCharactersMessage)).getText(),
-				"Password must be at least 8 characters long.", "Message Text Mismatch");
+				expectedMessage, "Message Text Mismatch");
 		Assert.assertTrue(
 				wait.until(ExpectedConditions.invisibilityOf(passwordMustHaveRequiredNumberCharactersMessage)),
 				"Password must be at least 8 characters long message should not be visible anymore");
 	}
 
-	public void verifyPasswordDoNotMatchMessage() {
+	public void verifyPasswordDoNotMatchMessage(String expectedMessage) {
 		Assert.assertEquals(wait.until(ExpectedConditions.visibilityOf(passwordNotMatchMessage)).getText(),
-				"Passwords do not match.", "Message Text Mismatch");
+				expectedMessage, "Message Text Mismatch");
 		Assert.assertTrue(wait.until(ExpectedConditions.invisibilityOf(passwordNotMatchMessage)),
 				"Passwords do not match message should not be visible anymore");
 	}
 
-	public void verifyPhoneNumberIsRequiredMessage() {
+	public void verifyPhoneNumberIsRequiredMessage(String expectedMessage) {
 		Assert.assertEquals(wait.until(ExpectedConditions.visibilityOf(phoneNumberRequiredMessage)).getText(),
-				"Phone Number is required.", "Message Text Mismatch");
+				expectedMessage, "Message Text Mismatch");
 		Assert.assertTrue(wait.until(ExpectedConditions.invisibilityOf(phoneNumberRequiredMessage)),
 				"Phone Number is required message should not be visible anymore");
 	}
 
-	public void verifyInvalidPhoneNumberMessage() {
+	public void verifyInvalidPhoneNumberMessage(String expectedMessage) {
 		Assert.assertEquals(wait.until(ExpectedConditions.visibilityOf(phoneNumberInvalidMessage)).getText(),
-				"Please enter a valid 10-digit phone number.", "Message Text Mismatch");
+				expectedMessage, "Message Text Mismatch");
 		Assert.assertTrue(wait.until(ExpectedConditions.invisibilityOf(phoneNumberInvalidMessage)),
 				"Please enter a valid 10-digit phone number message should not be visible anymore");
 	}

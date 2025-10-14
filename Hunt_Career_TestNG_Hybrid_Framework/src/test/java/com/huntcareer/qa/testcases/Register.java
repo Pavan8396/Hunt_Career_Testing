@@ -57,7 +57,7 @@ public class Register extends Base {
 		rp.clickSecondNextButton();
 		rp.enterPhoneNumber(user.get("phoneNumber"));
 		lp = rp.clickSignUpButton();
-		lp.verifyRegisterSuccess();
+		lp.verifyRegisterSuccess(dataProp.getProperty("RegisterSuccessMessage"));
 	}
 
 	@Test(priority = 2, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
@@ -74,7 +74,7 @@ public class Register extends Base {
 		rp.clickSecondNextButton();
 		rp.enterPhoneNumber(user.get("phoneNumber"));
 		rp.clickSignUpButton();
-		rp.verifyUserAlreadyExistsMessage();
+		rp.verifyUserAlreadyExistsMessage(dataProp.getProperty("UserAlreadyExistsMessage"));
 	}
 
 	@Test(priority = 3, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
@@ -84,7 +84,7 @@ public class Register extends Base {
 		Map<String, String> user = RegisterData.noFirstName();
 		rp.enterLastName(user.get("lastName"));
 		rp.clickFirstNextButton();
-		rp.verifyBlankFirstNameMessage();
+		rp.verifyBlankFirstNameMessage(dataProp.getProperty("FirstNameIsRequiredMessage"));
 	}
 
 	@Test(priority = 4, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
@@ -94,7 +94,7 @@ public class Register extends Base {
 		Map<String, String> user = RegisterData.noLastName();
 		rp.enterFirstName(user.get("firstName"));
 		rp.clickFirstNextButton();
-		rp.verifyBlankLastNameMessage();
+		rp.verifyBlankLastNameMessage(dataProp.getProperty("LastNameIsRequiredMessage"));
 	}
 
 	@Test(priority = 5, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
@@ -108,7 +108,7 @@ public class Register extends Base {
 		rp.enterPassword(user.get("password"));
 		rp.enterConfirmPassword(user.get("confirmPassword"));
 		rp.clickSecondNextButton();
-		rp.verifyBlankEmailMessage();
+		rp.verifyBlankEmailMessage(dataProp.getProperty("EmailIsRequiredMessage"));
 	}
 
 	@Test(priority = 6, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
@@ -122,7 +122,7 @@ public class Register extends Base {
 		rp.enterEmail(user.get("email"));
 		rp.enterConfirmPassword(user.get("confirmPassword"));
 		rp.clickSecondNextButton();
-		rp.verifyPasswordMustBeAtLeast8CharctersLongMessage();
+		rp.verifyPasswordMustBeAtLeast8CharctersLongMessage(dataProp.getProperty("PasswordMustBeAtLeast8CharactersLongMessage"));
 	}
 
 	@Test(priority = 7, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
@@ -137,7 +137,7 @@ public class Register extends Base {
 		rp.enterPassword(user.get("password"));
 		rp.enterConfirmPassword(user.get("confirmPassword"));
 		rp.clickSecondNextButton();
-		rp.verifyPasswordMustBeAtLeast8CharctersLongMessage();
+		rp.verifyPasswordMustBeAtLeast8CharctersLongMessage(dataProp.getProperty("PasswordMustBeAtLeast8CharactersLongMessage"));
 	}
 
 	@Test(priority = 8, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
@@ -151,7 +151,7 @@ public class Register extends Base {
 		rp.enterEmail(user.get("email"));
 		rp.enterPassword(user.get("password"));
 		rp.clickSecondNextButton();
-		rp.verifyPasswordDoNotMatchMessage();
+		rp.verifyPasswordDoNotMatchMessage(dataProp.getProperty("PasswordsDoNotMatchMessage"));
 	}
 
 	@Test(priority = 9, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
@@ -167,7 +167,7 @@ public class Register extends Base {
 		rp.enterConfirmPassword(user.get("confirmPassword"));
 		rp.clickSecondNextButton();
 		rp.clickSignUpButton();
-		rp.verifyPhoneNumberIsRequiredMessage();
+		rp.verifyPhoneNumberIsRequiredMessage(dataProp.getProperty("PhoneNumberIsRequiredMessage"));
 	}
 
 	@Test(priority = 10, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
@@ -184,7 +184,7 @@ public class Register extends Base {
 		rp.clickSecondNextButton();
 		rp.enterPhoneNumber(user.get("phoneNumber"));
 		rp.clickSignUpButton();
-		rp.verifyInvalidPhoneNumberMessage();
+		rp.verifyInvalidPhoneNumberMessage(dataProp.getProperty("PleaseEnterAValid10-DigitPhoneNumberMessage"));
 	}
 
 	@Test(priority = 11, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
@@ -199,7 +199,7 @@ public class Register extends Base {
 		rp.enterPassword(user.get("password"));
 		rp.enterConfirmPassword(user.get("confirmPassword"));
 		rp.clickSecondNextButton();
-		rp.verifyInvalidEmailAndPassword();
+		rp.verifyInvalidEmailAndPassword(dataProp.getProperty("PleaseEnterAValidEmailAddressMessage"));
 	}
 
 	@Test(priority = 12, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
@@ -214,7 +214,7 @@ public class Register extends Base {
 		rp.enterPassword(user.get("password"));
 		rp.enterConfirmPassword(user.get("confirmPassword"));
 		rp.clickSecondNextButton();
-		rp.verifyInvalidEmailAndPassword();
+		rp.verifyInvalidEmailAndPassword(dataProp.getProperty("PleaseEnterAValidEmailAddressMessage"));
 	}
 
 	@Test(priority = 13, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
@@ -229,7 +229,7 @@ public class Register extends Base {
 		rp.enterPassword(user.get("password"));
 		rp.enterConfirmPassword(user.get("confirmPassword"));
 		rp.clickSecondNextButton();
-		rp.verifyInvalidEmailAndPassword();
+		rp.verifyInvalidEmailAndPassword(dataProp.getProperty("PleaseEnterAValidEmailAddressMessage"));
 	}
 
 	@Test(priority = 14, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
@@ -244,7 +244,7 @@ public class Register extends Base {
 		rp.enterPassword(user.get("password"));
 		rp.enterConfirmPassword(user.get("confirmPassword"));
 		rp.clickSecondNextButton();
-		rp.verifyInvalidEmailAndPassword();
+		rp.verifyInvalidEmailAndPassword(dataProp.getProperty("PleaseEnterAValidEmailAddressMessage"));
 	}
 
 	@Test(priority = 15, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
@@ -259,7 +259,7 @@ public class Register extends Base {
 		rp.enterPassword(user.get("password"));
 		rp.enterConfirmPassword(user.get("confirmPassword"));
 		rp.clickSecondNextButton();
-		rp.verifyInvalidEmailAndPassword();
+		rp.verifyInvalidEmailAndPassword(dataProp.getProperty("PleaseEnterAValidEmailAddressMessage"));
 	}
 	
 	@Test(priority = 16, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
@@ -274,7 +274,7 @@ public class Register extends Base {
 		rp.enterPassword(user.get("password"));
 		rp.enterConfirmPassword(user.get("confirmPassword"));
 		rp.clickSecondNextButton();
-		rp.verifyInvalidEmailAndPassword();
+		rp.verifyInvalidEmailAndPassword(dataProp.getProperty("PleaseEnterAValidEmailAddressMessage"));
 	}
 
 	@Test(priority = 17, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
@@ -289,7 +289,7 @@ public class Register extends Base {
 		rp.enterPassword(user.get("password"));
 		rp.enterConfirmPassword(user.get("confirmPassword"));
 		rp.clickSecondNextButton();
-		rp.verifyInvalidEmailAndPassword();
+		rp.verifyInvalidEmailAndPassword(dataProp.getProperty("PleaseEnterAValidEmailAddressMessage"));
 	}
 
 	@Test(priority = 18, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
@@ -304,7 +304,7 @@ public class Register extends Base {
 		rp.enterPassword(user.get("password"));
 		rp.enterConfirmPassword(user.get("confirmPassword"));
 		rp.clickSecondNextButton();
-		rp.verifyInvalidEmailAndPassword();
+		rp.verifyInvalidEmailAndPassword(dataProp.getProperty("PleaseEnterAValidEmailAddressMessage"));
 	}
 
 	@Test(priority = 19, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
@@ -319,7 +319,7 @@ public class Register extends Base {
 		rp.enterPassword(user.get("password"));
 		rp.enterConfirmPassword(user.get("confirmPassword"));
 		rp.clickSecondNextButton();
-		rp.verifyInvalidEmailAndPassword();
+		rp.verifyInvalidEmailAndPassword(dataProp.getProperty("PleaseEnterAValidEmailAddressMessage"));
 	}
 
 	@Test(priority = 20, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
@@ -334,7 +334,7 @@ public class Register extends Base {
 		rp.enterPassword(user.get("password"));
 		rp.enterConfirmPassword(user.get("confirmPassword"));
 		rp.clickSecondNextButton();
-		rp.verifyInvalidEmailAndPassword();
+		rp.verifyInvalidEmailAndPassword(dataProp.getProperty("PleaseEnterAValidEmailAddressMessage"));
 	}
 
 	@Test(priority = 21, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
@@ -349,7 +349,7 @@ public class Register extends Base {
 		rp.enterPassword(user.get("password"));
 		rp.enterConfirmPassword(user.get("confirmPassword"));
 		rp.clickSecondNextButton();
-		rp.verifyInvalidEmailAndPassword();
+		rp.verifyInvalidEmailAndPassword(dataProp.getProperty("PleaseEnterAValidEmailAddressMessage"));
 	}
 
 	@Test(priority = 22, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
@@ -364,7 +364,7 @@ public class Register extends Base {
 		rp.enterPassword(user.get("password"));
 		rp.enterConfirmPassword(user.get("confirmPassword"));
 		rp.clickSecondNextButton();
-		rp.verifyInvalidEmailAndPassword();
+		rp.verifyInvalidEmailAndPassword(dataProp.getProperty("PleaseEnterAValidEmailAddressMessage"));
 	}
 
 	@Test(priority = 23, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
@@ -379,7 +379,7 @@ public class Register extends Base {
 		rp.enterPassword(user.get("password"));
 		rp.enterConfirmPassword(user.get("confirmPassword"));
 		rp.clickSecondNextButton();
-		rp.verifyInvalidEmailAndPassword();
+		rp.verifyInvalidEmailAndPassword(dataProp.getProperty("PleaseEnterAValidEmailAddressMessage"));
 	}
 
 	@Test(priority = 24, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
@@ -394,7 +394,7 @@ public class Register extends Base {
 		rp.enterPassword(user.get("password"));
 		rp.enterConfirmPassword(user.get("confirmPassword"));
 		rp.clickSecondNextButton();
-		rp.verifyInvalidEmailAndPassword();
+		rp.verifyInvalidEmailAndPassword(dataProp.getProperty("PleaseEnterAValidEmailAddressMessage"));
 	}
 
 	@Test(priority = 25, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
@@ -409,7 +409,7 @@ public class Register extends Base {
 		rp.enterPassword(user.get("password"));
 		rp.enterConfirmPassword(user.get("confirmPassword"));
 		rp.clickSecondNextButton();
-		rp.verifyInvalidEmailAndPassword();
+		rp.verifyInvalidEmailAndPassword(dataProp.getProperty("PleaseEnterAValidEmailAddressMessage"));
 	}
 
 	@Test(priority = 26, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
@@ -424,7 +424,7 @@ public class Register extends Base {
 		rp.enterPassword(user.get("password"));
 		rp.enterConfirmPassword(user.get("confirmPassword"));
 		rp.clickSecondNextButton();
-		rp.verifyInvalidEmailAndPassword();
+		rp.verifyInvalidEmailAndPassword(dataProp.getProperty("PleaseEnterAValidEmailAddressMessage"));
 	}
 
 	@Test(priority = 27, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
@@ -439,7 +439,7 @@ public class Register extends Base {
 		rp.enterPassword(user.get("password"));
 		rp.enterConfirmPassword(user.get("confirmPassword"));
 		rp.clickSecondNextButton();
-		rp.verifyInvalidEmailAndPassword();
+		rp.verifyInvalidEmailAndPassword(dataProp.getProperty("PleaseEnterAValidEmailAddressMessage"));
 	}
 
 	@Test(priority = 28, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
@@ -454,7 +454,7 @@ public class Register extends Base {
 		rp.enterPassword(user.get("password"));
 		rp.enterConfirmPassword(user.get("confirmPassword"));
 		rp.clickSecondNextButton();
-		rp.verifyInvalidEmailAndPassword();
+		rp.verifyInvalidEmailAndPassword(dataProp.getProperty("PleaseEnterAValidEmailAddressMessage"));
 	}
 
 	@Test(priority = 29, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
@@ -469,7 +469,7 @@ public class Register extends Base {
 		rp.enterPassword(user.get("password"));
 		rp.enterConfirmPassword(user.get("confirmPassword"));
 		rp.clickSecondNextButton();
-		rp.verifyInvalidEmailAndPassword();
+		rp.verifyInvalidEmailAndPassword(dataProp.getProperty("PleaseEnterAValidEmailAddressMessage"));
 	}
 
 	@Test(priority = 30, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
@@ -484,7 +484,7 @@ public class Register extends Base {
 		rp.enterPassword(user.get("password"));
 		rp.enterConfirmPassword(user.get("confirmPassword"));
 		rp.clickSecondNextButton();
-		rp.verifyInvalidEmailAndPassword();
+		rp.verifyInvalidEmailAndPassword(dataProp.getProperty("PleaseEnterAValidEmailAddressMessage"));
 	}
 
 	@Test(priority = 31, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
@@ -499,7 +499,7 @@ public class Register extends Base {
 		rp.enterPassword(user.get("password"));
 		rp.enterConfirmPassword(user.get("confirmPassword"));
 		rp.clickSecondNextButton();
-		rp.verifyInvalidEmailAndPassword();
+		rp.verifyInvalidEmailAndPassword(dataProp.getProperty("PleaseEnterAValidEmailAddressMessage"));
 	}
 
 	@Test(priority = 32, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
@@ -514,7 +514,7 @@ public class Register extends Base {
 		rp.enterPassword(user.get("password"));
 		rp.enterConfirmPassword(user.get("confirmPassword"));
 		rp.clickSecondNextButton();
-		rp.verifyInvalidEmailAndPassword();
+		rp.verifyInvalidEmailAndPassword(dataProp.getProperty("PleaseEnterAValidEmailAddressMessage"));
 	}
 
 	@Test(priority = 33, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
@@ -531,7 +531,7 @@ public class Register extends Base {
 		rp.clickSecondNextButton();
 		rp.enterPhoneNumber(user.get("phoneNumber"));
 		lp = rp.clickSignUpButton();
-		lp.verifyRegisterSuccess();
+		lp.verifyRegisterSuccess(dataProp.getProperty("RegisterSuccessMessage"));
 	}
 
 	@Test(priority = 34, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
@@ -548,7 +548,7 @@ public class Register extends Base {
 		rp.clickSecondNextButton();
 		rp.enterPhoneNumber(user.get("phoneNumber"));
 		lp = rp.clickSignUpButton();
-		lp.verifyRegisterSuccess();
+		lp.verifyRegisterSuccess(dataProp.getProperty("RegisterSuccessMessage"));
 	}
 
 	@Test(priority = 35, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
@@ -565,7 +565,7 @@ public class Register extends Base {
 		rp.clickSecondNextButton();
 		rp.enterPhoneNumber(user.get("phoneNumber"));
 		lp = rp.clickSignUpButton();
-		lp.verifyRegisterSuccess();
+		lp.verifyRegisterSuccess(dataProp.getProperty("RegisterSuccessMessage"));
 	}
 
 	@Test(priority = 36, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
@@ -580,7 +580,7 @@ public class Register extends Base {
 		rp.enterPassword(user.get("password"));
 		rp.enterConfirmPassword(user.get("confirmPassword"));
 		rp.clickSecondNextButton();
-		rp.verifyInvalidEmailAndPassword();
+		rp.verifyInvalidEmailAndPassword(dataProp.getProperty("PleaseEnterAValidEmailAddressMessage"));
 	}
 
 	@Test(priority = 37, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
@@ -595,6 +595,6 @@ public class Register extends Base {
 		rp.enterPassword(user.get("password"));
 		rp.enterConfirmPassword(user.get("confirmPassword"));
 		rp.clickSecondNextButton();
-		rp.verifyInvalidEmailAndPassword();
+		rp.verifyInvalidEmailAndPassword(dataProp.getProperty("PleaseEnterAValidEmailAddressMessage"));
 	}
 }

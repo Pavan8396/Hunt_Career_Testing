@@ -12,7 +12,17 @@ public class ExtentReport {
 	public static ExtentReports generateExtentReport() {
 		ExtentReports extentReport = new ExtentReports();
 		
-		File extentReportFile = new File(System.getProperty("user.dir")+"/test-output/ExtentReports/extentReport.html");
+		Properties prop = new Properties();
+		File configPropFile = new File(System.getProperty("user.dir")+"/src/main/java/com/huntcareer/qa/config/Config.properties");
+
+		try {
+		FileInputStream fisConfigProp = new FileInputStream(configPropFile);
+		prop.load(fisConfigProp);
+		} catch(Throwable e) {
+			e.printStackTrace();
+		}
+
+		File extentReportFile = new File(System.getProperty("user.dir")+ prop.getProperty("extentReportPath"));
 		ExtentSparkReporter sparkreport = new ExtentSparkReporter(extentReportFile);
 		
 		sparkreport.config().setTheme(Theme.DARK);

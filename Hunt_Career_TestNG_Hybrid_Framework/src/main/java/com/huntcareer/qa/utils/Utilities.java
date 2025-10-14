@@ -40,68 +40,65 @@ public class Utilities {
 	}
 
 	public static String getEmail(String type) {
-
-		switch (type) {
-
-		case "plainEmail":
-			return genarateEmailTimeStamp();
-		case "noLocalPart":
-			return "@mailinator.com";
-		case "localPartOnly":
-			return genarateEmailTimeStamp() + "@";
-		case "doubleAt":
-			return "u@" + genarateEmailTimeStamp() + "@mailinator.com";
-		case "withoutTopLevelDomain":
-			return genarateEmailTimeStamp() + "@mailinator";
-		case "tailingWithDot":
-			return genarateEmailTimeStamp() + "@mailinator.";
-		case "topLevelDomainTooShort":
-			return genarateEmailTimeStamp() + "@mailinator.c";
-		case "domainStartsWithHyphen":
-			return genarateEmailTimeStamp() + "@-mailinator.com";
-		case "doubleDotInDomain":
-			return genarateEmailTimeStamp() + "@mailinator..com";
-		case "noAtTheRate":
-			return genarateEmailTimeStamp() + "#mailinator.com";
-		case "illegalChars":
-			return genarateEmailTimeStamp() + "<>@mailinator.com";
-		case "twoConsicutiveDots":
-			return "u.." + genarateEmailTimeStamp() + "@mailinator.com";
-		case "dotAtBeginning":
-			return "." + genarateEmailTimeStamp() + "@mailinator.com";
-		case "withQuotation":
-			return "\"" + genarateEmailTimeStamp() + "@mailinator.com" + "\"";
-		case "unclosedQuotation":
-			return "\"" + genarateEmailTimeStamp() + "@mailinator.com";
-		case "veryLengthyLocal":
-			return "verylonglocalpartthatexceedstheusuallimitstoverifythelimitdoesitexceedornotbyaddingverylongcharacters@example.com";
-		case "veryLengthyDomain":
-			return "example@verylonglocalpartthatexceedstheusuallimitstoverifythelimitdoesitexceedornotbyaddingverylongcharacters.com";
-		case "veryLenghtyTLD":
-			return genarateEmailTimeStamp()
-					+ "@example.verylonglocalpartthatexceedstheusuallimitstoverifythelimitdoesitexceedornotbyaddingverylongcharacters";
-		case "missingSecondLevelDomain":
-			return genarateEmailTimeStamp() + "com";
-		case "withComma":
-			return genarateEmailTimeStamp() + "@mailinator,com";
-		case "doubleConsicutiveAt":
-			return genarateEmailTimeStamp() + "@@mailinator.com";
-		case "underscoreInTLD":
-			return genarateEmailTimeStamp() + "@mailinator.c_m";
-		case "dotBetweenName":
-			return "u." + genarateEmailTimeStamp() + ".s@mailinator.com";
-		case "spaceBeforeName":
-			return "" + genarateEmailTimeStamp() + "@mailinator.com";
-		case "spaceAfterName":
-			return genarateEmailTimeStamp() + "@mailinator.com" + "";
-		case "dotBeforeAt":
-			return genarateEmailTimeStamp() + ".@mailinator.com";
-		case "withoutDomain":
-			return genarateEmailTimeStamp() + "@.com";
-
-		default:
-			return genarateEmailTimeStamp() + "@mailinator.com";
-		}
+	    String timestamp = genarateEmailTimeStamp();
+	    switch (type) {
+	        case "plainEmail":
+	            return timestamp;
+	        case "noLocalPart":
+	            return "@mailinator.com";
+	        case "localPartOnly":
+	            return timestamp + "@";
+	        case "doubleAt":
+	            return "u@" + timestamp + "@mailinator.com";
+	        case "withoutTopLevelDomain":
+	            return timestamp + "@mailinator";
+	        case "tailingWithDot":
+	            return timestamp + "@mailinator.";
+	        case "topLevelDomainTooShort":
+	            return timestamp + "@mailinator.c";
+	        case "domainStartsWithHyphen":
+	            return timestamp + "@-mailinator.com";
+	        case "doubleDotInDomain":
+	            return timestamp + "@mailinator..com";
+	        case "noAtTheRate":
+	            return timestamp + "#mailinator.com";
+	        case "illegalChars":
+	            return timestamp + "<>@mailinator.com";
+	        case "twoConsicutiveDots":
+	            return "u.." + timestamp + "@mailinator.com";
+	        case "dotAtBeginning":
+	            return "." + timestamp + "@mailinator.com";
+	        case "withQuotation":
+	            return "\"" + timestamp + "@mailinator.com" + "\"";
+	        case "unclosedQuotation":
+	            return "\"" + timestamp + "@mailinator.com";
+	        case "veryLengthyLocal":
+	            return "verylonglocalpartthatexceedstheusuallimitstoverifythelimitdoesitexceedornotbyaddingverylongcharacters@example.com";
+	        case "veryLengthyDomain":
+	            return "example@verylonglocalpartthatexceedstheusuallimitstoverifythelimitdoesitexceedornotbyaddingverylongcharacters.com";
+	        case "veryLenghtyTLD":
+	            return timestamp + "@example.verylonglocalpartthatexceedstheusuallimitstoverifythelimitdoesitexceedornotbyaddingverylongcharacters";
+	        case "missingSecondLevelDomain":
+	            return timestamp + "com";
+	        case "withComma":
+	            return timestamp + "@mailinator,com";
+	        case "doubleConsicutiveAt":
+	            return timestamp + "@@mailinator.com";
+	        case "underscoreInTLD":
+	            return timestamp + "@mailinator.c_m";
+	        case "dotBetweenName":
+	            return "u." + timestamp + ".s@mailinator.com";
+	        case "spaceBeforeName":
+	            return " " + timestamp + "@mailinator.com";
+	        case "spaceAfterName":
+	            return timestamp + "@mailinator.com" + " ";
+	        case "dotBeforeAt":
+	            return timestamp + ".@mailinator.com";
+	        case "withoutDomain":
+	            return timestamp + "@.com";
+	        default:
+	            return timestamp + "@mailinator.com";
+	    }
 	}
 
 	public static String generateRandomPassword() {
@@ -140,8 +137,8 @@ public class Utilities {
 		return "testUser" + timeStamp;
 	}
 
-	public static Object[][] getTestDataFromExcel(String sheetName) {
-		File file = new File(System.getProperty("user.dir") + "/src/main/java/com/huntcareer/qa/testdata/DDTFile.xlsx");
+	public static Object[][] getTestDataFromExcel(String sheetName, String excelFilePath) {
+		File file = new File(System.getProperty("user.dir") + excelFilePath);
 		XSSFWorkbook workbook = null;
 		try {
 			FileInputStream fis = new FileInputStream(file);
@@ -180,9 +177,9 @@ public class Utilities {
 		return data;
 	}
 
-	public static String captureScreenshot(WebDriver driver, String testName) {
+	public static String captureScreenshot(WebDriver driver, String testName, String screenshotsPath) {
 		File srcSreenShot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
-		String destinationScreenshotPath = System.getProperty("user.dir") + "/Screenshots/" + testName + ".png";
+		String destinationScreenshotPath = System.getProperty("user.dir") + screenshotsPath + testName + ".png";
 		try {
 			FileHandler.copy(srcSreenShot, new File(destinationScreenshotPath));
 		} catch (IOException e) {

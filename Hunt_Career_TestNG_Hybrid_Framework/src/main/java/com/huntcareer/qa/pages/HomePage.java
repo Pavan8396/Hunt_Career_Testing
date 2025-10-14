@@ -29,9 +29,9 @@ public class HomePage {
 		PageFactory.initElements(driver, this);
 	}
 
-	public void verifySuccessMessage() {
+	public void verifySuccessMessage(String expectedMessage) {
 		Assert.assertEquals(wait.until(ExpectedConditions.visibilityOf(successLoginMessage)).getText(),
-				"Logged in successfully!", "Message Text Mismatch");
+				expectedMessage, "Message Text Mismatch");
 		Assert.assertTrue(wait.until(ExpectedConditions.invisibilityOf(successLoginMessage)),
 				"Success message should not be visible anymore");
 	}
