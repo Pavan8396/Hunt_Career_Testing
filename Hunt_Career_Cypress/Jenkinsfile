@@ -9,11 +9,8 @@ pipeline {
     agent any
 
     tools {
-        nodejs 'NodeJS'  // Ensure NodeJS installation is configured in Jenkins
-    }
-
-    environment {
-        CYPRESS_INSTALL_BINARY = '0' // Prevent Cypress from downloading browsers each build
+        // Make sure you have configured NodeJS tool in Jenkins as 'NodeJS'
+        nodejs 'NodeJS'
     }
 
     options {
@@ -30,12 +27,8 @@ pipeline {
         stage('Checkout') {
             steps {
                 printBanner("CHECKING OUT SOURCE CODE: ${params.BRANCH}")
-                cleanWs() // Optional: ensures fresh workspace
-                git(
-                    url: 'https://github.com/Pavan8396/Hunt_Career_Testing.git',
-                    branch: "${params.BRANCH}",
-                    poll: false
-                )
+                cleanWs()
+                checkout scm
             }
         }
 
@@ -55,8 +48,10 @@ pipeline {
                 dir('Hunt_Career_Cypress') {
                     script {
                         try {
+                            printBanner('INSTALLING CYPRESS BINARY')
+                            bat 'npx cypress install'
+
                             printBanner('RUNNING CYPRESS TESTS')
-                            // Run Cypress tests and return exit code
                             def result = bat(returnStatus: true, script: 'npx cypress run --headless')
 
                             if (result != 0) {
@@ -80,13 +75,25 @@ pipeline {
         always {
             dir('Hunt_Career_Cypress') {
                 script {
-                    printBanner('ARCHIVING ARTIFACTS AND PUBLISHING REPORTS')
                     try {
+                        printBanner('ARCHIVING ARTIFACTS AND PUBLISHING REPORTS')
+
+                        // Archive test results, screenshots, and videos
                         archiveArtifacts artifacts: 'cypress/reports/html/*.html', allowEmptyArchive: true
                         archiveArtifacts artifacts: 'cypress/screenshots/**/*.png', allowEmptyArchive: true
                         archiveArtifacts artifacts: 'cypress/videos/**/*.mp4', allowEmptyArchive: true
+
+                        // Publish HTML report if plugin is installed
+                        publishHTML(target: [
+                            allowMissing: true,
+                            alwaysLinkToLastBuild: true,
+                            keepAll: true,
+                            reportDir: 'cypress/reports/html',
+                            reportFiles: 'index.html',
+                            reportName: 'Cypress Test Report'
+                        ])
                     } catch (err) {
-                        echo "⚠️ Could not archive artifacts: ${err.message}"
+                        echo "⚠️ Could not publish HTML reports: ${err.message}"
                     }
                 }
             }
@@ -97,7 +104,7 @@ pipeline {
         }
 
         failure {
-            echo "❌ Pipeline failed due to a critical error."
+            echo "❌ Pipeline failed due to a critical error (not test failures)."
         }
 
         success {
