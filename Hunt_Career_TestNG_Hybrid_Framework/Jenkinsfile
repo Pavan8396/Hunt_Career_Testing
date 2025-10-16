@@ -1,10 +1,15 @@
-// Function to print a standardized banner
+// ==============================
+// Utility Function
+// ==============================
 def printBanner(message) {
     echo '----------------------------------------'
     echo "    ${message}"
     echo '----------------------------------------'
 }
 
+// ==============================
+// Jenkins Pipeline
+// ==============================
 pipeline {
     agent any
 
@@ -37,12 +42,13 @@ pipeline {
                 dir('Hunt_Career_TestNG_Hybrid_Framework') {
                     script {
                         printBanner('BUILDING AND RUNNING TESTS')
-                        // Run tests but don’t fail pipeline immediately
+
+                        // Run tests, capture exit code
                         def result = bat(returnStatus: true, script: 'mvn -B clean install')
 
                         if (result != 0) {
-                            echo "⚠️ Some tests failed (exit code ${result}). Checking reports..."
-                            currentBuild.result = 'UNSTABLE'  // not FAILURE yet
+                            echo "⚠️ Some tests failed (exit code: ${result})."
+                            currentBuild.result = 'UNSTABLE'
                         } else {
                             echo "✅ Build and tests completed successfully."
                         }
@@ -52,40 +58,46 @@ pipeline {
         }
     }
 
+    // ==============================
+    // Post Build Actions
+    // ==============================
     post {
         always {
             dir('Hunt_Career_TestNG_Hybrid_Framework') {
                 script {
+                    printBanner('ARCHIVING & PUBLISHING REPORTS')
+
+                    // Archive JUnit results
+                    junit testResults: 'target/surefire-reports/TEST-*.xml', allowEmptyResults: true
+
+                    // Publish HTML report (if plugin available)
                     try {
-                        printBanner('ARCHIVING & PUBLISHING REPORTS')
-
-                        junit testResults: 'target/surefire-reports/TEST-*.xml', allowEmptyResults: true
-
-                        publishHTML(target: [
-                            allowMissing: true,
-                            alwaysLinkToLastBuild: true,
-                            keepAll: true,
+                        step([
+                            $class: 'HTMLPublisher',
                             reportDir: 'target/site',
                             reportFiles: 'surefire-report.html',
-                            reportName: 'TestNG Test Report'
+                            reportName: 'TestNG Test Report',
+                            keepAll: true,
+                            alwaysLinkToLastBuild: true,
+                            allowMissing: true
                         ])
                     } catch (err) {
-                        echo "⚠️ Could not publish reports: ${err.message}"
+                        echo "⚠️ HTML report not published (plugin missing or error): ${err.message}"
                     }
                 }
             }
         }
 
         unstable {
-            echo "⚠️ Build marked as UNSTABLE due to test failures (check reports)."
+            echo "⚠️ Build marked as UNSTABLE due to test failures. Check the HTML and JUnit reports."
         }
 
         failure {
-            echo "❌ Pipeline failed due to a critical error (not just tests)."
+            echo "❌ Pipeline failed due to a critical error (not just test failures)."
         }
 
         success {
-            echo "✅ All tests passed successfully."
+            echo "✅ All tests passed successfully!"
         }
     }
 }
