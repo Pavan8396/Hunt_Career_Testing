@@ -49,7 +49,7 @@ export class RegisterPage extends BasePage {
 
   async navigate() {
     await this.navigateToJobSeeker();
-    await this.clickElement(this.getRegisterLinkHomePage);
+    await this.clickElementAndWaitForLoad(this.getRegisterLinkHomePage);
   }
 
   async register(
@@ -68,7 +68,7 @@ export class RegisterPage extends BasePage {
     await this.typeInElement(this.getConfirmPasswordField, confirmPassword);
     await this.clickElement(this.getSecondNextButton);
     await this.typeInElement(this.getPhoneNumberField, phoneNumber);
-    await this.clickElement(this.getSignupButton);
+    await this.clickElementAndWaitForLoad(this.getSignupButton);
   }
   async fillFirstRegistrationPage(firstName, lastName) {
     await this.typeInElement(this.getFirstNameField, firstName);

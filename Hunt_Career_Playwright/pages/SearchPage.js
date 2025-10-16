@@ -69,7 +69,7 @@ export class SearchPage extends BasePage {
 
   async search(searchTerm, location = null, jobType = null) {
       await this.typeInElement(this.searchInput, searchTerm);
-      await this.clickElement(this.searchButton);
+      await this.clickElementAndWaitForLoad(this.searchButton);
 
     if (location) {
       await this.clickElement(this.locationButton);

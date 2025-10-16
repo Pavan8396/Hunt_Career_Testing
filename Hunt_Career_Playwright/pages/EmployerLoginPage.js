@@ -20,6 +20,6 @@ export class EmployerLoginPage extends BasePage {
   async login(email, password){
     await this.typeInElement(this.getEmailField, email);
     await this.typeInElement(this.getPasswordField, password);
-    await this.clickElement(this.getLoginButton);
+    await this.clickElementAndWaitForLoad(this.getLoginButton);
   }
 }

@@ -16,5 +16,9 @@
 import 'cypress-xpath';
 
 Cypress.Commands.add("typeTextSafely", { prevSubject: "element" }, (subject, text) => {
-  cy.wrap(subject).should("be.visible").clear().type(text, { parseSpecialCharSequences: false });
+  cy.wrap(subject).should("be.visible").click().clear().type(text, { parseSpecialCharSequences: false });
+});
+
+Cypress.Commands.add("clickSafely", { prevSubject: "element" }, (subject) => {
+  cy.wrap(subject).should("be.visible").click();
 });

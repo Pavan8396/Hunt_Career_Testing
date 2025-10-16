@@ -6,21 +6,21 @@ export class BasePage {
         element.should('not.be.visible', {timeout: 10000})
     }
     clickElement(element){
-        element.should('be.visible').click();
+        element.clickSafely();
     }
-    
-    // typeInElement(element, text){
-    //     element.typeTextSafely(text);
-    // }
 
     typeInElement(element, text){ 
-        element.should('be.visible').type(text)
+        element.typeTextSafely(text);
+    }
+
+    navigateTo(path) {
+        cy.visit(path);
     }
 
     navigateToJobSeeker(){
-        return cy.xpath("//h2[contains(text(), 'I am a Job Seeker')]").click();
+        return cy.xpath("//h2[contains(text(), 'I am a Job Seeker')]").clickSafely();
     }
     navigateToEmployer(){
-        return cy.xpath("//h2[contains(text(), 'I am an Employer')]").click();
+        return cy.xpath("//h2[contains(text(), 'I am an Employer')]").clickSafely();
     }
 }

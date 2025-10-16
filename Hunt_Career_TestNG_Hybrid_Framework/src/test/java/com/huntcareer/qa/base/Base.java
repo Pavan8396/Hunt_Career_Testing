@@ -13,6 +13,9 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.edge.EdgeOptions;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Parameters;
 
 import com.huntcareer.qa.utils.Utilities;
 
@@ -41,7 +44,9 @@ public class Base {
         }
     }
 
-    public WebDriver inicializeBrowserAndOpenApplication(String browserName) {
+    @Parameters("browser")
+    @BeforeMethod
+    public void setup(String browserName) {
         boolean isHeadless = Boolean.parseBoolean(prop.getProperty("headless", "false"));
 
         if (browserName.equalsIgnoreCase("chrome")) {
@@ -75,7 +80,6 @@ public class Base {
         }
 
         driver.manage().window().maximize();
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(Utilities.IMPLICIT_WAIT_TIME));
         driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(Utilities.PAGE_WAIT_TIME));
 
         String appUrl = prop.getProperty("url");
@@ -101,7 +105,12 @@ public class Base {
                 }
             }
         }
+    }
 
-        return driver;
+    @AfterMethod
+    public void tearDown() {
+        if (driver != null) {
+            driver.quit();
+        }
     }
 }

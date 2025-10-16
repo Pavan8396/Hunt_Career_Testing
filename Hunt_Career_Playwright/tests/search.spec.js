@@ -75,7 +75,7 @@ test.describe("Search Tests", () => {
     await loginAsValidUser(loginPage, loginData);
     const { searchTerm, location, jobType } = searchData.validSearch;
     await searchPage.search(searchTerm, location, jobType);
-    await homePage.viewDetailsLink.first().click();
+    await homePage.clickElementAndWaitForLoad(homePage.viewDetailsLink.first());
     await expect(viewDetailsPage.ApplyButton).toBeVisible();
   });
 
@@ -95,7 +95,7 @@ test.describe("Search Tests", () => {
     await homePage.saveConfirmationPopup.click();
     await homePage.waitUntilVisible(homePage.savedMessage(jobTitle));
     await homePage.waitUntilNotVisible(homePage.savedMessage(jobTitle));
-    await homePage.clickOnSavedJobs.click();
+    await homePage.goToSavedJobs();
     await expect(savePage.savedJobCard(jobTitle)).toBeVisible();
   });
 });

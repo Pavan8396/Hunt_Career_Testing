@@ -3,6 +3,10 @@ export class BasePage {
     this.page = page;
   }
 
+  async waitForPageLoad() {
+    await this.page.waitForLoadState("networkidle");
+  }
+
   async waitUntilVisible(locator) {
     await locator.waitFor({ state: "visible" });
   }
@@ -16,6 +20,12 @@ export class BasePage {
     await locator.click();
   }
 
+  async clickElementAndWaitForLoad(locator) {
+    await this.waitUntilVisible(locator);
+    await locator.click();
+    await this.waitForPageLoad();
+  }
+
   async typeInElement(locator, text) {
     await this.waitUntilVisible(locator);
     await locator.fill(text);
@@ -24,10 +34,12 @@ export class BasePage {
   async navigateToJobSeeker() {
     await this.page.goto("/");
     await this.page.locator("//h2[contains(text(), 'I am a Job Seeker')]").click();
+    await this.waitForPageLoad();
   }
 
   async navigateToEmployer() {
     await this.page.goto("/");
     await this.page.locator("//h2[contains(text(), 'I am an Employer')]").click();
+    await this.waitForPageLoad();
   }
 }

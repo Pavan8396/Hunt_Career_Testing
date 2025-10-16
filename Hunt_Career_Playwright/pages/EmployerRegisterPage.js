@@ -31,7 +31,7 @@ export class EmployerRegisterPage extends BasePage {
 
   async navigate() {
     await this.navigateToEmployer();
-    await this.clickElement(this.getRegisterLinkHomePage);
+    await this.clickElementAndWaitForLoad(this.getRegisterLinkHomePage);
   }
 
   async register(
@@ -44,6 +44,6 @@ export class EmployerRegisterPage extends BasePage {
     await this.typeInElement(this.getEmailField, email);
     await this.typeInElement(this.getPasswordField, password);
     await this.typeInElement(this.getConfirmPasswordField, confirmPassword);
-    await this.clickElement(this.getSignupButton);
+    await this.clickElementAndWaitForLoad(this.getSignupButton);
   }
 }

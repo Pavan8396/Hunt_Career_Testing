@@ -12,4 +12,9 @@ export class HomePage extends BasePage {
     savedMessage(jobTitle) {
       return this.page.locator(`//div[contains(text(), 'Job "${jobTitle}" saved')]`);
     }
+
+    async goToSavedJobs() {
+        await this.clickElement(this.openUserMenu);
+        await this.clickElementAndWaitForLoad(this.clickOnSavedJobs);
+    }
 }

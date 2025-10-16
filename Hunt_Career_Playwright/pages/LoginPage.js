@@ -17,12 +17,12 @@ export class LoginPage extends BasePage {
 
   async navigate() {
     await this.navigateToJobSeeker();
-    await this.clickElement(this.getLoginHomeLink);
+    await this.clickElementAndWaitForLoad(this.getLoginHomeLink);
   }
 
   async login(email, password) {
     await this.typeInElement(this.getEmailField, email);
     await this.typeInElement(this.getPasswordField, password);
-    await this.clickElement(this.getLoginButton);
+    await this.clickElementAndWaitForLoad(this.getLoginButton);
   }
 }
