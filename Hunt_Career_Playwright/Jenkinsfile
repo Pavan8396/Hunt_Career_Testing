@@ -9,6 +9,7 @@ pipeline {
     agent any
 
     tools {
+        // Make sure you have configured NodeJS tool in Jenkins as 'NodeJS'
         nodejs 'NodeJS'
     }
 
@@ -31,29 +32,33 @@ pipeline {
             }
         }
 
-        stage('Playwright Execution') {
+        stage('Setup & Install Dependencies') {
             steps {
                 dir('Hunt_Career_Playwright') {
                     script {
-                        try {
-                            stage('Install Dependencies') {
-                                printBanner('INSTALLING NPM DEPENDENCIES')
-                                bat 'npm ci'
-                            }
+                        printBanner('INSTALLING NPM DEPENDENCIES')
+                        bat 'npm ci'
 
-                            stage('Install Playwright Browsers') {
-                                printBanner('INSTALLING PLAYWRIGHT BROWSERS')
-                                bat 'npx playwright install --with-deps'
-                            }
+                        printBanner('INSTALLING PLAYWRIGHT BROWSERS')
+                        bat 'npx playwright install --with-deps'
+                    }
+                }
+            }
+        }
 
-                            stage('Run Playwright Tests') {
-                                printBanner('RUNNING PLAYWRIGHT TESTS')
-                                bat 'npx playwright test'
-                            }
-                        } catch (err) {
-                            echo "❌ Playwright tests failed: ${err.message}"
-                            currentBuild.result = 'FAILURE'
-                            error("Pipeline failed due to Playwright test failures.")
+        stage('Run Playwright Tests') {
+            steps {
+                dir('Hunt_Career_Playwright') {
+                    script {
+                        printBanner('RUNNING PLAYWRIGHT TESTS')
+                        // Run tests but mark UNSTABLE if tests fail
+                        def result = bat(returnStatus: true, script: 'npx playwright test')
+
+                        if (result != 0) {
+                            echo "⚠️ Some Playwright tests failed (exit code ${result})"
+                            currentBuild.result = 'UNSTABLE'
+                        } else {
+                            echo "✅ Playwright tests passed successfully."
                         }
                     }
                 }
@@ -66,10 +71,12 @@ pipeline {
             dir('Hunt_Career_Playwright') {
                 script {
                     try {
-                        printBanner('ARCHIVING & PUBLISHING REPORTS')
+                        printBanner('ARCHIVING ARTIFACTS & PUBLISHING REPORTS')
 
-                        archiveArtifacts artifacts: 'playwright-report/', allowEmptyArchive: true
+                        // Archive Playwright HTML report
+                        archiveArtifacts artifacts: 'playwright-report/**/*', allowEmptyArchive: true
 
+                        // Publish HTML report if plugin installed
                         publishHTML(target: [
                             allowMissing: true,
                             alwaysLinkToLastBuild: true,
@@ -79,10 +86,22 @@ pipeline {
                             reportName: 'Playwright Test Report'
                         ])
                     } catch (err) {
-                        echo "⚠️  Could not publish reports: ${err.message}"
+                        echo "⚠️ Could not publish reports: ${err.message}"
                     }
                 }
             }
+        }
+
+        unstable {
+            echo "⚠️ Build marked as UNSTABLE due to Playwright test failures."
+        }
+
+        failure {
+            echo "❌ Pipeline failed due to a critical error (not test failures)."
+        }
+
+        success {
+            echo "✅ All Playwright tests passed successfully."
         }
     }
 }

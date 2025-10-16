@@ -22,25 +22,47 @@ pipeline {
             }
         }
 
-        stage('Triggering Downstream Pipelines') {
+        stage('Trigger Cypress Pipeline') {
             steps {
                 script {
-                    // Define the downstream jobs
-                    def jobs = [
-                        'Cypress': "${params.CYPRESS_JOB_NAME}",
-                        'Playwright': "${params.PLAYWRIGHT_JOB_NAME}",
-                        'TestNG': "${params.TESTNG_JOB_NAME}"
-                    ]
+                    printBanner("TRIGGERING CYPRESS PIPELINE")
+                    try {
+                        def result = build job: params.CYPRESS_JOB_NAME, wait: true
+                        echo "✅ Cypress pipeline finished with result: ${result.result}"
+                    } catch (err) {
+                        echo "⚠️ Cypress pipeline failed: ${err.message}"
+                        currentBuild.result = 'UNSTABLE'
+                    }
+                }
+            }
+        }
 
-                    // Trigger jobs in parallel, failing fast
-                    parallel(jobs.collectEntries { jobName, jobPath ->
-                        ["${jobName} Tests": {
-                            stage("Run ${jobName} Tests") {
-                                printBanner("TRIGGERING ${jobName.toUpperCase()} PIPELINE")
-                                build job: jobPath, wait: true
-                            }
-                        }]
-                    } + [failFast: true])
+        stage('Trigger Playwright Pipeline') {
+            steps {
+                script {
+                    printBanner("TRIGGERING PLAYWRIGHT PIPELINE")
+                    try {
+                        def result = build job: params.PLAYWRIGHT_JOB_NAME, wait: true
+                        echo "✅ Playwright pipeline finished with result: ${result.result}"
+                    } catch (err) {
+                        echo "⚠️ Playwright pipeline failed: ${err.message}"
+                        currentBuild.result = 'UNSTABLE'
+                    }
+                }
+            }
+        }
+
+        stage('Trigger TestNG Pipeline') {
+            steps {
+                script {
+                    printBanner("TRIGGERING TESTNG PIPELINE")
+                    try {
+                        def result = build job: params.TESTNG_JOB_NAME, wait: true
+                        echo "✅ TestNG pipeline finished with result: ${result.result}"
+                    } catch (err) {
+                        echo "⚠️ TestNG pipeline failed: ${err.message}"
+                        currentBuild.result = 'UNSTABLE'
+                    }
                 }
             }
         }
@@ -53,11 +75,11 @@ pipeline {
         success {
             echo '✅ All downstream pipelines executed successfully.'
         }
-        failure {
-            echo '❌ One or more downstream pipelines failed.'
-        }
         unstable {
             echo '⚠️ One or more downstream pipelines are unstable.'
+        }
+        failure {
+            echo '❌ One or more downstream pipelines failed.'
         }
     }
 }
