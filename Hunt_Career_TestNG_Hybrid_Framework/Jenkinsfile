@@ -16,7 +16,6 @@ pipeline {
     options {
         timestamps()
         timeout(time: 30, unit: 'MINUTES')
-        // Clean workspace before build
         skipDefaultCheckout true
     }
 
@@ -33,26 +32,18 @@ pipeline {
             }
         }
 
-        // Grouping all TestNG-related steps
         stage('TestNG Execution') {
             steps {
                 dir('Hunt_Career_TestNG_Hybrid_Framework') {
                     script {
                         try {
-                            stage('Build') {
-                                printBanner('BUILDING THE PROJECT')
-                                bat 'mvn -B clean install -DskipTests'
-                            }
-
-                            stage('Test') {
-                                printBanner('RUNNING TESTNG TESTS')
-                                bat 'mvn -B test'
+                            stage('Build and Test') {
+                                printBanner('BUILDING AND RUNNING TESTS')
+                                bat 'mvn -B clean install'
                             }
                         } catch (err) {
                             echo "❌ TestNG tests failed: ${err.message}"
-                            // Mark the build as failed
                             currentBuild.result = 'FAILURE'
-                            // Re-throw the error to ensure the pipeline stops
                             error("Pipeline failed due to TestNG test failures.")
                         }
                     }
@@ -63,23 +54,20 @@ pipeline {
 
     post {
         always {
-            // This block will always run, regardless of the pipeline's status
             dir('Hunt_Career_TestNG_Hybrid_Framework') {
                 script {
                     try {
                         printBanner('ARCHIVING & PUBLISHING REPORTS')
 
-                        // Archive and publish JUnit test results
-                        junit testResults: 'target/surefire-reports/testng-results.xml', allowEmptyResults: true
+                        junit testResults: 'target/surefire-reports/TEST-*.xml', allowEmptyResults: true
 
-                        // Publish HTML reports
                         publishHTML(target: [
                             allowMissing: true,
                             alwaysLinkToLastBuild: true,
                             keepAll: true,
-                            reportDir: 'test-output/ExtentReports',
-                            reportFiles: 'extentReport.html',
-                            reportName: 'Extent Test Report'
+                            reportDir: 'target/site',
+                            reportFiles: 'surefire-report.html',
+                            reportName: 'TestNG Test Report'
                         ])
                     } catch (err) {
                         echo "⚠️  Could not publish reports: ${err.message}"

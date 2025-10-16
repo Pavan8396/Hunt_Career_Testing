@@ -12,14 +12,17 @@ pipeline {
         nodejs 'NodeJS'
     }
 
+    environment {
+        CYPRESS_INSTALL_BINARY = '0'
+    }
+
     options {
         timestamps()
         timeout(time: 30, unit: 'MINUTES')
-        // Clean workspace before build
         skipDefaultCheckout true
     }
 
-   parameters {
+    parameters {
         string(name: 'BRANCH', defaultValue: 'main', description: 'Git branch to build from')
     }
 
@@ -32,7 +35,6 @@ pipeline {
             }
         }
 
-        // Grouping all Cypress-related steps
         stage('Cypress Execution') {
             steps {
                 dir('Hunt_Career_Cypress') {
@@ -40,23 +42,16 @@ pipeline {
                         try {
                             stage('Install Dependencies') {
                                 printBanner('INSTALLING NPM DEPENDENCIES')
-                                bat 'npm install'
-                            }
-
-                            stage('Verify Cypress Installation') {
-                                printBanner('VERIFYING CYPRESS BINARY')
-                                bat 'npx cypress install'
+                                bat 'npm ci'
                             }
 
                             stage('Run Cypress Tests') {
-                                printBanner("RUNNING CYPRESS TESTS ON ${params.ENV}")
-                                // Headless mode for CI
+                                printBanner('RUNNING CYPRESS TESTS')
                                 bat 'npx cypress run --headless'
                             }
                         } catch (err) {
                             echo "❌ Cypress tests failed: ${err.message}"
                             currentBuild.result = 'FAILURE'
-                            // Re-throw the error to ensure the pipeline stops
                             error("Pipeline failed due to Cypress test failures.")
                         }
                     }
@@ -67,24 +62,21 @@ pipeline {
 
     post {
         always {
-            // This block will always run, regardless of the pipeline's status
             dir('Hunt_Career_Cypress') {
                 script {
                     try {
                         printBanner('ARCHIVING & PUBLISHING REPORTS')
 
-                        // Archive test reports and artifacts
-                        archiveArtifacts artifacts: 'mochawesome-report/**', allowEmptyArchive: true
+                        archiveArtifacts artifacts: 'cypress/reports/html/*.html', allowEmptyArchive: true
                         archiveArtifacts artifacts: 'cypress/screenshots/**/*.png', allowEmptyArchive: true
                         archiveArtifacts artifacts: 'cypress/videos/**/*.mp4', allowEmptyArchive: true
 
-                        // Publish HTML reports
                         publishHTML(target: [
                             allowMissing: true,
                             alwaysLinkToLastBuild: true,
                             keepAll: true,
-                            reportDir: 'mochawesome-report',
-                            reportFiles: 'mochawesome.html',
+                            reportDir: 'cypress/reports/html',
+                            reportFiles: 'index.html',
                             reportName: 'Cypress Test Report'
                         ])
                     } catch (err) {

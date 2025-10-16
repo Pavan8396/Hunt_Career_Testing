@@ -15,7 +15,6 @@ pipeline {
     options {
         timestamps()
         timeout(time: 30, unit: 'MINUTES')
-        // Clean workspace before build
         skipDefaultCheckout true
     }
 
@@ -32,7 +31,6 @@ pipeline {
             }
         }
 
-        // Grouping all Playwright-related steps
         stage('Playwright Execution') {
             steps {
                 dir('Hunt_Career_Playwright') {
@@ -40,7 +38,7 @@ pipeline {
                         try {
                             stage('Install Dependencies') {
                                 printBanner('INSTALLING NPM DEPENDENCIES')
-                                bat 'npm install'
+                                bat 'npm ci'
                             }
 
                             stage('Install Playwright Browsers') {
@@ -54,9 +52,7 @@ pipeline {
                             }
                         } catch (err) {
                             echo "❌ Playwright tests failed: ${err.message}"
-                            // Mark the build as failed
                             currentBuild.result = 'FAILURE'
-                            // Re-throw the error to ensure the pipeline stops
                             error("Pipeline failed due to Playwright test failures.")
                         }
                     }
@@ -67,16 +63,13 @@ pipeline {
 
     post {
         always {
-            // This block will always run, regardless of the pipeline's status
             dir('Hunt_Career_Playwright') {
                 script {
                     try {
                         printBanner('ARCHIVING & PUBLISHING REPORTS')
 
-                        // Archive test reports and artifacts
-                        archiveArtifacts artifacts: 'playwright-report/**/*', allowEmptyArchive: true
+                        archiveArtifacts artifacts: 'playwright-report/', allowEmptyArchive: true
 
-                        // Publish HTML reports
                         publishHTML(target: [
                             allowMissing: true,
                             alwaysLinkToLastBuild: true,
