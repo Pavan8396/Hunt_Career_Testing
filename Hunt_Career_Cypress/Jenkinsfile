@@ -46,7 +46,7 @@ pipeline {
                         env.PATH = "${nodeHome}/bin;${env.PATH}"
 
                         printBanner('INSTALLING NPM DEPENDENCIES')
-                        def installStatus = bat(returnStatus: true, script: 'npm ci')
+                        def installStatus = bat(returnStatus: true, script: 'npm install')
                         if (installStatus != 0) {
                             error("❌ npm install failed. Pipeline aborted.")
                         }
