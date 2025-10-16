@@ -1,20 +1,19 @@
-// ==============================
-// Utility Function
-// ==============================
+// Function to print a standardized banner
 def printBanner(message) {
     echo '----------------------------------------'
     echo "    ${message}"
     echo '----------------------------------------'
 }
 
-// ==============================
-// Jenkins Pipeline
-// ==============================
 pipeline {
     agent any
 
+    tools {
+        nodejs 'NodeJS'  // Ensure NodeJS installation is configured in Jenkins
+    }
+
     environment {
-        CYPRESS_INSTALL_BINARY = '0'
+        CYPRESS_INSTALL_BINARY = '0' // Prevent Cypress from downloading browsers each build
     }
 
     options {
@@ -31,8 +30,12 @@ pipeline {
         stage('Checkout') {
             steps {
                 printBanner("CHECKING OUT SOURCE CODE: ${params.BRANCH}")
-                cleanWs()
-                checkout scm
+                cleanWs() // Optional: ensures fresh workspace
+                git(
+                    url: 'https://github.com/Pavan8396/Hunt_Career_Testing.git',
+                    branch: "${params.BRANCH}",
+                    poll: false
+                )
             }
         }
 
@@ -40,18 +43,8 @@ pipeline {
             steps {
                 dir('Hunt_Career_Cypress') {
                     script {
-                        printBanner('SETTING UP NODEJS')
-                        // Debug: Verify Node.js tool
-                        def nodeHome = tool name: 'NodeJS', type: 'NodeJS'
-                        echo "NodeJS Home: ${nodeHome}"
-                        env.PATH = "${nodeHome}\\bin;${env.PATH}"
-                        bat 'node --version'
-                        bat 'npm --version'
                         printBanner('INSTALLING NPM DEPENDENCIES')
-                        def installStatus = bat(returnStatus: true, script: 'npm install')
-                        if (installStatus != 0) {
-                            error("❌ npm install failed. Pipeline aborted.")
-                        }
+                        bat 'npm ci'
                     }
                 }
             }
@@ -61,13 +54,21 @@ pipeline {
             steps {
                 dir('Hunt_Career_Cypress') {
                     script {
-                        printBanner('RUNNING CYPRESS TESTS')
-                        def testStatus = bat(returnStatus: true, script: 'npx cypress run --headless')
-                        if (testStatus != 0) {
-                            echo "⚠️ Cypress tests failed (exit code ${testStatus})"
-                            currentBuild.result = 'UNSTABLE'
-                        } else {
-                            echo "✅ Cypress tests completed successfully."
+                        try {
+                            printBanner('RUNNING CYPRESS TESTS')
+                            // Run Cypress tests and return exit code
+                            def result = bat(returnStatus: true, script: 'npx cypress run --headless')
+
+                            if (result != 0) {
+                                echo "⚠️ Some Cypress tests failed (exit code ${result})"
+                                currentBuild.result = 'UNSTABLE'
+                            } else {
+                                echo "✅ Cypress tests completed successfully."
+                            }
+                        } catch (err) {
+                            echo "❌ Cypress tests failed: ${err.message}"
+                            currentBuild.result = 'FAILURE'
+                            error("Pipeline failed due to Cypress test failures.")
                         }
                     }
                 }
@@ -80,21 +81,12 @@ pipeline {
             dir('Hunt_Career_Cypress') {
                 script {
                     printBanner('ARCHIVING ARTIFACTS AND PUBLISHING REPORTS')
-                    archiveArtifacts artifacts: 'cypress/reports/html/*.html', allowEmptyArchive: true
-                    archiveArtifacts artifacts: 'cypress/screenshots/**/*.png', allowEmptyArchive: true
-                    archiveArtifacts artifacts: 'cypress/videos/**/*.mp4', allowEmptyArchive: true
                     try {
-                        step([
-                            $class: 'HTMLPublisher',
-                            reportDir: 'cypress/reports/html',
-                            reportFiles: 'index.html',
-                            reportName: 'Cypress Test Report',
-                            keepAll: true,
-                            alwaysLinkToLastBuild: true,
-                            allowMissing: true
-                        ])
+                        archiveArtifacts artifacts: 'cypress/reports/html/*.html', allowEmptyArchive: true
+                        archiveArtifacts artifacts: 'cypress/screenshots/**/*.png', allowEmptyArchive: true
+                        archiveArtifacts artifacts: 'cypress/videos/**/*.mp4', allowEmptyArchive: true
                     } catch (err) {
-                        echo "⚠️ HTML report not published: ${err.message}"
+                        echo "⚠️ Could not archive artifacts: ${err.message}"
                     }
                 }
             }
@@ -109,7 +101,7 @@ pipeline {
         }
 
         success {
-            echo "✅ All Cypress tests passed successfully!"
+            echo "✅ All Cypress tests passed successfully."
         }
     }
 }
