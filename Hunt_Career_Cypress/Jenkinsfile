@@ -1,19 +1,20 @@
-// Function to print a standardized banner
+// ==============================
+// Utility Function
+// ==============================
 def printBanner(message) {
     echo '----------------------------------------'
     echo "    ${message}"
     echo '----------------------------------------'
 }
 
+// ==============================
+// Jenkins Pipeline
+// ==============================
 pipeline {
     agent any
 
-    tools {
-        nodejs 'NodeJS'
-    }
-
     environment {
-        CYPRESS_INSTALL_BINARY = '0'
+        CYPRESS_INSTALL_BINARY = '0'  // prevents Cypress from downloading browser binaries unnecessarily
     }
 
     options {
@@ -35,24 +36,36 @@ pipeline {
             }
         }
 
-        stage('Cypress Execution') {
+        stage('Setup NodeJS & Install Dependencies') {
             steps {
                 dir('Hunt_Career_Cypress') {
                     script {
-                        try {
-                            stage('Install Dependencies') {
-                                printBanner('INSTALLING NPM DEPENDENCIES')
-                                bat 'npm ci'
-                            }
+                        printBanner('SETTING UP NODEJS')
+                        // Setup NodeJS using Jenkins NodeJS plugin
+                        def nodeHome = tool name: 'NodeJS', type: 'NodeJS'
+                        env.PATH = "${nodeHome}/bin;${env.PATH}"
 
-                            stage('Run Cypress Tests') {
-                                printBanner('RUNNING CYPRESS TESTS')
-                                bat 'npx cypress run --headless'
-                            }
-                        } catch (err) {
-                            echo "❌ Cypress tests failed: ${err.message}"
-                            currentBuild.result = 'FAILURE'
-                            error("Pipeline failed due to Cypress test failures.")
+                        printBanner('INSTALLING NPM DEPENDENCIES')
+                        def installStatus = bat(returnStatus: true, script: 'npm ci')
+                        if (installStatus != 0) {
+                            error("❌ npm install failed. Pipeline aborted.")
+                        }
+                    }
+                }
+            }
+        }
+
+        stage('Run Cypress Tests') {
+            steps {
+                dir('Hunt_Career_Cypress') {
+                    script {
+                        printBanner('RUNNING CYPRESS TESTS')
+                        def testStatus = bat(returnStatus: true, script: 'npx cypress run --headless')
+                        if (testStatus != 0) {
+                            echo "⚠️ Cypress tests failed (exit code ${testStatus})"
+                            currentBuild.result = 'UNSTABLE'
+                        } else {
+                            echo "✅ Cypress tests completed successfully."
                         }
                     }
                 }
@@ -64,26 +77,41 @@ pipeline {
         always {
             dir('Hunt_Career_Cypress') {
                 script {
+                    printBanner('ARCHIVING ARTIFACTS AND PUBLISHING REPORTS')
+
+                    // Archive test artifacts
+                    archiveArtifacts artifacts: 'cypress/reports/html/*.html', allowEmptyArchive: true
+                    archiveArtifacts artifacts: 'cypress/screenshots/**/*.png', allowEmptyArchive: true
+                    archiveArtifacts artifacts: 'cypress/videos/**/*.mp4', allowEmptyArchive: true
+
+                    // Publish HTML report safely
                     try {
-                        printBanner('ARCHIVING & PUBLISHING REPORTS')
-
-                        archiveArtifacts artifacts: 'cypress/reports/html/*.html', allowEmptyArchive: true
-                        archiveArtifacts artifacts: 'cypress/screenshots/**/*.png', allowEmptyArchive: true
-                        archiveArtifacts artifacts: 'cypress/videos/**/*.mp4', allowEmptyArchive: true
-
-                        publishHTML(target: [
-                            allowMissing: true,
-                            alwaysLinkToLastBuild: true,
-                            keepAll: true,
+                        step([
+                            $class: 'HTMLPublisher',
                             reportDir: 'cypress/reports/html',
                             reportFiles: 'index.html',
-                            reportName: 'Cypress Test Report'
+                            reportName: 'Cypress Test Report',
+                            keepAll: true,
+                            alwaysLinkToLastBuild: true,
+                            allowMissing: true
                         ])
                     } catch (err) {
-                        echo "⚠️  Could not publish reports: ${err.message}"
+                        echo "⚠️ HTML report not published (plugin missing or error): ${err.message}"
                     }
                 }
             }
+        }
+
+        unstable {
+            echo "⚠️ Build marked as UNSTABLE due to Cypress test failures. Check the reports."
+        }
+
+        failure {
+            echo "❌ Pipeline failed due to a critical error (not test failures)."
+        }
+
+        success {
+            echo "✅ All Cypress tests passed successfully!"
         }
     }
 }
