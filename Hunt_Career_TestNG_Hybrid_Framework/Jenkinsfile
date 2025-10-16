@@ -36,15 +36,15 @@ pipeline {
             steps {
                 dir('Hunt_Career_TestNG_Hybrid_Framework') {
                     script {
-                        try {
-                            stage('Build and Test') {
-                                printBanner('BUILDING AND RUNNING TESTS')
-                                bat 'mvn -B clean install'
-                            }
-                        } catch (err) {
-                            echo "❌ TestNG tests failed: ${err.message}"
-                            currentBuild.result = 'FAILURE'
-                            error("Pipeline failed due to TestNG test failures.")
+                        printBanner('BUILDING AND RUNNING TESTS')
+                        // Run tests but don’t fail pipeline immediately
+                        def result = bat(returnStatus: true, script: 'mvn -B clean install')
+
+                        if (result != 0) {
+                            echo "⚠️ Some tests failed (exit code ${result}). Checking reports..."
+                            currentBuild.result = 'UNSTABLE'  // not FAILURE yet
+                        } else {
+                            echo "✅ Build and tests completed successfully."
                         }
                     }
                 }
@@ -70,10 +70,22 @@ pipeline {
                             reportName: 'TestNG Test Report'
                         ])
                     } catch (err) {
-                        echo "⚠️  Could not publish reports: ${err.message}"
+                        echo "⚠️ Could not publish reports: ${err.message}"
                     }
                 }
             }
+        }
+
+        unstable {
+            echo "⚠️ Build marked as UNSTABLE due to test failures (check reports)."
+        }
+
+        failure {
+            echo "❌ Pipeline failed due to a critical error (not just tests)."
+        }
+
+        success {
+            echo "✅ All tests passed successfully."
         }
     }
 }

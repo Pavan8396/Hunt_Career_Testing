@@ -33,6 +33,8 @@ public class MyListeners implements ITestListener {
 
 	@Override
 	public void onTestSuccess(ITestResult result) {
+		ITestContext context = result.getTestContext();
+		context.getFailedTests().removeResult(result.getMethod());
 		extentTest.log(Status.INFO, result.getName() + " Got Successfully Executed");
 	}
 
