@@ -10,6 +10,7 @@ This framework is designed for automating end-to-end tests for the Hunt Career a
 -   **Data-Driven Testing**: It supports data-driven testing using Cypress fixtures. This includes static data from `.json` files and dynamic data generated on-the-fly using JavaScript modules and libraries like `@faker-js/faker`.
 -   **Custom Commands**: The framework includes custom Cypress commands for common, reusable actions, making test scripts more concise and readable.
 -   **Detailed Reporting**: It is integrated with `mochawesome` to generate detailed HTML reports with test results, summaries, and screenshots for failed tests.
+-   **CI/CD Integration**: The framework is integrated with Jenkins for continuous testing. The `Jenkinsfile` in this directory is configured to run the tests in a Docker container, ensuring a consistent test environment.
 
 ## Project Structure
 
@@ -28,6 +29,7 @@ Hunt_Career_Cypress/
 │
 ├── cypress.config.js   # Main Cypress configuration file (baseUrl, viewport, env variables).
 ├── package.json        # Defines project dependencies and scripts.
+├── Jenkinsfile         # Jenkins pipeline for CI/CD.
 └── README.md           # This documentation file.
 ```
 
@@ -49,9 +51,9 @@ Before running the tests, ensure you have the following installed:
 2.  **Install project dependencies**:
     From the project's root directory (`Hunt_Career_Cypress`), run:
     ```bash
-    npm install
+    npm ci
     ```
-    This command downloads all necessary packages defined in `package.json`.
+    This command downloads all necessary packages defined in `package.json` and `package-lock.json`, ensuring that you have the exact same dependencies as the CI environment.
 
 ## Running Tests
 
@@ -79,21 +81,25 @@ You can execute the Cypress tests in several ways:
     ```json
     "scripts": {
       "test": "cypress run",
-      "test:open": "cypress open"
+      "test:open": "cypress open",
+      "report:merge": "mochawesome-merge cypress/reports/mocha/*.json > mochawesome.json",
+      "report:generate": "marge mochawesome.json -f report -o cypress/reports/html"
     }
     ```
     Run these using:
     ```bash
     npm test
     npm run test:open
+    npm run report:merge
+    npm run report:generate
     ```
 
 ## Reporting
 
 This framework uses **Mochawesome** to generate detailed HTML reports.
 
--   **How it works**: After a test run (especially headless), Mochawesome creates JSON files for each spec. These are then merged into a single, comprehensive HTML report.
--   **Viewing Reports**: The final report is typically generated in the `cypress/reports/` directory. Open the `index.html` file within the `html` sub-directory to view the results.
+-   **How it works**: After a test run (especially headless), Mochawesome creates JSON files for each spec in the `cypress/reports/mocha` directory. These are then merged into a single, comprehensive HTML report using the `mochawesome-merge` and `marge` utilities.
+-   **Viewing Reports**: The final report is typically generated in the `cypress/reports/html` directory. Open the `index.html` file to view the results.
 
 ## Test Suites
 
@@ -102,5 +108,8 @@ This framework includes the following test suites, covering key functionalities 
 -   **Login**: Verifies user authentication, including success and failure scenarios.
 -   **Registration**: Tests the new user registration flow, including data validation.
 -   **Search**: Covers job search functionality, including keyword searches and filtering.
+-   **Employer Login**: Verifies employer authentication.
+-   **Employer Registration**: Tests the new employer registration flow.
+-   **Post Job**: Covers the job posting functionality for employers.
 
 This README provides a comprehensive guide to understanding, setting up, and running tests with the Hunt Career Cypress Automation Framework.

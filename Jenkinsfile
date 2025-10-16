@@ -8,6 +8,12 @@ def printBanner(message) {
 pipeline {
     agent any
 
+    parameters {
+        string(name: 'CYPRESS_JOB_NAME', defaultValue: 'huntcareer-ui-tests-cypress', description: 'Name of the Cypress downstream job')
+        string(name: 'PLAYWRIGHT_JOB_NAME', defaultValue: 'huntcareer-ui-tests-playwright', description: 'Name of the Playwright downstream job')
+        string(name: 'TESTNG_JOB_NAME', defaultValue: 'huntcareer-ui-tests-selenium', description: 'Name of the TestNG downstream job')
+    }
+
     stages {
         stage('Clean Workspace') {
             steps {
@@ -21,9 +27,9 @@ pipeline {
                 script {
                     // Define the downstream jobs
                     def jobs = [
-                        'Cypress': 'huntcareer-ui-tests-cypress',
-                        'Playwright': 'huntcareer-ui-tests-playwright',
-                        'TestNG': 'huntcareer-ui-tests-selenium'
+                        'Cypress': "${params.CYPRESS_JOB_NAME}",
+                        'Playwright': "${params.PLAYWRIGHT_JOB_NAME}",
+                        'TestNG': "${params.TESTNG_JOB_NAME}"
                     ]
 
                     // Trigger jobs in parallel, failing fast

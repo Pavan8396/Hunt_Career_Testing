@@ -21,6 +21,7 @@ The framework is designed to be easily configurable for different environments a
     -   **JavaFaker**: For generating realistic and random test data on the fly.
     -   **slf4j & Log4j2**: For logging framework events and test execution details, which is crucial for debugging.
     -   **JSON-simple**: For parsing and handling test data from `.json` files.
+-   **CI/CD Integration**: The framework is integrated with Jenkins for continuous testing. The `Jenkinsfile` in this directory is configured to run the tests in a Docker container, ensuring a consistent test environment.
 
 ## Project Structure
 
@@ -46,6 +47,7 @@ Hunt_Career_TestNG_Hybrid_Framework/
 │
 ├── test-output/            # Default directory for TestNG reports and ExtentReports.
 ├── pom.xml                 # Maven Project Object Model file defining dependencies and build configurations.
+├── Jenkinsfile         # Jenkins pipeline for CI/CD.
 └── README.md               # This file.
 ```
 
@@ -97,7 +99,7 @@ You can execute the automated tests in several ways:
 1.  **Using Maven (Recommended for CI/CD)**:
     This command runs the entire test suite as defined in the `testng.xml` file.
     ```bash
-    mvn test
+    mvn clean install
     ```
 
 2.  **Using TestNG Suite XML**:
@@ -105,16 +107,20 @@ You can execute the automated tests in several ways:
 
 ## Reporting
 
-After test execution, the framework generates two types of reports in the `test-output/` directory:
+After test execution, the framework generates two types of reports in the `target/surefire-reports` and `test-output/` directories:
 
-1.  **ExtentReports**:
+1.  **Surefire Reports**:
+    -   A comprehensive and interactive HTML report is generated at `target/site/surefire-report.html`.
+    -   This report includes detailed steps, pass/fail status, and execution times.
+
+2.  **ExtentReports**:
     -   A comprehensive and interactive HTML report is generated at `test-output/ExtentReports/extentReport.html`.
     -   This report includes detailed steps, pass/fail status, execution times, and automatically captured screenshots for failed tests.
 
-2.  **TestNG Reports**:
+3.  **TestNG Reports**:
     -   TestNG also produces its own set of standard reports, including an `emailable-report.html` and `index.html`.
 
-To view the main report, open `test-output/ExtentReports/extentReport.html` in any web browser.
+To view the main report, open `target/site/surefire-report.html` or `test-output/ExtentReports/extentReport.html` in any web browser.
 
 ## Test Suites
 
@@ -122,4 +128,7 @@ The framework includes the following test suites located under `src/test/java/co
 
 -   **Login Tests**: Verifies login functionality with valid and invalid credentials.
 -   **Registration Tests**: Validates the user registration process, including checks for existing users and data validation.
---   **Search Tests**: Covers the job search functionality, including keyword searches and filtering.
+-   **Search Tests**: Covers the job search functionality, including keyword searches and filtering.
+-   **Employer Login**: Verifies employer authentication.
+-   **Employer Registration**: Tests the new employer registration flow.
+-   **Employer Job Post**: Covers the job posting functionality for employers.
