@@ -1,18 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
 
-<suite name="HuntCareerSuite" parallel="classes" thread-count="5">
+<suite name="HuntCareerSuite" parallel="false" thread-count="5" verbose="2">
     <listeners>
         <listener class-name="com.huntcareer.qa.listeners.MyListeners" />
     </listeners>
 
-    <test name="Functional Tests">
+    <!-- Functional Group -->
+    <test name="Functional_Tests">
+        <groups>
+            <run>
+                <include name="Functional" />
+            </run>
+        </groups>
         <classes>
             <class name="com.huntcareer.qa.testcases.Login" />
             <class name="com.huntcareer.qa.testcases.EmployerLogin" />
             <class name="com.huntcareer.qa.testcases.Register" />
             <class name="com.huntcareer.qa.testcases.EmployerRegister" />
             <class name="com.huntcareer.qa.testcases.Search" />
+            <class name="com.huntcareer.qa.testcases.EmployerJobPost" />
         </classes>
     </test>
 </suite>
