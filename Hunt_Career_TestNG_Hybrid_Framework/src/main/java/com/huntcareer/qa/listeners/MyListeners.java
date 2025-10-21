@@ -2,19 +2,36 @@ package com.huntcareer.qa.listeners;
 
 import java.awt.Desktop;
 import java.io.File;
-import java.io.IOException;
+import java.io.FileWriter;
 import java.lang.reflect.Field;
+import java.util.*;
 
 import org.openqa.selenium.WebDriver;
 import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
 
-import com.aventstack.extentreports.ExtentReports;
-import com.aventstack.extentreports.ExtentTest;
-import com.aventstack.extentreports.Status;
+import com.aventstack.extentreports.*;
+import com.huntcareer.qa.utils.AdvancedReportGenerator;
 import com.huntcareer.qa.utils.ExtentReport;
 import com.huntcareer.qa.utils.Utilities;
+import com.google.gson.Gson;
+
+class TestResultData {
+    public String className;
+    public String testName;
+    public String status;
+    public long duration;
+    public String screenshotPath;
+
+    public TestResultData(String className, String testName, String status, long duration, String screenshotPath) {
+        this.className = className;
+        this.testName = testName;
+        this.status = status;
+        this.duration = duration;
+        this.screenshotPath = screenshotPath;
+    }
+}
 
 public class MyListeners implements ITestListener {
 
@@ -22,6 +39,8 @@ public class MyListeners implements ITestListener {
     private static ThreadLocal<ExtentTest> extentTest = new ThreadLocal<>();
     private static ThreadLocal<ExtentTest> classNode = new ThreadLocal<>();
     private ThreadLocal<Long> testStartTime = new ThreadLocal<>();
+
+    private List<TestResultData> allTestResults = new ArrayList<>();
 
     @Override
     public void onStart(ITestContext context) {
@@ -31,12 +50,10 @@ public class MyListeners implements ITestListener {
     @Override
     public void onTestStart(ITestResult result) {
         testStartTime.set(System.currentTimeMillis());
-
         String className = result.getTestClass().getName();
         if (classNode.get() == null || !classNode.get().getModel().getName().equals(className)) {
             classNode.set(extentReport.createTest(className));
         }
-
         ExtentTest test = classNode.get().createNode(result.getMethod().getMethodName());
         test.log(Status.INFO, result.getName() + " Started Executing");
         extentTest.set(test);
@@ -44,11 +61,10 @@ public class MyListeners implements ITestListener {
 
     @Override
     public void onTestSuccess(ITestResult result) {
-        extentTest.get().log(Status.PASS, result.getName() + " executed successfully");
-        ExtentReport.updateClassStats(result.getTestClass().getName(), "pass");
-
         long duration = System.currentTimeMillis() - testStartTime.get();
-        ExtentReport.updateTestDuration(result.getTestName(), duration);
+        extentTest.get().log(Status.PASS, result.getName() + " executed successfully");
+        extentTest.get().info("Execution Time: " + duration + " ms");
+        allTestResults.add(new TestResultData(result.getTestClass().getName(), result.getName(), "PASS", duration, null));
     }
 
     @Override
@@ -61,35 +77,44 @@ public class MyListeners implements ITestListener {
         } catch (Throwable e) { e.printStackTrace(); }
 
         String screenshotPath = Utilities.captureScreenshot(driver, result.getName());
-        extentTest.get().addScreenCaptureFromPath(screenshotPath);
-
-        extentTest.get().log(Status.FAIL, result.getThrowable());
-        extentTest.get().log(Status.FAIL, result.getName() + " got failed");
-        ExtentReport.updateClassStats(result.getTestClass().getName(), "fail");
+        try { extentTest.get().addScreenCaptureFromPath(screenshotPath); } catch (Exception e) { e.printStackTrace(); }
 
         long duration = System.currentTimeMillis() - testStartTime.get();
-        ExtentReport.updateTestDuration(result.getName(), duration);
+        extentTest.get().log(Status.FAIL, result.getThrowable());
+        extentTest.get().log(Status.FAIL, result.getName() + " got failed");
+        extentTest.get().info("Execution Time: " + duration + " ms");
+
+        allTestResults.add(new TestResultData(result.getTestClass().getName(), result.getName(), "FAIL", duration, screenshotPath));
     }
 
     @Override
     public void onTestSkipped(ITestResult result) {
+        long duration = System.currentTimeMillis() - testStartTime.get();
         extentTest.get().log(Status.SKIP, result.getName() + " skipped");
         extentTest.get().log(Status.INFO, result.getThrowable());
-        ExtentReport.updateClassStats(result.getTestClass().getName(), "skip");
+        extentTest.get().info("Execution Time: " + duration + " ms");
 
-        long duration = System.currentTimeMillis() - testStartTime.get();
-        ExtentReport.updateTestDuration(result.getName(), duration);
+        allTestResults.add(new TestResultData(result.getTestClass().getName(), result.getName(), "SKIP", duration, null));
     }
 
     @Override
     public void onFinish(ITestContext context) {
         extentReport.flush();
+        try {
+            // Save current run JSON
+            String currentJson = Utilities.getReportJsonPath();
+            Gson gson = new Gson();
+            FileWriter writer = new FileWriter(currentJson);
+            gson.toJson(allTestResults, writer);
+            writer.flush();
+            writer.close();
 
-        String reportPath = System.getProperty("user.dir") + "/test-output/ExtentReports/extentReport.html";
-        File reportFile = new File(reportPath);
-        if (System.getenv("CI") == null) {
-            try { Desktop.getDesktop().browse(reportFile.toURI()); }
-            catch (IOException e) { e.printStackTrace(); }
-        }
+            // Generate merged dashboard using all historical JSONs
+            String dashboardHtml = System.getProperty("user.dir") + "/test-output/MergedDashboard.html";
+            AdvancedReportGenerator.generateMultiRunDashboard(dashboardHtml);
+
+            Desktop.getDesktop().browse(new File(dashboardHtml).toURI());
+
+        } catch (Exception e) { e.printStackTrace(); }
     }
 }

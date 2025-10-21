@@ -194,4 +194,12 @@ public class Utilities {
 
         return destPath;
     }
+
+    // Helper to get timestamped report JSON
+    public static String getReportJsonPath() {
+        String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String folder = System.getProperty("user.dir") + "/test-output/ReportsHistory/";
+        new File(folder).mkdirs();
+        return folder + "ReportData_" + timestamp + ".json";
+    }
 }
