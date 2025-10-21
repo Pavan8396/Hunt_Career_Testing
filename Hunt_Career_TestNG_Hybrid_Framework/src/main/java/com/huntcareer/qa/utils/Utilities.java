@@ -3,11 +3,13 @@ package com.huntcareer.qa.utils;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
@@ -16,7 +18,6 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.io.FileHandler;
 
 import com.github.javafaker.Faker;
 
@@ -180,15 +181,17 @@ public class Utilities {
 		return data;
 	}
 
-	public static String captureScreenshot(WebDriver driver, String testName) {
-		File srcSreenShot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
-		String destinationScreenshotPath = System.getProperty("user.dir") + "/Screenshots/" + testName + ".png";
-		try {
-			FileHandler.copy(srcSreenShot, new File(destinationScreenshotPath));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return destinationScreenshotPath;
-	}
+	public static String captureScreenshot(WebDriver driver, String screenshotName) {
+        String date = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String destPath = System.getProperty("user.dir") + "/test-output/Screenshots/" + screenshotName + "_" + date + ".png";
 
+        try {
+            TakesScreenshot ts = (TakesScreenshot) driver;
+            File source = ts.getScreenshotAs(OutputType.FILE);
+            File dest = new File(destPath);
+            FileUtils.copyFile(source, dest);
+        } catch (IOException e) { e.printStackTrace(); }
+
+        return destPath;
+    }
 }

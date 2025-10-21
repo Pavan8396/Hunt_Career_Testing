@@ -17,64 +17,79 @@ import com.huntcareer.qa.utils.ExtentReport;
 import com.huntcareer.qa.utils.Utilities;
 
 public class MyListeners implements ITestListener {
-	ExtentReports extentReport;
-	ExtentTest extentTest;
 
-	@Override
-	public void onStart(ITestContext context) {
-		extentReport = ExtentReport.generateExtentReport();
-	}
+    private static ExtentReports extentReport;
+    private static ThreadLocal<ExtentTest> extentTest = new ThreadLocal<>();
+    private static ThreadLocal<ExtentTest> classNode = new ThreadLocal<>();
+    private ThreadLocal<Long> testStartTime = new ThreadLocal<>();
 
-	@Override
-	public void onTestStart(ITestResult result) {
-		extentTest = extentReport.createTest(result.getName());
-		extentTest.log(Status.INFO, result.getName() + " Stated Executing");
-	}
+    @Override
+    public void onStart(ITestContext context) {
+        extentReport = ExtentReport.generateExtentReport();
+    }
 
-	@Override
-	public void onTestSuccess(ITestResult result) {
-		ITestContext context = result.getTestContext();
-		context.getFailedTests().removeResult(result.getMethod());
-		extentTest.log(Status.INFO, result.getName() + " Got Successfully Executed");
-	}
+    @Override
+    public void onTestStart(ITestResult result) {
+        testStartTime.set(System.currentTimeMillis());
 
-	@Override
-	public void onTestFailure(ITestResult result) {
-		WebDriver driver = null;
-		try {
-			Field field = result.getTestClass().getRealClass().getDeclaredField("driver");
-			field.setAccessible(true);
-			driver = (WebDriver) field.get(result.getInstance());
-		} catch (Throwable e) {
-			e.printStackTrace();
-		}
+        String className = result.getTestClass().getName();
+        if (classNode.get() == null || !classNode.get().getModel().getName().equals(className)) {
+            classNode.set(extentReport.createTest(className));
+        }
 
-		String destinationScreenshotPath = Utilities.captureScreenshot(driver, result.getName());
+        ExtentTest test = classNode.get().createNode(result.getMethod().getMethodName());
+        test.log(Status.INFO, result.getName() + " Started Executing");
+        extentTest.set(test);
+    }
 
-		extentTest.addScreenCaptureFromPath(destinationScreenshotPath);
-		extentTest.log(Status.INFO, result.getThrowable());
-		extentTest.log(Status.FAIL, result.getName() + " got failed");
-	}
+    @Override
+    public void onTestSuccess(ITestResult result) {
+        extentTest.get().log(Status.PASS, result.getName() + " executed successfully");
+        ExtentReport.updateClassStats(result.getTestClass().getName(), "pass");
 
-	@Override
-	public void onTestSkipped(ITestResult result) {
-		extentTest.log(Status.SKIP, result.getName() + " Test got skipped");
-		extentTest.log(Status.INFO, result.getThrowable());
-	}
+        long duration = System.currentTimeMillis() - testStartTime.get();
+        ExtentReport.updateTestDuration(result.getTestName(), duration);
+    }
 
-	@Override
-	public void onFinish(ITestContext context) {
-		extentReport.flush();
+    @Override
+    public void onTestFailure(ITestResult result) {
+        WebDriver driver = null;
+        try {
+            Field field = result.getTestClass().getRealClass().getDeclaredField("driver");
+            field.setAccessible(true);
+            driver = (WebDriver) field.get(result.getInstance());
+        } catch (Throwable e) { e.printStackTrace(); }
 
-		String pathOfExtentReport = System.getProperty("user.dir") + "/test-output/ExtentReports/extentReport.html";
-		File extentReport = new File(pathOfExtentReport);
-		// Only open the report locally, NOT in CI
-		if (System.getenv("CI") == null) {
-			try {
-				Desktop.getDesktop().browse(extentReport.toURI());
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-	}
+        String screenshotPath = Utilities.captureScreenshot(driver, result.getName());
+        extentTest.get().addScreenCaptureFromPath(screenshotPath);
+
+        extentTest.get().log(Status.FAIL, result.getThrowable());
+        extentTest.get().log(Status.FAIL, result.getName() + " got failed");
+        ExtentReport.updateClassStats(result.getTestClass().getName(), "fail");
+
+        long duration = System.currentTimeMillis() - testStartTime.get();
+        ExtentReport.updateTestDuration(result.getName(), duration);
+    }
+
+    @Override
+    public void onTestSkipped(ITestResult result) {
+        extentTest.get().log(Status.SKIP, result.getName() + " skipped");
+        extentTest.get().log(Status.INFO, result.getThrowable());
+        ExtentReport.updateClassStats(result.getTestClass().getName(), "skip");
+
+        long duration = System.currentTimeMillis() - testStartTime.get();
+        ExtentReport.updateTestDuration(result.getName(), duration);
+    }
+
+    @Override
+    public void onFinish(ITestContext context) {
+        extentReport.flush();
+
+        String reportPath = System.getProperty("user.dir") + "/test-output/ExtentReports/extentReport.html";
+        File reportFile = new File(reportPath);
+        if (System.getenv("CI") == null) {
+            try { Desktop.getDesktop().browse(reportFile.toURI()); }
+            catch (IOException e) { e.printStackTrace(); }
+        }
+    }
 }
