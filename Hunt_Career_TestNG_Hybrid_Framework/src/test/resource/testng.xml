@@ -12,6 +12,7 @@
                 <include name="Login" />
                 <include name="Registration" />
                 <include name="Employer" />
+                <include name="Search" />
             </run>
         </groups>
         <classes>
