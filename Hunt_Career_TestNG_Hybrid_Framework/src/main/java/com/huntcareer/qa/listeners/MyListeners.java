@@ -40,7 +40,7 @@ public class MyListeners implements ITestListener {
 	public void onTestFailure(ITestResult result) {
 		WebDriver driver = null;
 		try {
-			Field field = result.getTestClass().getRealClass().getDeclaredField("driver");
+			Field field = result.getTestClass().getRealClass().getField("driver");
 			field.setAccessible(true);
 			driver = (WebDriver) field.get(result.getInstance());
 		} catch (Throwable e) {

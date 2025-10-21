@@ -14,7 +14,6 @@ import com.huntcareer.qa.pages.LandingPage;
 import com.huntcareer.qa.testdata.PostAJob;
 
 public class EmployerJobPost extends Base {
-	WebDriver driver;
 	EmployerPostJobPage jp;
 	LandingPage ldp;
 	EmployerLoginPage elp;

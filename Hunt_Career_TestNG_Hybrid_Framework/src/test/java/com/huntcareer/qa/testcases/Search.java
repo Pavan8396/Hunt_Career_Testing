@@ -11,7 +11,6 @@ import com.huntcareer.qa.pages.LandingPage;
 import com.huntcareer.qa.pages.SearchPage;
 
 public class Search extends Base {
-	WebDriver driver;
 	SearchPage sp;
 	LandingPage ldp;
 	HomePage hp;

@@ -15,7 +15,6 @@ import com.huntcareer.qa.pages.LoginPage;
 import com.huntcareer.qa.testdata.EmployerRegisterData;
 
 public class EmployerRegister extends Base {
-    WebDriver driver;
     EmployerRegisterPage erp;
     EmployerLoginPage elp;
     LandingPage ldp;

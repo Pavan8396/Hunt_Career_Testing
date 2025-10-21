@@ -15,7 +15,6 @@ import com.huntcareer.qa.pages.RegisterPage;
 import com.huntcareer.qa.testdata.RegisterData;
 
 public class Register extends Base {
-	WebDriver driver;
 	RegisterPage rp;
 	LoginPage lp;
 	LandingPage ldp;

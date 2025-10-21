@@ -13,7 +13,6 @@ import com.huntcareer.qa.pages.LoginPage;
 import com.huntcareer.qa.utils.Utilities;
 
 public class Login extends Base {
-	public WebDriver driver;
 	LoginPage lp;
 	HomePage hp;
 	LandingPage ldp;
