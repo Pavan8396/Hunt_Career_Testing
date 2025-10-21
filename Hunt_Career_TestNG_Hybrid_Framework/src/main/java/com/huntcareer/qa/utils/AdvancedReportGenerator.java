@@ -42,9 +42,29 @@ public class AdvancedReportGenerator {
 
             // Collect JSON files sorted by last modified (ascending = older -> newer)
             File[] jsonFiles = historyDir.listFiles((dir, name) -> name.toLowerCase().endsWith(".json"));
-            if (jsonFiles == null)
+            if (jsonFiles == null) {
                 jsonFiles = new File[0];
+            }
             Arrays.sort(jsonFiles, Comparator.comparingLong(File::lastModified));
+
+            // If more than 10 runs, delete the oldest ones
+            if (jsonFiles.length > 10) {
+                System.out.println("More than 10 reports found, trimming the oldest ones.");
+                int filesToDelete = jsonFiles.length - 10;
+                for (int i = 0; i < filesToDelete; i++) {
+                    if (jsonFiles[i].delete()) {
+                        System.out.println("Deleted old report file: " + jsonFiles[i].getName());
+                    } else {
+                        System.err.println("Warning: failed to delete old report file " + jsonFiles[i].getName());
+                    }
+                }
+                // Reload the file list after deletion
+                jsonFiles = historyDir.listFiles((dir, name) -> name.toLowerCase().endsWith(".json"));
+                if (jsonFiles == null) {
+                   jsonFiles = new File[0];
+                }
+                Arrays.sort(jsonFiles, Comparator.comparingLong(File::lastModified));
+            }
 
             // Read all runs into a list of runs; each run is a list of maps
             List<RunData> runs = new ArrayList<>();
@@ -118,54 +138,56 @@ public class AdvancedReportGenerator {
         // --- Clean, modern dark theme ---
         sb.append("<style>");
         sb.append(
-                ":root{--bg:#0f1114;--card:#16181b;--muted:#a1acb5;--accent:#00bcd4;--success:#4caf50;--danger:#f44336;--warn:#ff9800;} ");
+                ":root{--bg:#0d1117;--card:#161b22;--muted:#8b949e;--accent:#58a6ff;--success:#3fb950;--danger:#f85149;--warn:#d29922;--border-color:rgba(255,255,255,0.1);} ");
         sb.append(
-                "body{margin:0;font-family:'Inter',Segoe UI,Roboto,Arial,sans-serif;background:linear-gradient(180deg,#0b0c0d 0%,#0f1114 100%);color:#e6eef3;line-height:1.5;} ");
-        sb.append(".container{max-width:1280px;margin:32px auto;padding:0 24px;} ");
+                "body{margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif,'Apple Color Emoji','Segoe UI Emoji';background:var(--bg);color:#c9d1d9;line-height:1.6;} ");
+        sb.append(".container{max-width:1400px;margin:40px auto;padding:0 24px;} ");
 
         // --- Header layout ---
         sb.append(
-                ".header{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;margin-bottom:28px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,0.05);} ");
+                ".header{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;margin-bottom:32px;padding-bottom:16px;border-bottom:1px solid var(--border-color);} ");
         sb.append(
-                ".title h1{margin:0;font-size:26px;font-weight:600;color:#fff;} ");
+                ".title h1{margin:0;font-size:28px;font-weight:600;color:#fff;} ");
         sb.append(
-                ".title p{margin:6px 0 0;color:var(--muted);font-size:14px;} ");
+                ".title p{margin:8px 0 0;color:var(--muted);font-size:16px;} ");
         sb.append(
-                ".controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;} ");
+                ".controls{display:flex;flex-wrap:wrap;gap:12px;align-items:center;} ");
         sb.append(
-                ".btn{background:var(--card);border:1px solid rgba(255,255,255,0.1);padding:8px 14px;border-radius:8px;color:#e6eef3;cursor:pointer;transition:all 0.2s ease;font-size:13px;} ");
+                ".btn{background:#21262d;border:1px solid var(--border-color);padding:10px 18px;border-radius:8px;color:#c9d1d9;cursor:pointer;transition:all 0.2s ease;font-size:14px;font-weight:500;} ");
         sb.append(
                 ".btn:hover{background:var(--accent);color:#fff;border-color:var(--accent);} ");
         sb.append(
-                ".btn:disabled{opacity:0.4;cursor:not-allowed;} ");
+                ".btn:disabled{opacity:0.5;cursor:not-allowed;background:#161b22;border-color:var(--border-color);} ");
 
         // --- Grid and card styling ---
         sb.append(
-                ".grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:22px;margin-top:24px;} ");
+                ".grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:24px;margin-top:24px;} ");
         sb.append(
-                ".card{background:var(--card);padding:18px 20px;border-radius:14px;box-shadow:0 4px 14px rgba(2,6,23,0.5);} ");
+                ".card{background:var(--card);padding:24px;border-radius:12px;border:1px solid var(--border-color);box-shadow:0 8px 24px rgba(1,4,9,0.5);} ");
         sb.append(
-                ".chart-container{width:100%;height:220px !important;margin-top:10px;} ");
+                ".chart-container{width:100%;height:240px !important;margin-top:16px;} .duration-chart-wrapper{max-height:500px;overflow-y:auto;margin-top:16px;} ");
         sb.append(
-                ".summary{display:flex;gap:16px;flex-wrap:wrap;justify-content:flex-start;} ");
+                ".summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:20px;} ");
         sb.append(
-                ".stat h3{margin:0;font-size:14px;color:var(--muted);} .stat p{margin:6px 0 0;font-size:19px;color:#fff;font-weight:600;} ");
+                ".stat{text-align:center;} .stat h3{margin:0;font-size:15px;color:var(--muted);font-weight:500;} .stat p{margin:8px 0 0;font-size:22px;color:#fff;font-weight:600;} ");
         sb.append(
-                ".class-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;} .class-header h3{margin:0;color:var(--accent);} ");
+                ".class-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;} .class-header h3{margin:0;color:var(--accent);font-size:18px;} ");
         sb.append(
-                ".collapsible{background:#0f1215;border:0;padding:10px 12px;border-radius:8px;color:var(--muted);cursor:pointer;width:100%;text-align:left;margin-top:12px;transition:all 0.2s;} ");
+                ".collapsible{background:#0d1117;border:1px solid var(--border-color);padding:10px 14px;border-radius:8px;color:var(--muted);cursor:pointer;width:100%;text-align:left;margin-top:16px;transition:all 0.2s;font-size:13px;} ");
         sb.append(
-                ".collapsible:hover{background:rgba(255,255,255,0.04);color:#fff;} ");
+                ".collapsible:hover{background:#161b22;color:#fff;} ");
         sb.append(
-                ".content{display:none;padding-top:12px;} table{width:100%;border-collapse:collapse;} th,td{padding:8px;text-align:left;border-bottom:1px solid rgba(255,255,255,0.03);} ");
+                ".content{display:none;padding-top:16px;overflow-y:auto;max-height:400px;} table{width:100%;border-collapse:collapse;table-layout:fixed;} th,td{padding:10px;text-align:left;border-bottom:1px solid var(--border-color);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:13px;} th{font-weight:600;} ");
         sb.append(
-                ".badge{padding:6px 8px;border-radius:6px;font-weight:600;font-size:12px;} .badge-pass{background:rgba(76,175,80,0.12);color:var(--success);} .badge-fail{background:rgba(244,67,54,0.12);color:var(--danger);} .badge-skip{background:rgba(255,152,0,0.12);color:var(--warn);} ");
+                "th:first-child,td:first-child{width:60%;} td:first-child{cursor:pointer;} td:first-child:hover{text-decoration:underline;} ");
         sb.append(
-                "canvas{max-height:240px !important;} ");
+                ".badge{padding:6px 10px;border-radius:16px;font-weight:600;font-size:12px;} .badge-pass{background:rgba(63,185,80,0.15);color:var(--success);} .badge-fail{background:rgba(248,81,73,0.15);color:var(--danger);} .badge-skip{background:rgba(210,153,34,0.15);color:var(--warn);} ");
         sb.append(
-                ".small{font-size:12px;color:var(--muted);} .iframe-wrap{margin-top:28px;} iframe{width:100%;height:640px;border:0;border-radius:10px;box-shadow:0 8px 20px rgba(0,0,0,0.6);} ");
+                "canvas{max-height:280px !important;} ");
         sb.append(
-                "@media(max-width:700px){.header{flex-direction:column;align-items:flex-start;} .grid{grid-template-columns:1fr;} .chart-wide{overflow-x:auto;} }");
+                ".small{font-size:13px;color:var(--muted);} .iframe-wrap{margin-top:32px;} iframe{width:100%;height:700px;border:1px solid var(--border-color);border-radius:12px;box-shadow:0 8px 24px rgba(1,4,9,0.5);} ");
+        sb.append(
+                "@media(max-width:768px){.header{flex-direction:column;align-items:flex-start;} .grid{grid-template-columns:1fr;} .chart-wide{overflow-x:auto;} .container{margin:24px auto;} .title h1{font-size:24px;} .title p{font-size:14px;}}");
         sb.append("</style></head><body>");
 
         // --- Header section ---
@@ -268,8 +290,10 @@ public class AdvancedReportGenerator {
                 }
 
                 sb.append("<div class='card'>");
-                sb.append("<div class='class-header'><h3>").append(cls).append("</h3>");
-                sb.append("<div style='display:flex;gap:8px;align-items:center;'>");
+                String simpleClassName = cls.substring(cls.lastIndexOf('.') + 1);
+                sb.append("<div class='class-header'><h3>").append(simpleClassName).append("</h3>");
+                sb.append(
+                        "<div style='display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:flex-end;'>");
                 sb.append("<div class='small'>Tests: ").append(tests.size()).append("</div>");
                 sb.append("<div class='small' style='color:var(--muted)'>Pass: ").append(cPass).append("</div>");
                 sb.append("<div class='small' style='color:var(--muted)'>Fail: ").append(cFail).append("</div>");
@@ -277,8 +301,8 @@ public class AdvancedReportGenerator {
 
                 // Charts
                 sb.append("<canvas id='classChart-").append(classIndex).append("' class='chart-container'></canvas>");
-                sb.append("<canvas id='classDurChart-").append(classIndex)
-                        .append("' class='chart-container'></canvas>");
+                sb.append("<div class='duration-chart-wrapper'><canvas id='classDurChart-").append(classIndex)
+                        .append("' style='height:").append(Math.max(240, tests.size() * 25)).append("px !important;'></canvas></div>");
 
                 // Collapsible logs
                 sb.append("<button class='collapsible'>Toggle Test Logs</button>");
@@ -290,7 +314,8 @@ public class AdvancedReportGenerator {
                             : tr.status.equals("FAIL") ? "badge-fail" : "badge-skip";
                     String screenshotLink = (tr.screenshotPath == null || tr.screenshotPath.isEmpty()) ? "-"
                             : ("<a href='" + relativePathForHtml(tr.screenshotPath) + "' target='_blank'>View</a>");
-                    sb.append("<tr><td>").append(tr.testName).append("</td>")
+                    sb.append("<tr><td title='").append(jsEscape(tr.testName)).append("'>").append(tr.testName)
+                            .append("</td>")
                             .append("<td><span class='badge ").append(badgeClass).append("'>").append(tr.status)
                             .append("</span></td>")
                             .append("<td>").append(tr.duration).append("</td>")
@@ -373,7 +398,7 @@ public class AdvancedReportGenerator {
         sb.append("{label:'Avg Duration (ms)',data:[").append(jsNumberArray(runAvgDur)).append("],borderColor:'")
                 .append("#00bcd4").append("',backgroundColor:'rgba(0,188,212,0.12)',yAxisID:'yDur',tension:0.3}");
         sb.append(
-                "]},options:{responsive:true,interaction:{mode:'index',intersect:false},scales:{y:{type:'linear',position:'left',ticks:{color:'#ccc'}},yDur:{type:'linear',position:'right',ticks:{color:'#ccc'},grid:{display:false}}},plugins:{legend:{labels:{color:'#ccc'}}}}});");
+                "]},options:{responsive:true,interaction:{mode:'index',intersect:false},scales:{x:{ticks:{color:'#ccc',callback:function(val,idx){const label=this.getLabelForValue(val);return label.length>15?label.substring(0,15)+'...':label;}}},y:{type:'linear',position:'left',ticks:{color:'#ccc'}},yDur:{type:'linear',position:'right',ticks:{color:'#ccc'},grid:{display:false}}},plugins:{legend:{labels:{color:'#ccc'}},tooltip:{callbacks:{title:function(ctx){return ctx[0].chart.data.labels[ctx[0].dataIndex];}}}}}});");
 
         // Per-class charts: we need to create unique chart scripts for each class shown
         // above.
@@ -391,7 +416,7 @@ public class AdvancedReportGenerator {
                 List<String> names = new ArrayList<>();
                 List<Long> durs = new ArrayList<>();
                 for (TestRecord tr : tests) {
-                    names.add(jsEscape(tr.testName));
+                    names.add(tr.testName);
                     durs.add(tr.duration);
                     if ("PASS".equals(tr.status))
                         pass++;
@@ -411,7 +436,7 @@ public class AdvancedReportGenerator {
                 sb.append("new Chart(document.getElementById('classDurChart-").append(ci)
                         .append("'),{type:'bar',data:{labels:[").append(jsStringArrayFromList(names))
                         .append("],datasets:[{label:'Duration(ms)',data:[").append(jsNumberArrayFromListLong(durs))
-                        .append("],backgroundColor:'#00bcd4'}]},options:{plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{color:'#ccc'}},x:{ticks:{color:'#ccc'}}}}});");
+                        .append("],backgroundColor:'#00bcd4'}]},options:{indexAxis:'y',plugins:{legend:{display:false},tooltip:{callbacks:{title:function(ctx){return ctx[0].label;}}}},scales:{y:{ticks:{color:'#ccc',callback:function(val,idx){const label=this.getLabelForValue(val);return label.length>40?'...'+label.substring(label.length-37):label;}}},x:{beginAtZero:true,ticks:{color:'#ccc'}}}}});");
 
                 ci++;
             }
@@ -487,7 +512,7 @@ public class AdvancedReportGenerator {
     // file is fine.
     private static String relativePathForHtml(String absPath) {
         try {
-            Path htmlRoot = Paths.get(System.getProperty("user.dir")).toAbsolutePath();
+            Path htmlRoot = Paths.get(System.getProperty("user.dir"), "test-output").toAbsolutePath();
             Path target = Paths.get(absPath).toAbsolutePath();
             Path rel = htmlRoot.relativize(target);
             return rel.toString().replace("\\", "/");
