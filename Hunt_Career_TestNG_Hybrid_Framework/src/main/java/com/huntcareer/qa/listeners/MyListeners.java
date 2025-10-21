@@ -33,9 +33,7 @@ public class MyListeners implements ITestListener {
 
 	@Override
 	public void onTestSuccess(ITestResult result) {
-		ITestContext context = result.getTestContext();
-		context.getFailedTests().removeResult(result.getMethod());
-		extentTest.log(Status.INFO, result.getName() + " Got Successfully Executed");
+		extentTest.log(Status.PASS, result.getName() + " Got Successfully Executed");
 	}
 
 	@Override
@@ -66,12 +64,11 @@ public class MyListeners implements ITestListener {
 	public void onFinish(ITestContext context) {
 		extentReport.flush();
 
-		String pathOfExtentReport = System.getProperty("user.dir") + "/test-output/ExtentReports/extentReport.html";
-		File extentReport = new File(pathOfExtentReport);
+		File pathOfExtentReport = ExtentReport.getLatestReportFile();
 		// Only open the report locally, NOT in CI
 		if (System.getenv("CI") == null) {
 			try {
-				Desktop.getDesktop().browse(extentReport.toURI());
+				Desktop.getDesktop().browse(pathOfExtentReport.toURI());
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

@@ -7,13 +7,44 @@
     </listeners>
 
     <test name="Functional Tests">
+        <groups>
+            <run>
+                <include name="Login" />
+                <include name="Registration" />
+                <include name="Employer" />
+            </run>
+        </groups>
         <classes>
-            <class name="com.huntcareer.qa.testcases.Login" />
-            <class name="com.huntcareer.qa.testcases.EmployerLogin" />
-            <class name="com.huntcareer.qa.testcases.Register" />
-            <class name="com.huntcareer.qa.testcases.EmployerRegister" />
-            <class name="com.huntcareer.qa.testcases.Search" />
-            <class name="com.huntcareer.qa.testcases.EmployerJobPost" />
+            <class name="com.huntcareer.qa.testcases.Login">
+                <methods>
+                    <include name=".*" />
+                </methods>
+            </class>
+            <class name="com.huntcareer.qa.testcases.EmployerLogin">
+                <methods>
+                    <include name=".*" />
+                </methods>
+            </class>
+            <class name="com.huntcareer.qa.testcases.Register">
+                <methods>
+                    <include name=".*" />
+                </methods>
+            </class>
+            <class name="com.huntcareer.qa.testcases.EmployerRegister">
+                <methods>
+                    <include name=".*" />
+                </methods>
+            </class>
+            <class name="com.huntcareer.qa.testcases.Search">
+                <methods>
+                    <include name=".*" />
+                </methods>
+            </class>
+            <class name="com.huntcareer.qa.testcases.EmployerJobPost">
+                <methods>
+                    <include name=".*" />
+                </methods>
+            </class>
         </classes>
     </test>
 </suite>

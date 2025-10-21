@@ -35,7 +35,7 @@ public class Search extends Base {
 		driver.quit();
 	}
 	
-	@Test(priority = 1, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
+	@Test(priority = 1, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class, groups = "Search")
 	public void TC_1_verifyValidSearch() {
 
 		sp = new SearchPage(driver);
@@ -44,7 +44,7 @@ public class Search extends Base {
 		sp.getSearchTag("validSearchTerm");
 	}
 	
-	@Test(priority = 2, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
+	@Test(priority = 2, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class, groups = "Search")
 	public void TC_2_verifyInvalidSearch() {
 		sp = new SearchPage(driver);
 		sp.enterKeywordIntoSearchInputField(dataProp.getProperty("invalidSearchTerm"));
@@ -52,7 +52,7 @@ public class Search extends Base {
 		sp.getSearchTag("invalidSearchTerm");
 	}
 	
-	@Test(priority = 3, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
+	@Test(priority = 3, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class, groups = "Search")
 	public void TC_3_verifySearchWithSpecialCharcters() {
 		sp = new SearchPage(driver);
 		sp.enterKeywordIntoSearchInputField(dataProp.getProperty("specialCharctersSearchTerm"));
@@ -60,7 +60,7 @@ public class Search extends Base {
 		sp.getSearchTag("specialCharctersSearchTerm");
 	}
 	
-	@Test(priority = 4, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
+	@Test(priority = 4, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class, groups = "Search")
 	public void TC_4_verifySearchWithFilters() {
 		sp = new SearchPage(driver);
 		sp.enterKeywordIntoSearchInputField(dataProp.getProperty("validSearchTerm"));
@@ -74,7 +74,7 @@ public class Search extends Base {
 		sp.getJobTypeTag("filterJobType");
 	}
 	
-	@Test(priority = 4, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
+	@Test(priority = 4, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class, groups = {"Search", "Login"})
 	public void TC_5_Login_and_Save_the_job_and_view_the_saved_job_in_saved_jobs_page() {
 		
 	}

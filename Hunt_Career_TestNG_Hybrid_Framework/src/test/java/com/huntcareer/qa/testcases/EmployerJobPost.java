@@ -42,7 +42,7 @@ public class EmployerJobPost extends Base {
 		}
 	}
 	
-	@Test(priority = 1)
+	@Test(priority = 1, groups = "Employer")
 	public void TC_1_Create_Job_Post_With_Valid_Data() {
 		jp = new EmployerPostJobPage(driver);
 		Map<String, String> job = PostAJob.validJob();
@@ -56,7 +56,7 @@ public class EmployerJobPost extends Base {
 		jp.verifyJobPostSuccess();
 	}
 	
-	@Test(priority = 2)
+	@Test(priority = 2, groups = "Employer")
 	public void TC_2_Blank_Job_Post() {
 		jp = new EmployerPostJobPage(driver);
 		Map<String, String> job = PostAJob.blankJob();
@@ -70,7 +70,7 @@ public class EmployerJobPost extends Base {
 		jp.verifyJobTitleRequiredErrorMessage();
 	}
 	
-	@Test(priority = 3)
+	@Test(priority = 3, groups = "Employer")
 	public void TC_3_Create_Job_Post_Without_Title() {
 		jp = new EmployerPostJobPage(driver);
 		Map<String, String> job = PostAJob.withoutTitle();
@@ -84,7 +84,7 @@ public class EmployerJobPost extends Base {
 		jp.verifyJobTitleRequiredErrorMessage();
 	}
 	
-	@Test(priority = 4)
+	@Test(priority = 4, groups = "Employer")
 	public void TC_4_Create_Job_Post_Without_CompanyName() {
 		jp = new EmployerPostJobPage(driver);
 		Map<String, String> job = PostAJob.withoutCompanyName();
@@ -98,7 +98,7 @@ public class EmployerJobPost extends Base {
 		jp.verifyCompanyNameRequiredErrorMessage();
 	}
 	
-	@Test(priority = 5)
+	@Test(priority = 5, groups = "Employer")
 	public void TC_5_Create_Job_Post_Without_Description() {
 		jp = new EmployerPostJobPage(driver);
 		Map<String, String> job = PostAJob.withoutDescription();
@@ -112,7 +112,7 @@ public class EmployerJobPost extends Base {
 		jp.verifyDescriptionRequiredErrorMessage();
 	}
 	
-	@Test(priority = 6)
+	@Test(priority = 6, groups = "Employer")
 	public void TC_6_Create_Job_Post_Without_Location() {
 		jp = new EmployerPostJobPage(driver);
 		Map<String, String> job = PostAJob.withoutLocation();
