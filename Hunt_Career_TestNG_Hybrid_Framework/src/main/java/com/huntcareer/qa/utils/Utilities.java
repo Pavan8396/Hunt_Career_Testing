@@ -3,7 +3,6 @@ package com.huntcareer.qa.utils;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Random;
@@ -44,64 +43,64 @@ public class Utilities {
 
 		switch (type) {
 
-			case "plainEmail":
-				return genarateEmailTimeStamp();
-			case "noLocalPart":
-				return "@mailinator.com";
-			case "localPartOnly":
-				return genarateEmailTimeStamp() + "@";
-			case "doubleAt":
-				return "u@" + genarateEmailTimeStamp() + "@mailinator.com";
-			case "withoutTopLevelDomain":
-				return genarateEmailTimeStamp() + "@mailinator";
-			case "tailingWithDot":
-				return genarateEmailTimeStamp() + "@mailinator.";
-			case "topLevelDomainTooShort":
-				return genarateEmailTimeStamp() + "@mailinator.c";
-			case "domainStartsWithHyphen":
-				return genarateEmailTimeStamp() + "@-mailinator.com";
-			case "doubleDotInDomain":
-				return genarateEmailTimeStamp() + "@mailinator..com";
-			case "noAtTheRate":
-				return genarateEmailTimeStamp() + "#mailinator.com";
-			case "illegalChars":
-				return genarateEmailTimeStamp() + "<>@mailinator.com";
-			case "twoConsicutiveDots":
-				return "u.." + genarateEmailTimeStamp() + "@mailinator.com";
-			case "dotAtBeginning":
-				return "." + genarateEmailTimeStamp() + "@mailinator.com";
-			case "withQuotation":
-				return "\"" + genarateEmailTimeStamp() + "@mailinator.com" + "\"";
-			case "unclosedQuotation":
-				return "\"" + genarateEmailTimeStamp() + "@mailinator.com";
-			case "veryLengthyLocal":
-				return "verylonglocalpartthatexceedstheusuallimitstoverifythelimitdoesitexceedornotbyaddingverylongcharacters@example.com";
-			case "veryLengthyDomain":
-				return "example@verylonglocalpartthatexceedstheusuallimitstoverifythelimitdoesitexceedornotbyaddingverylongcharacters.com";
-			case "veryLenghtyTLD":
-				return genarateEmailTimeStamp()
-						+ "@example.verylonglocalpartthatexceedstheusuallimitstoverifythelimitdoesitexceedornotbyaddingverylongcharacters";
-			case "missingSecondLevelDomain":
-				return genarateEmailTimeStamp() + "com";
-			case "withComma":
-				return genarateEmailTimeStamp() + "@mailinator,com";
-			case "doubleConsicutiveAt":
-				return genarateEmailTimeStamp() + "@@mailinator.com";
-			case "underscoreInTLD":
-				return genarateEmailTimeStamp() + "@mailinator.c_m";
-			case "dotBetweenName":
-				return "u." + genarateEmailTimeStamp() + ".s@mailinator.com";
-			case "spaceBeforeName":
-				return "" + genarateEmailTimeStamp() + "@mailinator.com";
-			case "spaceAfterName":
-				return genarateEmailTimeStamp() + "@mailinator.com" + "";
-			case "dotBeforeAt":
-				return genarateEmailTimeStamp() + ".@mailinator.com";
-			case "withoutDomain":
-				return genarateEmailTimeStamp() + "@.com";
+		case "plainEmail":
+			return genarateEmailTimeStamp();
+		case "noLocalPart":
+			return "@mailinator.com";
+		case "localPartOnly":
+			return genarateEmailTimeStamp() + "@";
+		case "doubleAt":
+			return "u@" + genarateEmailTimeStamp() + "@mailinator.com";
+		case "withoutTopLevelDomain":
+			return genarateEmailTimeStamp() + "@mailinator";
+		case "tailingWithDot":
+			return genarateEmailTimeStamp() + "@mailinator.";
+		case "topLevelDomainTooShort":
+			return genarateEmailTimeStamp() + "@mailinator.c";
+		case "domainStartsWithHyphen":
+			return genarateEmailTimeStamp() + "@-mailinator.com";
+		case "doubleDotInDomain":
+			return genarateEmailTimeStamp() + "@mailinator..com";
+		case "noAtTheRate":
+			return genarateEmailTimeStamp() + "#mailinator.com";
+		case "illegalChars":
+			return genarateEmailTimeStamp() + "<>@mailinator.com";
+		case "twoConsicutiveDots":
+			return "u.." + genarateEmailTimeStamp() + "@mailinator.com";
+		case "dotAtBeginning":
+			return "." + genarateEmailTimeStamp() + "@mailinator.com";
+		case "withQuotation":
+			return "\"" + genarateEmailTimeStamp() + "@mailinator.com" + "\"";
+		case "unclosedQuotation":
+			return "\"" + genarateEmailTimeStamp() + "@mailinator.com";
+		case "veryLengthyLocal":
+			return "verylonglocalpartthatexceedstheusuallimitstoverifythelimitdoesitexceedornotbyaddingverylongcharacters@example.com";
+		case "veryLengthyDomain":
+			return "example@verylonglocalpartthatexceedstheusuallimitstoverifythelimitdoesitexceedornotbyaddingverylongcharacters.com";
+		case "veryLenghtyTLD":
+			return genarateEmailTimeStamp()
+					+ "@example.verylonglocalpartthatexceedstheusuallimitstoverifythelimitdoesitexceedornotbyaddingverylongcharacters";
+		case "missingSecondLevelDomain":
+			return genarateEmailTimeStamp() + "com";
+		case "withComma":
+			return genarateEmailTimeStamp() + "@mailinator,com";
+		case "doubleConsicutiveAt":
+			return genarateEmailTimeStamp() + "@@mailinator.com";
+		case "underscoreInTLD":
+			return genarateEmailTimeStamp() + "@mailinator.c_m";
+		case "dotBetweenName":
+			return "u." + genarateEmailTimeStamp() + ".s@mailinator.com";
+		case "spaceBeforeName":
+			return "" + genarateEmailTimeStamp() + "@mailinator.com";
+		case "spaceAfterName":
+			return genarateEmailTimeStamp() + "@mailinator.com" + "";
+		case "dotBeforeAt":
+			return genarateEmailTimeStamp() + ".@mailinator.com";
+		case "withoutDomain":
+			return genarateEmailTimeStamp() + "@.com";
 
-			default:
-				return genarateEmailTimeStamp() + "@mailinator.com";
+		default:
+			return genarateEmailTimeStamp() + "@mailinator.com";
 		}
 	}
 
@@ -164,17 +163,17 @@ public class Utilities {
 				CellType cellType = cell.getCellType();
 
 				switch (cellType) {
-					case STRING:
-						data[i][j] = cell.getStringCellValue();
-						break;
-					case NUMERIC:
-						data[i][j] = Integer.toString((int) cell.getNumericCellValue());
-						break;
-					case BOOLEAN:
-						data[i][j] = cell.getBooleanCellValue();
-						break;
-					default:
-						break;
+				case STRING:
+					data[i][j] = cell.getStringCellValue();
+					break;
+				case NUMERIC:
+					data[i][j] = Integer.toString((int) cell.getNumericCellValue());
+					break;
+				case BOOLEAN:
+					data[i][j] = cell.getBooleanCellValue();
+					break;
+				default:
+					break;
 				}
 			}
 		}
@@ -182,19 +181,14 @@ public class Utilities {
 	}
 
 	public static String captureScreenshot(WebDriver driver, String testName) {
-		if (driver == null) {
-			System.err.println("[WARNING] WebDriver is null, skipping screenshot for test: " + testName);
-			return null;
-		}
 		File srcSreenShot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
-		String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-		String destinationPath = System.getProperty("user.dir") + "/test-output/Screenshots/" + testName + "_"
-				+ timestamp + ".png";
+		String destinationScreenshotPath = System.getProperty("user.dir") + "/Screenshots/" + testName + ".png";
 		try {
-			FileHandler.copy(srcSreenShot, new File(destinationPath));
+			FileHandler.copy(srcSreenShot, new File(destinationScreenshotPath));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return destinationPath;
+		return destinationScreenshotPath;
 	}
+
 }

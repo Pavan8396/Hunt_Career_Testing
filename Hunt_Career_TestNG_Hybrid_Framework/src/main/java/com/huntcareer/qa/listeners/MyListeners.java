@@ -17,83 +17,64 @@ import com.huntcareer.qa.utils.ExtentReport;
 import com.huntcareer.qa.utils.Utilities;
 
 public class MyListeners implements ITestListener {
+	ExtentReports extentReport;
+	ExtentTest extentTest;
 
-    private ExtentReports extentReport;
-    private static ThreadLocal<ExtentTest> parentTest = new ThreadLocal<>();
-    private static ThreadLocal<ExtentTest> childTest = new ThreadLocal<>();
+	@Override
+	public void onStart(ITestContext context) {
+		extentReport = ExtentReport.generateExtentReport();
+	}
 
-    @Override
-    public void onStart(ITestContext context) {
-        extentReport = ExtentReport.generateExtentReport();
-    }
+	@Override
+	public void onTestStart(ITestResult result) {
+		extentTest = extentReport.createTest(result.getName());
+		extentTest.log(Status.INFO, result.getName() + " Stated Executing");
+	}
 
-    @Override
-    public void onTestStart(ITestResult result) {
-        String className = result.getTestClass().getName();
-        String methodName = result.getName();
+	@Override
+	public void onTestSuccess(ITestResult result) {
+		ITestContext context = result.getTestContext();
+		context.getFailedTests().removeResult(result.getMethod());
+		extentTest.log(Status.INFO, result.getName() + " Got Successfully Executed");
+	}
 
-        // Group info (TestNG @Test groups)
-        String[] groups = result.getMethod().getGroups();
-        String groupLabel = (groups.length > 0) ? String.join(", ", groups) : "Ungrouped";
+	@Override
+	public void onTestFailure(ITestResult result) {
+		WebDriver driver = null;
+		try {
+			Field field = result.getTestClass().getRealClass().getDeclaredField("driver");
+			field.setAccessible(true);
+			driver = (WebDriver) field.get(result.getInstance());
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
 
-        // Create parent node per class (only once)
-        ExtentTest parent = parentTest.get();
-        if (parent == null || !parent.getModel().getName().equals(className)) {
-            parent = extentReport.createTest(className)
-                                 .assignCategory(groupLabel);
-            parentTest.set(parent);
-        }
+		String destinationScreenshotPath = Utilities.captureScreenshot(driver, result.getName());
 
-        // Create child test node under the parent class node
-        ExtentTest child = parent.createNode(methodName)
-                                 .assignCategory(groupLabel);
-        child.log(Status.INFO, methodName + " started executing");
-        childTest.set(child);
-    }
+		extentTest.addScreenCaptureFromPath(destinationScreenshotPath);
+		extentTest.log(Status.INFO, result.getThrowable());
+		extentTest.log(Status.FAIL, result.getName() + " got failed");
+	}
 
-    @Override
-    public void onTestSuccess(ITestResult result) {
-        childTest.get().log(Status.PASS, result.getName() + " passed ✅");
-    }
+	@Override
+	public void onTestSkipped(ITestResult result) {
+		extentTest.log(Status.SKIP, result.getName() + " Test got skipped");
+		extentTest.log(Status.INFO, result.getThrowable());
+	}
 
-    @Override
-    public void onTestFailure(ITestResult result) {
-        WebDriver driver = null;
-        try {
-            Field field = result.getTestClass().getRealClass().getDeclaredField("driver");
-            field.setAccessible(true);
-            driver = (WebDriver) field.get(result.getInstance());
-        } catch (Throwable e) {
-            e.printStackTrace();
-        }
+	@Override
+	public void onFinish(ITestContext context) {
+		extentReport.flush();
 
-        String screenshotPath = Utilities.captureScreenshot(driver, result.getName());
-        childTest.get().addScreenCaptureFromPath(screenshotPath);
-        childTest.get().log(Status.FAIL, "❌ " + result.getName() + " failed");
-        childTest.get().log(Status.INFO, result.getThrowable());
-    }
-
-    @Override
-    public void onTestSkipped(ITestResult result) {
-        childTest.get().log(Status.SKIP, "⚠️ " + result.getName() + " skipped");
-        if (result.getThrowable() != null)
-            childTest.get().log(Status.INFO, result.getThrowable());
-    }
-
-    @Override
-    public void onFinish(ITestContext context) {
-        extentReport.flush();
-        File reportFile = ExtentReport.getLatestReportFile();
-
-        if (System.getenv("CI") == null && reportFile != null && reportFile.exists()) {
-            try {
-                Desktop.getDesktop().browse(reportFile.toURI());
-                System.out.println("✅ Opened latest report: " + reportFile.getAbsolutePath());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else {
-            System.out.println("ℹ️ Report not opened (running in CI or file missing).");
-        }
-    }
+		String pathOfExtentReport = System.getProperty("user.dir") + "/test-output/ExtentReports/extentReport.html";
+		File extentReport = new File(pathOfExtentReport);
+		// Only open the report locally, NOT in CI
+		if (System.getenv("CI") == null) {
+			try {
+				Desktop.getDesktop().browse(extentReport.toURI());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 }

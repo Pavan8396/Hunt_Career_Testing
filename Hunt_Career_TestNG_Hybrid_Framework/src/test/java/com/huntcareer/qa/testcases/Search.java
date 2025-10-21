@@ -35,7 +35,7 @@ public class Search extends Base {
 		driver.quit();
 	}
 	
-	@Test(priority = 1, groups = "Functional", retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
+	@Test(priority = 1, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TC_1_verifyValidSearch() {
 
 		sp = new SearchPage(driver);
@@ -44,23 +44,23 @@ public class Search extends Base {
 		sp.getSearchTag("validSearchTerm");
 	}
 	
-	@Test(priority = 2, groups = "Functional", retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
+	@Test(priority = 2, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TC_2_verifyInvalidSearch() {
 		sp = new SearchPage(driver);
 		sp.enterKeywordIntoSearchInputField(dataProp.getProperty("invalidSearchTerm"));
 		sp.clickOnSearch();
 		sp.getSearchTag("invalidSearchTerm");
 	}
-
-	@Test(priority = 3, groups = "Functional", retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-	public void TC_3_verifySearchWithSpecialCharacters() {
+	
+	@Test(priority = 3, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
+	public void TC_3_verifySearchWithSpecialCharcters() {
 		sp = new SearchPage(driver);
 		sp.enterKeywordIntoSearchInputField(dataProp.getProperty("specialCharctersSearchTerm"));
 		sp.clickOnSearch();
 		sp.getSearchTag("specialCharctersSearchTerm");
 	}
 	
-	@Test(priority = 4, groups = "Functional", retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
+	@Test(priority = 4, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TC_4_verifySearchWithFilters() {
 		sp = new SearchPage(driver);
 		sp.enterKeywordIntoSearchInputField(dataProp.getProperty("validSearchTerm"));
@@ -74,7 +74,7 @@ public class Search extends Base {
 		sp.getJobTypeTag("filterJobType");
 	}
 	
-	@Test(priority = 5, groups = "Functional", retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
+	@Test(priority = 4, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TC_5_Login_and_Save_the_job_and_view_the_saved_job_in_saved_jobs_page() {
 		
 	}
