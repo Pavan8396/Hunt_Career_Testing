@@ -9,23 +9,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
-/**
- * AdvancedReportGenerator
- * - Reads JSON run files from test-output/ReportsHistory/
- * - Builds a single polished merged dashboard HTML containing:
- * - Global summary
- * - Per-class doughnut charts and duration bars
- * - Collapsible test logs with screenshot links
- * - Multi-run trend charts (Pass%, Fail%, Avg Duration)
- * - Link & iframe to ExtentReport (if present)
- *
- * Expected JSON structure per run: a list of objects with fields:
- * { "className":"...", "testName":"...", "status":"PASS"|"FAIL"|"SKIP",
- * "duration":123, "screenshotPath":"..." }
- *
- * The listener should save each run to
- * test-output/ReportsHistory/ReportData_<timestamp>.json
- */
 public class AdvancedReportGenerator {
 
     private static final String REPORTS_HISTORY_DIR = System.getProperty("user.dir") + "/test-output/ReportsHistory/";
@@ -82,11 +65,6 @@ public class AdvancedReportGenerator {
                 }
             }
 
-            // If no historical runs, still try to include current Extent JSON if available
-            // (should be saved by listener)
-            // Build aggregated current run if present as last run
-            // Prepare aggregated current run (if no runs, we will produce an empty
-            // dashboard)
             RunData currentRun = runs.isEmpty() ? null : runs.get(runs.size() - 1);
 
             // Build HTML
@@ -131,7 +109,7 @@ public class AdvancedReportGenerator {
 
         sb.append(
                 "<!doctype html><html><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'>");
-        sb.append("<title>Hunt Career - Merged Test Dashboard</title>");
+        sb.append("<title>Hunt Career - Test Report Dashboard</title>");
         // Chart.js
         sb.append("<script src='https://cdn.jsdelivr.net/npm/chart.js'></script>");
 
@@ -200,8 +178,7 @@ public class AdvancedReportGenerator {
         sb.append("<div class='container'>");
         sb.append("<div class='header'>");
         sb.append("<div class='title'>");
-        sb.append("<h1>Hunt Career — Merged Test Dashboard</h1>");
-        sb.append("<p>Interactive test analytics combining Extent Reports, class-level results, and trends</p>");
+        sb.append("<h1>Hunt Career — Test Report Dashboard</h1>");
         sb.append("</div>");
         sb.append("<div class='controls'>");
 
@@ -242,7 +219,7 @@ public class AdvancedReportGenerator {
         // Summary card
         sb.append("<div class='grid'>");
         sb.append("<div class='card'>");
-        sb.append("<h2>Current Run Summary</h2>");
+        sb.append("<h2>Run Summary</h2>");
         sb.append("<div class='summary'>");
         sb.append(statBlock("Total Tests", String.valueOf(totalTests)));
         sb.append(statBlock("Passed", String.valueOf(passed), "badge-pass"));
@@ -260,7 +237,7 @@ public class AdvancedReportGenerator {
 
         // Multi-run trend card (pass% / fail% / avg duration)
         sb.append("<div class='card chart-wide'>");
-        sb.append("<h2>Trends Across Runs</h2>");
+        sb.append("<h2>Trends</h2>");
         sb.append("<canvas id='trendChart' style='width:100%;height:320px;'></canvas>");
         sb.append("</div>");
 
@@ -268,7 +245,7 @@ public class AdvancedReportGenerator {
 
         // Per-class section (grouped)
         sb.append("<div style='margin-top:20px;'>");
-        sb.append("<h2 style='color:var(--accent);'>Per-class Details</h2>");
+        sb.append("<h2 style='color:var(--accent);'>Class Details</h2>");
         sb.append("<div class='grid'>");
 
         // If no runs, skip per-class
@@ -311,7 +288,7 @@ public class AdvancedReportGenerator {
                         .append("' style='height:300px !important; width:100%;'></canvas></div>");
 
                 // Collapsible logs
-                sb.append("<button class='collapsible'>Toggle Test Logs</button>");
+                sb.append("<button class='collapsible'>Test Logs</button>");
                 sb.append("<div class='content'><table>");
                 sb.append(
                         "<thead><tr><th>Test</th><th>Status</th><th>Duration (ms)</th><th>Screenshot</th></tr></thead><tbody>");
@@ -339,15 +316,15 @@ public class AdvancedReportGenerator {
 
         // ExtentReport iframe (merged view)
         sb.append("<div class='card iframe-wrap'>");
-        sb.append("<h2>Extent Report (embedded)</h2>");
+        sb.append("<h2>Extent Report</h2>");
         if (extentFile.exists()) {
             String relPath = relativePathForHtml(EXTENT_REPORT_PATH);
             // Fallback if relative fails or file not accessible
             if (!new File(EXTENT_REPORT_PATH).exists()) {
                 relPath = "file:///" + EXTENT_REPORT_PATH.replace("\\", "/");
             }
-            sb.append("<p class='small'>Extent report is embedded below. "
-                    + "If it doesn’t display, click 'Open Extent Report' above.</p>");
+            sb.append("<p class='small'>click 'Open Extent Report' above. "
+                    + "If you want to view the detailed report</p>");
             sb.append("<iframe src='").append(relPath)
                     .append("' sandbox='allow-same-origin allow-popups allow-forms'></iframe>");
         } else {
@@ -406,10 +383,7 @@ public class AdvancedReportGenerator {
         sb.append(
                 "]},options:{responsive:true,interaction:{mode:'index',intersect:false},scales:{x:{ticks:{color:'#ccc',callback:function(val,idx){const label=this.getLabelForValue(val);return label.length>15?label.substring(0,15)+'...':label;}}},y:{type:'linear',position:'left',ticks:{color:'#ccc'}},yDur:{type:'linear',position:'right',ticks:{color:'#ccc'},grid:{display:false}}},plugins:{legend:{labels:{color:'#ccc'}},tooltip:{callbacks:{title:function(ctx){return ctx[0].chart.data.labels[ctx[0].dataIndex];}}}}}});");
 
-        // Per-class charts: we need to create unique chart scripts for each class shown
-        // above.
-        // Recreate the class map (from latest) to produce arrays in the same order as
-        // rendered.
+        // Per-class charts
         if (latest != null) {
             Map<String, List<TestRecord>> classMap = new LinkedHashMap<>();
             for (TestRecord t : latest.tests)
@@ -512,10 +486,7 @@ public class AdvancedReportGenerator {
             return "";
         return s.replace("\\", "\\\\").replace("'", "\\'");
     }
-
-    // Convert absolute file paths to relative paths usable in HTML opened locally.
-    // For local file links, browsers use file:/// — but relative path from HTML
-    // file is fine.
+    
     private static String relativePathForHtml(String absPath) {
         try {
             Path htmlRoot = Paths.get(System.getProperty("user.dir"), "test-output").toAbsolutePath();

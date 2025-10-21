@@ -18,11 +18,11 @@ public class EmployerJobPost extends Base {
 	EmployerPostJobPage jp;
 	LandingPage ldp;
 	EmployerLoginPage elp;
-	
+
 	public EmployerJobPost() {
 		super();
 	}
-	
+
 	@BeforeMethod
 	public void setup() {
 		driver = inicializeBrowserAndOpenApplication(prop.getProperty("browser"));
@@ -34,15 +34,15 @@ public class EmployerJobPost extends Base {
 		elp.enterPassword(dataProp.getProperty("EmployervalidPassword"));
 		elp.clickLoginButton();
 	}
-	
+
 	@AfterMethod
 	public void tearDown() {
-		if (driver!=null) {
+		if (driver != null) {
 			driver.quit();
 		}
 	}
-	
-	@Test(priority = 1)
+
+	@Test(priority = 1, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TC_1_Create_Job_Post_With_Valid_Data() {
 		jp = new EmployerPostJobPage(driver);
 		Map<String, String> job = PostAJob.validJob();
@@ -55,8 +55,8 @@ public class EmployerJobPost extends Base {
 		jp.clickPostJobSubmitButton();
 		jp.verifyJobPostSuccess();
 	}
-	
-	@Test(priority = 2)
+
+	@Test(priority = 2, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TC_2_Blank_Job_Post() {
 		jp = new EmployerPostJobPage(driver);
 		Map<String, String> job = PostAJob.blankJob();
@@ -68,5 +68,79 @@ public class EmployerJobPost extends Base {
 		jp.selectJobTypeOption();
 		jp.clickPostJobSubmitButton();
 		jp.verifyJobTitleRequiredErrorMessage();
+	}
+
+	@Test(priority = 3, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
+	public void TC_3_No_Title_Job_Post() {
+		jp = new EmployerPostJobPage(driver);
+		Map<String, String> job = PostAJob.noTitle();
+		jp.clickPostAJobNavigationButton();
+		jp.enterJobTitle(job.get("title"));
+		jp.enterCompanyName(job.get("companyName"));
+		jp.enterDescription(job.get("description"));
+		jp.enterLocation(job.get("location"));
+		jp.selectJobTypeOption();
+		jp.clickPostJobSubmitButton();
+		jp.verifyJobTitleRequiredErrorMessage();
+	}
+
+	@Test(priority = 4, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
+	public void TC_4_No_Company_Name_Job_Post() {
+		jp = new EmployerPostJobPage(driver);
+		Map<String, String> job = PostAJob.noCompanyName();
+		jp.clickPostAJobNavigationButton();
+		jp.enterJobTitle(job.get("title"));
+		jp.enterCompanyName(job.get("companyName"));
+		jp.enterDescription(job.get("description"));
+		jp.enterLocation(job.get("location"));
+		jp.selectJobTypeOption();
+		jp.clickPostJobSubmitButton();
+		jp.verifyCompanyNameRequiredErrorMessage();
+	}
+
+	@Test(priority = 5, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
+	public void TC_5_No_Description_Job_Post() {
+		jp = new EmployerPostJobPage(driver);
+		Map<String, String> job = PostAJob.noDescription();
+		jp.clickPostAJobNavigationButton();
+		jp.enterJobTitle(job.get("title"));
+		jp.enterCompanyName(job.get("companyName"));
+		jp.enterDescription(job.get("description"));
+		jp.enterLocation(job.get("location"));
+		jp.selectJobTypeOption();
+		jp.clickPostJobSubmitButton();
+		jp.verifyDescriptionRequiredErrorMessage();
+	}
+
+	@Test(priority = 6, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
+	public void TC_6_No_Job_Location_Job_Post() {
+		jp = new EmployerPostJobPage(driver);
+		Map<String, String> job = PostAJob.noLocation();
+		jp.clickPostAJobNavigationButton();
+		jp.enterJobTitle(job.get("title"));
+		jp.enterCompanyName(job.get("companyName"));
+		jp.enterDescription(job.get("description"));
+		jp.enterLocation(job.get("location"));
+		jp.selectJobTypeOption();
+		jp.clickPostJobSubmitButton();
+		jp.verifyLocationRequiredErrorMessage();
+	}
+
+	@Test(priority = 7, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
+	public void TC_7_Duplicate_Job_Post() {
+		jp = new EmployerPostJobPage(driver);
+		for (int i = 1; i <= 2; i++) {
+			System.out.println("Running duplicate job post iteration: " + i);
+
+			Map<String, String> job = PostAJob.duplicateJobPost();
+			jp.clickPostAJobNavigationButton();
+			jp.enterJobTitle(job.get("title"));
+			jp.enterCompanyName(job.get("companyName"));
+			jp.enterDescription(job.get("description"));
+			jp.enterLocation(job.get("location"));
+			jp.selectJobTypeOption();
+			jp.clickPostJobSubmitButton();
+			jp.verifyJobPostSuccess();
+		}
 	}
 }

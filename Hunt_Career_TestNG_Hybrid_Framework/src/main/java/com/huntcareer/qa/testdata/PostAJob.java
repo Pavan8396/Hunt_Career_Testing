@@ -25,4 +25,54 @@ public class PostAJob {
 		data.put("jobType", "");
 		return data;
 	}
+
+	public static Map<String, String> noTitle(){
+		Map<String, String> data = new HashMap<>();
+		data.put("title", "");
+		data.put("companyName", Utilities.getCompanyName());
+		data.put("description", Utilities.generateRandomJobDescription());
+		data.put("location", Utilities.generateRandomLocation());
+		data.put("jobType", Utilities.getRandomJobType());
+		return data;
+	}
+
+	public static Map<String, String> noCompanyName(){
+		Map<String, String> data = new HashMap<>();
+		data.put("title", Utilities.generateRandomJobNames());
+		data.put("companyName", "");
+		data.put("description", Utilities.generateRandomJobDescription());
+		data.put("location", Utilities.generateRandomLocation());
+		data.put("jobType", Utilities.getRandomJobType());
+		return data;
+	}
+
+	public static Map<String, String> noDescription(){
+		Map<String, String> data = new HashMap<>();
+		data.put("title", Utilities.generateRandomJobNames());
+		data.put("companyName", Utilities.getCompanyName());
+		data.put("description", "");
+		data.put("location", Utilities.generateRandomLocation());
+		data.put("jobType", Utilities.getRandomJobType());
+		return data;
+	}
+
+	public static Map<String, String> noLocation(){
+		Map<String, String> data = new HashMap<>();
+		data.put("title", Utilities.generateRandomJobNames());
+		data.put("companyName", Utilities.getCompanyName());
+		data.put("description", Utilities.generateRandomJobDescription());
+		data.put("location", "");
+		data.put("jobType", Utilities.getRandomJobType());
+		return data;
+	}
+
+	public static Map<String, String> duplicateJobPost(){
+		Map<String, String> data = new HashMap<>();
+		data.put("title", "QA Engineer");
+		data.put("companyName", "Tech Solutions Inc");
+		data.put("description", "We are looking for a QA Engineer to join our team.");
+		data.put("location", "New York");
+		data.put("jobType", "Full-time");
+		return data;
+	}
 }
