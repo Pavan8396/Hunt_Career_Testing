@@ -61,7 +61,7 @@ public class AdvancedReportGenerator {
                 // Reload the file list after deletion
                 jsonFiles = historyDir.listFiles((dir, name) -> name.toLowerCase().endsWith(".json"));
                 if (jsonFiles == null) {
-                   jsonFiles = new File[0];
+                    jsonFiles = new File[0];
                 }
                 Arrays.sort(jsonFiles, Comparator.comparingLong(File::lastModified));
             }
@@ -165,7 +165,7 @@ public class AdvancedReportGenerator {
         sb.append(
                 ".card{background:var(--card);padding:24px;border-radius:12px;border:1px solid var(--border-color);box-shadow:0 8px 24px rgba(1,4,9,0.5);} ");
         sb.append(
-                ".chart-container{width:100%;height:240px !important;margin-top:16px;} .duration-chart-wrapper{max-height:500px;overflow-y:auto;margin-top:16px;} ");
+                ".chart-container{width:100%;height:240px !important;margin-top:16px;} .duration-chart-wrapper{overflow-x:auto;height:300px;margin-top:16px;} ");
         sb.append(
                 ".summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:20px;} ");
         sb.append(
@@ -173,13 +173,19 @@ public class AdvancedReportGenerator {
         sb.append(
                 ".class-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;} .class-header h3{margin:0;color:var(--accent);font-size:18px;} ");
         sb.append(
-                ".collapsible{background:#0d1117;border:1px solid var(--border-color);padding:10px 14px;border-radius:8px;color:var(--muted);cursor:pointer;width:100%;text-align:left;margin-top:16px;transition:all 0.2s;font-size:13px;} ");
+                ".collapsible{background:#0d1117;border:1px solid var(--border-color);padding:10px 14px;border-radius:8px;color:var(--muted);cursor:pointer;width:100%;text-align:left;margin-top:16px;transition:all 0.2s;font-size:12px;} ");
         sb.append(
                 ".collapsible:hover{background:#161b22;color:#fff;} ");
         sb.append(
-                ".content{display:none;padding-top:16px;overflow-y:auto;max-height:400px;} table{width:100%;border-collapse:collapse;table-layout:fixed;} th,td{padding:10px;text-align:left;border-bottom:1px solid var(--border-color);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:13px;} th{font-weight:600;} ");
+                ".content{display:none;padding-top:16px;overflow-y:auto;max-height:400px;}" +
+                        "table{width:100%;border-collapse:collapse;table-layout:fixed;}" +
+                        "th,td{padding:12px 10px;text-align:left;border-bottom:1px solid var(--border-color);" +
+                        "white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}" +
+                        ".content table th, .content table td{font-size:12px !important;padding:6px 8px;}" +
+                        "th{font-weight:600;}");
+
         sb.append(
-                "th:first-child,td:first-child{width:60%;} td:first-child{cursor:pointer;} td:first-child:hover{text-decoration:underline;} ");
+                "th:first-child,td:first-child{width:50%;} th:nth-child(2),td:nth-child(2){width:20%;} th:nth-child(3),td:nth-child(3){width:20%;} th:nth-child(4),td:nth-child(4){width:10%;} td:first-child{cursor:pointer;} td:first-child:hover{text-decoration:underline;} ");
         sb.append(
                 ".badge{padding:6px 10px;border-radius:16px;font-weight:600;font-size:12px;} .badge-pass{background:rgba(63,185,80,0.15);color:var(--success);} .badge-fail{background:rgba(248,81,73,0.15);color:var(--danger);} .badge-skip{background:rgba(210,153,34,0.15);color:var(--warn);} ");
         sb.append(
@@ -302,7 +308,7 @@ public class AdvancedReportGenerator {
                 // Charts
                 sb.append("<canvas id='classChart-").append(classIndex).append("' class='chart-container'></canvas>");
                 sb.append("<div class='duration-chart-wrapper'><canvas id='classDurChart-").append(classIndex)
-                        .append("' style='height:").append(Math.max(240, tests.size() * 25)).append("px !important;'></canvas></div>");
+                        .append("' style='height:300px !important; width:100%;'></canvas></div>");
 
                 // Collapsible logs
                 sb.append("<button class='collapsible'>Toggle Test Logs</button>");
@@ -436,7 +442,7 @@ public class AdvancedReportGenerator {
                 sb.append("new Chart(document.getElementById('classDurChart-").append(ci)
                         .append("'),{type:'bar',data:{labels:[").append(jsStringArrayFromList(names))
                         .append("],datasets:[{label:'Duration(ms)',data:[").append(jsNumberArrayFromListLong(durs))
-                        .append("],backgroundColor:'#00bcd4'}]},options:{indexAxis:'y',plugins:{legend:{display:false},tooltip:{callbacks:{title:function(ctx){return ctx[0].label;}}}},scales:{y:{ticks:{color:'#ccc',callback:function(val,idx){const label=this.getLabelForValue(val);return label.length>40?'...'+label.substring(label.length-37):label;}}},x:{beginAtZero:true,ticks:{color:'#ccc'}}}}});");
+                        .append("],backgroundColor:'#00bcd4'}]},options:{plugins:{legend:{display:false},tooltip:{callbacks:{title:function(ctx){return ctx[0].label;}}}},scales:{x:{ticks:{display:false}},y:{beginAtZero:true,ticks:{color:'#ccc'}}}}});");
 
                 ci++;
             }
