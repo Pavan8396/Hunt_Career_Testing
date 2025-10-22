@@ -376,15 +376,13 @@ public class AdvancedReportGenerator {
             int tcount = r.tests.size();
             if (tcount == 0)
                 continue;
-            int p = 0, f = 0, s = 0;
+            int p = 0, f = 0;
             long sumDur = 0;
             for (TestRecord tr : r.tests) {
                 if ("PASS".equals(tr.status))
                     p++;
                 else if ("FAIL".equals(tr.status))
                     f++;
-                else
-                    s++;
                 sumDur += tr.duration;
             }
             double passPct = (p * 100.0) / tcount;
