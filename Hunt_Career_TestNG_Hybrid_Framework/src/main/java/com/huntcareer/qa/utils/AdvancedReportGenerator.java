@@ -94,7 +94,8 @@ public class AdvancedReportGenerator {
             if (m.get("duration") instanceof Number)
                 duration = ((Number) m.get("duration")).longValue();
             String screenshot = m.get("screenshotPath") == null ? "" : safeToString(m.get("screenshotPath"));
-            run.tests.add(new TestRecord(className, testName, status, duration, screenshot));
+            boolean flaky = m.get("flaky") != null && (Boolean) m.get("flaky");
+            run.tests.add(new TestRecord(className, testName, status, duration, screenshot, flaky));
         }
         return run;
     }
@@ -165,7 +166,7 @@ public class AdvancedReportGenerator {
         sb.append(
                 "th:first-child,td:first-child{width:50%;} th:nth-child(2),td:nth-child(2){width:20%;} th:nth-child(3),td:nth-child(3){width:20%;} th:nth-child(4),td:nth-child(4){width:10%;} td:first-child{cursor:pointer;} td:first-child:hover{text-decoration:underline;} ");
         sb.append(
-                ".badge{padding:6px 10px;border-radius:16px;font-weight:600;font-size:12px;} .badge-pass{background:rgba(63,185,80,0.15);color:var(--success);} .badge-fail{background:rgba(248,81,73,0.15);color:var(--danger);} .badge-skip{background:rgba(210,153,34,0.15);color:var(--warn);} ");
+                ".badge{padding:6px 10px;border-radius:16px;font-weight:600;font-size:12px;} .badge-pass{background:rgba(63,185,80,0.15);color:var(--success);} .badge-fail{background:rgba(248,81,73,0.15);color:var(--danger);} .badge-skip{background:rgba(210,153,34,0.15);color:var(--warn);} .badge-flaky{background:rgba(255,165,0,0.15);color:#FFA500;} .badge-blocked{background:rgba(139,148,158,0.15);color:#8b949e;}");
         sb.append(
                 "canvas{max-height:280px !important;} ");
         sb.append(
@@ -196,12 +197,15 @@ public class AdvancedReportGenerator {
 
         // Top summary: use latest run if available
         RunData latest = runs.isEmpty() ? null : runs.get(runs.size() - 1);
-        int totalTests = 0, passed = 0, failed = 0, skipped = 0;
+        int totalTests = 0, passed = 0, failed = 0, skipped = 0, flaky = 0, blocked = 0;
         long totalDuration = 0;
         if (latest != null) {
             for (TestRecord tr : latest.tests) {
                 totalTests++;
                 totalDuration += tr.duration;
+                if (tr.flaky) {
+                    flaky++;
+                }
                 switch (tr.status) {
                     case "PASS":
                         passed++;
@@ -211,6 +215,9 @@ public class AdvancedReportGenerator {
                         break;
                     case "SKIP":
                         skipped++;
+                        break;
+                    case "BLOCKED":
+                        blocked++;
                         break;
                 }
             }
@@ -225,6 +232,8 @@ public class AdvancedReportGenerator {
         sb.append(statBlock("Passed", String.valueOf(passed), "badge-pass"));
         sb.append(statBlock("Failed", String.valueOf(failed), "badge-fail"));
         sb.append(statBlock("Skipped", String.valueOf(skipped), "badge-skip"));
+        sb.append(statBlock("Flaky", String.valueOf(flaky), "badge-flaky"));
+        sb.append(statBlock("Blocked", String.valueOf(blocked), "badge-blocked"));
         sb.append(statBlock("Total Time (ms)", String.valueOf(totalDuration)));
         sb.append("</div>"); // summary
         if (latest != null) {
@@ -262,14 +271,19 @@ public class AdvancedReportGenerator {
             for (Map.Entry<String, List<TestRecord>> ce : classMap.entrySet()) {
                 String cls = ce.getKey();
                 List<TestRecord> tests = ce.getValue();
-                int cPass = 0, cFail = 0, cSkip = 0;
+                int cPass = 0, cFail = 0, cSkip = 0, cFlaky = 0, cBlocked = 0;
                 for (TestRecord tr : tests) {
+                    if (tr.flaky) {
+                        cFlaky++;
+                    }
                     if ("PASS".equals(tr.status))
                         cPass++;
                     else if ("FAIL".equals(tr.status))
                         cFail++;
-                    else
+                    else if ("SKIP".equals(tr.status))
                         cSkip++;
+                    else if ("BLOCKED".equals(tr.status))
+                        cBlocked++;
                 }
 
                 sb.append("<div class='card'>");
@@ -280,6 +294,8 @@ public class AdvancedReportGenerator {
                 sb.append("<div class='small'>Tests: ").append(tests.size()).append("</div>");
                 sb.append("<div class='small' style='color:var(--muted)'>Pass: ").append(cPass).append("</div>");
                 sb.append("<div class='small' style='color:var(--muted)'>Fail: ").append(cFail).append("</div>");
+                sb.append("<div class='small' style='color:var(--muted)'>Flaky: ").append(cFlaky).append("</div>");
+                sb.append("<div class='small' style='color:var(--muted)'>Blocked: ").append(cBlocked).append("</div>");
                 sb.append("</div></div>"); // class-header
 
                 // Charts
@@ -293,13 +309,14 @@ public class AdvancedReportGenerator {
                 sb.append(
                         "<thead><tr><th>Test</th><th>Status</th><th>Duration (ms)</th><th>Screenshot</th></tr></thead><tbody>");
                 for (TestRecord tr : tests) {
-                    String badgeClass = tr.status.equals("PASS") ? "badge-pass"
-                            : tr.status.equals("FAIL") ? "badge-fail" : "badge-skip";
+                    String badgeClass = tr.flaky ? "badge-flaky" : (tr.status.equals("PASS") ? "badge-pass"
+                            : tr.status.equals("FAIL") ? "badge-fail" : (tr.status.equals("SKIP") ? "badge-skip" : "badge-blocked"));
+                    String statusText = tr.flaky ? "FLAKY" : tr.status;
                     String screenshotLink = (tr.screenshotPath == null || tr.screenshotPath.isEmpty()) ? "-"
                             : ("<a href='" + relativePathForHtml(tr.screenshotPath) + "' target='_blank'>View</a>");
                     sb.append("<tr><td title='").append(jsEscape(tr.testName)).append("'>").append(tr.testName)
                             .append("</td>")
-                            .append("<td><span class='badge ").append(badgeClass).append("'>").append(tr.status)
+                            .append("<td><span class='badge ").append(badgeClass).append("'>").append(statusText)
                             .append("</span></td>")
                             .append("<td>").append(tr.duration).append("</td>")
                             .append("<td>").append(screenshotLink).append("</td></tr>");
@@ -512,13 +529,15 @@ public class AdvancedReportGenerator {
         String status;
         long duration;
         String screenshotPath;
+        boolean flaky;
 
-        public TestRecord(String className, String testName, String status, long duration, String screenshotPath) {
+        public TestRecord(String className, String testName, String status, long duration, String screenshotPath, boolean flaky) {
             this.className = className;
             this.testName = testName;
             this.status = status;
             this.duration = duration;
             this.screenshotPath = screenshotPath;
+            this.flaky = flaky;
         }
     }
 
