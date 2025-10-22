@@ -130,8 +130,6 @@ public class EmployerJobPost extends Base {
 	public void TC_7_Duplicate_Job_Post() {
 		jp = new EmployerPostJobPage(driver);
 		for (int i = 1; i <= 2; i++) {
-			System.out.println("Running duplicate job post iteration: " + i);
-
 			Map<String, String> job = PostAJob.duplicateJobPost();
 			jp.clickPostAJobNavigationButton();
 			jp.enterJobTitle(job.get("title"));
