@@ -1,0 +1,22 @@
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #121212;
+    color: #e0e0e0;
+}
+
+.report-name {
+    color: #00bcd4 !important;
+    font-weight: 600;
+}
+
+.badge-success {
+    background-color: #4caf50 !important;
+}
+
+.badge-danger {
+    background-color: #f44336 !important;
+}
+
+.badge-warning {
+    background-color: #ff9800 !important;
+}

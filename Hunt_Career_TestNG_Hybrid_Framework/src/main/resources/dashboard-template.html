@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hunt Career - Test Report Dashboard</title>
+    <link rel="stylesheet" href="dashboard-assets/css/dashboard-styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="title">
+                <h1>Hunt Career — Test Report Dashboard</h1>
+                <p>A summary of test execution metrics and historical trends.</p>
+            </div>
+            <div class="controls">
+                <a href="ExtentReports/AutomationReport.html" target="_blank" class="btn">View Detailed Report</a>
+                <button class="btn" onclick="window.location.reload()">Refresh</button>
+            </div>
+        </div>
+
+        <!-- Summary Section -->
+        <div class="grid">
+            <div class="card">
+                <h2>Run Summary</h2>
+                <div class="summary">
+                    <!-- Summary stats will be injected here -->
+                    ${summary_stats}
+                </div>
+                <p class="small">Run ID: ${run_id} | Timestamp: ${timestamp}</p>
+            </div>
+            <div class="card">
+                <h2>Trends Across Runs</h2>
+                <canvas id="trendChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Per-Class Details Section -->
+        <div style="margin-top: 32px;">
+            <h2>Class-level Details</h2>
+            <div class="grid">
+                <!-- Per-class cards will be injected here -->
+                ${class_details}
+            </div>
+        </div>
+
+        <!-- Extent Report IFrame -->
+        <div class="card iframe-wrap">
+            <h2>Detailed Extent Report</h2>
+            <iframe src="ExtentReports/AutomationReport.html" sandbox="allow-same-origin allow-scripts"></iframe>
+        </div>
+    </div>
+
+    <script>
+        window.dashboardData = ${dashboard_data_json};
+    </script>
+    <script src="dashboard-assets/js/dashboard-charts.js"></script>
+</body>
+</html>
