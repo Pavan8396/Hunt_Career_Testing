@@ -67,15 +67,27 @@ public class MyListeners implements ITestListener {
         boolean isFlaky = RetryAnalyzer.retryCounts.get().getOrDefault(testIdentifier, 0) > 0;
         if (isFlaky) {
             allTestResults.removeIf(tr -> tr.testName.equals(result.getName()) && tr.className.equals(result.getTestClass().getName()));
+            extentTest.get().log(Status.WARNING, result.getName() + " passed after retry (flaky)");
+        } else {
+            extentTest.get().log(Status.PASS, result.getName() + " executed successfully");
         }
         long duration = System.currentTimeMillis() - testStartTime.get();
-        extentTest.get().log(Status.PASS, result.getName() + " executed successfully");
         extentTest.get().info("Execution Time: " + duration + " ms");
         allTestResults.add(new TestResultData(result.getTestClass().getName(), result.getName(), "PASS", duration, null, isFlaky));
     }
 
     @Override
     public void onTestFailure(ITestResult result) {
+        String testIdentifier = result.getTestClass().getName() + "." + result.getName();
+        boolean wasRetried = RetryAnalyzer.retryCounts.get().getOrDefault(testIdentifier, 0) > 0;
+
+        if (wasRetried) {
+            allTestResults.removeIf(tr -> tr.testName.equals(result.getName()) && tr.className.equals(result.getTestClass().getName()));
+            extentTest.get().log(Status.FAIL, result.getName() + " failed after retry");
+        } else {
+            extentTest.get().log(Status.FAIL, result.getName() + " got failed");
+        }
+
         WebDriver driver = null;
         try {
             Field field = result.getTestClass().getRealClass().getDeclaredField("driver");
@@ -88,7 +100,6 @@ public class MyListeners implements ITestListener {
 
         long duration = System.currentTimeMillis() - testStartTime.get();
         extentTest.get().log(Status.FAIL, result.getThrowable());
-        extentTest.get().log(Status.FAIL, result.getName() + " got failed");
         extentTest.get().info("Execution Time: " + duration + " ms");
 
         allTestResults.add(new TestResultData(result.getTestClass().getName(), result.getName(), "FAIL", duration, screenshotPath, false));
@@ -99,9 +110,11 @@ public class MyListeners implements ITestListener {
         String status = "SKIP";
         if (result.getThrowable() != null && result.getThrowable().getMessage().contains("depends on not successfully finished methods")) {
             status = "BLOCKED";
+            extentTest.get().log(Status.WARNING, result.getName() + " blocked due to dependency failure");
+        } else {
+            extentTest.get().log(Status.SKIP, result.getName() + " skipped");
         }
         long duration = System.currentTimeMillis() - testStartTime.get();
-        extentTest.get().log(Status.SKIP, result.getName() + " skipped");
         extentTest.get().log(Status.INFO, result.getThrowable());
         extentTest.get().info("Execution Time: " + duration + " ms");
 
@@ -124,7 +137,11 @@ public class MyListeners implements ITestListener {
             String dashboardHtml = System.getProperty("user.dir") + "/test-output/MergedDashboard.html";
             AdvancedReportGenerator.generateMultiRunDashboard(dashboardHtml);
 
-            //Desktop.getDesktop().browse(new File(dashboardHtml).toURI());
+            try {
+                Desktop.getDesktop().browse(new File(dashboardHtml).toURI());
+            } catch (java.awt.HeadlessException e) {
+                // Ignore, this happens in headless environments
+            }
 
         } catch (Exception e) { e.printStackTrace(); }
     }

@@ -44,7 +44,7 @@ public class Register extends Base {
 	}
 
 	@Test(priority = 1,  retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-	public void TC_1_verifyRegisterWithValidData() {
+	public void TCJSR_1_verifyRegisterWithValidData() {
 
 		rp = new RegisterPage(driver);
 		Map<String, String> user = RegisterData.validUser();
@@ -61,7 +61,7 @@ public class Register extends Base {
 	}
 
 	@Test(priority = 2, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-	public void TC_2_verifyDuplicateData() {
+	public void TCJSR_2_verifyDuplicateData() {
 
 		rp = new RegisterPage(driver);
 		Map<String, String> user = RegisterData.duplicateUser();
@@ -78,7 +78,7 @@ public class Register extends Base {
 	}
 
 	@Test(priority = 3, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-	public void TC_3_verifyNoFirstNameData() {
+	public void TCJSR_3_verifyNoFirstNameData() {
 
 		rp = new RegisterPage(driver);
 		Map<String, String> user = RegisterData.noFirstName();
@@ -88,7 +88,7 @@ public class Register extends Base {
 	}
 
 	@Test(priority = 4, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-	public void TC_4_verifyNoLastNameData() {
+	public void TCJSR_4_verifyNoLastNameData() {
 
 		rp = new RegisterPage(driver);
 		Map<String, String> user = RegisterData.noLastName();
@@ -98,7 +98,7 @@ public class Register extends Base {
 	}
 
 	@Test(priority = 5, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-	public void TC_5_verifyNoEmailData() {
+	public void TCJSR_5_verifyNoEmailData() {
 
 		rp = new RegisterPage(driver);
 		Map<String, String> user = RegisterData.noEmail();
@@ -112,7 +112,7 @@ public class Register extends Base {
 	}
 
 	@Test(priority = 6, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-	public void TC_6_verifyNoPasswordData() {
+	public void TCJSR_6_verifyNoPasswordData() {
 
 		rp = new RegisterPage(driver);
 		Map<String, String> user = RegisterData.noPassword();
@@ -126,7 +126,7 @@ public class Register extends Base {
 	}
 
 	@Test(priority = 7, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-	public void TC_7_verifyPasswordWithLessCharacters() {
+	public void TCJSR_7_verifyPasswordWithLessCharacters() {
 
 		rp = new RegisterPage(driver);
 		Map<String, String> user = RegisterData.passwordWithLessCharacters();
@@ -141,7 +141,7 @@ public class Register extends Base {
 	}
 
 	@Test(priority = 8, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-	public void TC_8_verifyRegisterWithoutConfirmPasswordData() {
+	public void TCJSR_8_verifyRegisterWithoutConfirmPasswordData() {
 
 		rp = new RegisterPage(driver);
 		Map<String, String> user = RegisterData.noConfirmPassword();
@@ -155,7 +155,7 @@ public class Register extends Base {
 	}
 
 	@Test(priority = 9, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-	public void TC_9_verifyNoPhoneNumberData() {
+	public void TCJSR_9_verifyNoPhoneNumberData() {
 
 		rp = new RegisterPage(driver);
 		Map<String, String> user = RegisterData.noPhoneNumber();
@@ -171,7 +171,7 @@ public class Register extends Base {
 	}
 
 	@Test(priority = 10, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-	public void TC_10_verifyInvalidPhoneNumberData() {
+	public void TCJSR_10_verifyInvalidPhoneNumberData() {
 
 		rp = new RegisterPage(driver);
 		Map<String, String> user = RegisterData.invalidPhoneNumber();
@@ -188,7 +188,7 @@ public class Register extends Base {
 	}
 
 	@Test(priority = 11, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-	public void TC_11_verifyplainEmail() {
+	public void TCJSR_11_verifyplainEmail() {
 
 		rp = new RegisterPage(driver);
 		Map<String, String> user = RegisterData.plainEmail();
@@ -203,7 +203,7 @@ public class Register extends Base {
 	}
 
 	@Test(priority = 12, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-	public void TC_12_verifynoLocalPart() {
+	public void TCJSR_12_verifynoLocalPart() {
 
 		rp = new RegisterPage(driver);
 		Map<String, String> user = RegisterData.noLocalPart();
@@ -218,7 +218,7 @@ public class Register extends Base {
 	}
 
 	@Test(priority = 13, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-	public void TC_13_verifyEmailonlyLocalPart() {
+	public void TCJSR_13_verifyEmailonlyLocalPart() {
 
 		rp = new RegisterPage(driver);
 		Map<String, String> user = RegisterData.onlyLocalPart();
@@ -233,7 +233,7 @@ public class Register extends Base {
 	}
 
 	@Test(priority = 14, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-	public void TC_14_verifydoubleAt() {
+	public void TCJSR_14_verifydoubleAt() {
 
 		rp = new RegisterPage(driver);
 		Map<String, String> user = RegisterData.doubleAt();
@@ -248,7 +248,7 @@ public class Register extends Base {
 	}
 
 	@Test(priority = 15, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-	public void TC_15_verifyEmailwithoutTopLevelDomain() {
+	public void TCJSR_15_verifyEmailwithoutTopLevelDomain() {
 
 		rp = new RegisterPage(driver);
 		Map<String, String> user = RegisterData.withoutTopLevelDomain();
@@ -263,7 +263,7 @@ public class Register extends Base {
 	}
 	
 	@Test(priority = 16, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-	public void TC_16_verifytailingWithDot() {
+	public void TCJSR_16_verifytailingWithDot() {
 
 		rp = new RegisterPage(driver);
 		Map<String, String> user = RegisterData.tailingWithDot();
@@ -278,7 +278,7 @@ public class Register extends Base {
 	}
 
 	@Test(priority = 17, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-	public void TC_17_verifytopLevelDomainTooShort() {
+	public void TCJSR_17_verifytopLevelDomainTooShort() {
 
 		rp = new RegisterPage(driver);
 		Map<String, String> user = RegisterData.topLevelDomainTooShort();
@@ -293,7 +293,7 @@ public class Register extends Base {
 	}
 
 	@Test(priority = 18, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-	public void TC_18_verifydomainStartsWithHyphen() {
+	public void TCJSR_18_verifydomainStartsWithHyphen() {
 
 		rp = new RegisterPage(driver);
 		Map<String, String> user = RegisterData.domainStartsWithHyphen();
@@ -308,7 +308,7 @@ public class Register extends Base {
 	}
 
 	@Test(priority = 19, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-	public void TC_19_verifydoubleDotInDomain() {
+	public void TCJSR_19_verifydoubleDotInDomain() {
 
 		rp = new RegisterPage(driver);
 		Map<String, String> user = RegisterData.doubleDotInDomain();
@@ -323,7 +323,7 @@ public class Register extends Base {
 	}
 
 	@Test(priority = 20, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-	public void TC_20_verifynoAtTheRate() {
+	public void TCJSR_20_verifynoAtTheRate() {
 
 		rp = new RegisterPage(driver);
 		Map<String, String> user = RegisterData.noAtTheRate();
@@ -338,7 +338,7 @@ public class Register extends Base {
 	}
 
 	@Test(priority = 21, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-	public void TC_21_verifyillegalChars() {
+	public void TCJSR_21_verifyillegalChars() {
 
 		rp = new RegisterPage(driver);
 		Map<String, String> user = RegisterData.illegalChars();
@@ -353,7 +353,7 @@ public class Register extends Base {
 	}
 
 	@Test(priority = 22, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-	public void TC_22_verifytwoConsicutiveDots() {
+	public void TCJSR_22_verifytwoConsicutiveDots() {
 
 		rp = new RegisterPage(driver);
 		Map<String, String> user = RegisterData.twoConsicutiveDots();
@@ -368,7 +368,7 @@ public class Register extends Base {
 	}
 
 	@Test(priority = 23, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-	public void TC_23_verifydotAtBeginning() {
+	public void TCJSR_23_verifydotAtBeginning() {
 
 		rp = new RegisterPage(driver);
 		Map<String, String> user = RegisterData.dotAtBeginning();
@@ -383,7 +383,7 @@ public class Register extends Base {
 	}
 
 	@Test(priority = 24, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-	public void TC_24_verifywithQuotation() {
+	public void TCJSR_24_verifywithQuotation() {
 
 		rp = new RegisterPage(driver);
 		Map<String, String> user = RegisterData.withQuotation();
@@ -398,7 +398,7 @@ public class Register extends Base {
 	}
 
 	@Test(priority = 25, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-	public void TC_25_verifyunclosedQuotation() {
+	public void TCJSR_25_verifyunclosedQuotation() {
 
 		rp = new RegisterPage(driver);
 		Map<String, String> user = RegisterData.unclosedQuotation();
@@ -413,7 +413,7 @@ public class Register extends Base {
 	}
 
 	@Test(priority = 26, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-	public void TC_26_verifyveryLengthyLocal() {
+	public void TCJSR_26_verifyveryLengthyLocal() {
 
 		rp = new RegisterPage(driver);
 		Map<String, String> user = RegisterData.veryLengthyLocal();
@@ -428,7 +428,7 @@ public class Register extends Base {
 	}
 
 	@Test(priority = 27, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-	public void TC_27_verifyveryLengthyDomain() {
+	public void TCJSR_27_verifyveryLengthyDomain() {
 
 		rp = new RegisterPage(driver);
 		Map<String, String> user = RegisterData.veryLengthyDomain();
@@ -443,7 +443,7 @@ public class Register extends Base {
 	}
 
 	@Test(priority = 28, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-	public void TC_28_verifyveryLengthyTLD() {
+	public void TCJSR_28_verifyveryLengthyTLD() {
 
 		rp = new RegisterPage(driver);
 		Map<String, String> user = RegisterData.veryLengthyTLD();
@@ -458,7 +458,7 @@ public class Register extends Base {
 	}
 
 	@Test(priority = 29, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-	public void TC_29_verifymissingSecondLevelDomain() {
+	public void TCJSR_29_verifymissingSecondLevelDomain() {
 
 		rp = new RegisterPage(driver);
 		Map<String, String> user = RegisterData.missingSecondLevelDomain();
@@ -473,7 +473,7 @@ public class Register extends Base {
 	}
 
 	@Test(priority = 30, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-	public void TC_30_verifywithComma() {
+	public void TCJSR_30_verifywithComma() {
 
 		rp = new RegisterPage(driver);
 		Map<String, String> user = RegisterData.withComma();
@@ -488,7 +488,7 @@ public class Register extends Base {
 	}
 
 	@Test(priority = 31, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-	public void TC_31_verifydoubleConsicutiveAt() {
+	public void TCJSR_31_verifydoubleConsicutiveAt() {
 
 		rp = new RegisterPage(driver);
 		Map<String, String> user = RegisterData.doubleConsicutiveAt();
@@ -503,7 +503,7 @@ public class Register extends Base {
 	}
 
 	@Test(priority = 32, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-	public void TC_32_verifyunderscoreInTLD() {
+	public void TCJSR_32_verifyunderscoreInTLD() {
 
 		rp = new RegisterPage(driver);
 		Map<String, String> user = RegisterData.underscoreInTLD();
@@ -518,7 +518,7 @@ public class Register extends Base {
 	}
 
 	@Test(priority = 33, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-	public void TC_33_verifydotBetweenName() {
+	public void TCJSR_33_verifydotBetweenName() {
 
 		rp = new RegisterPage(driver);
 		Map<String, String> user = RegisterData.dotBetweenName();
@@ -535,7 +535,7 @@ public class Register extends Base {
 	}
 
 	@Test(priority = 34, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-	public void TC_34_verifyspaceBeforeName() {
+	public void TCJSR_34_verifyspaceBeforeName() {
 
 		rp = new RegisterPage(driver);
 		Map<String, String> user = RegisterData.spaceBeforeName();
@@ -552,7 +552,7 @@ public class Register extends Base {
 	}
 
 	@Test(priority = 35, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-	public void TC_35_verifyspaceAfterName() {
+	public void TCJSR_35_verifyspaceAfterName() {
 
 		rp = new RegisterPage(driver);
 		Map<String, String> user = RegisterData.spaceAfterName();
@@ -569,7 +569,7 @@ public class Register extends Base {
 	}
 
 	@Test(priority = 36, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-	public void TC_36_verifydotBeforeAt() {
+	public void TCJSR_36_verifydotBeforeAt() {
 
 		rp = new RegisterPage(driver);
 		Map<String, String> user = RegisterData.dotBeforeAt();
@@ -584,7 +584,7 @@ public class Register extends Base {
 	}
 
 	@Test(priority = 37, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-	public void TC_37_verifywithoutDomain() {
+	public void TCJSR_37_verifywithoutDomain() {
 
 		rp = new RegisterPage(driver);
 		Map<String, String> user = RegisterData.withoutDomain();

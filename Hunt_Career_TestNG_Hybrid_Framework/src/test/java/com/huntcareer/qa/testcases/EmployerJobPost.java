@@ -43,7 +43,7 @@ public class EmployerJobPost extends Base {
 	}
 
 	@Test(priority = 1, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-	public void TC_1_Create_Job_Post_With_Valid_Data() {
+	public void TCEJB_1_Create_Job_Post_With_Valid_Data() {
 		jp = new EmployerPostJobPage(driver);
 		Map<String, String> job = PostAJob.validJob();
 		jp.clickPostAJobNavigationButton();
@@ -57,7 +57,7 @@ public class EmployerJobPost extends Base {
 	}
 
 	@Test(priority = 2, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-	public void TC_2_Blank_Job_Post() {
+	public void TCEJB_2_Blank_Job_Post() {
 		jp = new EmployerPostJobPage(driver);
 		Map<String, String> job = PostAJob.blankJob();
 		jp.clickPostAJobNavigationButton();
@@ -71,7 +71,7 @@ public class EmployerJobPost extends Base {
 	}
 
 	@Test(priority = 3, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-	public void TC_3_No_Title_Job_Post() {
+	public void TCEJB_3_No_Title_Job_Post() {
 		jp = new EmployerPostJobPage(driver);
 		Map<String, String> job = PostAJob.noTitle();
 		jp.clickPostAJobNavigationButton();
@@ -85,7 +85,7 @@ public class EmployerJobPost extends Base {
 	}
 
 	@Test(priority = 4, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-	public void TC_4_No_Company_Name_Job_Post() {
+	public void TCEJB_4_No_Company_Name_Job_Post() {
 		jp = new EmployerPostJobPage(driver);
 		Map<String, String> job = PostAJob.noCompanyName();
 		jp.clickPostAJobNavigationButton();
@@ -99,7 +99,7 @@ public class EmployerJobPost extends Base {
 	}
 
 	@Test(priority = 5, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-	public void TC_5_No_Description_Job_Post() {
+	public void TCEJB_5_No_Description_Job_Post() {
 		jp = new EmployerPostJobPage(driver);
 		Map<String, String> job = PostAJob.noDescription();
 		jp.clickPostAJobNavigationButton();
@@ -113,7 +113,7 @@ public class EmployerJobPost extends Base {
 	}
 
 	@Test(priority = 6, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-	public void TC_6_No_Job_Location_Job_Post() {
+	public void TCEJB_6_No_Job_Location_Job_Post() {
 		jp = new EmployerPostJobPage(driver);
 		Map<String, String> job = PostAJob.noLocation();
 		jp.clickPostAJobNavigationButton();
@@ -127,7 +127,7 @@ public class EmployerJobPost extends Base {
 	}
 
 	@Test(priority = 7, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-	public void TC_7_Duplicate_Job_Post() {
+	public void TCEJB_7_Duplicate_Job_Post() {
 		jp = new EmployerPostJobPage(driver);
 		for (int i = 1; i <= 2; i++) {
 			Map<String, String> job = PostAJob.duplicateJobPost();
