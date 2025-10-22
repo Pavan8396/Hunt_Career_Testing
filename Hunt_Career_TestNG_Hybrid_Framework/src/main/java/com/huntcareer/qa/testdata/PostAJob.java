@@ -68,11 +68,11 @@ public class PostAJob {
 
 	public static Map<String, String> duplicateJobPost(){
 		Map<String, String> data = new HashMap<>();
-		data.put("title", "QA Engineer");
-		data.put("companyName", "Tech Solutions Inc");
-		data.put("description", "We are looking for a QA Engineer to join our team.");
-		data.put("location", "New York");
-		data.put("jobType", "Full-time");
+		data.put("title", Utilities.generateRandomJobNames());
+		data.put("companyName", Utilities.getCompanyName());
+		data.put("description", Utilities.generateRandomJobDescription());
+		data.put("location", Utilities.generateRandomLocation());
+		data.put("jobType", Utilities.getRandomJobType());
 		return data;
 	}
 }
