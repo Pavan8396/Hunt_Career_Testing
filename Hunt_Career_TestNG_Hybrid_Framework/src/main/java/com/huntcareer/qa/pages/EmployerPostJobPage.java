@@ -49,7 +49,11 @@ public class EmployerPostJobPage {
 	
 	@FindBy(xpath = "//div[contains(text(), 'Location is required')]")
 	private WebElement locationRequiredErrorMessage;
-	
+
+	@FindBy(xpath = "//div[contains(text(), 'A job with the same title and company already exists.')]")
+	private WebElement jobExistsErrorMessage;
+
+
 	public EmployerPostJobPage(WebDriver driver) {
 		this.driver = driver;
 		this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
@@ -118,5 +122,12 @@ public class EmployerPostJobPage {
 				"Location is required", "Message Text Mismatch");
 		Assert.assertTrue(wait.until(ExpectedConditions.invisibilityOf(locationRequiredErrorMessage)),
 				"Location is required should not be visible anymore");
+	}
+
+	public void verifyJobExistsErrorMessage() {
+		Assert.assertEquals(wait.until(ExpectedConditions.visibilityOf(jobExistsErrorMessage)).getText(),
+				"A job with the same title and company already exists.", "Message Text Mismatch");
+		Assert.assertTrue(wait.until(ExpectedConditions.invisibilityOf(jobExistsErrorMessage)),
+				"A job with the same title and company already exists. should not be visible anymore");
 	}
 }

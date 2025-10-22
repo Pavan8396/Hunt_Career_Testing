@@ -140,7 +140,7 @@ public class EmployerJobPost extends Base {
 			jp.enterLocation(job.get("location"));
 			jp.selectJobTypeOption();
 			jp.clickPostJobSubmitButton();
-			jp.verifyJobPostSuccess();
+			jp.verifyJobExistsErrorMessage();
 		}
 	}
 }
