@@ -44,7 +44,7 @@ public class EmployerRegister extends Base {
     }
 
     @Test(priority = 1, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-    public void TC_1_verifyRegisterWithValidData() {
+    public void TCER_1_verifyRegisterWithValidData() {
 
         erp = new EmployerRegisterPage(driver);
         Map<String, String> user = EmployerRegisterData.validUser();
@@ -57,7 +57,7 @@ public class EmployerRegister extends Base {
     }
 
     @Test(priority = 2, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-    public void TC_2_verifyDuplicateData() {
+    public void TCER_2_verifyDuplicateData() {
 
         erp = new EmployerRegisterPage(driver);
         Map<String, String> user = EmployerRegisterData.duplicateUser();
@@ -70,7 +70,7 @@ public class EmployerRegister extends Base {
     }
 
     @Test(priority = 3, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-    public void TC_3_verifyNoFirstNameData() {
+    public void TCER_3_verifyNoFirstNameData() {
 
         erp = new EmployerRegisterPage(driver);
         Map<String, String> user = EmployerRegisterData.noName();
@@ -82,7 +82,7 @@ public class EmployerRegister extends Base {
     }
 
     @Test(priority = 5, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-    public void TC_5_verifyNoEmailData() {
+    public void TCER_5_verifyNoEmailData() {
 
         erp = new EmployerRegisterPage(driver);
         Map<String, String> user = EmployerRegisterData.noEmail();
@@ -94,7 +94,7 @@ public class EmployerRegister extends Base {
     }
 
     @Test(priority = 6, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-    public void TC_6_verifyNoPasswordData() {
+    public void TCER_6_verifyNoPasswordData() {
 
         erp = new EmployerRegisterPage(driver);
         Map<String, String> user = EmployerRegisterData.noPassword();
@@ -106,7 +106,7 @@ public class EmployerRegister extends Base {
     }
 
     @Test(priority = 7, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-    public void TC_7_verifyPasswordWithLessCharacters() {
+    public void TCER_7_verifyPasswordWithLessCharacters() {
 
         erp = new EmployerRegisterPage(driver);
         Map<String, String> user = EmployerRegisterData.passwordWithLessCharacters();
@@ -119,7 +119,7 @@ public class EmployerRegister extends Base {
     }
 
     @Test(priority = 8, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-    public void TC_8_verifyRegisterWithoutConfirmPasswordData() {
+    public void TCER_8_verifyRegisterWithoutConfirmPasswordData() {
 
         erp = new EmployerRegisterPage(driver);
         Map<String, String> user = EmployerRegisterData.noConfirmPassword();
@@ -131,7 +131,7 @@ public class EmployerRegister extends Base {
     }
 
     @Test(priority = 11, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-    public void TC_11_verifyplainEmail() {
+    public void TCER_11_verifyplainEmail() {
 
         erp = new EmployerRegisterPage(driver);
         Map<String, String> user = EmployerRegisterData.plainEmail();
@@ -144,7 +144,7 @@ public class EmployerRegister extends Base {
     }
 
     @Test(priority = 12, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-    public void TC_12_verifynoLocalPart() {
+    public void TCER_12_verifynoLocalPart() {
 
         erp = new EmployerRegisterPage(driver);
         Map<String, String> user = EmployerRegisterData.noLocalPart();
@@ -157,7 +157,7 @@ public class EmployerRegister extends Base {
     }
 
     @Test(priority = 13, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-    public void TC_13_verifyEmailonlyLocalPart() {
+    public void TCER_13_verifyEmailonlyLocalPart() {
 
         erp = new EmployerRegisterPage(driver);
         Map<String, String> user = EmployerRegisterData.onlyLocalPart();
@@ -170,7 +170,7 @@ public class EmployerRegister extends Base {
     }
 
     @Test(priority = 14, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-    public void TC_14_verifydoubleAt() {
+    public void TCER_14_verifydoubleAt() {
 
         erp = new EmployerRegisterPage(driver);
         Map<String, String> user = EmployerRegisterData.doubleAt();
@@ -183,7 +183,7 @@ public class EmployerRegister extends Base {
     }
 
     @Test(priority = 15, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-    public void TC_15_verifyEmailwithoutTopLevelDomain() {
+    public void TCER_15_verifyEmailwithoutTopLevelDomain() {
 
         erp = new EmployerRegisterPage(driver);
         Map<String, String> user = EmployerRegisterData.withoutTopLevelDomain();
@@ -196,7 +196,7 @@ public class EmployerRegister extends Base {
     }
 
     @Test(priority = 16, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-    public void TC_16_verifytailingWithDot() {
+    public void TCER_16_verifytailingWithDot() {
 
         erp = new EmployerRegisterPage(driver);
         Map<String, String> user = EmployerRegisterData.tailingWithDot();
@@ -209,7 +209,7 @@ public class EmployerRegister extends Base {
     }
 
     @Test(priority = 17, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-    public void TC_17_verifytopLevelDomainTooShort() {
+    public void TCER_17_verifytopLevelDomainTooShort() {
 
         erp = new EmployerRegisterPage(driver);
         Map<String, String> user = EmployerRegisterData.topLevelDomainTooShort();
@@ -222,7 +222,7 @@ public class EmployerRegister extends Base {
     }
 
     @Test(priority = 18, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-    public void TC_18_verifydomainStartsWithHyphen() {
+    public void TCER_18_verifydomainStartsWithHyphen() {
 
         erp = new EmployerRegisterPage(driver);
         Map<String, String> user = EmployerRegisterData.domainStartsWithHyphen();
@@ -235,7 +235,7 @@ public class EmployerRegister extends Base {
     }
 
     @Test(priority = 19, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-    public void TC_19_verifydoubleDotInDomain() {
+    public void TCER_19_verifydoubleDotInDomain() {
 
         erp = new EmployerRegisterPage(driver);
         Map<String, String> user = EmployerRegisterData.doubleDotInDomain();
@@ -248,7 +248,7 @@ public class EmployerRegister extends Base {
     }
 
     @Test(priority = 20, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-    public void TC_20_verifynoAtTheRate() {
+    public void TCER_20_verifynoAtTheRate() {
 
         erp = new EmployerRegisterPage(driver);
         Map<String, String> user = EmployerRegisterData.noAtTheRate();
@@ -261,7 +261,7 @@ public class EmployerRegister extends Base {
     }
 
     @Test(priority = 21, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-    public void TC_21_verifyillegalChars() {
+    public void TCER_21_verifyillegalChars() {
 
         erp = new EmployerRegisterPage(driver);
         Map<String, String> user = EmployerRegisterData.illegalChars();
@@ -274,7 +274,7 @@ public class EmployerRegister extends Base {
     }
 
     @Test(priority = 22, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-    public void TC_22_verifytwoConsicutiveDots() {
+    public void TCER_22_verifytwoConsicutiveDots() {
 
         erp = new EmployerRegisterPage(driver);
         Map<String, String> user = EmployerRegisterData.twoConsicutiveDots();
@@ -287,7 +287,7 @@ public class EmployerRegister extends Base {
     }
 
     @Test(priority = 23, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-    public void TC_23_verifydotAtBeginning() {
+    public void TCER_23_verifydotAtBeginning() {
 
         erp = new EmployerRegisterPage(driver);
         Map<String, String> user = EmployerRegisterData.dotAtBeginning();
@@ -300,7 +300,7 @@ public class EmployerRegister extends Base {
     }
 
     @Test(priority = 24, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-    public void TC_24_verifywithQuotation() {
+    public void TCER_24_verifywithQuotation() {
 
         erp = new EmployerRegisterPage(driver);
         Map<String, String> user = EmployerRegisterData.withQuotation();
@@ -313,7 +313,7 @@ public class EmployerRegister extends Base {
     }
 
     @Test(priority = 25, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-    public void TC_25_verifyunclosedQuotation() {
+    public void TCER_25_verifyunclosedQuotation() {
 
         erp = new EmployerRegisterPage(driver);
         Map<String, String> user = EmployerRegisterData.unclosedQuotation();
@@ -326,7 +326,7 @@ public class EmployerRegister extends Base {
     }
 
     @Test(priority = 26, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-    public void TC_26_verifyveryLengthyLocal() {
+    public void TCER_26_verifyveryLengthyLocal() {
 
         erp = new EmployerRegisterPage(driver);
         Map<String, String> user = EmployerRegisterData.veryLengthyLocal();
@@ -339,7 +339,7 @@ public class EmployerRegister extends Base {
     }
 
     @Test(priority = 27, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-    public void TC_27_verifyveryLengthyDomain() {
+    public void TCER_27_verifyveryLengthyDomain() {
 
         erp = new EmployerRegisterPage(driver);
         Map<String, String> user = EmployerRegisterData.veryLengthyDomain();
@@ -352,7 +352,7 @@ public class EmployerRegister extends Base {
     }
 
     @Test(priority = 28, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-    public void TC_28_verifyveryLengthyTLD() {
+    public void TCER_28_verifyveryLengthyTLD() {
 
         erp = new EmployerRegisterPage(driver);
         Map<String, String> user = EmployerRegisterData.veryLengthyTLD();
@@ -365,7 +365,7 @@ public class EmployerRegister extends Base {
     }
 
     @Test(priority = 29, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-    public void TC_29_verifymissingSecondLevelDomain() {
+    public void TCER_29_verifymissingSecondLevelDomain() {
 
         erp = new EmployerRegisterPage(driver);
         Map<String, String> user = EmployerRegisterData.missingSecondLevelDomain();
@@ -378,7 +378,7 @@ public class EmployerRegister extends Base {
     }
 
     @Test(priority = 30, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-    public void TC_30_verifywithComma() {
+    public void TCER_30_verifywithComma() {
 
         erp = new EmployerRegisterPage(driver);
         Map<String, String> user = EmployerRegisterData.withComma();
@@ -391,7 +391,7 @@ public class EmployerRegister extends Base {
     }
 
     @Test(priority = 31, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-    public void TC_31_verifydoubleConsicutiveAt() {
+    public void TCER_31_verifydoubleConsicutiveAt() {
 
         erp = new EmployerRegisterPage(driver);
         Map<String, String> user = EmployerRegisterData.doubleConsicutiveAt();
@@ -404,7 +404,7 @@ public class EmployerRegister extends Base {
     }
 
     @Test(priority = 32, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-    public void TC_32_verifyunderscoreInTLD() {
+    public void TCER_32_verifyunderscoreInTLD() {
 
         erp = new EmployerRegisterPage(driver);
         Map<String, String> user = EmployerRegisterData.underscoreInTLD();
@@ -417,7 +417,7 @@ public class EmployerRegister extends Base {
     }
 
     @Test(priority = 33, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-    public void TC_33_verifydotBetweenName() {
+    public void TCER_33_verifydotBetweenName() {
 
         erp = new EmployerRegisterPage(driver);
         Map<String, String> user = EmployerRegisterData.dotBetweenName();
@@ -430,7 +430,7 @@ public class EmployerRegister extends Base {
     }
 
     @Test(priority = 34, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-    public void TC_34_verifyspaceBeforeName() {
+    public void TCER_34_verifyspaceBeforeName() {
 
         erp = new EmployerRegisterPage(driver);
         Map<String, String> user = EmployerRegisterData.spaceBeforeName();
@@ -443,7 +443,7 @@ public class EmployerRegister extends Base {
     }
 
     @Test(priority = 35, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-    public void TC_35_verifyspaceAfterName() {
+    public void TCER_35_verifyspaceAfterName() {
 
         erp = new EmployerRegisterPage(driver);
         Map<String, String> user = EmployerRegisterData.spaceAfterName();
@@ -456,7 +456,7 @@ public class EmployerRegister extends Base {
     }
 
     @Test(priority = 36, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-    public void TC_36_verifydotBeforeAt() {
+    public void TCER_36_verifydotBeforeAt() {
 
         erp = new EmployerRegisterPage(driver);
         Map<String, String> user = EmployerRegisterData.dotBeforeAt();
@@ -469,7 +469,7 @@ public class EmployerRegister extends Base {
     }
 
     @Test(priority = 37, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-    public void TC_37_verifywithoutDomain() {
+    public void TCER_37_verifywithoutDomain() {
 
         erp = new EmployerRegisterPage(driver);
         Map<String, String> user = EmployerRegisterData.withoutDomain();

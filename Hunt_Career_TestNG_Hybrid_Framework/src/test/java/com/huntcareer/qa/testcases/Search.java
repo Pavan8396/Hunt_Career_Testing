@@ -36,7 +36,7 @@ public class Search extends Base {
 	}
 	
 	@Test(priority = 1, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-	public void TC_1_verifyValidSearch() {
+	public void TCJSS_1_verifyValidSearch() {
 
 		sp = new SearchPage(driver);
 		sp.enterKeywordIntoSearchInputField(dataProp.getProperty("validSearchTerm"));
@@ -45,7 +45,7 @@ public class Search extends Base {
 	}
 	
 	@Test(priority = 2, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-	public void TC_2_verifyInvalidSearch() {
+	public void TCJSS_2_verifyInvalidSearch() {
 		sp = new SearchPage(driver);
 		sp.enterKeywordIntoSearchInputField(dataProp.getProperty("invalidSearchTerm"));
 		sp.clickOnSearch();
@@ -53,7 +53,7 @@ public class Search extends Base {
 	}
 	
 	@Test(priority = 3, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-	public void TC_3_verifySearchWithSpecialCharcters() {
+	public void TCJSS_3_verifySearchWithSpecialCharcters() {
 		sp = new SearchPage(driver);
 		sp.enterKeywordIntoSearchInputField(dataProp.getProperty("specialCharctersSearchTerm"));
 		sp.clickOnSearch();
@@ -61,7 +61,7 @@ public class Search extends Base {
 	}
 	
 	@Test(priority = 4, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-	public void TC_4_verifySearchWithFilters() {
+	public void TCJSS_4_verifySearchWithFilters() {
 		sp = new SearchPage(driver);
 		sp.enterKeywordIntoSearchInputField(dataProp.getProperty("validSearchTerm"));
 		sp.clickLocationButton();
@@ -72,10 +72,5 @@ public class Search extends Base {
 		sp.getSearchTag("validSearchTerm");
 		sp.getLocationTag("filterLocation");
 		sp.getJobTypeTag("filterJobType");
-	}
-	
-	@Test(priority = 4, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
-	public void TC_5_Login_and_Save_the_job_and_view_the_saved_job_in_saved_jobs_page() {
-		
 	}
 }
