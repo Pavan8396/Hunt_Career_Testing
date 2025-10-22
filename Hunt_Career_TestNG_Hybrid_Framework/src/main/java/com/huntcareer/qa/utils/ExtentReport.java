@@ -86,9 +86,9 @@ public class ExtentReport {
             sb.append("dashboard.appendChild(container);");
 
             sb.append("const ctx=document.getElementById('chart-").append(cls).append("').getContext('2d');");
-            sb.append("new Chart(ctx,{type:'doughnut',data:{labels:['Passed','Failed','Skipped'],datasets:[{data:[")
-              .append(stats.passed).append(",").append(stats.failed).append(",").append(stats.skipped)
-              .append("],backgroundColor:['#4caf50','#f44336','#ff9800'],borderColor:'#222',borderWidth:2}]},options:{plugins:{legend:{position:'bottom',labels:{color:'#ccc'}},title:{display:true,text:'Execution Summary',color:'#00bcd4',font:{size:16}}},cutout:'70%'}});");
+            sb.append("new Chart(ctx,{type:'doughnut',data:{labels:['Passed','Failed','Skipped','Flaky','Blocked'],datasets:[{data:[")
+              .append(stats.passed).append(",").append(stats.failed).append(",").append(stats.skipped).append(",").append(stats.flaky).append(",").append(stats.blocked)
+              .append("],backgroundColor:['#4caf50','#f44336','#ff9800','#e69a2e','#6e7681'],borderColor:'#222',borderWidth:2}]},options:{plugins:{legend:{position:'bottom',labels:{color:'#ccc'}},title:{display:true,text:'Execution Summary',color:'#00bcd4',font:{size:16}}},cutout:'70%'}});");
         }
 
         // Execution duration bar chart
@@ -147,10 +147,12 @@ public class ExtentReport {
     // Update stats per class
     public static void updateClassStats(String className, String status) {
         ClassStats stats = classStatsMap.getOrDefault(className, new ClassStats());
-        switch(status.toLowerCase()) {
-            case "pass": stats.passed++; break;
-            case "fail": stats.failed++; break;
-            case "skip": stats.skipped++; break;
+        switch (status.toUpperCase()) {
+            case "PASS": stats.passed++; break;
+            case "FAIL": stats.failed++; break;
+            case "SKIP": stats.skipped++; break;
+            case "FLAKY": stats.flaky++; break;
+            case "BLOCKED": stats.blocked++; break;
         }
         classStatsMap.put(className, stats);
     }
@@ -164,5 +166,7 @@ public class ExtentReport {
         int passed = 0;
         int failed = 0;
         int skipped = 0;
+        int flaky = 0;
+        int blocked = 0;
     }
 }

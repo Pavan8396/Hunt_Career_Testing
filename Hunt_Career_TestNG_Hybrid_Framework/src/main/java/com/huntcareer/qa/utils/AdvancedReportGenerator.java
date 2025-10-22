@@ -116,7 +116,7 @@ public class AdvancedReportGenerator {
         // --- Clean, modern dark theme ---
         sb.append("<style>");
         sb.append(
-                ":root{--bg:#0d1117;--card:#161b22;--muted:#8b949e;--accent:#58a6ff;--success:#3fb950;--danger:#f85149;--warn:#d29922;--border-color:rgba(255,255,255,0.1);} ");
+                ":root{--bg:#0d1117;--card:#161b22;--muted:#8b949e;--accent:#58a6ff;--success:#3fb950;--danger:#f85149;--warn:#d29922;--flaky:#e69a2e;--blocked:#6e7681;--border-color:rgba(255,255,255,0.1);} ");
         sb.append(
                 "body{margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif,'Apple Color Emoji','Segoe UI Emoji';background:var(--bg);color:#c9d1d9;line-height:1.6;} ");
         sb.append(".container{max-width:1400px;margin:40px auto;padding:0 24px;} ");
@@ -165,7 +165,7 @@ public class AdvancedReportGenerator {
         sb.append(
                 "th:first-child,td:first-child{width:50%;} th:nth-child(2),td:nth-child(2){width:20%;} th:nth-child(3),td:nth-child(3){width:20%;} th:nth-child(4),td:nth-child(4){width:10%;} td:first-child{cursor:pointer;} td:first-child:hover{text-decoration:underline;} ");
         sb.append(
-                ".badge{padding:6px 10px;border-radius:16px;font-weight:600;font-size:12px;} .badge-pass{background:rgba(63,185,80,0.15);color:var(--success);} .badge-fail{background:rgba(248,81,73,0.15);color:var(--danger);} .badge-skip{background:rgba(210,153,34,0.15);color:var(--warn);} ");
+                ".badge{padding:6px 10px;border-radius:16px;font-weight:600;font-size:12px;} .badge-pass{background:rgba(63,185,80,0.15);color:var(--success);} .badge-fail{background:rgba(248,81,73,0.15);color:var(--danger);} .badge-skip{background:rgba(210,153,34,0.15);color:var(--warn);} .badge-flaky{background:rgba(230,154,46,0.15);color:var(--flaky);} .badge-blocked{background:rgba(110,118,129,0.15);color:var(--blocked);}");
         sb.append(
                 "canvas{max-height:280px !important;} ");
         sb.append(
@@ -196,7 +196,7 @@ public class AdvancedReportGenerator {
 
         // Top summary: use latest run if available
         RunData latest = runs.isEmpty() ? null : runs.get(runs.size() - 1);
-        int totalTests = 0, passed = 0, failed = 0, skipped = 0;
+        int totalTests = 0, passed = 0, failed = 0, skipped = 0, flaky = 0, blocked = 0;
         long totalDuration = 0;
         if (latest != null) {
             for (TestRecord tr : latest.tests) {
@@ -212,6 +212,12 @@ public class AdvancedReportGenerator {
                     case "SKIP":
                         skipped++;
                         break;
+                    case "FLAKY":
+                        flaky++;
+                        break;
+                    case "BLOCKED":
+                        blocked++;
+                        break;
                 }
             }
         }
@@ -225,6 +231,8 @@ public class AdvancedReportGenerator {
         sb.append(statBlock("Passed", String.valueOf(passed), "badge-pass"));
         sb.append(statBlock("Failed", String.valueOf(failed), "badge-fail"));
         sb.append(statBlock("Skipped", String.valueOf(skipped), "badge-skip"));
+        sb.append(statBlock("Flaky", String.valueOf(flaky), "badge-flaky"));
+        sb.append(statBlock("Blocked", String.valueOf(blocked), "badge-blocked"));
         sb.append(statBlock("Total Time (ms)", String.valueOf(totalDuration)));
         sb.append("</div>"); // summary
         if (latest != null) {
@@ -262,14 +270,25 @@ public class AdvancedReportGenerator {
             for (Map.Entry<String, List<TestRecord>> ce : classMap.entrySet()) {
                 String cls = ce.getKey();
                 List<TestRecord> tests = ce.getValue();
-                int cPass = 0, cFail = 0, cSkip = 0;
+                int cPass = 0, cFail = 0, cSkip = 0, cFlaky = 0, cBlocked = 0;
                 for (TestRecord tr : tests) {
-                    if ("PASS".equals(tr.status))
-                        cPass++;
-                    else if ("FAIL".equals(tr.status))
-                        cFail++;
-                    else
-                        cSkip++;
+                    switch (tr.status) {
+                        case "PASS":
+                            cPass++;
+                            break;
+                        case "FAIL":
+                            cFail++;
+                            break;
+                        case "SKIP":
+                            cSkip++;
+                            break;
+                        case "FLAKY":
+                            cFlaky++;
+                            break;
+                        case "BLOCKED":
+                            cBlocked++;
+                            break;
+                    }
                 }
 
                 sb.append("<div class='card'>");
@@ -280,6 +299,9 @@ public class AdvancedReportGenerator {
                 sb.append("<div class='small'>Tests: ").append(tests.size()).append("</div>");
                 sb.append("<div class='small' style='color:var(--muted)'>Pass: ").append(cPass).append("</div>");
                 sb.append("<div class='small' style='color:var(--muted)'>Fail: ").append(cFail).append("</div>");
+                sb.append("<div class='small' style='color:var(--muted)'>Flaky: ").append(cFlaky).append("</div>");
+                sb.append("<div class='small' style='color:var(--muted)'>Blocked: ").append(cBlocked).append("</div>");
+                sb.append("<div class='small' style='color:var(--muted)'>Skipped: ").append(cSkip).append("</div>");
                 sb.append("</div></div>"); // class-header
 
                 // Charts
@@ -293,8 +315,15 @@ public class AdvancedReportGenerator {
                 sb.append(
                         "<thead><tr><th>Test</th><th>Status</th><th>Duration (ms)</th><th>Screenshot</th></tr></thead><tbody>");
                 for (TestRecord tr : tests) {
-                    String badgeClass = tr.status.equals("PASS") ? "badge-pass"
-                            : tr.status.equals("FAIL") ? "badge-fail" : "badge-skip";
+                    String badgeClass;
+                    switch (tr.status) {
+                        case "PASS": badgeClass = "badge-pass"; break;
+                        case "FAIL": badgeClass = "badge-fail"; break;
+                        case "SKIP": badgeClass = "badge-skip"; break;
+                        case "FLAKY": badgeClass = "badge-flaky"; break;
+                        case "BLOCKED": badgeClass = "badge-blocked"; break;
+                        default: badgeClass = "";
+                    }
                     String screenshotLink = (tr.screenshotPath == null || tr.screenshotPath.isEmpty()) ? "-"
                             : ("<a href='" + relativePathForHtml(tr.screenshotPath) + "' target='_blank'>View</a>");
                     sb.append("<tr><td title='").append(jsEscape(tr.testName)).append("'>").append(tr.testName)
@@ -392,25 +421,27 @@ public class AdvancedReportGenerator {
             int ci = 0;
             for (Map.Entry<String, List<TestRecord>> ce : classMap.entrySet()) {
                 List<TestRecord> tests = ce.getValue();
-                int pass = 0, fail = 0, skip = 0;
+                int pass = 0, fail = 0, skip = 0, flaky1 = 0, blocked1 = 0;
                 List<String> names = new ArrayList<>();
                 List<Long> durs = new ArrayList<>();
                 for (TestRecord tr : tests) {
                     names.add(tr.testName);
                     durs.add(tr.duration);
-                    if ("PASS".equals(tr.status))
-                        pass++;
-                    else if ("FAIL".equals(tr.status))
-                        fail++;
-                    else
-                        skip++;
+                    switch (tr.status) {
+                        case "PASS": pass++; break;
+                        case "FAIL": fail++; break;
+                        case "SKIP": skip++; break;
+                        case "FLAKY": flaky1++; break;
+                        case "BLOCKED": blocked1++; break;
+                    }
                 }
 
                 // Doughnut
                 sb.append("new Chart(document.getElementById('classChart-").append(ci)
-                        .append("'),{type:'doughnut',data:{labels:['Passed','Failed','Skipped'],datasets:[{data:[")
-                        .append(pass).append(",").append(fail).append(",").append(skip)
-                        .append("],backgroundColor:['#4caf50','#f44336','#ff9800'],borderColor:'#111',borderWidth:1}]},options:{plugins:{legend:{position:'bottom',labels:{color:'#ccc'}}},cutout:'60%'}});");
+                        .append("'),{type:'doughnut',data:{labels:['Passed','Failed','Skipped','Flaky','Blocked'],datasets:[{data:[")
+                        .append(pass).append(",").append(fail).append(",").append(skip).append(",").append(flaky1).append(",").append(blocked1)
+                        .append("],backgroundColor:['#4caf50','#f44336','#ff9800','#e69a2e','#6e7681'],borderColor:'#111',borderWidth:1}]},options:{plugins:{legend:{position:'bottom',labels:{color:'#ccc'}}},cutout:'60%'}});");
+
 
                 // Duration bar
                 sb.append("new Chart(document.getElementById('classDurChart-").append(ci)

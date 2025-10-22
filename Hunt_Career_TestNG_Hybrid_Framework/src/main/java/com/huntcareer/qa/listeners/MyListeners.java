@@ -62,9 +62,15 @@ public class MyListeners implements ITestListener {
     @Override
     public void onTestSuccess(ITestResult result) {
         long duration = System.currentTimeMillis() - testStartTime.get();
-        extentTest.get().log(Status.PASS, result.getName() + " executed successfully");
+        String status = result.wasRetried() ? "FLAKY" : "PASS";
+
+        if ("FLAKY".equals(status)) {
+            extentTest.get().log(Status.WARNING, result.getName() + " passed after a retry (flaky)");
+        } else {
+            extentTest.get().log(Status.PASS, result.getName() + " executed successfully");
+        }
         extentTest.get().info("Execution Time: " + duration + " ms");
-        allTestResults.add(new TestResultData(result.getTestClass().getName(), result.getName(), "PASS", duration, null));
+        allTestResults.add(new TestResultData(result.getTestClass().getName(), result.getName(), status, duration, null));
     }
 
     @Override
@@ -89,12 +95,30 @@ public class MyListeners implements ITestListener {
 
     @Override
     public void onTestSkipped(ITestResult result) {
+        if (result.wasRetried()) {
+            return;
+        }
         long duration = System.currentTimeMillis() - testStartTime.get();
-        extentTest.get().log(Status.SKIP, result.getName() + " skipped");
-        extentTest.get().log(Status.INFO, result.getThrowable());
+        String status;
+        String logMessage;
+
+        Throwable throwable = result.getThrowable();
+        if (throwable != null && throwable.getMessage() != null
+                && throwable.getMessage().contains("depends on not successfully finished methods")) {
+            status = "BLOCKED";
+            logMessage = result.getName() + " is blocked due to dependency failure.";
+        } else {
+            status = "SKIP";
+            logMessage = result.getName() + " was skipped.";
+        }
+
+        extentTest.get().log(Status.SKIP, logMessage);
+        if (throwable != null) {
+            extentTest.get().log(Status.INFO, throwable);
+        }
         extentTest.get().info("Execution Time: " + duration + " ms");
 
-        allTestResults.add(new TestResultData(result.getTestClass().getName(), result.getName(), "SKIP", duration, null));
+        allTestResults.add(new TestResultData(result.getTestClass().getName(), result.getName(), status, duration, null));
     }
 
     @Override
