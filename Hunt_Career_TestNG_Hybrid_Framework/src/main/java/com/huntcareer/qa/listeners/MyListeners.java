@@ -67,7 +67,7 @@ public class MyListeners implements ITestListener {
         boolean isFlaky = RetryAnalyzer.retryCounts.get().getOrDefault(testIdentifier, 0) > 0;
         if (isFlaky) {
             allTestResults.removeIf(tr -> tr.testName.equals(result.getName()) && tr.className.equals(result.getTestClass().getName()));
-            extentTest.get().log(Status.WARNING, result.getName() + " passed after retry (flaky)");
+            extentTest.get().log(Status.PASS, result.getName() + " passed after retry (flaky)");
         } else {
             extentTest.get().log(Status.PASS, result.getName() + " executed successfully");
         }
@@ -78,16 +78,11 @@ public class MyListeners implements ITestListener {
 
     @Override
     public void onTestFailure(ITestResult result) {
-        String testIdentifier = result.getTestClass().getName() + "." + result.getName();
-        boolean wasRetried = RetryAnalyzer.retryCounts.get().getOrDefault(testIdentifier, 0) > 0;
+        // Remove any previous results for this test to avoid duplicates
+        allTestResults.removeIf(tr -> tr.testName.equals(result.getName()) && tr.className.equals(result.getTestClass().getName()));
 
-        if (wasRetried) {
-            allTestResults.removeIf(tr -> tr.testName.equals(result.getName()) && tr.className.equals(result.getTestClass().getName()));
-            extentTest.get().log(Status.FAIL, result.getName() + " failed after retry");
-        } else {
-            extentTest.get().log(Status.FAIL, result.getName() + " got failed");
-        }
-
+        extentTest.get().log(Status.FAIL, result.getName() + " got failed");
+        
         WebDriver driver = null;
         try {
             Field field = result.getTestClass().getRealClass().getDeclaredField("driver");
@@ -107,6 +102,12 @@ public class MyListeners implements ITestListener {
 
     @Override
     public void onTestSkipped(ITestResult result) {
+        // If a test is retried, TestNG marks the initial failure as a skip.
+        // We want to ignore these skips to avoid duplicate reporting.
+        if (result.wasRetried()) {
+            return;
+        }
+
         String status = "SKIP";
         if (result.getThrowable() != null && result.getThrowable().getMessage().contains("depends on not successfully finished methods")) {
             status = "BLOCKED";
