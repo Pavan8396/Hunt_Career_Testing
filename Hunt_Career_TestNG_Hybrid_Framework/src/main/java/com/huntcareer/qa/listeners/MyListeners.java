@@ -23,13 +23,15 @@ class TestResultData {
     public String status;
     public long duration;
     public String screenshotPath;
+    public boolean flaky;
 
-    public TestResultData(String className, String testName, String status, long duration, String screenshotPath) {
+    public TestResultData(String className, String testName, String status, long duration, String screenshotPath, boolean flaky) {
         this.className = className;
         this.testName = testName;
         this.status = status;
         this.duration = duration;
         this.screenshotPath = screenshotPath;
+        this.flaky = flaky;
     }
 }
 
@@ -61,10 +63,15 @@ public class MyListeners implements ITestListener {
 
     @Override
     public void onTestSuccess(ITestResult result) {
+        String testIdentifier = result.getTestClass().getName() + "." + result.getName();
+        boolean isFlaky = RetryAnalyzer.retryCounts.get().getOrDefault(testIdentifier, 0) > 0;
+        if (isFlaky) {
+            allTestResults.removeIf(tr -> tr.testName.equals(result.getName()) && tr.className.equals(result.getTestClass().getName()));
+        }
         long duration = System.currentTimeMillis() - testStartTime.get();
         extentTest.get().log(Status.PASS, result.getName() + " executed successfully");
         extentTest.get().info("Execution Time: " + duration + " ms");
-        allTestResults.add(new TestResultData(result.getTestClass().getName(), result.getName(), "PASS", duration, null));
+        allTestResults.add(new TestResultData(result.getTestClass().getName(), result.getName(), "PASS", duration, null, isFlaky));
     }
 
     @Override
@@ -84,17 +91,21 @@ public class MyListeners implements ITestListener {
         extentTest.get().log(Status.FAIL, result.getName() + " got failed");
         extentTest.get().info("Execution Time: " + duration + " ms");
 
-        allTestResults.add(new TestResultData(result.getTestClass().getName(), result.getName(), "FAIL", duration, screenshotPath));
+        allTestResults.add(new TestResultData(result.getTestClass().getName(), result.getName(), "FAIL", duration, screenshotPath, false));
     }
 
     @Override
     public void onTestSkipped(ITestResult result) {
+        String status = "SKIP";
+        if (result.getThrowable() != null && result.getThrowable().getMessage().contains("depends on not successfully finished methods")) {
+            status = "BLOCKED";
+        }
         long duration = System.currentTimeMillis() - testStartTime.get();
         extentTest.get().log(Status.SKIP, result.getName() + " skipped");
         extentTest.get().log(Status.INFO, result.getThrowable());
         extentTest.get().info("Execution Time: " + duration + " ms");
 
-        allTestResults.add(new TestResultData(result.getTestClass().getName(), result.getName(), "SKIP", duration, null));
+        allTestResults.add(new TestResultData(result.getTestClass().getName(), result.getName(), status, duration, null, false));
     }
 
     @Override
@@ -113,7 +124,7 @@ public class MyListeners implements ITestListener {
             String dashboardHtml = System.getProperty("user.dir") + "/test-output/MergedDashboard.html";
             AdvancedReportGenerator.generateMultiRunDashboard(dashboardHtml);
 
-            Desktop.getDesktop().browse(new File(dashboardHtml).toURI());
+            //Desktop.getDesktop().browse(new File(dashboardHtml).toURI());
 
         } catch (Exception e) { e.printStackTrace(); }
     }
