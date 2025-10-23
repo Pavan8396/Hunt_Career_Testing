@@ -12,6 +12,7 @@ public class RetryAnalyzer implements IRetryAnalyzer {
 		if (retryCount < MAX_RETRY_COUNT) {
 			retryCount++;
 			System.out.println("Retrying test " + result.getName() + " for the " + retryCount + " time(s).");
+			RetryTracker.addRetriedTest(result);
 			return true;
 		}
 		return false;

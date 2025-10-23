@@ -39,6 +39,7 @@ public class MyListeners implements ITestListener {
     private static ThreadLocal<ExtentTest> extentTest = new ThreadLocal<>();
     private static ThreadLocal<ExtentTest> classNode = new ThreadLocal<>();
     private ThreadLocal<Long> testStartTime = new ThreadLocal<>();
+    private static Map<String, ExtentTest> testMap = new HashMap<>();
 
     private List<TestResultData> allTestResults = new ArrayList<>();
 
@@ -50,31 +51,53 @@ public class MyListeners implements ITestListener {
     @Override
     public void onTestStart(ITestResult result) {
         testStartTime.set(System.currentTimeMillis());
-        String className = result.getTestClass().getName();
-        if (classNode.get() == null || !classNode.get().getModel().getName().equals(className)) {
-            classNode.set(extentReport.createTest(className));
+        String testIdentifier = RetryTracker.getTestIdentifier(result);
+        
+        if (!testMap.containsKey(testIdentifier)) {
+            String className = result.getTestClass().getName();
+            if (classNode.get() == null || !classNode.get().getModel().getName().equals(className)) {
+                classNode.set(extentReport.createTest(className));
+            }
+            ExtentTest test = classNode.get().createNode(result.getMethod().getMethodName());
+            test.log(Status.INFO, result.getName() + " Started Executing");
+            extentTest.set(test);
+            testMap.put(testIdentifier, test);
         }
-        ExtentTest test = classNode.get().createNode(result.getMethod().getMethodName());
-        test.log(Status.INFO, result.getName() + " Started Executing");
-        extentTest.set(test);
     }
 
     @Override
     public void onTestSuccess(ITestResult result) {
         long duration = System.currentTimeMillis() - testStartTime.get();
-        String status = result.wasRetried() ? "FLAKY" : "PASS";
+        String status;
 
-        if ("FLAKY".equals(status)) {
+        if (RetryTracker.isTestRetried(result)) {
+            status = "FLAKY";
+            
+            Throwable originalException = RetryTracker.getOriginalException(result);
+            if (originalException != null) {
+                extentTest.get().log(Status.INFO, "Original failure reason: " + originalException.getMessage());
+            }
+            
             extentTest.get().log(Status.WARNING, result.getName() + " passed after a retry (flaky)");
+            
+            RetryTracker.removeTestFromTracker(result); // Clean up the tracker
         } else {
+            status = "PASS";
             extentTest.get().log(Status.PASS, result.getName() + " executed successfully");
         }
+
         extentTest.get().info("Execution Time: " + duration + " ms");
         allTestResults.add(new TestResultData(result.getTestClass().getName(), result.getName(), status, duration, null));
+        ExtentReport.updateClassStats(result.getTestClass().getName(), status);
+        testMap.remove(RetryTracker.getTestIdentifier(result));
     }
 
     @Override
     public void onTestFailure(ITestResult result) {
+        if (RetryTracker.isTestRetried(result)) {
+            RetryTracker.removeTestFromTracker(result); // Clean up tracker for tests that fail all retries
+        }
+        
         WebDriver driver = null;
         try {
             Field field = result.getTestClass().getRealClass().getDeclaredField("driver");
@@ -91,11 +114,13 @@ public class MyListeners implements ITestListener {
         extentTest.get().info("Execution Time: " + duration + " ms");
 
         allTestResults.add(new TestResultData(result.getTestClass().getName(), result.getName(), "FAIL", duration, screenshotPath));
+        ExtentReport.updateClassStats(result.getTestClass().getName(), "FAIL");
+        testMap.remove(RetryTracker.getTestIdentifier(result));
     }
 
     @Override
     public void onTestSkipped(ITestResult result) {
-        if (result.wasRetried()) {
+        if (RetryTracker.isTestRetried(result)) {
             return;
         }
         long duration = System.currentTimeMillis() - testStartTime.get();
@@ -119,6 +144,8 @@ public class MyListeners implements ITestListener {
         extentTest.get().info("Execution Time: " + duration + " ms");
 
         allTestResults.add(new TestResultData(result.getTestClass().getName(), result.getName(), status, duration, null));
+        ExtentReport.updateClassStats(result.getTestClass().getName(), status);
+        testMap.remove(RetryTracker.getTestIdentifier(result));
     }
 
     @Override
