@@ -2,8 +2,6 @@ package com.huntcareer.qa.testcases;
 
 import java.util.Map;
 
-import org.openqa.selenium.WebDriver;
-import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -14,7 +12,6 @@ import com.huntcareer.qa.pages.LandingPage;
 import com.huntcareer.qa.testdata.PostAJob;
 
 public class EmployerJobPost extends Base {
-	WebDriver driver;
 	EmployerPostJobPage jp;
 	LandingPage ldp;
 	EmployerLoginPage elp;
@@ -24,22 +21,13 @@ public class EmployerJobPost extends Base {
 	}
 
 	@BeforeMethod
-	public void setup() {
-		driver = inicializeBrowserAndOpenApplication(prop.getProperty("browser"));
-		driver.get(prop.getProperty("url"));
+	public void setupEmployerJobPost() {
 		ldp = new LandingPage(driver);
 		ldp.clickOnEmployerRole();
 		elp = new EmployerLoginPage(driver);
 		elp.enterEmail(dataProp.getProperty("EmployervalidEmail"));
 		elp.enterPassword(dataProp.getProperty("EmployervalidPassword"));
 		elp.clickLoginButton();
-	}
-
-	@AfterMethod
-	public void tearDown() {
-		if (driver != null) {
-			driver.quit();
-		}
 	}
 
 	@Test(priority = 1, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
@@ -139,7 +127,7 @@ public class EmployerJobPost extends Base {
 			jp.enterLocation(job.get("location"));
 			jp.selectJobTypeOption();
 			jp.clickPostJobSubmitButton();
-			if (i==1) {
+			if (i == 1) {
 				jp.verifyJobPostSuccess();
 			} else {
 				jp.verifyJobExistsErrorMessage();

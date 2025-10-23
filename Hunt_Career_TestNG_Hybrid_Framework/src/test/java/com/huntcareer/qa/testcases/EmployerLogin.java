@@ -1,7 +1,5 @@
 package com.huntcareer.qa.testcases;
 
-import org.openqa.selenium.WebDriver;
-import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -13,7 +11,6 @@ import com.huntcareer.qa.pages.LandingPage;
 import com.huntcareer.qa.utils.Utilities;
 
 public class EmployerLogin extends Base {
-	public WebDriver driver;
 	EmployerLoginPage elp;
 	HomePage hp;
 	LandingPage ldp;
@@ -23,18 +20,10 @@ public class EmployerLogin extends Base {
 	}
 
 	@BeforeMethod
-	public void setup() {
-		// loadPropertiesFile();
-		driver = inicializeBrowserAndOpenApplication(prop.getProperty("browser"));
-		driver.get(prop.getProperty("url"));
+	public void setupEmployerLogin() {
 		ldp = new LandingPage(driver);
 		ldp.clickOnEmployerRole();
-		// driver.gaet(loadPropertiesFile().getProperty("url")+"/login");
-	}
-
-	@AfterMethod
-	public void tearDown() {
-		driver.quit();
+		elp = new EmployerLoginPage(driver);
 	}
 
 	@DataProvider(name = "testdata")
@@ -46,49 +35,24 @@ public class EmployerLogin extends Base {
 	@Test(enabled = false, priority = 1, dataProvider = "testdata", retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 
 	public void TCEL_1_verifyWithValidDataUsingExcel(String email, String password) {
-		elp = new EmployerLoginPage(driver);
 		elp.enterEmail(email);
 		elp.enterPassword(password);
 		hp = elp.clickLoginButton();
 		hp.verifySuccessMessage();
 
-		/*
-		 * Assert.assertTrue(wait.until(ExpectedConditions.visibilityOfElementLocated(By
-		 * .xpath("//div[contains(text(),'Logged in successfully!')]"))).isDisplayed());
-		 * 
-		 * Assert.assertEquals(wait.until(ExpectedConditions.visibilityOfElementLocated(
-		 * By.xpath("//div[contains(text(), 'Logged in successfully!')]"))).getText(),
-		 * "Logged in successfully!", "Message Text Mismatch");
-		 * Assert.assertTrue(wait.until(ExpectedConditions.invisibilityOfElementLocated(
-		 * By.xpath("//div[contains(text(), 'Logged in successfully!')]")))
-		 * ,"Success message should not be visible anymore");
-		 */
 	}
 
 	@Test(priority = 3, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TCEL_3_verifyWithValidData() {
-		elp = new EmployerLoginPage(driver);
 		elp.enterEmail(dataProp.getProperty("EmployervalidEmail"));
 		elp.enterPassword(dataProp.getProperty("EmployervalidPassword"));
 		hp = elp.clickLoginButton();
 		hp.verifySuccessMessage();
 
-		/*
-		 * Assert.assertTrue(wait.until(ExpectedConditions.visibilityOfElementLocated(By
-		 * .xpath("//div[contains(text(), 'Logged in
-		 * successfully!')]"))).isDisplayed()); Assert.assertEquals(wait
-		 * .until(ExpectedConditions .visibilityOfElementLocated(By.
-		 * xpath("//div[contains(text(), 'Logged in successfully!')]"))) .getText(),
-		 * "Logged in successfully!", "Message Text Mismatch"); Assert.assertTrue(
-		 * wait.until(ExpectedConditions .invisibilityOfElementLocated(By.
-		 * xpath("//div[contains(text(), 'Logged in successfully!')]"))),
-		 * "Success message should not be visible anymore");
-		 */
 	}
 
 	@Test(priority = 4, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TCEL_4_verifyEmailWithDotInbetweenUserName() {
-		elp = new EmployerLoginPage(driver);
 		elp.enterEmail(dataProp.getProperty("EmployeremailWithDotInbetweenUserName"));
 		elp.enterPassword(dataProp.getProperty("EmployervalidPassword"));
 		hp = elp.clickLoginButton();
@@ -97,7 +61,6 @@ public class EmployerLogin extends Base {
 
 	@Test(priority = 5, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TCEL_5_verifyEmailWithSpaceBeforeUserName() {
-		elp = new EmployerLoginPage(driver);
 		elp.enterEmail(dataProp.getProperty("EmployeremailWithSpaceBeforeUserName"));
 		elp.enterPassword(dataProp.getProperty("EmployervalidPassword"));
 		hp = elp.clickLoginButton();
@@ -106,7 +69,6 @@ public class EmployerLogin extends Base {
 
 	@Test(priority = 6, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TCEL_6_verifyEmailWithSpaceAfterUserName() {
-		elp = new EmployerLoginPage(driver);
 		elp.enterEmail(dataProp.getProperty("EmployeremailWithSpaceAfterUserName"));
 		elp.enterPassword(dataProp.getProperty("EmployervalidPassword"));
 		hp = elp.clickLoginButton();
@@ -115,7 +77,6 @@ public class EmployerLogin extends Base {
 
 	@Test(priority = 2, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TCEL_2_verifyWithInvalidUser() {
-		elp = new EmployerLoginPage(driver);
 		elp.enterEmail(dataProp.getProperty("EmployerinvalidUser"));
 		elp.enterPassword(dataProp.getProperty("EmployerinvalidPassword"));
 		elp.clickLoginButton();
@@ -124,7 +85,6 @@ public class EmployerLogin extends Base {
 
 	@Test(priority = 7, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TCEL_7_verifyShortPassword() {
-		elp = new EmployerLoginPage(driver);
 		elp.enterEmail(dataProp.getProperty("EmployervalidEmail"));
 		elp.enterPassword(dataProp.getProperty("EmployershortPassword"));
 		elp.clickLoginButton();
@@ -133,7 +93,6 @@ public class EmployerLogin extends Base {
 
 	@Test(priority = 8, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TCEL_8_verifyinvalidEmailAndValidPassword() {
-		elp = new EmployerLoginPage(driver);
 		elp.enterEmail(dataProp.getProperty("EmployerinvalidUser"));
 		elp.enterPassword(dataProp.getProperty("EmployervalidPassword"));
 		elp.clickLoginButton();
@@ -142,7 +101,6 @@ public class EmployerLogin extends Base {
 
 	@Test(priority = 9, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TCEL_9_verifyValidEmailAndInvalidPassword() {
-		elp = new EmployerLoginPage(driver);
 		elp.enterEmail(dataProp.getProperty("EmployervalidEmail"));
 		elp.enterPassword(dataProp.getProperty("EmployerinvalidPassword"));
 		elp.clickLoginButton();
@@ -151,14 +109,12 @@ public class EmployerLogin extends Base {
 
 	@Test(priority = 10, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TCEL_10_verifyNoEmailAndNoPassword() {
-		elp = new EmployerLoginPage(driver);
 		elp.clickLoginButton();
 		elp.verifyEmailIsRequired();
 	}
 
 	@Test(priority = 11, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TCEL_11_verifyNoEmail() {
-		elp = new EmployerLoginPage(driver);
 		elp.enterPassword(dataProp.getProperty("EmployervalidPassword"));
 		elp.clickLoginButton();
 		elp.verifyEmailIsRequired();
@@ -166,7 +122,6 @@ public class EmployerLogin extends Base {
 
 	@Test(priority = 12, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TCEL_12_verifyNoPassword() {
-		elp = new EmployerLoginPage(driver);
 		elp.enterEmail(dataProp.getProperty("EmployervalidEmail"));
 		elp.clickLoginButton();
 		elp.verifyPasswordIsRequired();
@@ -174,7 +129,6 @@ public class EmployerLogin extends Base {
 
 	@Test(priority = 13, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TCEL_13_verifyinvalidEmaielplain() {
-		elp = new EmployerLoginPage(driver);
 		elp.enterEmail(dataProp.getProperty("EmployerinvalidEmail(plain)"));
 		elp.enterPassword(dataProp.getProperty("EmployervalidPassword"));
 		elp.clickLoginButton();
@@ -183,7 +137,6 @@ public class EmployerLogin extends Base {
 
 	@Test(priority = 14, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TCEL_14_verifyinvalidEmailNoLocalpart() {
-		elp = new EmployerLoginPage(driver);
 		elp.enterEmail(dataProp.getProperty("EmployerinvalidEmail(noLocalPart)"));
 		elp.enterPassword(dataProp.getProperty("EmployervalidPassword"));
 		elp.clickLoginButton();
@@ -192,7 +145,6 @@ public class EmployerLogin extends Base {
 
 	@Test(priority = 15, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TCEL_15_verifyinvalidEmailOnlyEmailpart() {
-		elp = new EmployerLoginPage(driver);
 		elp.enterEmail(dataProp.getProperty("EmployerinvalidEmail(onlyEmailPart)"));
 		elp.enterPassword(dataProp.getProperty("EmployervalidPassword"));
 		elp.clickLoginButton();
@@ -201,7 +153,6 @@ public class EmployerLogin extends Base {
 
 	@Test(priority = 16, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TCEL_16_verifyinvalidEmailDoubleAt() {
-		elp = new EmployerLoginPage(driver);
 		elp.enterEmail(dataProp.getProperty("EmployerinvalidEmail(doubleAt)"));
 		elp.enterPassword(dataProp.getProperty("EmployervalidPassword"));
 		elp.clickLoginButton();
@@ -210,7 +161,6 @@ public class EmployerLogin extends Base {
 
 	@Test(priority = 17, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TCEL_17_verifyinvalidEmailNoTopDoamin() {
-		elp = new EmployerLoginPage(driver);
 		elp.enterEmail(dataProp.getProperty("EmployerinvalidEmail(noTopDomain)"));
 		elp.enterPassword(dataProp.getProperty("EmployervalidPassword"));
 		elp.clickLoginButton();
@@ -219,7 +169,6 @@ public class EmployerLogin extends Base {
 
 	@Test(priority = 18, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TCEL_18_verifyinvalidEmailTailingDot() {
-		elp = new EmployerLoginPage(driver);
 		elp.enterEmail(dataProp.getProperty("EmployerinvalidEmail(trailingDot)"));
 		elp.enterPassword(dataProp.getProperty("EmployervalidPassword"));
 		elp.clickLoginButton();
@@ -228,7 +177,6 @@ public class EmployerLogin extends Base {
 
 	@Test(priority = 19, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TCEL_19_verifyinvalidEmailShortTLD() {
-		elp = new EmployerLoginPage(driver);
 		elp.enterEmail(dataProp.getProperty("EmployerinvalidEmail(shortTLD)"));
 		elp.enterPassword(dataProp.getProperty("EmployervalidPassword"));
 		elp.clickLoginButton();
@@ -237,7 +185,6 @@ public class EmployerLogin extends Base {
 
 	@Test(priority = 20, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TCEL_20_verifyinvalidEmailDomainStartsHyphen() {
-		elp = new EmployerLoginPage(driver);
 		elp.enterEmail(dataProp.getProperty("EmployerinvalidEmail(domainStartsHyphen)"));
 		elp.enterPassword(dataProp.getProperty("EmployervalidPassword"));
 		elp.clickLoginButton();
@@ -246,7 +193,6 @@ public class EmployerLogin extends Base {
 
 	@Test(priority = 21, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TCEL_21_verifyinvalidEmaildoubleDotDomain() {
-		elp = new EmployerLoginPage(driver);
 		elp.enterEmail(dataProp.getProperty("EmployerinvalidEmail(doubleDotDomain)"));
 		elp.enterPassword(dataProp.getProperty("EmployervalidPassword"));
 		elp.clickLoginButton();
@@ -255,7 +201,6 @@ public class EmployerLogin extends Base {
 
 	@Test(priority = 22, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TCEL_22_verifyinvalidEmailNoAtSymbol() {
-		elp = new EmployerLoginPage(driver);
 		elp.enterEmail(dataProp.getProperty("EmployerinvalidEmail(noAtSymbol)"));
 		elp.enterPassword(dataProp.getProperty("EmployervalidPassword"));
 		elp.clickLoginButton();
@@ -264,7 +209,6 @@ public class EmployerLogin extends Base {
 
 	@Test(priority = 23, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TCEL_23_verifyinvalidEmailIllegalChars() {
-		elp = new EmployerLoginPage(driver);
 		elp.enterEmail(dataProp.getProperty("EmployerinvalidEmail(illegalChars)"));
 		elp.enterPassword(dataProp.getProperty("EmployervalidPassword"));
 		elp.clickLoginButton();
@@ -273,7 +217,6 @@ public class EmployerLogin extends Base {
 
 	@Test(priority = 24, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TCEL_24_verifyinvalidEmailDotAfterName() {
-		elp = new EmployerLoginPage(driver);
 		elp.enterEmail(dataProp.getProperty("EmployerinvalidEmail(dotAfterName)"));
 		elp.enterPassword(dataProp.getProperty("EmployervalidPassword"));
 		elp.clickLoginButton();
@@ -282,7 +225,6 @@ public class EmployerLogin extends Base {
 
 	@Test(priority = 25, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TCEL_25_verifyinvalidEmailTwoConsicutiveDots() {
-		elp = new EmployerLoginPage(driver);
 		elp.enterEmail(dataProp.getProperty("EmployerinvalidEmail(twoConsicutiveDots)"));
 		elp.enterPassword(dataProp.getProperty("EmployervalidPassword"));
 		elp.clickLoginButton();
@@ -291,7 +233,6 @@ public class EmployerLogin extends Base {
 
 	@Test(priority = 26, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TCEL_26_verifyinvalidEmailDotAtStart() {
-		elp = new EmployerLoginPage(driver);
 		elp.enterEmail(dataProp.getProperty("EmployerinvalidEmail(dotAtStart)"));
 		elp.enterPassword(dataProp.getProperty("EmployervalidPassword"));
 		elp.clickLoginButton();
@@ -300,7 +241,6 @@ public class EmployerLogin extends Base {
 
 	@Test(priority = 27, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TCEL_27_verifyinvalidEmailQuoted() {
-		elp = new EmployerLoginPage(driver);
 		elp.enterEmail(dataProp.getProperty("EmployerinvalidEmail(quoted)"));
 		elp.enterPassword(dataProp.getProperty("EmployervalidPassword"));
 		elp.clickLoginButton();
@@ -309,7 +249,6 @@ public class EmployerLogin extends Base {
 
 	@Test(priority = 28, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TCEL_28_verifyinvalidEmailUnclosedQuote() {
-		elp = new EmployerLoginPage(driver);
 		elp.enterEmail(dataProp.getProperty("EmployerinvalidEmail(unclosedQuote)"));
 		elp.enterPassword(dataProp.getProperty("EmployervalidPassword"));
 		elp.clickLoginButton();
@@ -318,7 +257,6 @@ public class EmployerLogin extends Base {
 
 	@Test(priority = 29, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TCEL_29_verifyinvalidEmailLongEmail() {
-		elp = new EmployerLoginPage(driver);
 		elp.enterEmail(dataProp.getProperty("EmployerinvalidEmail(longEmail)"));
 		elp.enterPassword(dataProp.getProperty("EmployervalidPassword"));
 		elp.clickLoginButton();
@@ -327,7 +265,6 @@ public class EmployerLogin extends Base {
 
 	@Test(priority = 30, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TCEL_30_verifyinvalidEmailLongDomain() {
-		elp = new EmployerLoginPage(driver);
 		elp.enterEmail(dataProp.getProperty("EmployerinvalidEmail(longDomain)"));
 		elp.enterPassword(dataProp.getProperty("EmployervalidPassword"));
 		elp.clickLoginButton();
@@ -336,7 +273,6 @@ public class EmployerLogin extends Base {
 
 	@Test(priority = 31, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TCEL_31_verifyinvalidEmailLongTLD() {
-		elp = new EmployerLoginPage(driver);
 		elp.enterEmail(dataProp.getProperty("EmployerinvalidEmail(longTLD)"));
 		elp.enterPassword(dataProp.getProperty("EmployervalidPassword"));
 		elp.clickLoginButton();
@@ -345,7 +281,6 @@ public class EmployerLogin extends Base {
 
 	@Test(priority = 32, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TCEL_32_verifyinvalidEmailMissingSecondLevelDomain() {
-		elp = new EmployerLoginPage(driver);
 		elp.enterEmail(dataProp.getProperty("EmployerinvalidEmail(missingSecondLevelDomain)"));
 		elp.enterPassword(dataProp.getProperty("EmployervalidPassword"));
 		elp.clickLoginButton();
@@ -354,7 +289,6 @@ public class EmployerLogin extends Base {
 
 	@Test(priority = 33, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TCEL_33_verifyinvalidEmailCommaInEmail() {
-		elp = new EmployerLoginPage(driver);
 		elp.enterEmail(dataProp.getProperty("EmployerinvalidEmail(commaInEmail)"));
 		elp.enterPassword(dataProp.getProperty("EmployervalidPassword"));
 		elp.clickLoginButton();
@@ -363,7 +297,6 @@ public class EmployerLogin extends Base {
 
 	@Test(priority = 34, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TCEL_34_verifyinvalidEmailConsicutiveDoubleAt() {
-		elp = new EmployerLoginPage(driver);
 		elp.enterEmail(dataProp.getProperty("EmployerinvalidEmail(consicutiveDoubleAt)"));
 		elp.enterPassword(dataProp.getProperty("EmployervalidPassword"));
 		elp.clickLoginButton();
@@ -372,7 +305,6 @@ public class EmployerLogin extends Base {
 
 	@Test(priority = 35, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TCEL_35_verifyinvalidEmailUnderscoreTLD() {
-		elp = new EmployerLoginPage(driver);
 		elp.enterEmail(dataProp.getProperty("EmployerinvalidEmail(underscoreTLD)"));
 		elp.enterPassword(dataProp.getProperty("EmployervalidPassword"));
 		elp.clickLoginButton();
@@ -381,7 +313,6 @@ public class EmployerLogin extends Base {
 
 	@Test(priority = 36, retryAnalyzer = com.huntcareer.qa.listeners.RetryAnalyzer.class)
 	public void TCEL_36_verifyinvalidEmailNoDomain() {
-		elp = new EmployerLoginPage(driver);
 		elp.enterEmail(dataProp.getProperty("EmployerinvalidEmail(noDomain)"));
 		elp.enterPassword(dataProp.getProperty("EmployervalidPassword"));
 		elp.clickLoginButton();
