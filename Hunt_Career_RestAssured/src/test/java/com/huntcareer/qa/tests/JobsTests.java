@@ -6,6 +6,7 @@ import io.restassured.http.ContentType;
 import org.testng.annotations.Test;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 
 public class JobsTests extends TestBase {
@@ -74,5 +75,20 @@ public class JobsTests extends TestBase {
                 put("/api/jobs/" + jobId).
                 then().
                 statusCode(200);
+    }
+
+    @Test(dependsOnMethods = {"com.huntcareer.qa.tests.EmployerAuthenticationTests.loginEmployerSuccess"})
+    public void createJobMissingFields() {
+        String payload = Payloads.getCreateJobPayloadMissingFields("Software Engineer");
+
+        given().
+                auth().oauth2(EmployerAuthenticationTests.authToken_employer).
+                contentType(ContentType.JSON).
+                body(payload).
+                when().
+                post("/api/jobs").
+                then().
+                statusCode(400).
+                body("message", equalTo("All fields are required"));
     }
 }

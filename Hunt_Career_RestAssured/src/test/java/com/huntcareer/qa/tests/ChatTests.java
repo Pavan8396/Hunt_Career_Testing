@@ -27,4 +27,14 @@ public class ChatTests extends TestBase {
                 statusCode(200).
                 body("message", equalTo("Chat history deleted successfully"));
     }
+
+    @Test(dependsOnMethods = {"com.huntcareer.qa.tests.UserAuthenticationTests.loginUserSuccess"})
+    public void getNotifications() {
+        given().
+                auth().oauth2(UserAuthenticationTests.authToken_user).
+                when().
+                get("/api/chat/notifications").
+                then().
+                statusCode(200);
+    }
 }
