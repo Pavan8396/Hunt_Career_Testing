@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "1c86c342-eb54-4ae5-8b00-162d2b6c9834",
+		"_postman_id": "4fe69edc-ade4-4c56-9ab9-5adc1d9b280f",
 		"name": "Job Portal Auth",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "32241718"
@@ -572,14 +572,14 @@
 									"pm.test(\"Response body contains token and user object\", function () {",
 									"    const jsonData = pm.response.json();",
 									"    pm.expect(jsonData).to.have.property('token');",
-									"    pm.expect(jsonData).to.have.property('user');",
-									"    pm.expect(jsonData.user).to.have.property('_id');",
-									"    pm.expect(jsonData.user).to.have.property('name');",
-									"    pm.expect(jsonData.user).to.have.property('email');",
+									"    pm.expect(jsonData).to.have.property('employer');",
+									"    pm.expect(jsonData.employer).to.have.property('_id');",
+									"    pm.expect(jsonData.employer).to.have.property('name');",
+									"    pm.expect(jsonData.employer).to.have.property('email');",
 									"});",
 									"const jsonData = pm.response.json();",
 									"pm.collectionVariables.set(\"authToken_employer\", jsonData.token);",
-									"pm.collectionVariables.set(\"employerId\", jsonData.user._id);"
+									"pm.collectionVariables.set(\"employerId\", jsonData.employer._id);"
 								],
 								"type": "text/javascript",
 								"packages": {},
@@ -1058,14 +1058,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/api/jobs/employer",
+							"raw": "{{baseUrl}}/api/jobs/employers",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"api",
 								"jobs",
-								"employer"
+								"employers"
 							]
 						}
 					},
