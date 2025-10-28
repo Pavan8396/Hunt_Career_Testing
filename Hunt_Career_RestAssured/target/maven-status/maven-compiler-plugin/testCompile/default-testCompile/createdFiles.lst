@@ -1,0 +1,6 @@
+com/huntcareer/qa/tests/TestBase.class
+com/huntcareer/qa/tests/ApplicationsTests.class
+com/huntcareer/qa/tests/ChatTests.class
+com/huntcareer/qa/tests/UserAuthenticationTests.class
+com/huntcareer/qa/tests/EmployerAuthenticationTests.class
+com/huntcareer/qa/tests/JobsTests.class

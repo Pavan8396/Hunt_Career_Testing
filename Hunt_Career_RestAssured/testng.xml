@@ -1,0 +1,12 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="RestAssuredTestSuite">
+    <test name="AllTests">
+        <classes>
+            <class name="com.huntcareer.qa.tests.UserAuthenticationTests"/>
+            <class name="com.huntcareer.qa.tests.EmployerAuthenticationTests"/>
+            <class name="com.huntcareer.qa.tests.JobsTests"/>
+            <class name="com.huntcareer.qa.tests.ApplicationsTests"/>
+            <class name="com.huntcareer.qa.tests.ChatTests"/>
+        </classes>
+    </test>
+</suite>
