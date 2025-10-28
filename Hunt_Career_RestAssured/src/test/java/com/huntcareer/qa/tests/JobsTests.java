@@ -49,7 +49,7 @@ public class JobsTests extends TestBase {
         given().
                 auth().oauth2(EmployerAuthenticationTests.authToken_employer).
                 when().
-                get("/api/jobs/employer").
+                get("/api/jobs/employers").
                 then().
                 statusCode(200);
     }
@@ -89,6 +89,6 @@ public class JobsTests extends TestBase {
                 post("/api/jobs").
                 then().
                 statusCode(400).
-                body("message", equalTo("All fields are required"));
+                body("message", equalTo("Job validation failed: job_type: Path `job_type` is required., candidate_required_location: Path `candidate_required_location` is required., description: Path `description` is required., company: Path `company` is required."));
     }
 }

@@ -81,7 +81,7 @@ public class UserAuthenticationTests extends TestBase {
                 post("/api/auth/register").
                 then().
                 statusCode(400).
-                body("message", equalTo("All fields are required"));
+                body("message", equalTo("All fields are required: firstName, lastName, email, password, phoneNumber"));
     }
 
     @Test

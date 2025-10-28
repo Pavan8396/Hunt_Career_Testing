@@ -44,14 +44,14 @@ public class EmployerAuthenticationTests extends TestBase {
                 then().
                 statusCode(200).
                 body("token", notNullValue()).
-                body("user._id", notNullValue()).
-                body("user.name", equalTo(companyName)).
-                body("user.email", equalTo(employerEmail)).
+                body("employer._id", notNullValue()).
+                body("employer.name", equalTo(companyName)).
+                body("employer.email", equalTo(employerEmail)).
                 extract().
                 response();
 
         authToken_employer = response.path("token");
-        employerId = response.path("user._id");
+        employerId = response.path("employer._id");
     }
 
     @Test(priority = 3)
@@ -79,7 +79,7 @@ public class EmployerAuthenticationTests extends TestBase {
                 post("/api/employers/register").
                 then().
                 statusCode(400).
-                body("message", equalTo("All fields are required"));
+                body("message", equalTo("All fields are required: companyName, email, password"));
     }
 
     @Test

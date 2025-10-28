@@ -4,6 +4,7 @@
 <suite name="HuntCareerSuite" parallel="classes" thread-count="5">
     <listeners>
         <listener class-name="com.huntcareer.qa.listeners.MyListeners" />
+        <listener class-name="io.qameta.allure.testng.AllureTestNg"/>
     </listeners>
 
     <test name="Functional Tests">

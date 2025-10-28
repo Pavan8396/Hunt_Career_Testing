@@ -1,5 +1,9 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
 <suite name="RestAssuredTestSuite">
+    <listeners>
+        <listener class-name="com.huntcareer.qa.util.ExtentITestListener"/>
+        <listener class-name="io.qameta.allure.testng.AllureTestNg"/>
+    </listeners>
     <test name="AllTests">
         <classes>
             <class name="com.huntcareer.qa.tests.UserAuthenticationTests"/>
