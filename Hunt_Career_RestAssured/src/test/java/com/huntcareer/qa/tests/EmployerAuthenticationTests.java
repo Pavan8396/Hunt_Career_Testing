@@ -67,4 +67,88 @@ public class EmployerAuthenticationTests extends TestBase {
                 statusCode(400).
                 body("message", equalTo("Employer already exists"));
     }
+
+    @Test
+    public void registerEmployerMissingRequiredFields() {
+        String payload = Payloads.getRegisterEmployerPayloadMissingField(FakerUtil.generateEmployerEmail(), employerPassword);
+
+        given().
+                contentType(ContentType.JSON).
+                body(payload).
+                when().
+                post("/api/employers/register").
+                then().
+                statusCode(400).
+                body("message", equalTo("All fields are required"));
+    }
+
+    @Test
+    public void registerEmployerInvalidEmail() {
+        String payload = Payloads.getRegisterEmployerPayload(companyName, "invalid-email", employerPassword);
+
+        given().
+                contentType(ContentType.JSON).
+                body(payload).
+                when().
+                post("/api/employers/register").
+                then().
+                statusCode(400).
+                body("message", equalTo("Invalid email format"));
+    }
+
+    @Test
+    public void registerEmployerPasswordTooShort() {
+        String payload = Payloads.getRegisterEmployerPayload(companyName, FakerUtil.generateEmployerEmail(), "pass");
+
+        given().
+                contentType(ContentType.JSON).
+                body(payload).
+                when().
+                post("/api/employers/register").
+                then().
+                statusCode(400).
+                body("message", equalTo("Password must be at least 8 characters long"));
+    }
+
+    @Test(priority = 4)
+    public void loginEmployerIncorrectPassword() {
+        String payload = Payloads.getLoginPayload(employerEmail, "wrongpassword");
+
+        given().
+                contentType(ContentType.JSON).
+                body(payload).
+                when().
+                post("/api/employers/login").
+                then().
+                statusCode(401).
+                body("message", equalTo("Invalid email or password"));
+    }
+
+    @Test
+    public void loginEmployerNonExistentEmployer() {
+        String payload = Payloads.getLoginPayload("nonexistent@example.com", employerPassword);
+
+        given().
+                contentType(ContentType.JSON).
+                body(payload).
+                when().
+                post("/api/employers/login").
+                then().
+                statusCode(401).
+                body("message", equalTo("Invalid email or password"));
+    }
+
+    @Test(priority = 5)
+    public void loginEmployerMissingPassword() {
+        String payload = Payloads.getLoginPayloadMissingField(employerEmail);
+
+        given().
+                contentType(ContentType.JSON).
+                body(payload).
+                when().
+                post("/api/employers/login").
+                then().
+                statusCode(400).
+                body("message", equalTo("Email and password are required"));
+    }
 }
