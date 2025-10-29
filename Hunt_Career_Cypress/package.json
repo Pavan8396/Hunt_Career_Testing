@@ -14,9 +14,9 @@
   "scripts": {
     "cypress:open": "cypress open",
     "cypress:run": "cypress run --headed",
-    "report:merge": "mochawesome-merge mochawesome-report/*.json -o mochawesome-report/mochawesome.json",
-    "report:generate": "marge mochawesome-report/mochawesome.json -f report -o mochawesome-report",
+    "report:merge": "mochawesome-merge reports/mochawesome/*.json -o reports/mochawesome/mochawesome.json",
+    "report:generate": "marge reports/mochawesome/mochawesome.json -f report -o reports/mochawesome",
     "report:full": "npm run report:merge && npm run report:generate",
-    "test:run:report": "npm run cypress:run && npm run report:full && open-cli mochawesome-report/index.html"
+    "test:run:report": "npm run cypress:run && npm run report:full && open-cli reports/mochawesome/index.html"
   }
 }
