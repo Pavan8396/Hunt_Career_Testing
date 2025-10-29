@@ -2,8 +2,7 @@
 /node_modules
 
 # Test results
-/mochawesome-report
-/cypress/reports
+/reports
 
 # Log files
 npm-debug.log*
