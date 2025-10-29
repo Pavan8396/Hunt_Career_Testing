@@ -4,7 +4,7 @@ const allureWriter = require('@shelex/cypress-allure-plugin/writer');
 module.exports = defineConfig({
   reporter: 'cypress-mochawesome-reporter',
   reporterOptions: {
-    reportDir: 'mochawesome-report',
+    reportDir: 'D:/Project HuntCareer/Hunt_Career_Testing/Hunt_Career_Cypress/cypress/reports/mochawesome-report',
     overwrite: true,
     html: true,
     json: true,
@@ -22,6 +22,9 @@ module.exports = defineConfig({
       require('cypress-mochawesome-reporter/plugin')(on);
       return config;
     },
+      env: {
+      allureResultsPath: 'D:/Project HuntCareer/Hunt_Career_Testing/Hunt_Career_Cypress/cypress/reports/allure-results',
+    }
   },
   retries: {
     runMode: 2,

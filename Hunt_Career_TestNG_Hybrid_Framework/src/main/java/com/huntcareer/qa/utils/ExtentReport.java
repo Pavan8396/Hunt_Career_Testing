@@ -31,7 +31,7 @@ public class ExtentReport {
     private static ExtentReports createInstance() {
         ExtentReports extentReport = new ExtentReports();
 
-        String reportPath = System.getProperty("user.dir") + "/reports/extent-reports/extentReport.html";
+        String reportPath = System.getProperty("user.dir") + "/test-output/Extent-Reports/extentReport.html";
         File reportFile = new File(reportPath);
         reportFile.getParentFile().mkdirs();
 

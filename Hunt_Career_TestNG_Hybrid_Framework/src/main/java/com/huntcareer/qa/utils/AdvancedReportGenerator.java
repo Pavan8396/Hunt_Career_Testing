@@ -13,7 +13,7 @@ public class AdvancedReportGenerator {
 
     private static final String REPORTS_HISTORY_DIR = System.getProperty("user.dir") + "/test-output/ReportsHistory/";
     private static final String EXTENT_REPORT_PATH = System.getProperty("user.dir")
-            + "/test-output/ExtentReports/extentReport.html";
+            + "/test-output/Extent-Reports/extentReport.html";
     private static final Gson gson = new Gson();
 
     public static void generateMultiRunDashboard(String htmlPath) {
